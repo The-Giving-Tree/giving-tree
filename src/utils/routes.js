@@ -1,7 +1,7 @@
 const ROUTES = {
   production: {
-    giving_tree: 'https://giving_tree.herokuapp.com',
-    socket: 'https://giving_tree.herokuapp.com'
+    giving_tree: 'https://the-giving-tree-backend-2020.herokuapp.com',
+    socket: 'https://the-giving-tree-backend-2020.herokuapp.com'
   },
   development: {
     giving_tree: 'http://localhost:3000',
