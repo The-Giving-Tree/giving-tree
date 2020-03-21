@@ -477,7 +477,7 @@ function Submit(props) {
                   }
                   style={{ cursor: 'pointer', color: 'black' }}
                 >
-                  X
+                  <img src='https://d1ppmvgsdgdlyy.cloudfront.net/close.svg' alt='close' style={{ height: 10 }} />
                 </div>
               </div>
               <div style={{ marginTop: 15 }}>

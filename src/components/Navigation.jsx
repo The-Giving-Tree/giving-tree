@@ -454,7 +454,7 @@ function Navigation(props) {
                   onClick={() => (window.location = '/submit')}
                   size={'compact'}
                   shape={'pill'}
-                  style={{ marginRight: 25 }}
+                  style={{ outline: 'none', marginRight: 25 }}
                   kind={'secondary'}
                 >
                   <img
@@ -526,9 +526,9 @@ function Navigation(props) {
                         style: {
                           marginRight: '24px'
                         }
-                      }
+                      },
                     }}
-                    style={{ fontSize: '14px' }}
+                    style={{ outline: 'none', fontSize: '14px' }}
                     size={SIZE.compact}
                     shape={SHAPE.pill}
                     kind={'secondary'}

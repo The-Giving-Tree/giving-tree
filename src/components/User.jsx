@@ -227,7 +227,7 @@ function User(props) {
     return 'https://d1ppmvgsdgdlyy.cloudfront.net/user/' + hash;
   }
 
-  var postElements = <StyledBody>No posts published!</StyledBody>;
+  var postElements = <StyledBody>No requests!</StyledBody>;
   if (!foundUserNull && !isEmpty(foundUser) && foundUser.posts.length > 0) {
     console.log('foundUser.posts: ', JSON.parse(foundUser.posts[0].text));
     postElements = foundUser.posts.map(post => (
@@ -910,6 +910,7 @@ function User(props) {
                         {!selfProfile && (
                           <Button
                             style={{
+                              outline: 'none',
                               backgroundColor: userFollowsProfile
                                 ? followHover
                                   ? 'rgb(202, 32, 85)'
@@ -969,6 +970,7 @@ function User(props) {
                         {!selfProfile && (
                           <Button
                             style={{
+                              outline: 'none',
                               backgroundColor: userFollowsProfile
                                 ? followHover
                                   ? 'rgb(202, 32, 85)'
@@ -992,12 +994,13 @@ function User(props) {
                         )}
                       </div>
                     </div>
-                    {createdAt && (
-                      <p className="my-2" style={{ textTransform: 'capitalize', margin: 'auto 0', fontSize: 12 }}>
-                        0 karma · Member since {moment(createdAt).format('MMM D, YYYY')}
-                      </p>
-                    )}
                   </div>
+                )}
+
+                {createdAt && (
+                  <p className="my-2" style={{ textTransform: 'capitalize', margin: 'auto 0', fontSize: 12 }}>
+                    0 karma · Member since {moment(createdAt).format('MMM D, YYYY')}
+                  </p>
                 )}
 
                 <Block>

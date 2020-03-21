@@ -983,7 +983,7 @@ function Post(props) {
                                   : '#aaa'
                               }
                               size={25}
-                              style={{ alignContent: 'center', cursor: 'pointer' }}
+                              style={{ outline: 'none', alignContent: 'center', cursor: 'pointer' }}
                               onMouseEnter={() => mouseOverDown(foundPost._id)}
                               onMouseLeave={() => mouseOutDown(foundPost._id)}
                               onClick={async () =>
