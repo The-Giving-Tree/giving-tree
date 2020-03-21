@@ -129,7 +129,7 @@ function ResetPassword(props) {
               onClick={() => (window.location = '/')}
             >
               <img
-                src="https://s3.amazonaws.com/pan.gaea/acacia.svg"
+                src="https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg"
                 alt="Giving Tree"
                 style={{ height: 30, marginRight: 12 }}
               />

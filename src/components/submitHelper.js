@@ -5,7 +5,7 @@ import { Text, createEditor, Transforms, Editor } from 'slate';
 import { Slate, Editable, ReactEditor, withReact, useSlate } from 'slate-react';
 import { useEditor, useSelected, useFocused } from 'slate-react';
 
-export const insertImage = (editor, url = 'https://s3.amazonaws.com/pan.gaea/acacia.svg') => {
+export const insertImage = (editor, url = 'https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg') => {
   const text = { text: '' };
   const image = { type: 'image', url, children: [text] };
   Transforms.insertNodes(editor, image);

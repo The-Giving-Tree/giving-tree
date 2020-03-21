@@ -302,7 +302,7 @@ function Post(props) {
       .update(username.toLowerCase())
       .digest('hex');
 
-    return 'https://s3.amazonaws.com/pan.gaea/user/' + hash;
+    return 'https://d1ppmvgsdgdlyy.cloudfront.net/user/' + hash;
   }
 
   function generateCommentHTML(childComment, leftIndent) {
@@ -406,7 +406,7 @@ function Post(props) {
                             height: 32,
                             background: `url(${generateHash(
                               childComment.username
-                            )}), url(https://s3.amazonaws.com/pan.gaea/acacia.svg)`,
+                            )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
                             backgroundPosition: '50% 50%',
                             backgroundSize: 'cover',
                             borderRadius: '50%',
@@ -508,7 +508,7 @@ function Post(props) {
                       size={SIZE.compact}
                     >
                       <img
-                        src="https://s3.amazonaws.com/pan.gaea/reply.svg"
+                        src="https://d1ppmvgsdgdlyy.cloudfront.net/reply.svg"
                         alt="reply"
                         style={{ height: 10, width: 'auto', display: 'block' }}
                       />
@@ -843,7 +843,7 @@ function Post(props) {
                               height: 32,
                               background: `url(${generateHash(
                                 foundPost.username
-                              )}), url(https://s3.amazonaws.com/pan.gaea/acacia.svg)`,
+                              )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
                               backgroundPosition: '50% 50%',
                               backgroundSize: 'cover',
                               borderRadius: '50%',
@@ -937,7 +937,7 @@ function Post(props) {
                                   onClick={() => {
                                     setEditor(true);
                                   }}
-                                  src="https://s3.amazonaws.com/pan.gaea/edit.svg"
+                                  src="https://d1ppmvgsdgdlyy.cloudfront.net/edit.svg"
                                   alt="edit"
                                   style={{
                                     marginLeft: 15,
@@ -1212,7 +1212,7 @@ function Post(props) {
                             >
                               <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <img
-                                  src="https://s3.amazonaws.com/pan.gaea/annotate.svg"
+                                  src="https://d1ppmvgsdgdlyy.cloudfront.net/annotate.svg"
                                   alt="annotate"
                                   style={{
                                     height: '12px',
@@ -1238,7 +1238,7 @@ function Post(props) {
                             >
                               <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <img
-                                  src="https://s3.amazonaws.com/pan.gaea/summary.svg"
+                                  src="https://d1ppmvgsdgdlyy.cloudfront.net/summary.svg"
                                   alt="summarize"
                                   style={{
                                     height: '12px',

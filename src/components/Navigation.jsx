@@ -186,7 +186,7 @@ function Navigation(props) {
       .update(username.toLowerCase())
       .digest('hex');
 
-    return 'https://s3.amazonaws.com/pan.gaea/user/' + hash;
+    return 'https://d1ppmvgsdgdlyy.cloudfront.net/user/' + hash;
   }
 
   const notificationMenu = close => {
@@ -356,7 +356,7 @@ function Navigation(props) {
                 onClick={() => (window.location = '/')}
               >
                 <img
-                  src="https://s3.amazonaws.com/pan.gaea/acacia.svg"
+                  src="https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg"
                   alt="Giving Tree"
                   style={{ height: 30, marginRight: 12 }}
                 />
@@ -458,7 +458,7 @@ function Navigation(props) {
                   kind={'secondary'}
                 >
                   <img
-                    src="https://s3.amazonaws.com/pan.gaea/submit.svg"
+                    src="https://d1ppmvgsdgdlyy.cloudfront.net/submit.svg"
                     alt="document"
                     style={{ height: 26, marginLeft: '3px' }}
                   />
@@ -472,7 +472,7 @@ function Navigation(props) {
                       <NotificationBadge count={notifications.length} effect={Effect.SCALE} />
                     )}
                     <img
-                      src="https://s3.amazonaws.com/pan.gaea/notification.svg"
+                      src="https://d1ppmvgsdgdlyy.cloudfront.net/notification.svg"
                       alt="notification"
                       style={{ width: 25, marginRight: 25 }}
                     />
@@ -485,15 +485,15 @@ function Navigation(props) {
                       items={[
                         {
                           label: 'My Profile',
-                          icon: 'https://s3.amazonaws.com/pan.gaea/user.svg'
+                          icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/user.svg'
                         },
                         {
                           label: 'Settings',
-                          icon: 'https://s3.amazonaws.com/pan.gaea/setting.svg'
+                          icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/setting.svg'
                         },
                         {
                           label: 'Log Out',
-                          icon: 'https://s3.amazonaws.com/pan.gaea/logout.svg'
+                          icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/logout.svg'
                         }
                       ]}
                       onItemSelect={item => {
@@ -541,7 +541,7 @@ function Navigation(props) {
                           height: 32,
                           background: `url(${generateHash(
                             user.username
-                          )}), url(https://s3.amazonaws.com/pan.gaea/acacia.svg)`,
+                          )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
                           backgroundPosition: '50% 50% !important',
                           backgroundSize: 'cover !important',
                           borderRadius: '50%',
@@ -578,7 +578,7 @@ function Navigation(props) {
                 onClick={() => (window.location = '/')}
               >
                 <img
-                  src="https://s3.amazonaws.com/pan.gaea/acacia.svg"
+                  src="https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg"
                   alt="Giving Tree"
                   style={{ height: 30, marginRight: 12 }}
                 />

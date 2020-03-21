@@ -519,7 +519,7 @@ function Draft(props) {
                           >
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                               <img
-                                src="https://s3.amazonaws.com/pan.gaea/cut.svg"
+                                src="https://d1ppmvgsdgdlyy.cloudfront.net/cut.svg"
                                 alt="cut"
                                 style={{ height: '12px', marginRight: 7, alignItems: 'center' }}
                               />
@@ -541,7 +541,7 @@ function Draft(props) {
                           >
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                               <img
-                                src="https://s3.amazonaws.com/pan.gaea/copy.svg"
+                                src="https://d1ppmvgsdgdlyy.cloudfront.net/copy.svg"
                                 alt="copy"
                                 style={{ height: '12px', marginRight: 7, alignItems: 'center' }}
                               />
@@ -563,7 +563,7 @@ function Draft(props) {
                           >
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                               <img
-                                src="https://s3.amazonaws.com/pan.gaea/paste.svg"
+                                src="https://d1ppmvgsdgdlyy.cloudfront.net/paste.svg"
                                 alt="paste"
                                 style={{ height: '12px', marginRight: 7, alignItems: 'center' }}
                               />
@@ -585,7 +585,7 @@ function Draft(props) {
                           >
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                               <img
-                                src="https://s3.amazonaws.com/pan.gaea/annotate.svg"
+                                src="https://d1ppmvgsdgdlyy.cloudfront.net/annotate.svg"
                                 alt="annotate"
                                 style={{ height: '12px', marginRight: 7, alignItems: 'center' }}
                               />
@@ -607,7 +607,7 @@ function Draft(props) {
                           >
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                               <img
-                                src="https://s3.amazonaws.com/pan.gaea/photo.svg"
+                                src="https://d1ppmvgsdgdlyy.cloudfront.net/photo.svg"
                                 alt="upload"
                                 style={{ height: '12px', marginRight: 7, alignItems: 'center' }}
                               />
@@ -629,7 +629,7 @@ function Draft(props) {
                           >
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                               <img
-                                src="https://s3.amazonaws.com/pan.gaea/link.svg"
+                                src="https://d1ppmvgsdgdlyy.cloudfront.net/link.svg"
                                 alt="link"
                                 style={{ height: '12px', marginRight: 7, alignItems: 'center' }}
                               />
@@ -651,7 +651,7 @@ function Draft(props) {
                           >
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                               <img
-                                src="https://s3.amazonaws.com/pan.gaea/tex.svg"
+                                src="https://d1ppmvgsdgdlyy.cloudfront.net/tex.svg"
                                 alt="latex"
                                 style={{ width: '12px', marginRight: 7, alignItems: 'center' }}
                               />

@@ -145,7 +145,7 @@ function Home(props) {
       .update(username.toLowerCase())
       .digest('hex');
 
-    return 'https://s3.amazonaws.com/pan.gaea/user/' + hash;
+    return 'https://d1ppmvgsdgdlyy.cloudfront.net/user/' + hash;
   }
 
   const renderElement = React.useCallback(props => <Element {...props} />, []);
@@ -220,7 +220,7 @@ function Home(props) {
                         height: 32,
                         background: `url(${generateHash(
                           item.username
-                        )}), url(https://s3.amazonaws.com/pan.gaea/acacia.svg)`,
+                        )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
                         backgroundPosition: '50% 50%',
                         backgroundSize: 'cover',
                         borderRadius: '50%',
@@ -267,7 +267,7 @@ function Home(props) {
                         ))}
                       <img
                         onClick={() => (window.location = `/post/${item._id}`)}
-                        src="https://s3.amazonaws.com/pan.gaea/more.svg"
+                        src="https://d1ppmvgsdgdlyy.cloudfront.net/more.svg"
                         alt="more"
                         style={{ width: 15, height: 'auto', cursor: 'pointer' }}
                       />
@@ -425,7 +425,7 @@ function Home(props) {
                                       height: 32,
                                       background: `url(${generateHash(
                                         item.parent.username
-                                      )}), url(https://s3.amazonaws.com/pan.gaea/acacia.svg)`,
+                                      )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
                                       backgroundPosition: '50% 50%',
                                       backgroundSize: 'cover',
                                       borderRadius: '50%',
@@ -469,7 +469,7 @@ function Home(props) {
                                     onClick={() =>
                                       (window.location = `/post/${item.parent && item.parent._id}`)
                                     }
-                                    src="https://s3.amazonaws.com/pan.gaea/more.svg"
+                                    src="https://d1ppmvgsdgdlyy.cloudfront.net/more.svg"
                                     alt="more"
                                     style={{ width: 15, height: 'auto', cursor: 'pointer' }}
                                   />
@@ -651,7 +651,7 @@ function Home(props) {
                       >
                         <Button style={{ padding: 0 }} kind="minimal" size={SIZE.compact}>
                           <img
-                            src="https://s3.amazonaws.com/pan.gaea/share.svg"
+                            src="https://d1ppmvgsdgdlyy.cloudfront.net/share.svg"
                             alt="share"
                             style={{ height: 22, width: 'auto', display: 'block' }}
                           />
@@ -670,7 +670,7 @@ function Home(props) {
                       onClick={() => (window.location = `/post/${item._id}`)}
                     >
                       <img
-                        src="https://s3.amazonaws.com/pan.gaea/comment.svg"
+                        src="https://d1ppmvgsdgdlyy.cloudfront.net/comment.svg"
                         alt="comment"
                         style={{ height: 22, width: 'auto', display: 'block' }}
                       />
@@ -781,7 +781,7 @@ function Home(props) {
     <div
       style={{
         width: '100%',
-        background: `url(https://s3.amazonaws.com/pan.gaea/pangaea.jpg)`,
+        background: `url(https://d1ppmvgsdgdlyy.cloudfront.net/pangaea.jpg)`,
         backgroundPosition: '50% 50%',
         backgroundSize: 'cover'
       }}

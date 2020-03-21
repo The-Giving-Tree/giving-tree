@@ -165,7 +165,7 @@ function Submit(props) {
 
   const isImageUrl = url => {
     if (!url) return false;
-    if (url.includes('https://s3.amazonaws.com/pan.gaea.net')) return true;
+    if (url.includes('https://d1ppmvgsdgdlyy.cloudfront.net')) return true;
     return false;
     // if (!isUrl(url)) return false;
     // const ext = new URL(url).pathname.split('.').pop();
@@ -358,8 +358,8 @@ function Submit(props) {
     if (uploadPhotoUrl !== '') {
       let newUploadPhotoUrl = uploadPhotoUrl;
       newUploadPhotoUrl = newUploadPhotoUrl.replace(
-        `https://s3.amazonaws.com/pan.gaea`,
-        `https://s3.amazonaws.com/pan.gaea.net`
+        `https://d1ppmvgsdgdlyy.cloudfront`,
+        `https://d1ppmvgsdgdlyy.cloudfront.net`
       );
 
       // replace imagePreview with this url
@@ -818,7 +818,7 @@ function Submit(props) {
                         >
                           <div style={{ display: 'flex', alignItems: 'center' }}>
                             <img
-                              src="https://s3.amazonaws.com/pan.gaea.net/annotate.svg"
+                              src="https://d1ppmvgsdgdlyy.cloudfront.net/annotate.svg"
                               alt="annotate"
                               style={{ height: '12px', marginRight: 7, alignItems: 'center' }}
                             />
@@ -840,7 +840,7 @@ function Submit(props) {
                         >
                           <div style={{ display: 'flex', alignItems: 'center' }}>
                             <img
-                              src="https://s3.amazonaws.com/pan.gaea.net/photo.svg"
+                              src="https://d1ppmvgsdgdlyy.cloudfront.net/photo.svg"
                               alt="upload"
                               style={{ height: '12px', marginRight: 7, alignItems: 'center' }}
                             />
@@ -862,7 +862,7 @@ function Submit(props) {
                         >
                           <div style={{ display: 'flex', alignItems: 'center' }}>
                             <img
-                              src="https://s3.amazonaws.com/pan.gaea.net/link.svg"
+                              src="https://d1ppmvgsdgdlyy.cloudfront.net/link.svg"
                               alt="link"
                               style={{ height: '12px', marginRight: 7, alignItems: 'center' }}
                             />
@@ -884,7 +884,7 @@ function Submit(props) {
                         >
                           <div style={{ display: 'flex', alignItems: 'center' }}>
                             <img
-                              src="https://s3.amazonaws.com/pan.gaea.net/tex.svg"
+                              src="https://d1ppmvgsdgdlyy.cloudfront.net/tex.svg"
                               alt="latex"
                               style={{ width: '12px', marginRight: 7, alignItems: 'center' }}
                             />

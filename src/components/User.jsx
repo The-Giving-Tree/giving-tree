@@ -224,7 +224,7 @@ function User(props) {
       .update(username.toLowerCase())
       .digest('hex');
 
-    return 'https://s3.amazonaws.com/pan.gaea/user/' + hash;
+    return 'https://d1ppmvgsdgdlyy.cloudfront.net/user/' + hash;
   }
 
   var postElements = <StyledBody>No posts published!</StyledBody>;
@@ -285,7 +285,7 @@ function User(props) {
                     <div style={{ color: 'green', display: 'flex', alignContent: 'center' }}>
                       +{post.upVotes.length}{' '}
                       <img
-                        src="https://s3.amazonaws.com/pan.gaea/like.svg"
+                        src="https://d1ppmvgsdgdlyy.cloudfront.net/like.svg"
                         alt="ago"
                         style={{ width: '10px', marginLeft: 5 }}
                       />
@@ -294,7 +294,7 @@ function User(props) {
                     <div style={{ display: 'flex', alignContent: 'center' }}>
                       0
                       <img
-                        src="https://s3.amazonaws.com/pan.gaea/like.svg"
+                        src="https://d1ppmvgsdgdlyy.cloudfront.net/like.svg"
                         alt="ago"
                         style={{ width: '10px', marginLeft: 5 }}
                       />
@@ -305,7 +305,7 @@ function User(props) {
                     <div style={{ color: 'red', display: 'flex', alignContent: 'center' }}>
                       -{post.downVotes.length}{' '}
                       <img
-                        src="https://s3.amazonaws.com/pan.gaea/dislike.svg"
+                        src="https://d1ppmvgsdgdlyy.cloudfront.net/dislike.svg"
                         alt="ago"
                         style={{ width: '10px', marginLeft: 5 }}
                       />
@@ -314,7 +314,7 @@ function User(props) {
                     <div style={{ display: 'flex', alignContent: 'center' }}>
                       0
                       <img
-                        src="https://s3.amazonaws.com/pan.gaea/dislike.svg"
+                        src="https://d1ppmvgsdgdlyy.cloudfront.net/dislike.svg"
                         alt="ago"
                         style={{ width: '10px', marginLeft: 5 }}
                       />
@@ -325,7 +325,7 @@ function User(props) {
                   <StatefulTooltip content={moment(post.updatedAt).format('MMM D, YYYY h:mm A')}>
                     <div style={{ display: 'flex', alignContent: 'center' }}>
                       <img
-                        src="https://s3.amazonaws.com/pan.gaea/future.svg"
+                        src="https://d1ppmvgsdgdlyy.cloudfront.net/future.svg"
                         alt="ago"
                         style={{ width: '12px', marginRight: 5 }}
                       />
@@ -377,7 +377,7 @@ function User(props) {
             }}
           >
             <img
-              src="https://s3.amazonaws.com/pan.gaea/post.svg"
+              src="https://d1ppmvgsdgdlyy.cloudfront.net/post.svg"
               alt="post"
               style={{ width: '16px', marginRight: 10 }}
             />
@@ -453,7 +453,7 @@ function User(props) {
                   height: 32,
                   background: `url(${generateHash(
                     comment.username
-                  )}), url(https://s3.amazonaws.com/pan.gaea/acacia.svg)`,
+                  )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
                   backgroundPosition: '50% 50%',
                   backgroundSize: 'cover',
                   borderRadius: '50%',
@@ -475,7 +475,7 @@ function User(props) {
             <div style={{ alignContent: 'flex-start' }}>
               <img
                 onClick={() => (window.location = `/post/${comment._id}`)}
-                src="https://s3.amazonaws.com/pan.gaea/more.svg"
+                src="https://d1ppmvgsdgdlyy.cloudfront.net/more.svg"
                 alt="more"
                 style={{ width: 15, height: 'auto', cursor: 'pointer' }}
               />
@@ -557,7 +557,7 @@ function User(props) {
                   height: 32,
                   background: `url(${generateHash(
                     vote.username
-                  )}), url(https://s3.amazonaws.com/pan.gaea/acacia.svg)`,
+                  )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
                   backgroundPosition: '50% 50%',
                   backgroundSize: 'cover',
                   borderRadius: '50%',
@@ -579,7 +579,7 @@ function User(props) {
             <div style={{ alignContent: 'flex-start' }}>
               <img
                 onClick={() => (window.location = `/post/${vote._id}`)}
-                src="https://s3.amazonaws.com/pan.gaea/more.svg"
+                src="https://d1ppmvgsdgdlyy.cloudfront.net/more.svg"
                 alt="more"
                 style={{ width: 15, height: 'auto', cursor: 'pointer' }}
               />
@@ -730,7 +730,7 @@ function User(props) {
                               backgroundRepeat: 'no-repeat',
                               backgroundPosition: 'center',
                               cursor: 'pointer',
-                              backgroundImage: `url('https://s3.amazonaws.com/pan.gaea/photo.svg')`
+                              backgroundImage: `url('https://d1ppmvgsdgdlyy.cloudfront.net/photo.svg')`
                             }}
                             onMouseEnter={() => mouseOverHeader()}
                             onMouseLeave={() => mouseOutHeader()}
@@ -776,7 +776,7 @@ function User(props) {
                                     marginTop: '-94px',
                                     backgroundRepeat: 'no-repeat',
                                     backgroundPosition: 'center',
-                                    backgroundImage: `url('https://s3.amazonaws.com/pan.gaea/photo.svg')`
+                                    backgroundImage: `url('https://d1ppmvgsdgdlyy.cloudfront.net/photo.svg')`
                                   }}
                                 />
                                 <Avatar
@@ -870,7 +870,7 @@ function User(props) {
                       selfProfile && (
                         <div style={{ alignContent: 'flex-start' }}>
                           <img
-                            src="https://s3.amazonaws.com/pan.gaea/edit.svg"
+                            src="https://d1ppmvgsdgdlyy.cloudfront.net/edit.svg"
                             alt="edit"
                             onClick={() => {
                               //
@@ -952,7 +952,7 @@ function User(props) {
                         {verified && (
                           <div style={{ display: 'flex', alignItems: 'center' }}>
                             <img
-                              src="https://s3.amazonaws.com/pan.gaea/verified.svg"
+                              src="https://d1ppmvgsdgdlyy.cloudfront.net/verified.svg"
                               alt="verified"
                               style={{ marginLeft: 14, height: 20 }}
                             />
