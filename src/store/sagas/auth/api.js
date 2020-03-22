@@ -52,7 +52,11 @@ const follow = async (env, userId, token) => {
       headers: { Authorization: `Bearer ${token}` }
     };
 
-    const data = await Axios.post(`${ROUTES[env].giving_tree}/v1/user/follow/${userId}`, {}, headers);
+    const data = await Axios.post(
+      `${ROUTES[env].giving_tree}/v1/user/follow/${userId}`,
+      {},
+      headers
+    );
     return data;
   } catch (e) {
     const error = e.response.data ? e.response.data : e;
@@ -67,7 +71,11 @@ const unfollow = async (env, userId, token) => {
       headers: { Authorization: `Bearer ${token}` }
     };
 
-    const data = await Axios.post(`${ROUTES[env].giving_tree}/v1/user/unfollow/${userId}`, {}, headers);
+    const data = await Axios.post(
+      `${ROUTES[env].giving_tree}/v1/user/unfollow/${userId}`,
+      {},
+      headers
+    );
     return data;
   } catch (e) {
     const error = e.response.data ? e.response.data : e;

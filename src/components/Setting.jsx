@@ -111,7 +111,9 @@ function Setting(props) {
         {(tab === undefined || tab === 'account') && (
           <Block>
             <div style={{ marginTop: 50, marginBottom: 30 }}>
-            <p className="my-3" style={{ fontSize: 20 }}>Account</p>
+              <p className="my-3" style={{ fontSize: 20 }}>
+                Account
+              </p>
               <Button
                 onClick={() => {
                   logoutAllDispatch({ env: process.env.NODE_ENV });
@@ -126,21 +128,27 @@ function Setting(props) {
         {tab === 'profile' && (
           <Block>
             <div style={{ marginTop: 50, marginBottom: 30 }}>
-              <p className="my-3" style={{ fontSize: 20 }}>Profile</p>
+              <p className="my-3" style={{ fontSize: 20 }}>
+                Profile
+              </p>
             </div>
           </Block>
         )}
         {tab === 'security' && (
           <Block>
             <div style={{ marginTop: 50, marginBottom: 30 }}>
-              <p className="my-3" style={{ fontSize: 20 }}>Security</p>
+              <p className="my-3" style={{ fontSize: 20 }}>
+                Security
+              </p>
             </div>
           </Block>
         )}
         {tab === 'premium' && (
           <Block>
             <div style={{ marginTop: 50, marginBottom: 30 }}>
-              <p className="my-3" style={{ fontSize: 20 }}>Premium</p>
+              <p className="my-3" style={{ fontSize: 20 }}>
+                Premium
+              </p>
             </div>
           </Block>
         )}

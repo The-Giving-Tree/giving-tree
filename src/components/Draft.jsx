@@ -220,9 +220,9 @@ function Draft(props) {
                 </div>
               </div>
               <div style={{ marginTop: 15 }}>
-                Welcome to Giving Tree's document editor! You can edit documents, upload documents and
-                annotate research. The goal is to help foster greater discussion in spreading truth
-                and knowledge.
+                Welcome to Giving Tree's document editor! You can edit documents, upload documents
+                and annotate research. The goal is to help foster greater discussion in spreading
+                truth and knowledge.
               </div>
             </Card>
           )}

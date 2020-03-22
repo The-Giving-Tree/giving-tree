@@ -149,7 +149,11 @@ function Signup(props) {
                   }
                 }}
               >
-                {errorMessage && <p className="my-3 text-sm" style={{ color: 'rgb(204, 50, 63)' }}>{errorMessage}</p>}
+                {errorMessage && (
+                  <p className="my-3 text-sm" style={{ color: 'rgb(204, 50, 63)' }}>
+                    {errorMessage}
+                  </p>
+                )}
                 <Input
                   value={name}
                   onChange={event => setName(event.currentTarget.value)}

@@ -391,7 +391,11 @@ function User(props) {
   let draftElements = (
     <StyledBody>
       No drafts avaiable.{' '}
-      <a className="text-indigo-600 hover:text-indigo-800" style={{ textDecoration: 'none' }} href={'/submit'}>
+      <a
+        className="text-indigo-600 hover:text-indigo-800"
+        style={{ textDecoration: 'none' }}
+        href={'/submit'}
+      >
         Get started!
       </a>
     </StyledBody>
@@ -806,7 +810,10 @@ function User(props) {
                               justifyContent: 'center'
                             }}
                           >
-                            <p className="my-2" style={{ fontSize: 8, textAlign: 'center', color: 'green' }}>
+                            <p
+                              className="my-2"
+                              style={{ fontSize: 8, textAlign: 'center', color: 'green' }}
+                            >
                               {newFileName}
                             </p>
                             <Check style={{ height: 16, color: 'green' }} />
@@ -947,7 +954,10 @@ function User(props) {
                       }}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', marginBottom: 10 }}>
-                        <p className="my-2" style={{ textTransform: 'capitalize', margin: 'auto 0', fontSize: 20 }}>
+                        <p
+                          className="my-2"
+                          style={{ textTransform: 'capitalize', margin: 'auto 0', fontSize: 20 }}
+                        >
                           <strong>{username}</strong>
                         </p>
                         {verified && (
@@ -998,7 +1008,10 @@ function User(props) {
                 )}
 
                 {createdAt && (
-                  <p className="my-2" style={{ textTransform: 'capitalize', margin: 'auto 0', fontSize: 12 }}>
+                  <p
+                    className="my-2"
+                    style={{ textTransform: 'capitalize', margin: 'auto 0', fontSize: 12 }}
+                  >
                     0 karma · Member since {moment(createdAt).format('MMM D, YYYY')}
                   </p>
                 )}

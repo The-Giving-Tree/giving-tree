@@ -526,7 +526,7 @@ function Navigation(props) {
                         style: {
                           marginRight: '24px'
                         }
-                      },
+                      }
                     }}
                     style={{ outline: 'none', fontSize: '14px' }}
                     size={SIZE.compact}

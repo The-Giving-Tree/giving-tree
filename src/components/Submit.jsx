@@ -6,7 +6,6 @@ import isHotkey from 'is-hotkey';
 import { Range } from 'slate';
 import { css, cx } from 'emotion';
 import { withHistory } from 'slate-history';
-import imageExtensions from 'image-extensions';
 import isUrl from 'is-url';
 import {
   HeaderNavigation,
@@ -29,7 +28,7 @@ import { Redirect } from 'react-router-dom';
 import { Card, StyledBody, StyledAction } from 'baseui/card';
 import { Block } from 'baseui/block';
 import { H1, H2, H3, H4, H5, H6 } from 'baseui/typography';
-import { Upload, ChevronUp, ChevronDown } from 'baseui/icon';
+import { ArrowLeft } from 'baseui/icon';
 import { useStyletron } from 'baseui';
 import { Input, StyledInput } from 'baseui/input';
 import { Tag, VARIANT as TAG_VARIANT } from 'baseui/tag';
@@ -118,8 +117,14 @@ function Submit(props) {
   const [title, setTitle] = React.useState('');
   const [imagePreview, setPreview] = React.useState('');
   const [text, setText] = React.useState('');
+  const [foodCart, setFoodCart] = React.useState([]);
+  const [selectedRequest, setRequest] = React.useState('');
   const [value, setValue] = React.useState('');
+  const [checkout, setCheckout] = React.useState(false);
   const [tags, setTags] = React.useState([]);
+  let [changedFoodCart, setChangedFoodCart] = useState(0);
+  const [foodCartQuantity, setFoodCartQuantity] = React.useState('');
+  const [foodCartName, setFoodCartName] = React.useState('');
   const [slateValue, setSlateValue] = React.useState(initialValue);
   const addTag = tag => {
     setTags([...tags, tag]);
@@ -310,6 +315,8 @@ function Submit(props) {
     updateUser();
   }, [props.submitDraftSuccess, props.markSeenSubmitTutorial, getCurrentUserDispatch]);
 
+  useEffect(() => {}, [changedFoodCart]);
+
   const handleKeyDown = event => {
     switch (event.keyCode) {
       // Enter
@@ -412,6 +419,103 @@ function Submit(props) {
     );
   };
 
+  const transportationJSX = (
+    <div>
+      <div>Pickup</div>
+      <div>Dropoff</div>
+      <div>Date</div>
+    </div>
+  );
+
+  const validFoodCart = foodCartName && foodCartQuantity && Number(foodCartQuantity) > 0;
+
+  const foodCartJSX = () => {
+    return foodCart.length === 0 ? (
+      <div className="text-center">no items in cart</div>
+    ) : (
+      <table class="table-auto" style={{ width: '100%' }}>
+        <thead>
+          <tr>
+            <th class="px-4 py-2">Item Description</th>
+            <th class="px-4 py-2">Quantity</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {foodCart.map((item, i) => (
+            <tr className={i % 2 === 0 && `bg-gray-100`}>
+              <td className={`border px-4 py-2`}>{item.name}</td>
+              <td className={`border px-4 py-2`}>{item.quantity}</td>
+              <td className={`border px-4 py-2`} style={{ width: 50, cursor: 'pointer' }}>
+                {' '}
+                <img
+                  onClick={() => {
+                    let foodCartNow = foodCart;
+                    foodCartNow.splice(i, 1);
+                    setFoodCart(foodCartNow);
+                    setChangedFoodCart((changedFoodCart += 1)); // to update state every time
+                  }}
+                  style={{ objectFit: 'cover', maxHeight: 15, overflow: 'auto' }}
+                  src="https://d1ppmvgsdgdlyy.cloudfront.net/trash.svg"
+                  alt="delete"
+                ></img>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  };
+
+  const foodJSX = () => {
+    return (
+      <div>
+        {foodCartJSX()}
+        <div className={`flex items-center mt-4`}>
+          <input
+            onChange={e => {
+              setFoodCartName(e.target.value);
+            }}
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="food"
+            value={foodCartName}
+            type="text"
+            placeholder="food item"
+          />
+          <input
+            onChange={e => {
+              setFoodCartQuantity(e.target.value);
+            }}
+            class="mx-4 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            style={{ width: 100 }}
+            value={foodCartQuantity}
+            id="food"
+            type="number"
+            placeholder="quantity"
+          />
+          <button
+            className={`${validFoodCart ? 'bg-indigo-500' : 'bg-gray-500'} ${validFoodCart &&
+              'hover:bg-indigo-700'} text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
+            type="button"
+            onClick={() => {
+              if (validFoodCart) {
+                let foodCartNew = foodCart;
+                foodCartNew.push({ name: foodCartName, quantity: foodCartQuantity });
+                setFoodCart(foodCartNew);
+                setFoodCartQuantity('');
+                setFoodCartName('');
+              } else {
+                alert('please enter a valid food cart item');
+              }
+            }}
+          >
+            Add
+          </button>
+        </div>
+      </div>
+    );
+  };
+
   const InsertImageButton = () => {
     const editor = useEditor();
     return (
@@ -477,11 +581,20 @@ function Submit(props) {
                   }
                   style={{ cursor: 'pointer', color: 'black' }}
                 >
-                  <img src='https://d1ppmvgsdgdlyy.cloudfront.net/close.svg' alt='close' style={{ height: 10 }} />
+                  <img
+                    src="https://d1ppmvgsdgdlyy.cloudfront.net/close.svg"
+                    alt="close"
+                    style={{ height: 10 }}
+                  />
                 </div>
               </div>
               <div style={{ marginTop: 15 }}>
-                Welcome to Giving Tree! You can submit a claim to the community and get help! You can also message us at <a className="text-indigo-600 hover:text-indigo-800" href="tel:+1507-533-5281">507-533-5281</a> to get help.
+                Welcome to Giving Tree! You can submit a claim to the community and get help! You
+                can also message us at{' '}
+                <a className="text-indigo-600 hover:text-indigo-800" href="tel:+1507-533-5281">
+                  507-533-5281
+                </a>{' '}
+                to get help.
               </div>
             </Card>
           )}
@@ -515,7 +628,151 @@ function Submit(props) {
               }
             }}
           >
-            <div
+            <div className="flex justify-between items-center my-4 mb-6" style={{ height: 36 }}>
+              {!checkout ? (
+                <React.Fragment>
+                  <div class="font-bold text-xl text-left">I need:</div>
+                  <div>
+                    {selectedRequest !== '' && (
+                      <button
+                        onClick={() => setCheckout(true)}
+                        style={{ outline: 'none' }}
+                        class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
+                      >
+                        Next
+                      </button>
+                    )}
+                  </div>
+                </React.Fragment>
+              ) : (
+                <React.Fragment>
+                  <div
+                    onClick={() => {
+                      setRequest('');
+                      setCheckout(false);
+                    }}
+                    class="font-bold text-xl text-left"
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <ArrowLeft size={20} />
+                  </div>
+                  <div>
+                    {selectedRequest !== '' && (
+                      <button
+                        onClick={() => setCheckout(true)}
+                        style={{ outline: 'none' }}
+                        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                      >
+                        Submit
+                      </button>
+                    )}
+                  </div>
+                </React.Fragment>
+              )}
+            </div>
+            {!checkout && (
+              <div class="grid grid-cols-3 gap-4">
+                <div
+                  onClick={() => {
+                    if (selectedRequest) {
+                      setRequest('');
+                    } else {
+                      setRequest('food');
+                    }
+                  }}
+                  className={`max-w-sm rounded overflow-hidden shadow-lg border ${selectedRequest ===
+                    'food' &&
+                    'border-indigo-600'} hover:border-indigo-600 rounded-lg hover:text-green-600 transition duration-150`}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <img
+                    style={{ objectFit: 'cover', maxHeight: 150, width: 400, overflow: 'auto' }}
+                    src="https://d1ppmvgsdgdlyy.cloudfront.net/groceries.jpg"
+                    alt="Food"
+                  ></img>
+                  <div class="px-6 py-8">
+                    <div
+                      className={`font-bold text-xl text-center ${selectedRequest === 'food' &&
+                        'text-green-600'}`}
+                    >
+                      Food
+                    </div>
+                  </div>
+                </div>
+                <div
+                  onClick={() => {
+                    if (selectedRequest) {
+                      setRequest('');
+                    } else {
+                      // setRequest('supplies');
+                    }
+                  }}
+                  className={`max-w-sm rounded overflow-hidden shadow-lg border ${selectedRequest ===
+                    'supplies' && 'border-indigo-600'} rounded-lg transition duration-150`}
+                  style={{ cursor: 'not-allowed' }}
+                >
+                  <img
+                    style={{
+                      objectFit: 'cover',
+                      maxHeight: 150,
+                      width: 400,
+                      overflow: 'auto',
+                      filter: 'grayscale(100%)'
+                    }}
+                    src="https://d1ppmvgsdgdlyy.cloudfront.net/supplies.jpg"
+                    alt="Supplies"
+                  ></img>
+                  <div class="px-6 py-8">
+                    <div
+                      className={`font-bold text-xl text-center ${selectedRequest === 'supplies' &&
+                        'text-green-600'}`}
+                    >
+                      Supplies (coming soon)
+                    </div>
+                  </div>
+                </div>
+                <div
+                  onClick={() => {
+                    if (selectedRequest) {
+                      setRequest('');
+                    } else {
+                      // setRequest('transportation');
+                    }
+                  }}
+                  className={`max-w-sm rounded overflow-hidden shadow-lg border ${selectedRequest ===
+                    'transportation' && 'border-indigo-600'} rounded-lg transition duration-150`}
+                  style={{ cursor: 'not-allowed' }}
+                >
+                  <img
+                    style={{
+                      objectFit: 'cover',
+                      maxHeight: 150,
+                      width: 400,
+                      overflow: 'auto',
+                      filter: 'grayscale(100%)'
+                    }}
+                    src="https://d1ppmvgsdgdlyy.cloudfront.net/transportation.jpg"
+                    alt="Transportation"
+                  ></img>
+                  <div class="px-6 py-8">
+                    <div
+                      className={`font-bold text-xl text-center ${selectedRequest ===
+                        'transportation' && 'text-green-600'}`}
+                    >
+                      Transportation (coming soon)
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            {checkout && (
+              <React.Fragment>
+                {selectedRequest === 'food' && foodJSX()}
+                {selectedRequest === 'supplies' && 'supplies'}
+                {selectedRequest === 'transportation' && transportationJSX}
+              </React.Fragment>
+            )}
+            {/* <div
               style={{ display: 'flex', justifyContent: 'space-between', alignContent: 'center' }}
             >
               <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -616,7 +873,6 @@ function Submit(props) {
                       : 'Save'}
                   </Button>
                 )}
-                {/* only see publish button when a draft exists */}
                 {!isEmpty(submittedDraft) && (
                   <Button
                     style={{ fontSize: '12px', marginTop: 10, marginBottom: 10 }}
@@ -637,8 +893,8 @@ function Submit(props) {
                   </Button>
                 )}
               </div>
-            </div>
-            <div
+            </div> */}
+            {/* <div
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -706,7 +962,7 @@ function Submit(props) {
                     renderElement={renderElement}
                     spellCheck
                     autoFocus
-                    placeholder="Enter some text..."
+                    placeholder="Describe your need..."
                     onKeyDown={event => {
                       for (const hotkey in HOTKEYS) {
                         if (isHotkey(hotkey, event)) {
@@ -897,7 +1153,7 @@ function Submit(props) {
                   ]}
                 />
               </ContextMenu>
-            </div>
+            </div> */}
           </Card>
         </div>
       </div>

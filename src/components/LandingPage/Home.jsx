@@ -822,12 +822,12 @@ function Home(props) {
                         {
                           label: 'Home'
                         },
-                        {
-                          label: 'Popular'
-                        },
-                        {
-                          label: 'Newest'
-                        },
+                        // {
+                        //   label: 'Popular'
+                        // },
+                        // {
+                        //   label: 'Newest'
+                        // },
                         {
                           label: 'Discover'
                         }
@@ -875,10 +875,10 @@ function Home(props) {
                 <Button
                   onClick={() => (window.location = '/submit')}
                   kind="secondary"
-                  style={{ marginLeft: 10 }}
+                  style={{ marginLeft: 10, fontSize: 14 }}
                   shape={SHAPE.square}
                 >
-                  <Upload />
+                  Submit
                 </Button>
               </div>
             </Card>
@@ -901,16 +901,17 @@ function Home(props) {
             <div style={{ paddingTop: 30 }} />
             {items.length === 0 && newsfeedSuccess && !newsfeedLoading && (
               <StyledBody style={{ margin: '0 auto', textAlign: 'center', marginTop: 20 }}>
-                You don't follow anyone yet :(
-                <div
-                  onClick={() => {
-                    window.location = '/home/discover';
-                  }}
-                  style={{ cursor: 'pointer', color: 'rgb(25, 103, 210)' }}
-                >
-                  Click here to discover topics and people to follow
-                </div>
-                .
+                {id !== 'discover' ? `You don't follow anyone yet :(` : 'No requests yet'}
+                {id !== 'discover' && (
+                  <div
+                    onClick={() => {
+                      window.location = '/home/discover';
+                    }}
+                    style={{ cursor: 'pointer', color: 'rgb(25, 103, 210)' }}
+                  >
+                    Click here to discover topics and people to follow.
+                  </div>
+                )}
               </StyledBody>
             )}
           </div>

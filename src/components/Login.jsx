@@ -118,7 +118,11 @@ function Login(props) {
                   }
                 }}
               >
-                {errorMessage && <p className="my-3 text-sm" style={{ color: 'rgb(204, 50, 63)' }}>{errorMessage}</p>}
+                {errorMessage && (
+                  <p className="my-3 text-sm" style={{ color: 'rgb(204, 50, 63)' }}>
+                    {errorMessage}
+                  </p>
+                )}
                 <Input
                   value={username}
                   onChange={event => setUsername(event.currentTarget.value)}
@@ -210,7 +214,10 @@ function Login(props) {
             )}
           </Media>
           <p className="my-3 text-sm">
-            New to Giving Tree? <a className="text-indigo-600 hover:text-indigo-800" href="/signup">Sign Up</a>
+            New to Giving Tree?{' '}
+            <a className="text-indigo-600 hover:text-indigo-800" href="/signup">
+              Sign Up
+            </a>
           </p>
         </div>
       </div>

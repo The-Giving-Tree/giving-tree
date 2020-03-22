@@ -14,7 +14,7 @@ const ROUTES = {
   local: {
     giving_tree: 'http://localhost:3000',
     socket: 'http://localhost:3000'
-  },
+  }
 };
 
 export default ROUTES;
