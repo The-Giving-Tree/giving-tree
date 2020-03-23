@@ -607,28 +607,18 @@ function User(props) {
             <div>
               <strong>{shorten(100, vote.title)}</strong>
               <br />
-              {
-                <Slate
-                  editor={slateEditor}
-                  value={
-                    vote.text
-                      ? JSON.parse(vote.text)
-                      : [
-                          {
-                            children: [{ text: 'loading...' }]
-                          }
-                        ]
-                  }
-                >
-                  <Editable
-                    renderLeaf={renderLeaf}
-                    renderElement={renderElement}
-                    spellCheck
-                    autoFocus
-                    readOnly
-                  />
-                </Slate>
-              }
+              <div>
+                <div class="font-bold text-base text-left my-1 mt-4">
+                  {vote.text && JSON.parse(vote.text).address}
+                </div>
+                <div className="font-bold text-base text-left my-1 mt-4">
+                  {vote && `Description: ${JSON.parse(vote.text).foodDescription}`}
+                </div>
+                <div className="mt-4"></div>
+                {vote.text &&
+                  JSON.parse(vote.text).type === 'food' &&
+                  foodCartJSX(JSON.parse(vote.text).foodCart)}
+              </div>
             </div>
           ) : (
             ''
