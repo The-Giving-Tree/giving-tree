@@ -1122,11 +1122,10 @@ function Home(props) {
                     <div style={{ paddingTop: 30 }} />
                     {items.length === 0 && newsfeedSuccess && !newsfeedLoading && (
                       <StyledBody style={{ margin: '0 auto', textAlign: 'center', marginTop: 20 }}>
-                        {id === 'discover' && 'No requests yet'}
-                        {id === 'ongoing' && `You haven't requested to help anyone yet`}
-                        {id === 'completed' && `You haven't completed any tasks yet`}
-                        {id === 'global' && `No requests globally yet! Invite your friends and start spreading the love`}
-                        <br />
+                        {id === 'discover' && <div className='mb-2'>No requests yet</div>}
+                        {id === 'ongoing' && <div className='mb-2'>You haven't requested to help anyone yet</div>}
+                        {id === 'completed' && <div className='mb-2'>You haven't completed any tasks yet</div>}
+                        {id === 'global' && <div className='mb-2'>No requests globally yet! Invite your friends and start spreading the love</div>}
                         {id !== 'discover' && (
                           <div
                             onClick={() => {
