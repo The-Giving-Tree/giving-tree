@@ -163,6 +163,21 @@ const editComment = async (env, postId, commentId, newContent, token) => {
   }
 };
 
+const claimTask = async (env, postId, token) => {
+  try {
+    const headers = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+
+    const data = await Axios.put(`${ROUTES[env].giving_tree}/v1/post/${postId}/claim`, {}, headers);
+    return data;
+  } catch (e) {
+    const error = e.response.data ? e.response.data : e;
+    Sentry.captureException(new Error(JSON.stringify(error)));
+    throw error;
+  }
+};
+
 const upvote = async (env, postId, commentId = '', token) => {
   try {
     const headers = {
@@ -269,7 +284,7 @@ const loadNewsFeed = async (env, page, feed, token) => {
         data = await Axios.get(`${ROUTES[env].giving_tree}/completed/${page}`, headers);
         break;
       case 'Global':
-        data = await Axios.get(`${ROUTES[env].giving_tree}/globals/${page}`, headers);
+        data = await Axios.get(`${ROUTES[env].giving_tree}/global/${page}`, headers);
         break;
       default:
         break;
@@ -428,6 +443,7 @@ const Api = {
   addReply,
   addComment,
   deleteComment,
+  claimTask,
   upvote,
   follow,
   unfollow,

@@ -33,6 +33,7 @@ import { connect } from 'react-redux';
 import {
   getCurrentUser,
   loadNewsfeed,
+  claimTask,
   upvote,
   downvote,
   addComment,
@@ -44,6 +45,7 @@ function Home(props) {
     user,
     getCurrentUserDispatch,
     loadNewsfeedDispatch,
+    claimTaskDispatch,
     newsfeed,
     upvoteDispatch,
     downvoteDispatch,
@@ -236,7 +238,7 @@ function Home(props) {
               Root: {
                 style: {
                   width: '100%',
-                  margin: '10px auto 0px auto',
+                  margin: `${props.match.url === '/home/discover' ? '10px' : '0px'} auto 0px auto`,
                   maxHeight: '800px',
                   overflow: 'hidden'
                 }
@@ -715,6 +717,11 @@ function Home(props) {
                               'Please confirm your committment to helping this person - by saying yes, other people cannot claim this request.'
                             )
                           ) {
+                            claimTaskDispatch({
+                              env: process.env.NODE_ENV,
+                              postId: item._id
+                            });
+
                             showConfetti(true);
                           }
                         }}
@@ -985,6 +992,20 @@ function Home(props) {
                       Global Tasks
                     </div>
                   </div>
+                  <div
+                    className={`text-black transition duration-150 hover:text-indigo-600 ${props
+                      .match.url === '/home/global' &&
+                      'text-indigo-600'} flex items-center justify-between`}
+                    style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
+                  >
+                    <span />
+                    <div
+                      className="flex items-center"
+                      onClick={() => (window.location = '/submit')}
+                    >
+                      ❤️Ask for Help
+                    </div>
+                  </div>
                 </div>
               </th>
               <th class="px-4 py-2" style={{ width: '50%' }}>
@@ -995,114 +1016,116 @@ function Home(props) {
                   }}
                 >
                   <div style={{ paddingLeft: 24, paddingRight: 24, paddingTop: 30 }}>
-                    <Card
-                      overrides={{
-                        Root: {
-                          style: {
-                            width: '100%',
-                            margin: '0 auto'
+                    {props.match.url === '/home/discover' && (
+                      <Card
+                        overrides={{
+                          Root: {
+                            style: {
+                              width: '100%',
+                              margin: '0 auto'
+                            }
+                          },
+                          Body: {
+                            style: {
+                              margin: '-15px'
+                            }
                           }
-                        },
-                        Body: {
-                          style: {
-                            margin: '-15px'
-                          }
-                        }
-                      }}
-                    >
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignContent: 'center'
                         }}
                       >
-                        <StatefulPopover
-                          placement={PLACEMENT.bottomLeft}
-                          content={({ close }) => (
-                            <StatefulMenu
-                              items={[
-                                // {
-                                //   label: 'Home'
-                                // },
-                                // {
-                                //   label: 'Popular'
-                                // },
-                                // {
-                                //   label: 'Newest'
-                                // },
-                                {
-                                  label: 'Discover'
-                                },
-                                {
-                                  label: 'Your Tasks'
-                                },
-                                {
-                                  label: 'Completed Tasks'
-                                },
-                                {
-                                  label: 'Global Tasks'
-                                }
-                              ]}
-                              onItemSelect={item => {
-                                close();
-                                switch (item.item.label) {
-                                  case 'Home':
-                                    window.location = '/';
-                                    break;
-                                  case 'Popular':
-                                    window.location = '/home/popular';
-                                    break;
-                                  case 'Newest':
-                                    window.location = '/home/newest';
-                                    break;
-                                  case 'Discover':
-                                    window.location = '/home/discover';
-                                    break;
-                                  case 'Your Tasks':
-                                    window.location = '/home/ongoing';
-                                    break;
-                                  case 'Completed Tasks':
-                                    window.location = '/home/completed';
-                                    break;
-                                  case 'Global Tasks':
-                                    window.location = '/home/global';
-                                    break;
-                                  default:
-                                    break;
-                                }
-                              }}
-                              overrides={{
-                                List: { style: { outline: 'none' } }
-                              }}
-                            />
-                          )}
+                        <div
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignContent: 'center'
+                          }}
                         >
-                          <Button
-                            size={'compact'}
-                            kind={'secondary'}
-                            style={{ marginRight: 10 }}
-                            endEnhancer={() => <ChevronDown size={24} />}
+                          <StatefulPopover
+                            placement={PLACEMENT.bottomLeft}
+                            content={({ close }) => (
+                              <StatefulMenu
+                                items={[
+                                  // {
+                                  //   label: 'Home'
+                                  // },
+                                  // {
+                                  //   label: 'Popular'
+                                  // },
+                                  // {
+                                  //   label: 'Newest'
+                                  // },
+                                  {
+                                    label: 'Discover'
+                                  },
+                                  {
+                                    label: 'Your Tasks'
+                                  },
+                                  {
+                                    label: 'Completed Tasks'
+                                  },
+                                  {
+                                    label: 'Global Tasks'
+                                  }
+                                ]}
+                                onItemSelect={item => {
+                                  close();
+                                  switch (item.item.label) {
+                                    case 'Home':
+                                      window.location = '/';
+                                      break;
+                                    case 'Popular':
+                                      window.location = '/home/popular';
+                                      break;
+                                    case 'Newest':
+                                      window.location = '/home/newest';
+                                      break;
+                                    case 'Discover':
+                                      window.location = '/home/discover';
+                                      break;
+                                    case 'Your Tasks':
+                                      window.location = '/home/ongoing';
+                                      break;
+                                    case 'Completed Tasks':
+                                      window.location = '/home/completed';
+                                      break;
+                                    case 'Global Tasks':
+                                      window.location = '/home/global';
+                                      break;
+                                    default:
+                                      break;
+                                  }
+                                }}
+                                overrides={{
+                                  List: { style: { outline: 'none' } }
+                                }}
+                              />
+                            )}
                           >
-                            {newsfeedSort}
+                            <Button
+                              size={'compact'}
+                              kind={'secondary'}
+                              style={{ marginRight: 10 }}
+                              endEnhancer={() => <ChevronDown size={24} />}
+                            >
+                              {newsfeedSort}
+                            </Button>
+                          </StatefulPopover>
+                          <Input
+                            value={newPost}
+                            onClick={() => (window.location = '/submit')}
+                            onChange={event => setNewPost(event.currentTarget.value)}
+                            placeholder="Ask for help / assistance"
+                          />
+                          <Button
+                            onClick={() => (window.location = '/submit')}
+                            kind="secondary"
+                            style={{ marginLeft: 10, fontSize: 14 }}
+                            shape={SHAPE.square}
+                          >
+                            Submit
                           </Button>
-                        </StatefulPopover>
-                        <Input
-                          value={newPost}
-                          onClick={() => (window.location = '/submit')}
-                          onChange={event => setNewPost(event.currentTarget.value)}
-                          placeholder="Ask for help / assistance"
-                        />
-                        <Button
-                          onClick={() => (window.location = '/submit')}
-                          kind="secondary"
-                          style={{ marginLeft: 10, fontSize: 14 }}
-                          shape={SHAPE.square}
-                        >
-                          Submit
-                        </Button>
-                      </div>
-                    </Card>
+                        </div>
+                      </Card>
+                    )}
                     <InfiniteScroll
                       pageStart={1}
                       loadMore={() => setUpdateNews(true)}
@@ -1122,10 +1145,19 @@ function Home(props) {
                     <div style={{ paddingTop: 30 }} />
                     {items.length === 0 && newsfeedSuccess && !newsfeedLoading && (
                       <StyledBody style={{ margin: '0 auto', textAlign: 'center', marginTop: 20 }}>
-                        {id === 'discover' && <div className='mb-2'>No requests yet</div>}
-                        {id === 'ongoing' && <div className='mb-2'>You haven't requested to help anyone yet</div>}
-                        {id === 'completed' && <div className='mb-2'>You haven't completed any tasks yet</div>}
-                        {id === 'global' && <div className='mb-2'>No requests globally yet! Invite your friends and start spreading the love</div>}
+                        {id === 'discover' && <div className="mb-2">No requests yet</div>}
+                        {id === 'ongoing' && (
+                          <div className="mb-2">You haven't requested to help anyone yet</div>
+                        )}
+                        {id === 'completed' && (
+                          <div className="mb-2">You haven't completed any tasks yet</div>
+                        )}
+                        {id === 'global' && (
+                          <div className="mb-2">
+                            No requests globally yet! Invite your friends and start spreading the
+                            love
+                          </div>
+                        )}
                         {id !== 'discover' && (
                           <div
                             onClick={() => {
@@ -1162,6 +1194,7 @@ function Home(props) {
 const mapDispatchToProps = dispatch => ({
   getCurrentUserDispatch: payload => dispatch(getCurrentUser(payload)),
   loadNewsfeedDispatch: payload => dispatch(loadNewsfeed(payload)),
+  claimTaskDispatch: payload => dispatch(claimTask(payload)),
   upvoteDispatch: payload => dispatch(upvote(payload)),
   downvoteDispatch: payload => dispatch(downvote(payload)),
   addCommentDispatch: payload => dispatch(addComment(payload)),

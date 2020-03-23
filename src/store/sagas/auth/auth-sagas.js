@@ -173,6 +173,19 @@ export function* editComment(action) {
   }
 }
 
+export function* claimTask(action) {
+  try {
+    const token = localStorage.getItem('giving_tree_jwt');
+    yield call(Api.claimTask, action.payload.env, action.payload.postId, token);
+
+    yield put({
+      type: ACTION_TYPE.CLAIM_TASK_SUCCESS
+    });
+  } catch (error) {
+    yield put({ type: ACTION_TYPE.CLAIM_TASK_FAILURE, payload: error });
+  }
+}
+
 export function* upvote(action) {
   try {
     const token = localStorage.getItem('giving_tree_jwt');
@@ -556,6 +569,7 @@ export default function* watchAuthSagas() {
   yield takeLatest(ACTION_TYPE.EDIT_COMMENT_REQUESTED, editComment);
   yield takeLatest(ACTION_TYPE.DELETE_COMMENT_REQUESTED, deleteComment);
   yield takeLatest(ACTION_TYPE.UPVOTE_REQUESTED, upvote);
+  yield takeLatest(ACTION_TYPE.CLAIM_TASK_REQUESTED, claimTask);
   yield takeLatest(ACTION_TYPE.DOWNVOTE_REQUESTED, downvote);
   yield takeLatest(ACTION_TYPE.FOLLOW_REQUESTED, follow);
   yield takeLatest(ACTION_TYPE.UNFOLLOW_REQUESTED, unfollow);

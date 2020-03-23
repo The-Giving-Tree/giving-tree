@@ -1,4 +1,5 @@
 import ACTION_TYPE from './action-types';
+import { ACCESSIBILITY_TYPE } from 'baseui/popover';
 
 /**
  * @function
@@ -12,6 +13,11 @@ export const login = payload => ({
 
 export const refreshItem = payload => ({
   type: ACTION_TYPE.REFRESH_ITEM_REQUESTED,
+  payload
+});
+
+export const claimTask = payload => ({
+  type: ACTION_TYPE.CLAIM_TASK_REQUESTED,
   payload
 });
 
