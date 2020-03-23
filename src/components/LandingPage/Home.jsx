@@ -1248,10 +1248,10 @@ function Home(props) {
           </thead>
         </table>
       ) : (
-        <div style={{ backgroundImage: 'https://d1ppmvgsdgdlyy.cloudfront.net/eat.jpg', paddingLeft: 24, paddingRight: 24, height: `calc(100vh - 70px)` }}>
+        <div style={{ background: 'url(https://d1ppmvgsdgdlyy.cloudfront.net/eat.jpg)', objectFit: 'cover', paddingLeft: 24, paddingRight: 24, height: `calc(100vh - 70px)` }}>
           <Block>
-            <h1 style={{ fontSize: 64, color: 'white' }}>We're one big family</h1>
-            <h2 style={{ color: 'rgb(247, 242, 233)' }}>
+            <h1 style={{ fontSize: 100, color: 'white' }}>We're one big family</h1>
+            <h2 style={{ color: 'rgb(247, 242, 233)', fontSize: 40 }}>
               Request help or give to neighbors in need.
             </h2>
           </Block>
