@@ -21,6 +21,16 @@ export const claimTask = payload => ({
   payload
 });
 
+export const unclaimTask = payload => ({
+  type: ACTION_TYPE.UNCLAIM_TASK_REQUESTED,
+  payload
+});
+
+export const completeTask = payload => ({
+  type: ACTION_TYPE.COMPLETE_TASK_REQUESTED,
+  payload
+});
+
 export const upvote = payload => ({
   type: ACTION_TYPE.UPVOTE_REQUESTED,
   payload

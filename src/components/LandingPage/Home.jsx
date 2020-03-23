@@ -36,6 +36,8 @@ import {
   getCurrentUser,
   loadNewsfeed,
   claimTask,
+  unclaimTask,
+  completeTask,
   upvote,
   downvote,
   addComment,
@@ -48,6 +50,8 @@ function Home(props) {
     getCurrentUserDispatch,
     loadNewsfeedDispatch,
     claimTaskDispatch,
+    unclaimTaskDispatch,
+    completeTaskDispatch,
     newsfeed,
     upvoteDispatch,
     downvoteDispatch,
@@ -64,6 +68,7 @@ function Home(props) {
   let items = [];
   const [news, setNews] = React.useState([]);
   const [openFoodTracking, setOpenFoodTracking] = React.useState(false);
+  const [postId, setPostId] = React.useState('');
   const [eta, setETA] = React.useState('');
   const [missing, setOrderMissing] = React.useState('');
   const [deliverer, setOrderDeliverer] = React.useState('');
@@ -235,48 +240,48 @@ function Home(props) {
     );
   };
 
+  // completed order details
+  const completedOrderJSX = trackingDetails => {
+    return trackingDetails.length === 0 ? (
+      <div className="text-center">no tracking details added yet</div>
+    ) : (
+      <React.Fragment>
+        <div
+          class="bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-4 mt-8"
+          role="alert"
+        >
+          <div
+            style={{
+              textTransform: 'capitalize',
+              fontSize: 16,
+              fontWeight: 600,
+              marginBottom: 10,
+              textDecoration: 'underline'
+            }}
+          >
+            Order Details:
+          </div>
+          <p style={{ textTransform: 'capitalize' }}>
+            order created: {trackingDetails.created}
+          </p>
+          <p style={{ textTransform: 'capitalize' }}>
+            dropoff ETA: {trackingDetails.dropoffEta}
+          </p>
+          <p style={{ textTransform: 'capitalize' }}>
+            method: {trackingDetails.method}
+          </p>
+          <p style={{ textTransform: 'capitalize' }}>
+            notes: {trackingDetails.notes}
+          </p>
+        </div>
+      </React.Fragment>
+    );
+  };
+
   const render = async () => {
     news.map((item, i) => {
       items.push(
         <div className="item" key={i}>
-          <Modal
-            overrides={{ Dialog: { style: { borderRadius: '7px' } } }}
-            onClose={() => setOpenFoodTracking(false)}
-            isOpen={openFoodTracking}
-          >
-            <ModalHeader>Add Tracking Details</ModalHeader>
-            <ModalBody>
-              When is the food arriving (ETA)?
-              <Input
-                value={eta}
-                onChange={e => setETA(e.target.value)}
-                placeholder="4/2/2020 @ 6:40pm"
-              />
-              <br />
-              Are you missing anything from the order?
-              <Input
-                value={missing}
-                onChange={e => setOrderMissing(e.target.value)}
-                placeholder="spinach was out"
-              />
-              <br />
-              Who is delivering the food? (name, phone number, etc)
-              <Input
-                value={deliverer}
-                onChange={e => setOrderDeliverer(e.target.value)}
-                placeholder="Barack Obama, 6465335281"
-              />
-              <br />
-            </ModalBody>
-            <ModalFooter>
-              <ModalButton size={'compact'} kind={'minimal'} onClick={() => setOpenFoodTracking(false)}>
-                Cancel
-              </ModalButton>
-              <ModalButton size={'compact'} onClick={() => alert('submitted')}>
-                Submit
-              </ModalButton>
-            </ModalFooter>
-          </Modal>
           <Card
             overrides={{
               Root: {
@@ -519,6 +524,9 @@ function Home(props) {
                                   props.match.url !== '/home/ongoing' &&
                                   JSON.parse(item.text).type === 'food' &&
                                   foodCartJSX(JSON.parse(item.text).foodCart)}
+                                {item.text &&
+                                  props.match.url === '/home/completed' &&
+                                  completedOrderJSX(item.trackingDetails)}
                               </div>
                             </div>
                           ) : (
@@ -858,7 +866,10 @@ function Home(props) {
                   {props.match.url === '/home/ongoing' && (
                     <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
                       <Button
-                        onClick={() => setOpenFoodTracking(true)}
+                        onClick={() => {
+                          setOpenFoodTracking(true);
+                          setPostId(item._id);
+                        }}
                         style={{ outline: 'none', padding: 0 }}
                         kind="minimal"
                         size={SIZE.compact}
@@ -977,6 +988,61 @@ function Home(props) {
       }}
     >
       <Navigation searchBarPosition="center" />
+      <Modal
+        overrides={{ Dialog: { style: { borderRadius: '7px' } } }}
+        onClose={() => setOpenFoodTracking(false)}
+        isOpen={openFoodTracking}
+      >
+        <ModalHeader>Add Tracking Details</ModalHeader>
+        <ModalBody>
+          When is the food arriving (ETA)?
+          <Input
+            value={eta}
+            onChange={e => setETA(e.target.value)}
+            placeholder="4/2/2020 @ 6:40pm"
+          />
+          <br />
+          Are you missing anything from the order?
+          <Input
+            value={missing}
+            onChange={e => setOrderMissing(e.target.value)}
+            placeholder="spinach was out"
+          />
+          <br />
+          Who is delivering the food? (name, phone number, etc)
+          <Input
+            value={deliverer}
+            onChange={e => setOrderDeliverer(e.target.value)}
+            placeholder="Barack Obama, 6465335281"
+          />
+          <br />
+        </ModalBody>
+        <ModalFooter>
+          <ModalButton size={'compact'} kind={'minimal'} onClick={() => setOpenFoodTracking(false)}>
+            Cancel
+          </ModalButton>
+          <ModalButton
+            size={'compact'}
+            onClick={() => {
+              completeTaskDispatch({
+                env: process.env.NODE_ENV,
+                postId: postId,
+                trackingDetails: {
+                  method: 'manual',
+                  created: new Date(),
+                  dropoffEta: eta,
+                  notes: `${missing}. \n\n${deliverer}`
+                }
+              });
+
+              setConfetti(false);
+              setConfetti(true);
+            }}
+          >
+            Submit
+          </ModalButton>
+        </ModalFooter>
+      </Modal>
       {authenticated ? (
         <table class="table-auto" style={{ width: '100%', background: '#F5F5F5' }}>
           <thead>
@@ -1248,7 +1314,15 @@ function Home(props) {
           </thead>
         </table>
       ) : (
-        <div style={{ background: 'url(https://d1ppmvgsdgdlyy.cloudfront.net/eat2.jpg)', backgroundSize: '100%', paddingLeft: 24, paddingRight: 24, height: `calc(100vh - 70px)` }}>
+        <div
+          style={{
+            background: 'url(https://d1ppmvgsdgdlyy.cloudfront.net/eat2.jpg)',
+            backgroundSize: '100%',
+            paddingLeft: 24,
+            paddingRight: 24,
+            height: `calc(100vh - 70px)`
+          }}
+        >
           <Block>
             <h1 style={{ fontSize: 100, color: 'white' }}>We're one big family</h1>
             <h2 style={{ color: 'rgb(247, 242, 233)', fontSize: 40 }}>
@@ -1265,6 +1339,8 @@ const mapDispatchToProps = dispatch => ({
   getCurrentUserDispatch: payload => dispatch(getCurrentUser(payload)),
   loadNewsfeedDispatch: payload => dispatch(loadNewsfeed(payload)),
   claimTaskDispatch: payload => dispatch(claimTask(payload)),
+  unclaimTaskDispatch: payload => dispatch(unclaimTask(payload)),
+  completeTaskDispatch: payload => dispatch(completeTask(payload)),
   upvoteDispatch: payload => dispatch(upvote(payload)),
   downvoteDispatch: payload => dispatch(downvote(payload)),
   addCommentDispatch: payload => dispatch(addComment(payload)),

@@ -178,6 +178,44 @@ const claimTask = async (env, postId, token) => {
   }
 };
 
+const unclaimTask = async (env, postId, token) => {
+  try {
+    const headers = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+
+    const data = await Axios.put(
+      `${ROUTES[env].giving_tree}/v1/post/${postId}/unclaim`,
+      {},
+      headers
+    );
+    return data;
+  } catch (e) {
+    const error = e.response.data ? e.response.data : e;
+    Sentry.captureException(new Error(JSON.stringify(error)));
+    throw error;
+  }
+};
+
+const completeTask = async (env, postId, trackingDetails, token) => {
+  try {
+    const headers = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+
+    const data = await Axios.put(
+      `${ROUTES[env].giving_tree}/v1/post/${postId}/complete`,
+      trackingDetails,
+      headers
+    );
+    return data;
+  } catch (e) {
+    const error = e.response.data ? e.response.data : e;
+    Sentry.captureException(new Error(JSON.stringify(error)));
+    throw error;
+  }
+};
+
 const upvote = async (env, postId, commentId = '', token) => {
   try {
     const headers = {
@@ -444,6 +482,8 @@ const Api = {
   addComment,
   deleteComment,
   claimTask,
+  unclaimTask,
+  completeTask,
   upvote,
   follow,
   unfollow,

@@ -37,7 +37,19 @@ const initialState = {
   confirmPasswordSuccess: false,
   confirmPasswordFailure: false,
 
-  updatedProfile: false
+  updatedProfile: false,
+
+  claimTaskLoading: false,
+  claimTaskSuccess: false,
+  claimTaskFailure: false,
+
+  unclaimTaskLoading: false,
+  unclaimTaskSuccess: false,
+  unclaimTaskFailure: false,
+
+  completeTaskLoading: false,
+  completeTaskSuccess: false,
+  completeTaskFailure: false
 };
 
 const auth = (state = initialState, action) => {
@@ -60,6 +72,64 @@ const auth = (state = initialState, action) => {
         updatedProfile: false,
         errorMessage: action.payload.message
       });
+
+    case ACTION_TYPE.CLAIM_TASK_REQUESTED:
+      return Object.assign({}, state, {
+        claimTaskLoading: true,
+        claimTaskSuccess: false,
+        claimTaskFailure: false
+      });
+    case ACTION_TYPE.CLAIM_TASK_SUCCESS:
+      return Object.assign({}, state, {
+        claimTaskLoading: false,
+        claimTaskSuccess: true,
+        claimTaskFailure: false
+      });
+    case ACTION_TYPE.CLAIM_TASK_FAILURE:
+      return Object.assign({}, state, {
+        claimTaskLoading: false,
+        claimTaskSuccess: false,
+        claimTaskFailure: true
+      });
+
+    case ACTION_TYPE.UNCLAIM_TASK_REQUESTED:
+      return Object.assign({}, state, {
+        unclaimTaskLoading: true,
+        unclaimTaskSuccess: false,
+        unclaimTaskFailure: false
+      });
+    case ACTION_TYPE.UNCLAIM_TASK_SUCCESS:
+      return Object.assign({}, state, {
+        unclaimTaskLoading: false,
+        unclaimTaskSuccess: true,
+        unclaimTaskFailure: false
+      });
+    case ACTION_TYPE.UNCLAIM_TASK_FAILURE:
+      return Object.assign({}, state, {
+        unclaimTaskLoading: false,
+        unclaimTaskSuccess: false,
+        unclaimTaskFailure: true
+      });
+
+    case ACTION_TYPE.COMPLETE_TASK_REQUESTED:
+      return Object.assign({}, state, {
+        completeTaskLoading: true,
+        completeTaskSuccess: false,
+        completeTaskFailure: false
+      });
+    case ACTION_TYPE.COMPLETE_TASK_SUCCESS:
+      return Object.assign({}, state, {
+        completeTaskLoading: false,
+        completeTaskSuccess: true,
+        completeTaskFailure: false
+      });
+    case ACTION_TYPE.COMPLETE_TASK_FAILURE:
+      return Object.assign({}, state, {
+        completeTaskLoading: false,
+        completeTaskSuccess: false,
+        completeTaskFailure: true
+      });
+
     case ACTION_TYPE.CONFIRM_PASSWORD_REQUESTED:
       return Object.assign({}, state, {
         confirmPasswordLoading: true,
