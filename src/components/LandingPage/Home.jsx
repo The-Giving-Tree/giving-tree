@@ -884,7 +884,7 @@ function Home(props) {
                     style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 30 }}
                   >
                     <span />
-                    <div className='flex items-center'>
+                    <div className='flex items-center' onClick={() => window.location = '/home/discover'}>
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/search.svg"
                         alt="search"
@@ -898,7 +898,7 @@ function Home(props) {
                     style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
                   >
                     <span />
-                    <div className='flex items-center'>
+                    <div className='flex items-center' onClick={() => alert('coming soon')}>
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/care.svg"
                         alt="care"
@@ -912,7 +912,7 @@ function Home(props) {
                     style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
                   >
                     <span />
-                    <div className='flex items-center'>
+                    <div className='flex items-center' onClick={() => alert('coming soon')}>
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/gift.svg"
                         alt="gift"
@@ -926,7 +926,7 @@ function Home(props) {
                     style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
                   >
                     <span />
-                    <div className='flex items-center'>
+                    <div className='flex items-center' onClick={() => alert('coming soon')}>
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/global.svg"
                         alt="global"
