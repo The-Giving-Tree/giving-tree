@@ -107,12 +107,12 @@ function Home(props) {
         }
         break;
       case 'ongoing':
-        if (newsfeedSort !== 'Discover') {
-          setSort('Discover');
+        if (newsfeedSort !== 'Ongoing') {
+          setSort('Ongoing');
           loadNewsfeedDispatch({
             env: process.env.NODE_ENV,
             page: Number(currentPage),
-            feed: 'Discover'
+            feed: 'Ongoing'
           });
         }
         break;
@@ -126,16 +126,16 @@ function Home(props) {
           });
         }
         break;
-        case 'global':
-          if (newsfeedSort !== 'Global') {
-            setSort('Global');
-            loadNewsfeedDispatch({
-              env: process.env.NODE_ENV,
-              page: Number(currentPage),
-              feed: 'Global'
-            });
-          }
-          break;
+      case 'global':
+        if (newsfeedSort !== 'Global') {
+          setSort('Global');
+          loadNewsfeedDispatch({
+            env: process.env.NODE_ENV,
+            page: Number(currentPage),
+            feed: 'Global'
+          });
+        }
+        break;
       case 'popular':
         if (newsfeedSort !== 'Popular') {
           setSort('Popular');
@@ -910,11 +910,16 @@ function Home(props) {
                   }}
                 >
                   <div
-                    className={`text-black transition duration-150 hover:text-indigo-600 ${props.match.url === '/home/discover' && 'text-indigo-600'} flex items-center justify-between`}
+                    className={`text-black transition duration-150 hover:text-indigo-600 ${props
+                      .match.url === '/home/discover' &&
+                      'text-indigo-600'} flex items-center justify-between`}
                     style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 30 }}
                   >
                     <span />
-                    <div className='flex items-center' onClick={() => window.location = '/home/discover'}>
+                    <div
+                      className="flex items-center"
+                      onClick={() => (window.location = '/home/discover')}
+                    >
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/search.svg"
                         alt="search"
@@ -924,11 +929,16 @@ function Home(props) {
                     </div>
                   </div>
                   <div
-                    className={`text-black transition duration-150 hover:text-indigo-600 ${props.match.url === '/home/ongoing' && 'text-indigo-600'} flex items-center justify-between`}
+                    className={`text-black transition duration-150 hover:text-indigo-600 ${props
+                      .match.url === '/home/ongoing' &&
+                      'text-indigo-600'} flex items-center justify-between`}
                     style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
                   >
                     <span />
-                    <div className='flex items-center' onClick={() => window.location = '/home/ongoing'}>
+                    <div
+                      className="flex items-center"
+                      onClick={() => (window.location = '/home/ongoing')}
+                    >
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/care.svg"
                         alt="care"
@@ -938,11 +948,16 @@ function Home(props) {
                     </div>
                   </div>
                   <div
-                    className={`text-black transition duration-150 hover:text-indigo-600 ${props.match.url === '/home/completed' && 'text-indigo-600'} flex items-center justify-between`}
+                    className={`text-black transition duration-150 hover:text-indigo-600 ${props
+                      .match.url === '/home/completed' &&
+                      'text-indigo-600'} flex items-center justify-between`}
                     style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
                   >
                     <span />
-                    <div className='flex items-center' onClick={() => window.location = '/home/completed'}>
+                    <div
+                      className="flex items-center"
+                      onClick={() => (window.location = '/home/completed')}
+                    >
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/gift.svg"
                         alt="gift"
@@ -952,11 +967,16 @@ function Home(props) {
                     </div>
                   </div>
                   <div
-                    className={`text-black transition duration-150 hover:text-indigo-600 ${props.match.url === '/home/global' && 'text-indigo-600'} flex items-center justify-between`}
+                    className={`text-black transition duration-150 hover:text-indigo-600 ${props
+                      .match.url === '/home/global' &&
+                      'text-indigo-600'} flex items-center justify-between`}
                     style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
                   >
                     <span />
-                    <div className='flex items-center' onClick={() => window.location = '/home/global'}>
+                    <div
+                      className="flex items-center"
+                      onClick={() => (window.location = '/home/global')}
+                    >
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/global.svg"
                         alt="global"
@@ -1013,6 +1033,15 @@ function Home(props) {
                                 // },
                                 {
                                   label: 'Discover'
+                                },
+                                {
+                                  label: 'Your Tasks'
+                                },
+                                {
+                                  label: 'Completed Tasks'
+                                },
+                                {
+                                  label: 'Global Tasks'
                                 }
                               ]}
                               onItemSelect={item => {
@@ -1029,6 +1058,15 @@ function Home(props) {
                                     break;
                                   case 'Discover':
                                     window.location = '/home/discover';
+                                    break;
+                                  case 'Your Tasks':
+                                    window.location = '/home/ongoing';
+                                    break;
+                                  case 'Completed Tasks':
+                                    window.location = '/home/completed';
+                                    break;
+                                  case 'Global Tasks':
+                                    window.location = '/home/global';
                                     break;
                                   default:
                                     break;
@@ -1084,7 +1122,11 @@ function Home(props) {
                     <div style={{ paddingTop: 30 }} />
                     {items.length === 0 && newsfeedSuccess && !newsfeedLoading && (
                       <StyledBody style={{ margin: '0 auto', textAlign: 'center', marginTop: 20 }}>
-                        {id !== 'discover' ? `You don't follow anyone yet :(` : 'No requests yet'}
+                        {id === 'discover' && 'No requests yet'}
+                        {id === 'ongoing' && `You haven't requested to help anyone yet`}
+                        {id === 'completed' && `You haven't completed any tasks yet`}
+                        {id === 'global' && `No requests globally yet! Invite your friends and start spreading the love`}
+                        <br />
                         {id !== 'discover' && (
                           <div
                             onClick={() => {

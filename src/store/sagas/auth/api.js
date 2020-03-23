@@ -262,6 +262,15 @@ const loadNewsFeed = async (env, page, feed, token) => {
       case 'Popular':
         data = await Axios.get(`${ROUTES[env].giving_tree}/popular/${page}`, headers);
         break;
+      case 'Ongoing':
+        data = await Axios.get(`${ROUTES[env].giving_tree}/ongoing/${page}`, headers);
+        break;
+      case 'Completed':
+        data = await Axios.get(`${ROUTES[env].giving_tree}/completed/${page}`, headers);
+        break;
+      case 'Global':
+        data = await Axios.get(`${ROUTES[env].giving_tree}/globals/${page}`, headers);
+        break;
       default:
         break;
     }
