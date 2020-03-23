@@ -146,7 +146,7 @@ function Home(props) {
   };
 
   function generateHash(username = '') {
-    const secret = 'giving_tree';
+    const secret = 'givingtree';
     const hash = require('crypto')
       .createHmac('sha256', secret)
       .update(username.toLowerCase())
@@ -533,32 +533,16 @@ function Home(props) {
                               {/* String length <= 250 or add '...' */}
                               {item.parent && item.parent.type === 'Post'
                                 ? item.parent && (
-                                    <Slate
-                                      editor={slateEditor}
-                                      value={
-                                        item.parent.text
-                                          ? JSON.parse(item.parent.text).length > 3
-                                            ? JSON.parse(item.parent.text)
-                                                .slice(0, 3)
-                                                .concat({
-                                                  children: [{ text: 'more...', italic: true }]
-                                                })
-                                            : JSON.parse(item.parent.text)
-                                          : [
-                                              {
-                                                children: [{ text: 'loading...' }]
-                                              }
-                                            ]
-                                      }
-                                    >
-                                      <Editable
-                                        renderLeaf={renderLeaf}
-                                        renderElement={renderElement}
-                                        spellCheck
-                                        autoFocus
-                                        readOnly
-                                      />
-                                    </Slate>
+                                  <div>
+                                  <div className="text-sm my-1 mt-4">{item && item.address}</div>
+                                  <div className="text-sm my-1 mt-4">
+                                    {item && `Description: ${item.foodDescription}`}
+                                  </div>
+                                  <div className="mt-4"></div>
+                                  {item.text &&
+                    JSON.parse(item.text).type === 'food' &&
+                    foodCartJSX(JSON.parse(item.text).foodCart)}
+                                </div>
                                   )
                                 : item.parent && shorten(250, item.parent.content)}
                               <div

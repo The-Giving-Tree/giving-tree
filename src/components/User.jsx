@@ -218,7 +218,7 @@ function User(props) {
   }
 
   function generateHash(username = '') {
-    const secret = 'giving_tree';
+    const secret = 'givingtree';
     const hash = require('crypto')
       .createHmac('sha256', secret)
       .update(username.toLowerCase())
