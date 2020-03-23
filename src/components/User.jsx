@@ -138,6 +138,7 @@ function User(props) {
   let followers = foundUser.followers ? foundUser.followers.length : '0';
   let following = foundUser.following ? foundUser.following.length : '0';
   let createdAt = foundUser.createdAt ? foundUser.createdAt : '';
+  let karma = foundUser.karma ? foundUser.karma : '';
   let name = foundUser.name;
   let username = foundUser.username;
   let verified = foundUser.verified;
@@ -1013,7 +1014,7 @@ function User(props) {
                     className="my-2"
                     style={{ textTransform: 'capitalize', margin: 'auto 0', fontSize: 12 }}
                   >
-                    0 karma · Member since {moment(createdAt).format('MMM D, YYYY')}
+                    {Number(karma) >= 0 ? Number(karma) : 0} karma · Member since {moment(createdAt).format('MMM D, YYYY')}
                   </p>
                 )}
 
