@@ -270,6 +270,61 @@ function Home(props) {
     );
   };
 
+  const completedOrderGlobalJSX = item => {
+    return item.length === 0 ? (
+      <div className="text-center">no completed details available yet</div>
+    ) : (
+      <React.Fragment>
+        <div
+          class="bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-4 mt-8"
+          role="alert"
+        >
+          <div
+            style={{
+              textTransform: 'capitalize',
+              fontSize: 16,
+              fontWeight: 600,
+              marginBottom: 10,
+              textDecoration: 'underline'
+            }}
+          >
+            Order Details:
+          </div>
+          <p style={{ textTransform: 'capitalize' }}>
+            order created: {moment(item.trackingDetails.created).format('MMM D, YYYY h:mm A')}
+          </p>
+          <p style={{ textTransform: 'capitalize' }}>
+            dropoff ETA: {item.trackingDetails.dropoffEta}
+          </p>
+          <p style={{ textTransform: 'capitalize' }}>method: {item.trackingDetails.method}</p>
+          <p style={{ textTransform: 'capitalize' }}>notes: {item.trackingDetails.notes}</p>
+
+          <div
+            style={{
+              fontSize: 16,
+              fontWeight: 600,
+              marginTop: 15,
+              textDecoration: 'underline'
+            }}
+          >
+            Fulfilled By:
+          </div>
+          <p style={{ textTransform: 'lowercase', cursor: 'pointer' }} className='flex items-center'>
+            <span
+              onClick={() => (window.location = `/user/${item.assignedUser.username}`)}
+              className="hover:text-indigo-800"
+            >
+              {item.assignedUser.username}
+            </span>{Number(item.assignedUser.karma) >= 0 && <div>&nbsp;&bull; {item.assignedUser.karma} karma</div>}
+          </p>
+          <p style={{ textTransform: 'lowercase' }}>
+            email: <a href={`mailto:${item.assignedUser.email}`}>{item.assignedUser.email}</a>
+          </p>
+        </div>
+      </React.Fragment>
+    );
+  };
+
   const render = async () => {
     news.map((item, i) => {
       items.push(
@@ -519,6 +574,9 @@ function Home(props) {
                                 {item.text &&
                                   props.match.url === '/home/completed' &&
                                   completedOrderJSX(item.trackingDetails)}
+                                {item.text &&
+                                  props.match.url === '/home/global' &&
+                                  completedOrderGlobalJSX(item)}
                               </div>
                             </div>
                           ) : (
