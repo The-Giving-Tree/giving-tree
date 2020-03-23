@@ -68,7 +68,7 @@ function Setting(props) {
               </strong>
             </NavigationItem>
           </NavigationList>
-          <NavigationList $align={ALIGN.left}>
+          {/* <NavigationList $align={ALIGN.left}>
             <NavigationItem>
               <strong>
                 <a
@@ -106,7 +106,7 @@ function Setting(props) {
                 </a>
               </strong>
             </NavigationItem>
-          </NavigationList>
+          </NavigationList> */}
         </HeaderNavigation>
         {(tab === undefined || tab === 'account') && (
           <Block>

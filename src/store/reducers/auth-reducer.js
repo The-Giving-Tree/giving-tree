@@ -281,11 +281,15 @@ const auth = (state = initialState, action) => {
         errorMessage: action.payload.message,
         foundUserNull: true
       });
-    case ACTION_TYPE.GET_CURRENT_USER_FAILURE:
     case ACTION_TYPE.LOAD_POST_FAILURE:
-    case ACTION_TYPE.LOGIN_FAILURE:
       return Object.assign({}, state, {
         loadPostSuccess: false,
+        loadPostFailure: true,
+        errorMessage: action.payload.message
+      });
+    case ACTION_TYPE.GET_CURRENT_USER_FAILURE:
+    case ACTION_TYPE.LOGIN_FAILURE:
+      return Object.assign({}, state, {
         loginLoading: false,
         loginSuccess: false,
         loginFailure: true,

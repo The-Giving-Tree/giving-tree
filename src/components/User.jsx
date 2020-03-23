@@ -227,6 +227,29 @@ function User(props) {
     return 'https://d1ppmvgsdgdlyy.cloudfront.net/user/' + hash;
   }
 
+  const foodCartJSX = foodCart => {
+    return foodCart.length === 0 ? (
+      <div className="text-center">no items in cart</div>
+    ) : (
+      <table class="table-auto" style={{ width: '100%' }}>
+        <thead>
+          <tr>
+            <th class="px-4 py-2">Item Description</th>
+            <th class="px-4 py-2">Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+          {foodCart.map((item, i) => (
+            <tr className={i % 2 === 0 && `bg-gray-100`}>
+              <td className={`border px-4 py-2`}>{item.name}</td>
+              <td className={`border px-4 py-2`}>{item.quantity}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  };
+
   var postElements = <StyledBody>No requests!</StyledBody>;
   if (!foundUserNull && !isEmpty(foundUser) && foundUser.posts.length > 0) {
     console.log('foundUser.posts: ', JSON.parse(foundUser.posts[0].text));
@@ -335,30 +358,16 @@ function User(props) {
                 </div>
               </div>
               <div style={{ margin: 7 }}>
-                {
-                  <Slate
-                    editor={slateEditor}
-                    value={
-                      post.text
-                        ? JSON.parse(post.text).length > 3
-                          ? JSON.parse(post.text).slice(0, 3)
-                          : JSON.parse(post.text)
-                        : [
-                            {
-                              children: [{ text: 'loading...' }]
-                            }
-                          ]
-                    }
-                  >
-                    <Editable
-                      renderLeaf={renderLeaf}
-                      renderElement={renderElement}
-                      spellCheck
-                      autoFocus
-                      readOnly
-                    />
-                  </Slate>
-                }
+                <div>
+                  <div class="font-bold text-base text-left my-1 mt-4">
+                    {post.text && JSON.parse(post.text).address}
+                  </div>
+                  <div className="font-bold text-base text-left my-1 mt-4">
+                    {post && `Description: ${JSON.parse(post.text).foodDescription}`}
+                  </div>
+                  <div className="mt-4"></div>
+                  {post.text && JSON.parse(post.text).type === 'food' && foodCartJSX(JSON.parse(post.text).foodCart)}
+                </div>
               </div>
             </div>
             <div style={{ margin: 7 }}>
@@ -377,7 +386,7 @@ function User(props) {
             }}
           >
             <img
-              src="https://d1ppmvgsdgdlyy.cloudfront.net/post.svg"
+              src="https://d1ppmvgsdgdlyy.cloudfront.net/help.svg"
               alt="post"
               style={{ width: '16px', marginRight: 10 }}
             />

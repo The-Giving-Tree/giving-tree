@@ -130,6 +130,7 @@ function Post(props) {
     loadUserDispatch,
     newsfeedUpdated,
     loadPostSuccess,
+    loadPostFailure,
     editCommentDispatch,
     deleteCommentDispatch,
     addCommentDispatch,
@@ -153,6 +154,7 @@ function Post(props) {
   const [updated, setUpdated] = React.useState(true);
   const [upvoteIndex, setUpvoteIndex] = React.useState([]);
   const [downvoteIndex, setDownvoteIndex] = React.useState([]);
+  const [text, setText] = React.useState('');
   const [upvoteHover, setUpvoteHover] = React.useState([]);
   const [downvoteHover, setDownvoteHover] = React.useState([]);
   const [hiddenElements, setHidden] = React.useState([]);
@@ -181,11 +183,6 @@ function Post(props) {
     setTags(tags.filter(t => t !== tag));
   };
 
-  const slateEditor = React.useMemo(
-    () => withImages(withRichText(withFormatting(withHistory(withReact(createEditor()))))),
-    []
-  );
-
   // not null
   if (parsed !== null && !markSeenBool && !markSeenFailure) {
     markSeenDispatch({ env: process.env.NODE_ENV, postId: id, userId: parsed });
@@ -204,9 +201,11 @@ function Post(props) {
     if (!isEmpty(foundPost) && loadPostSuccess) {
       setTitle(foundPost.title);
       setTags(foundPost.categories);
-      setSlateValue(JSON.parse(foundPost.text));
+      setText(JSON.parse(foundPost.text));
     }
   }, [foundPost, loadPostSuccess]);
+
+  const foodCart = text ? text.foodCart : [];
 
   const isEmpty = obj => {
     for (var key in obj) {
@@ -216,7 +215,7 @@ function Post(props) {
   };
 
   const handlePostLoad = async id => {
-    if (isEmpty(foundPost) || !updated) {
+    if (!loadPostFailure && (isEmpty(foundPost) || !updated)) {
       await loadPostDispatch({
         env: process.env.NODE_ENV,
         id
@@ -669,90 +668,30 @@ function Post(props) {
 
   createCommentFeed();
 
-  const HoveringToolbar = () => {
-    const ref = React.useRef();
-    const slateEditor = useSlate();
-
-    React.useEffect(() => {
-      const el = ref.current;
-      const { selection } = slateEditor;
-
-      if (!el) {
-        return;
-      }
-
-      if (
-        !selection ||
-        !ReactEditor.isFocused(slateEditor) ||
-        editor || // cannot be editing document
-        Range.isCollapsed(selection) ||
-        Editor.string(slateEditor, selection) === ''
-      ) {
-        el.removeAttribute('style');
-        return;
-      }
-
-      const domSelection = window.getSelection();
-      console.log('dom selection: ', domSelection);
-      const domRange = domSelection.getRangeAt(0);
-      console.log('range: ', domRange);
-      const rect = domRange.getBoundingClientRect();
-      el.style.opacity = 1;
-      el.style.top = `${rect.top + window.pageYOffset - el.offsetHeight}px`;
-      el.style.left = `${rect.left + window.pageXOffset - el.offsetWidth / 2 + rect.width / 2}px`;
-    });
-
-    return (
-      <Portal>
-        <Menu
-          ref={ref}
-          className={css`
-            padding: 8px 7px 6px;
-            position: absolute;
-            z-index: 1;
-            top: -10000px;
-            left: -10000px;
-            margin-top: -6px;
-            opacity: 0;
-            background-color: #222;
-            border-radius: 4px;
-            transition: opacity 0.75s;
-          `}
-        >
-          <FormatButton format="annotate" icon="create" />
-        </Menu>
-      </Portal>
-    );
-  };
-
   const search = 'text';
 
-  const decorate = React.useCallback(
-    ([node, path]) => {
-      const ranges = [];
-
-      if (search && Text.isText(node)) {
-        const { text } = node;
-        const parts = text.split(search);
-        let offset = 0;
-
-        parts.forEach((part, i) => {
-          if (i !== 0) {
-            ranges.push({
-              anchor: { path, offset: offset - search.length },
-              focus: { path, offset },
-              highlight: true
-            });
-          }
-
-          offset = offset + part.length + search.length;
-        });
-      }
-
-      return ranges;
-    },
-    [search]
-  );
+  const foodCartJSX = () => {
+    return foodCart.length === 0 ? (
+      <div className="text-center">no items in cart</div>
+    ) : (
+      <table class="table-auto" style={{ width: '100%' }}>
+        <thead>
+          <tr>
+            <th class="px-4 py-2">Item Description</th>
+            <th class="px-4 py-2">Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+          {foodCart.map((item, i) => (
+            <tr className={i % 2 === 0 && `bg-gray-100`}>
+              <td className={`border px-4 py-2`}>{item.name}</td>
+              <td className={`border px-4 py-2`}>{item.quantity}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  };
 
   return (
     <div style={{ width: '100%' }}>
@@ -803,458 +742,301 @@ function Post(props) {
             <div style={{ paddingLeft: 24, paddingRight: 24, paddingTop: 50 }}>
               {!isEmpty(foundPost) && (
                 <React.Fragment>
-                  <ContextMenuTrigger id="giving-tree-editor">
-                    <Card
-                      overrides={{
-                        Root: {
-                          style: {
-                            width: '55%',
-                            margin: '10px auto 0px auto'
-                          }
-                        },
-                        Body: {
-                          style: {
-                            margin: '-10px'
-                          }
+                  <Card
+                    overrides={{
+                      Root: {
+                        style: {
+                          width: '55%',
+                          margin: '10px auto 0px auto'
                         }
+                      },
+                      Body: {
+                        style: {
+                          margin: '-10px'
+                        }
+                      }
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignContent: 'center',
+                        paddingBottom: 15
                       }}
                     >
                       <div
                         style={{
+                          textTransform: 'lowercase',
+                          fontSize: 12,
+                          marginLeft: 5,
                           display: 'flex',
-                          justifyContent: 'space-between',
-                          alignContent: 'center',
-                          paddingBottom: 15
+                          alignItems: 'center'
                         }}
                       >
                         <div
+                          onClick={() => (window.location = `/user/${foundPost.username}`)}
                           style={{
-                            textTransform: 'lowercase',
-                            fontSize: 12,
-                            marginLeft: 5,
-                            display: 'flex',
-                            alignItems: 'center'
+                            width: 32,
+                            height: 32,
+                            background: `url(${generateHash(
+                              foundPost.username
+                            )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
+                            backgroundPosition: '50% 50%',
+                            backgroundSize: 'cover',
+                            borderRadius: '50%',
+                            marginRight: 10,
+                            cursor: 'pointer'
+                          }}
+                        />
+                        <div>
+                          <strong>
+                            <a
+                              style={{ textDecoration: 'none', color: 'rgb(0, 121, 211)' }}
+                              href={`/user/${foundPost.username}`}
+                            >
+                              {foundPost.username}
+                            </a>
+                          </strong>{' '}
+                          ·{' '}
+                          <StatefulTooltip
+                            content={moment(foundPost.updatedAt).format('MMM D, YYYY h:mm A')}
+                          >{`${
+                            foundPost.createdAt === foundPost.updatedAt ? 'published' : 'updated'
+                          } ${moment(new Date(foundPost.updatedAt)).fromNow()}`}</StatefulTooltip>
+                        </div>
+                        {/* <div style={{ textTransform: 'capitalize' }}>&nbsp;·&nbsp;{0}&nbsp;Views</div> */}
+                      </div>
+                      <div style={{ alignContent: 'flex-start' }}>
+                        <div style={{ display: 'flex', alignContent: 'center' }}>
+                          {foundPost.type === 'Post' &&
+                            !editor &&
+                            foundPost.categories.map(i => (
+                              <Tag
+                                overrides={{
+                                  Root: {
+                                    style: {
+                                      marginTop: '0px',
+                                      marginBottom: '0px'
+                                    }
+                                  }
+                                }}
+                                closeable={false}
+                                color="#4327F1"
+                                kind={KIND.custom}
+                              >
+                                {i}
+                              </Tag>
+                            ))}
+                          {!isEmpty(user) &&
+                            user._id.toString() === foundPost.authorId.toString() &&
+                            (editor ? (
+                              <div>
+                                <Button
+                                  style={{ marginRight: 10, marginLeft: 10, fontSize: '12px' }}
+                                  size={'compact'}
+                                  shape={'pill'}
+                                  kind={'secondary'}
+                                  onClick={() => setEditor(false)}
+                                >
+                                  Cancel
+                                </Button>
+                                <Button
+                                  style={{
+                                    fontSize: '12px',
+                                    backgroundColor: '#03a87c',
+                                    color: 'white'
+                                  }}
+                                  size={SIZE.compact}
+                                  kind={KIND.secondary}
+                                  shape={SHAPE.pill}
+                                  disabled={editPostLoading}
+                                  onClick={() => {
+                                    editPostDispatch({
+                                      env: process.env.NODE_ENV,
+                                      postId: foundPost._id,
+                                      title,
+                                      text: JSON.stringify(slateValue),
+                                      categories: tags.join(',')
+                                    });
+
+                                    setEditor(false);
+                                  }}
+                                >
+                                  {editPostLoading
+                                    ? 'Saving...'
+                                    : editPostSuccess
+                                    ? 'Saved'
+                                    : 'Save'}
+                                </Button>
+                              </div>
+                            ) : (
+                              <img
+                                onClick={() => {
+                                  setEditor(true);
+                                }}
+                                src="https://d1ppmvgsdgdlyy.cloudfront.net/edit.svg"
+                                alt="edit"
+                                style={{
+                                  marginLeft: 15,
+                                  width: 15,
+                                  height: 'auto',
+                                  cursor: 'pointer'
+                                }}
+                              />
+                            ))}
+                        </div>
+                      </div>
+                    </div>
+                    <div style={{ alignContent: 'center' }}>
+                      <div style={{ display: 'table' }}>
+                        <div style={{ textAlign: 'center' }}>
+                          <ChevronUp
+                            size={25}
+                            color={
+                              upvoteHover.includes(foundPost._id) ||
+                              foundPost.upVotes.includes(user._id)
+                                ? '#268bd2'
+                                : '#aaa'
+                            }
+                            style={{ alignContent: 'center', cursor: 'pointer' }}
+                            onMouseEnter={() => mouseOverUp(foundPost._id)}
+                            onMouseLeave={() => mouseOutUp(foundPost._id)}
+                            onClick={async () =>
+                              await handleUpClick(
+                                foundPost.type,
+                                foundPost._id,
+                                foundPost.type === 'Comment' && foundPost.postId
+                              )
+                            }
+                          />
+                          <div style={{ alignContent: 'center', marginBottom: 3 }}>
+                            {foundPost.voteTotal}
+                          </div>
+                          <ChevronDown
+                            color={
+                              downvoteHover.includes(foundPost._id) ||
+                              foundPost.downVotes.includes(user._id)
+                                ? '#268bd2'
+                                : '#aaa'
+                            }
+                            size={25}
+                            style={{ outline: 'none', alignContent: 'center', cursor: 'pointer' }}
+                            onMouseEnter={() => mouseOverDown(foundPost._id)}
+                            onMouseLeave={() => mouseOutDown(foundPost._id)}
+                            onClick={async () =>
+                              await handleDownClick(
+                                foundPost.type,
+                                foundPost._id,
+                                foundPost.type === 'Comment' && foundPost.postId
+                              )
+                            }
+                          />
+                        </div>
+                        <div
+                          style={{
+                            display: 'table-cell',
+                            verticalAlign: 'middle',
+                            tableLayout: 'fixed',
+                            width: '100%'
                           }}
                         >
                           <div
-                            onClick={() => (window.location = `/user/${foundPost.username}`)}
                             style={{
-                              width: 32,
-                              height: 32,
-                              background: `url(${generateHash(
-                                foundPost.username
-                              )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
-                              backgroundPosition: '50% 50%',
-                              backgroundSize: 'cover',
-                              borderRadius: '50%',
-                              marginRight: 10,
-                              cursor: 'pointer'
+                              display: 'block',
+                              alignContent: 'center',
+                              marginBottom: 3,
+                              marginLeft: 20
                             }}
-                          />
-                          <div>
-                            <strong>
-                              <a
-                                style={{ textDecoration: 'none', color: 'rgb(0, 121, 211)' }}
-                                href={`/user/${foundPost.username}`}
+                          >
+                            {editor ? (
+                              <Input
+                                onChange={event => {
+                                  setTitle(event.target.value);
+                                }}
+                                size={'compact'}
+                                value={title}
+                              ></Input>
+                            ) : (
+                              <div
+                                style={{
+                                  textTransform: 'capitalize',
+                                  fontSize: 16,
+                                  marginTop: 15
+                                }}
                               >
-                                {foundPost.username}
-                              </a>
-                            </strong>{' '}
-                            ·{' '}
-                            <StatefulTooltip
-                              content={moment(foundPost.updatedAt).format('MMM D, YYYY h:mm A')}
-                            >{`${
-                              foundPost.createdAt === foundPost.updatedAt ? 'published' : 'updated'
-                            } ${moment(new Date(foundPost.updatedAt)).fromNow()}`}</StatefulTooltip>
-                          </div>
-                          {/* <div style={{ textTransform: 'capitalize' }}>&nbsp;·&nbsp;{0}&nbsp;Views</div> */}
-                        </div>
-                        <div style={{ alignContent: 'flex-start' }}>
-                          <div style={{ display: 'flex', alignContent: 'center' }}>
-                            {foundPost.type === 'Post' &&
-                              !editor &&
-                              foundPost.categories.map(i => (
-                                <Tag
+                                <strong>{foundPost.title}</strong>
+                              </div>
+                            )}
+                            <div
+                              className="mb-4"
+                              style={{ marginTop: 5 }}
+                              onClick={() => {
+                                // setAnnotationOpen(!editor ? true : false);
+                              }}
+                            >
+                              {foundPost.type === 'Post' ? (
+                                <div style={{ marginTop: 20 }}>
+                                  <div>
+                                    <div class="font-bold text-base text-left my-1 mt-4">
+                                      {text && text.address}
+                                    </div>
+                                    <div className="font-bold text-base text-left my-1 mt-4">
+                                      {text && `Description: ${text.foodDescription}`}
+                                    </div>
+                                    <div className="mt-4"></div>
+                                    {foodCartJSX()}
+                                  </div>
+                                </div>
+                              ) : editor ? (
+                                <Input size={'compact'} value={foundPost.content}></Input>
+                              ) : (
+                                foundPost.content
+                              )}
+                            </div>
+                            {!editor && (
+                              <div style={{ paddingTop: 5, paddingBottom: 10 }}>
+                                <Input
                                   overrides={{
-                                    Root: {
+                                    InputContainer: {
                                       style: {
-                                        marginTop: '0px',
-                                        marginBottom: '0px'
+                                        border: 0,
+                                        borderRadius: '5px'
                                       }
                                     }
                                   }}
-                                  closeable={false}
-                                  color="#4327F1"
-                                  kind={KIND.custom}
-                                >
-                                  {i}
-                                </Tag>
-                              ))}
-                            {!isEmpty(user) &&
-                              user._id.toString() === foundPost.authorId.toString() &&
-                              (editor ? (
-                                <div>
-                                  <Button
-                                    style={{ marginRight: 10, marginLeft: 10, fontSize: '12px' }}
-                                    size={'compact'}
-                                    shape={'pill'}
-                                    kind={'secondary'}
-                                    onClick={() => setEditor(false)}
-                                  >
-                                    Cancel
-                                  </Button>
-                                  <Button
-                                    style={{
-                                      fontSize: '12px',
-                                      backgroundColor: '#03a87c',
-                                      color: 'white'
-                                    }}
-                                    size={SIZE.compact}
-                                    kind={KIND.secondary}
-                                    shape={SHAPE.pill}
-                                    disabled={editPostLoading}
-                                    onClick={() => {
-                                      editPostDispatch({
+                                  autoFocus
+                                  value={postComment}
+                                  onChange={event => {
+                                    setPostComment(event.target.value);
+                                    setSuccessComment(false);
+                                  }}
+                                  size={SIZE.compact}
+                                  onKeyPress={event => {
+                                    var code = event.keyCode || event.which;
+                                    if (code === 13 && event.target.value !== '') {
+                                      // submit comment
+                                      addCommentDispatch({
                                         env: process.env.NODE_ENV,
                                         postId: foundPost._id,
-                                        title,
-                                        text: JSON.stringify(slateValue),
-                                        categories: tags.join(',')
+                                        newComment: postComment
                                       });
-
-                                      setEditor(false);
-                                    }}
-                                  >
-                                    {editPostLoading
-                                      ? 'Saving...'
-                                      : editPostSuccess
-                                      ? 'Saved'
-                                      : 'Save'}
-                                  </Button>
-                                </div>
-                              ) : (
-                                <img
-                                  onClick={() => {
-                                    setEditor(true);
+                                      // close
+                                      setSuccessComment(true);
+                                      setPostComment('');
+                                    }
                                   }}
-                                  src="https://d1ppmvgsdgdlyy.cloudfront.net/edit.svg"
-                                  alt="edit"
-                                  style={{
-                                    marginLeft: 15,
-                                    width: 15,
-                                    height: 'auto',
-                                    cursor: 'pointer'
-                                  }}
+                                  placeholder="add a comment..."
                                 />
-                              ))}
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
-                      <div style={{ alignContent: 'center' }}>
-                        <div style={{ display: 'table' }}>
-                          <div style={{ textAlign: 'center' }}>
-                            <ChevronUp
-                              size={25}
-                              color={
-                                upvoteHover.includes(foundPost._id) ||
-                                foundPost.upVotes.includes(user._id)
-                                  ? '#268bd2'
-                                  : '#aaa'
-                              }
-                              style={{ alignContent: 'center', cursor: 'pointer' }}
-                              onMouseEnter={() => mouseOverUp(foundPost._id)}
-                              onMouseLeave={() => mouseOutUp(foundPost._id)}
-                              onClick={async () =>
-                                await handleUpClick(
-                                  foundPost.type,
-                                  foundPost._id,
-                                  foundPost.type === 'Comment' && foundPost.postId
-                                )
-                              }
-                            />
-                            <div style={{ alignContent: 'center', marginBottom: 3 }}>
-                              {foundPost.voteTotal}
-                            </div>
-                            <ChevronDown
-                              color={
-                                downvoteHover.includes(foundPost._id) ||
-                                foundPost.downVotes.includes(user._id)
-                                  ? '#268bd2'
-                                  : '#aaa'
-                              }
-                              size={25}
-                              style={{ outline: 'none', alignContent: 'center', cursor: 'pointer' }}
-                              onMouseEnter={() => mouseOverDown(foundPost._id)}
-                              onMouseLeave={() => mouseOutDown(foundPost._id)}
-                              onClick={async () =>
-                                await handleDownClick(
-                                  foundPost.type,
-                                  foundPost._id,
-                                  foundPost.type === 'Comment' && foundPost.postId
-                                )
-                              }
-                            />
-                          </div>
-                          <div
-                            style={{
-                              display: 'table-cell',
-                              verticalAlign: 'middle',
-                              tableLayout: 'fixed',
-                              width: '100%'
-                            }}
-                          >
-                            <div
-                              style={{
-                                display: 'block',
-                                alignContent: 'center',
-                                marginBottom: 3,
-                                marginLeft: 20
-                              }}
-                            >
-                              {editor ? (
-                                <Input
-                                  onChange={event => {
-                                    setTitle(event.target.value);
-                                  }}
-                                  size={'compact'}
-                                  value={title}
-                                ></Input>
-                              ) : (
-                                <div
-                                  style={{
-                                    textTransform: 'capitalize',
-                                    fontSize: 16,
-                                    marginTop: 15
-                                  }}
-                                >
-                                  <strong>{foundPost.title}</strong>
-                                </div>
-                              )}
-                              <div
-                                style={{ marginTop: 5 }}
-                                onClick={() => {
-                                  // setAnnotationOpen(!editor ? true : false);
-                                }}
-                              >
-                                {foundPost.type === 'Post' ? (
-                                  <div style={{ marginTop: 20 }}>
-                                    <Slate
-                                      editor={slateEditor}
-                                      value={slateValue}
-                                      onChange={value => {
-                                        setSlateValue(editor ? value : slateValue);
-                                      }}
-                                    >
-                                      <HoveringToolbar />
-                                      {editor && (
-                                        <Toolbar>
-                                          <MarkButton format="bold" icon="format_bold" />
-                                          <MarkButton format="italic" icon="format_italic" />
-                                          <MarkButton format="underline" icon="format_underlined" />
-                                          <MarkButton format="code" icon="code" />
-                                          <BlockButton format="heading-one" icon="looks_one" />
-                                          <BlockButton format="heading-two" icon="looks_two" />
-                                          <BlockButton format="block-quote" icon="format_quote" />
-                                          <BlockButton
-                                            format="numbered-list"
-                                            icon="format_list_numbered"
-                                          />
-                                          <BlockButton
-                                            format="bulleted-list"
-                                            icon="format_list_bulleted"
-                                          />
-                                        </Toolbar>
-                                      )}
-                                      <Editable
-                                        style={
-                                          editor
-                                            ? {}
-                                            : {
-                                                color: 'transparent',
-                                                textShadow: '0 0 0 rgb(84, 84, 84)'
-                                              }
-                                        }
-                                        renderLeaf={renderLeaf}
-                                        renderElement={renderElement}
-                                        spellCheck
-                                        autoFocus
-                                        decorate={decorate}
-                                        onKeyDown={event => {
-                                          for (const hotkey in HOTKEYS) {
-                                            if (isHotkey(hotkey, event)) {
-                                              event.preventDefault();
-                                              const mark = HOTKEYS[hotkey];
-                                              switch (mark) {
-                                                case 'bold':
-                                                case 'italic':
-                                                case 'underline':
-                                                case 'code':
-                                                case 'annotate':
-                                                  slateEditor.exec({
-                                                    type: 'format_text',
-                                                    properties: { [mark]: true }
-                                                  });
-                                                  break;
-                                                case 'save':
-                                                  console.log('summarize hot key');
-                                                  break;
-                                                case 'cut':
-                                                  console.log(`cut`);
-                                                  break;
-                                                case 'paste':
-                                                  console.log(`paste`);
-                                                  break;
-                                                case 'copy':
-                                                  console.log(`copy`);
-                                                  break;
-                                                case 'latex':
-                                                  console.log(`latex`);
-                                                  break;
-                                                case 'link':
-                                                  console.log(`link`);
-                                                  break;
-                                                case 'insert_image':
-                                                  console.log(`insert_image`);
-                                                  break;
-                                                default:
-                                                  break;
-                                              }
-                                            }
-                                          }
-                                        }}
-                                      />
-                                    </Slate>
-                                  </div>
-                                ) : editor ? (
-                                  <Input size={'compact'} value={foundPost.content}></Input>
-                                ) : (
-                                  foundPost.content
-                                )}
-                              </div>
-                              {!editor && (
-                                <div style={{ paddingTop: 5, paddingBottom: 10 }}>
-                                  <Input
-                                    overrides={{
-                                      InputContainer: {
-                                        style: {
-                                          border: 0,
-                                          borderRadius: '5px'
-                                        }
-                                      }
-                                    }}
-                                    autoFocus
-                                    value={postComment}
-                                    onChange={event => {
-                                      setPostComment(event.target.value);
-                                      setSuccessComment(false);
-                                    }}
-                                    size={SIZE.compact}
-                                    onKeyPress={event => {
-                                      var code = event.keyCode || event.which;
-                                      if (code === 13 && event.target.value !== '') {
-                                        // submit comment
-                                        addCommentDispatch({
-                                          env: process.env.NODE_ENV,
-                                          postId: foundPost._id,
-                                          newComment: postComment
-                                        });
-                                        // close
-                                        setSuccessComment(true);
-                                        setPostComment('');
-                                      }
-                                    }}
-                                    placeholder="add a comment..."
-                                  />
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <hr />
-                      <div style={{ marginTop: 15 }}>{commentFeed}</div>
-                    </Card>
-                  </ContextMenuTrigger>
-                  <ContextMenu id="giving-tree-editor">
-                    <StatefulMenu
-                      overrides={{
-                        List: {
-                          style: {
-                            outline: 'none',
-                            width: '347px',
-                            borderRadius: '10px'
-                          }
-                        }
-                      }}
-                      onItemSelect={e => {
-                        switch (e.item.command) {
-                          case 'annotate':
-                            console.log('annotate');
-                            break;
-                          case 'summarize':
-                            console.log('summarize');
-                            break;
-                          default:
-                            break;
-                        }
-                        hideMenu();
-                      }}
-                      items={[
-                        {
-                          command: 'annotate',
-                          label: (
-                            <div
-                              style={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center'
-                              }}
-                            >
-                              <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <img
-                                  src="https://d1ppmvgsdgdlyy.cloudfront.net/annotate.svg"
-                                  alt="annotate"
-                                  style={{
-                                    height: '12px',
-                                    marginRight: 7,
-                                    alignItems: 'center'
-                                  }}
-                                />
-                                <div>Annotate</div>
-                              </div>
-                              <div>⌘&nbsp;D</div>
-                            </div>
-                          )
-                        },
-                        {
-                          command: 'summarize',
-                          label: (
-                            <div
-                              style={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center'
-                              }}
-                            >
-                              <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <img
-                                  src="https://d1ppmvgsdgdlyy.cloudfront.net/summary.svg"
-                                  alt="summarize"
-                                  style={{
-                                    height: '12px',
-                                    marginRight: 7,
-                                    alignItems: 'center'
-                                  }}
-                                />
-                                <div>Summarize</div>
-                              </div>
-                              <div>⌘&nbsp;S</div>
-                            </div>
-                          )
-                        }
-                      ]}
-                    />
-                  </ContextMenu>
+                    </div>
+                    <hr />
+                    <div style={{ marginTop: 15 }}>{commentFeed}</div>
+                  </Card>
                 </React.Fragment>
               )}
             </div>
@@ -1264,95 +1046,6 @@ function Post(props) {
     </div>
   );
 }
-
-const BlockButton = ({ format, icon }) => {
-  const editorSlate = useSlate();
-  return (
-    <ButtonEditor
-      active={isBlockActive(editorSlate, format)}
-      onMouseDown={event => {
-        event.preventDefault();
-        editorSlate.exec({ type: 'format_block', format });
-      }}
-    >
-      <Icon>{icon}</Icon>
-    </ButtonEditor>
-  );
-};
-
-const MarkButton = ({ format, icon }) => {
-  const editorSlate = useSlate();
-  return (
-    <ButtonEditor
-      active={isMarkActive(editorSlate, format)}
-      onMouseDown={event => {
-        event.preventDefault();
-        editorSlate.exec({ type: 'format_text', properties: { [format]: true } });
-      }}
-    >
-      <Icon>{icon}</Icon>
-    </ButtonEditor>
-  );
-};
-
-const toggleFormat = (editor, format) => {
-  const isActive = isFormatActive(editor, format);
-  Transforms.setNodes(
-    editor,
-    { [format]: isActive ? null : true },
-    { match: Text.isText, split: true }
-  );
-};
-
-const FormatButton = ({ format, icon }) => {
-  const editor = useSlate();
-  return (
-    <ButtonEditor
-      reversed
-      active={isFormatActive(editor, format)}
-      onMouseDown={event => {
-        event.preventDefault();
-        return toggleFormat(editor, format);
-      }}
-    >
-      <Icon>{icon}</Icon>
-    </ButtonEditor>
-  );
-};
-
-const withFormatting = editor => {
-  const { exec } = editor;
-
-  editor.exec = command => {
-    switch (command.type) {
-      case 'toggle_format': {
-        const { format } = command;
-        const isActive = isFormatActive(editor, format);
-        Editor.setNodes(
-          editor,
-          { [format]: isActive ? null : true },
-          { match: Text.isText, split: true }
-        );
-        break;
-      }
-
-      default: {
-        exec(command);
-        break;
-      }
-    }
-  };
-
-  return editor;
-};
-
-const isFormatActive = (editor, format) => {
-  const [match] = Editor.nodes(editor, {
-    match: n => n[format] === true,
-    mode: 'all'
-  });
-  return !!match;
-};
 
 const mapDispatchToProps = dispatch => ({
   getCurrentUserDispatch: payload => dispatch(getCurrentUser(payload)),
@@ -1375,6 +1068,7 @@ const mapStateToProps = state => ({
   errorMessage: state.auth.errorMessage,
   newsfeedUpdated: state.auth.newsfeedUpdated,
   loadPostSuccess: state.auth.loadPostSuccess,
+  loadPostFailure: state.auth.loadPostFailure,
   markSeenBool: state.auth.markSeen,
   markSeenFailure: state.auth.markSeenFailure,
   editPostLoading: state.user.editPostLoading,

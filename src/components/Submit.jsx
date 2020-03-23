@@ -6,6 +6,8 @@ import isHotkey from 'is-hotkey';
 import { Range } from 'slate';
 import { css, cx } from 'emotion';
 import { withHistory } from 'slate-history';
+import PlacesAutocomplete from 'react-places-autocomplete';
+import { geocodeByAddress, geocodeByPlaceId, getLatLng } from 'react-places-autocomplete';
 import isUrl from 'is-url';
 import {
   HeaderNavigation,
@@ -117,6 +119,8 @@ function Submit(props) {
   const [title, setTitle] = React.useState('');
   const [imagePreview, setPreview] = React.useState('');
   const [text, setText] = React.useState('');
+  const [address, setAddress] = useState('');
+  const [latLngFood, setLatLngFood] = useState({});
   const [foodCart, setFoodCart] = React.useState([]);
   const [selectedRequest, setRequest] = React.useState('');
   const [value, setValue] = React.useState('');
@@ -125,6 +129,7 @@ function Submit(props) {
   let [changedFoodCart, setChangedFoodCart] = useState(0);
   const [foodCartQuantity, setFoodCartQuantity] = React.useState('');
   const [foodCartName, setFoodCartName] = React.useState('');
+  const [foodDescription, setFoodDescription] = useState('');
   const [slateValue, setSlateValue] = React.useState(initialValue);
   const addTag = tag => {
     setTags([...tags, tag]);
@@ -315,6 +320,28 @@ function Submit(props) {
     updateUser();
   }, [props.submitDraftSuccess, props.markSeenSubmitTutorial, getCurrentUserDispatch]);
 
+  React.useEffect(() => {
+    console.log('submitted draft');
+    async function submitDraft() {
+      let foodString = {
+        address,
+        type: selectedRequest,
+        foodDescription,
+        foodCart
+      };
+
+      await publishPostDispatch({
+        env: process.env.NODE_ENV,
+        postId: submittedDraft._id,
+        title,
+        text: JSON.stringify(foodString),
+        categories: [selectedRequest].join(',')
+      });
+    }
+
+    submitDraft();
+  }, [props.submitDraftSuccess]);
+
   useEffect(() => {}, [changedFoodCart]);
 
   const handleKeyDown = event => {
@@ -470,6 +497,81 @@ function Submit(props) {
   const foodJSX = () => {
     return (
       <div>
+        <div className="font-bold text-base text-left my-1">Title</div>
+        <input
+          onChange={e => {
+            setTitle(e.target.value);
+          }}
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="title"
+          value={title}
+          type="text"
+          placeholder="Title"
+        />
+        <div class="font-bold text-base text-left my-1 mt-4">Delivery Address</div>
+        <PlacesAutocomplete
+          value={address}
+          onChange={address => setAddress(address)}
+          onSelect={address => {
+            setAddress(address);
+            geocodeByAddress(address)
+              .then(results => getLatLng(results[0]))
+              .then(latLng => {
+                console.log('Success', latLng);
+                setLatLngFood(latLng);
+              })
+              .catch(error => console.error('Error', error));
+          }}
+        >
+          {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+            <div>
+              <input
+                {...getInputProps({
+                  placeholder: 'Enter an address',
+                  className: 'location-search-input'
+                })}
+                value={address}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="address"
+                type="text"
+              />
+              <div className="autocomplete-dropdown-container">
+                {loading && <div>Loading...</div>}
+                {suggestions.map(suggestion => {
+                  const className = suggestion.active
+                    ? 'suggestion-item--active'
+                    : 'suggestion-item';
+                  // inline style for demonstration purpose
+                  const style = suggestion.active
+                    ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                    : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                  return (
+                    <div
+                      {...getSuggestionItemProps(suggestion, {
+                        className,
+                        style
+                      })}
+                    >
+                      <span>{suggestion.description}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </PlacesAutocomplete>
+        <div className="font-bold text-base text-left my-1 mt-4">Description</div>
+        <input
+          onChange={e => {
+            setFoodDescription(e.target.value);
+          }}
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="description"
+          value={foodDescription}
+          type="text"
+          placeholder="tell us a little more about your request..."
+        />
+        <div className="mt-4"></div>
         {foodCartJSX()}
         <div className={`flex items-center mt-4`}>
           <input
@@ -513,35 +615,6 @@ function Submit(props) {
           </button>
         </div>
       </div>
-    );
-  };
-
-  const InsertImageButton = () => {
-    const editor = useEditor();
-    return (
-      <Dropzone
-        accept="image/*"
-        onDrop={(files, rejectedFiles, event) => {
-          onDropImage(files, editor);
-        }}
-        className="dropzone-box"
-      >
-        {({ getRootProps, getInputProps }) => (
-          <section>
-            <div {...getRootProps()} style={{ outline: 'none' }}>
-              <input {...getInputProps()} />
-              <ButtonEditor
-                ref={imageUpload}
-                onMouseDown={event => {
-                  event.preventDefault();
-                }}
-              >
-                <Icon>image</Icon>
-              </ButtonEditor>
-            </div>
-          </section>
-        )}
-      </Dropzone>
     );
   };
 
@@ -659,7 +732,29 @@ function Submit(props) {
                   <div>
                     {selectedRequest !== '' && (
                       <button
-                        onClick={() => setCheckout(true)}
+                        onClick={() => {
+                          if (title && address && foodDescription && foodCart.length > 0) {
+                            let foodString = {
+                              address,
+                              type: selectedRequest,
+                              foodDescription,
+                              foodCart
+                            };
+
+                            if (isEmpty(submittedDraft)) {
+                              submitDraftDispatch({
+                                env: process.env.NODE_ENV,
+                                title,
+                                text: JSON.stringify(foodString),
+                                categories: [selectedRequest].join(',')
+                              });
+                            } else {
+                              alert('draft already submitted');
+                            }
+                          } else {
+                            alert('please fill out all fields');
+                          }
+                        }}
                         style={{ outline: 'none' }}
                         class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
                       >

@@ -51,7 +51,8 @@ function Home(props) {
     pages,
     numOfResults,
     addCommentDispatch,
-    addReplyDispatch
+    addReplyDispatch,
+    newsfeedUpdated
   } = props;
 
   let items = [];
@@ -80,6 +81,8 @@ function Home(props) {
   if (!isEmpty(user)) {
     switch (id) {
       case '':
+        window.location = '/home/discover'; // temporary to redirect to discover
+        return;
         if (newsfeedSort !== 'Home') {
           setSort('Home');
           loadNewsfeedDispatch({
@@ -166,6 +169,29 @@ function Home(props) {
 
   // keep track of which sub comment/post is overflowing div
   let overFlowList = {};
+
+  const foodCartJSX = foodCart => {
+    return foodCart.length === 0 ? (
+      <div className="text-center">no items in cart</div>
+    ) : (
+      <table class="table-auto" style={{ width: '100%' }}>
+        <thead>
+          <tr>
+            <th class="px-4 py-2">Item Description</th>
+            <th class="px-4 py-2">Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+          {foodCart.map((item, i) => (
+            <tr className={i % 2 === 0 && `bg-gray-100`}>
+              <td className={`border px-4 py-2`}>{item.name}</td>
+              <td className={`border px-4 py-2`}>{item.quantity}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  };
 
   const render = async () => {
     news.map((item, i) => {
@@ -356,32 +382,18 @@ function Home(props) {
                         </div>
                         <div style={{ marginTop: 5 }}>
                           {item.type === 'Post' ? (
-                            <Slate
-                              editor={slateEditor}
-                              value={
-                                item.text
-                                  ? JSON.parse(item.text).length > 3
-                                    ? JSON.parse(item.text)
-                                        .slice(0, 3)
-                                        .concat({
-                                          children: [{ text: 'more...', italic: true }]
-                                        })
-                                    : JSON.parse(item.text)
-                                  : [
-                                      {
-                                        children: [{ text: 'loading...' }]
-                                      }
-                                    ]
-                              }
-                            >
-                              <Editable
-                                renderLeaf={renderLeaf}
-                                renderElement={renderElement}
-                                spellCheck
-                                autoFocus
-                                readOnly
-                              />
-                            </Slate>
+                            <div style={{ marginTop: 20 }}>
+                              <div>
+                                <div class="font-bold text-base text-left my-1 mt-4">
+                                  {item.text && JSON.parse(item.text).address}
+                                </div>
+                                <div className="font-bold text-base text-left my-1 mt-4">
+                                  {item && `Description: ${JSON.parse(item.text).foodDescription}`}
+                                </div>
+                                <div className="mt-4"></div>
+                                {item.text && JSON.parse(item.text).type === 'food' && foodCartJSX(JSON.parse(item.text).foodCart)}
+                              </div>
+                            </div>
                           ) : (
                             item.content
                           )}
@@ -819,9 +831,9 @@ function Home(props) {
                   content={({ close }) => (
                     <StatefulMenu
                       items={[
-                        {
-                          label: 'Home'
-                        },
+                        // {
+                        //   label: 'Home'
+                        // },
                         // {
                         //   label: 'Popular'
                         // },
