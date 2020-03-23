@@ -174,7 +174,7 @@ function Home(props) {
     return foodCart.length === 0 ? (
       <div className="text-center">no items in cart</div>
     ) : (
-      <table class="table-auto" style={{ width: '100%' }}>
+      <table class="table-auto" style={{ width: '99%' }}>
         <thead>
           <tr>
             <th class="px-4 py-2">Item Description</th>
@@ -384,10 +384,10 @@ function Home(props) {
                           {item.type === 'Post' ? (
                             <div style={{ marginTop: 20 }}>
                               <div>
-                                <div class="font-bold text-base text-left my-1 mt-4">
-                                  {item.text && JSON.parse(item.text).address}
+                                <div class="text-sm my-1 mt-4">
+                                  {item.text && `Address: ${JSON.parse(item.text).address}`}
                                 </div>
-                                <div className="font-bold text-base text-left my-1 mt-4">
+                                <div className="text-sm my-1 mt-4">
                                   {item && `Description: ${JSON.parse(item.text).foodDescription}`}
                                 </div>
                                 <div className="mt-4"></div>
@@ -635,6 +635,18 @@ function Home(props) {
                     </div>
                   </Button>
                 </div> */}
+                <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
+                <Button style={{ outline: 'none', padding: 0 }} kind="minimal" size={SIZE.compact}>
+                          <img
+                            src="https://d1ppmvgsdgdlyy.cloudfront.net/help.svg"
+                            alt="help"
+                            style={{ height: 22, width: 'auto', display: 'block' }}
+                          />
+                          <div style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}>
+                            <strong>Help</strong>
+                          </div>
+                        </Button>
+                  </div>
                   <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
                     <CopyToClipboard text={`${window.location.origin}/post/${item._id}`}>
                       <StatefulPopover
@@ -656,12 +668,12 @@ function Home(props) {
                               }
                             }}
                             overrides={{
-                              List: { style: { outline: 'none', padding: '0px' } }
+                              List: { style: { padding: '0px' } }
                             }}
                           />
                         )}
                       >
-                        <Button style={{ padding: 0 }} kind="minimal" size={SIZE.compact}>
+                        <Button style={{ outline: 'none', padding: 0 }} kind="minimal" size={SIZE.compact}>
                           <img
                             src="https://d1ppmvgsdgdlyy.cloudfront.net/share.svg"
                             alt="share"
@@ -676,7 +688,7 @@ function Home(props) {
                   </div>
                   <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
                     <Button
-                      style={{ padding: 0 }}
+                      style={{ outline: 'none', padding: 0 }}
                       kind="minimal"
                       size={SIZE.compact}
                       onClick={() => (window.location = `/post/${item._id}`)}
