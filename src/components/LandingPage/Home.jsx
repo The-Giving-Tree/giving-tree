@@ -261,18 +261,10 @@ function Home(props) {
           >
             Order Details:
           </div>
-          <p style={{ textTransform: 'capitalize' }}>
-            order created: {trackingDetails.created}
-          </p>
-          <p style={{ textTransform: 'capitalize' }}>
-            dropoff ETA: {trackingDetails.dropoffEta}
-          </p>
-          <p style={{ textTransform: 'capitalize' }}>
-            method: {trackingDetails.method}
-          </p>
-          <p style={{ textTransform: 'capitalize' }}>
-            notes: {trackingDetails.notes}
-          </p>
+          <p style={{ textTransform: 'capitalize' }}>order created: {trackingDetails.created}</p>
+          <p style={{ textTransform: 'capitalize' }}>dropoff ETA: {trackingDetails.dropoffEta}</p>
+          <p style={{ textTransform: 'capitalize' }}>method: {trackingDetails.method}</p>
+          <p style={{ textTransform: 'capitalize' }}>notes: {trackingDetails.notes}</p>
         </div>
       </React.Fragment>
     );
@@ -865,19 +857,60 @@ function Home(props) {
                   )}
                   {props.match.url === '/home/ongoing' && (
                     <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
-                      <Button
-                        onClick={() => {
-                          setOpenFoodTracking(true);
-                          setPostId(item._id);
-                        }}
-                        style={{ outline: 'none', padding: 0 }}
-                        kind="minimal"
-                        size={SIZE.compact}
+                      <StatefulPopover
+                        placement={PLACEMENT.bottomLeft}
+                        content={({ close }) => (
+                          <StatefulMenu
+                            items={[
+                              {
+                                label: 'Manually Add Details',
+                                key: 'manual'
+                              },
+                              {
+                                label: (
+                                  <div className="flex justify-center">
+                                    <img
+                                      src="https://d1ppmvgsdgdlyy.cloudfront.net/postmates.svg"
+                                      alt="postmates"
+                                      style={{ height: 50 }}
+                                    />
+                                  </div>
+                                ),
+                                key: 'postmates'
+                              }
+                            ]}
+                            onItemSelect={item => {
+                              close();
+                              switch (item.item.key) {
+                                case 'manual':
+                                  setOpenFoodTracking(true);
+                                  break;
+                                case 'postmates':
+                                  alert('coming soon');
+                                  break;
+                                default:
+                                  break;
+                              }
+                            }}
+                            overrides={{
+                              List: { style: { outline: 'none', padding: '0px' } }
+                            }}
+                          />
+                        )}
                       >
-                        <div style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}>
-                          <strong>Add Tracking Details</strong>
-                        </div>
-                      </Button>
+                        <Button
+                          onClick={() => {
+                            setPostId(item._id);
+                          }}
+                          style={{ outline: 'none', padding: 0 }}
+                          kind="minimal"
+                          size={SIZE.compact}
+                        >
+                          <div style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}>
+                            <strong>Add Tracking Details</strong>
+                          </div>
+                        </Button>
+                      </StatefulPopover>
                     </div>
                   )}
                 </div>
