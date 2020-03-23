@@ -194,6 +194,9 @@ function Navigation(props) {
 
     let actionLegend = {
       Upvote: 'upvoted',
+      Complete: 'completed',
+      Claim: 'claimed',
+      Unclaim: 'unclaimed',
       Downvote: 'downvoted',
       Comment: 'commented on',
       Reply: 'replied to',

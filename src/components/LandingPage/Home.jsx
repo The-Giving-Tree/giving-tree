@@ -278,7 +278,7 @@ function Home(props) {
                             overrides={{
                               Root: {
                                 style: {
-                                  marginRight: '15px',
+                                  marginRight: item.assignedUser ? '5px' : '15px',
                                   marginTop: '0px',
                                   marginBottom: '0px'
                                 }
@@ -291,6 +291,42 @@ function Home(props) {
                             {i}
                           </Tag>
                         ))}
+                      {item.assignedUser && !item.completed && (
+                        <Tag
+                          overrides={{
+                            Root: {
+                              style: {
+                                marginRight: '15px',
+                                marginTop: '0px',
+                                marginBottom: '0px'
+                              }
+                            }
+                          }}
+                          closeable={false}
+                          color="#FFA500"
+                          kind={KIND.custom}
+                        >
+                          In Progress
+                        </Tag>
+                      )}
+                      {item.assignedUser && item.completed && (
+                        <Tag
+                          overrides={{
+                            Root: {
+                              style: {
+                                marginRight: '15px',
+                                marginTop: '0px',
+                                marginBottom: '0px'
+                              }
+                            }
+                          }}
+                          closeable={false}
+                          color="#4BCA81"
+                          kind={KIND.custom}
+                        >
+                          Completed
+                        </Tag>
+                      )}
                       <img
                         onClick={() => (window.location = `/post/${item._id}`)}
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/more.svg"
@@ -391,7 +427,9 @@ function Home(props) {
                                   {item && `Description: ${JSON.parse(item.text).foodDescription}`}
                                 </div>
                                 <div className="mt-4"></div>
-                                {item.text && JSON.parse(item.text).type === 'food' && foodCartJSX(JSON.parse(item.text).foodCart)}
+                                {item.text &&
+                                  JSON.parse(item.text).type === 'food' &&
+                                  foodCartJSX(JSON.parse(item.text).foodCart)}
                               </div>
                             </div>
                           ) : (
@@ -635,18 +673,40 @@ function Home(props) {
                     </div>
                   </Button>
                 </div> */}
-                <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
-                <Button style={{ outline: 'none', padding: 0 }} kind="minimal" size={SIZE.compact}>
-                          <img
-                            src="https://d1ppmvgsdgdlyy.cloudfront.net/help.svg"
-                            alt="help"
-                            style={{ height: 22, width: 'auto', display: 'block' }}
-                          />
-                          <div style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}>
-                            <strong>Help</strong>
-                          </div>
-                        </Button>
-                  </div>
+                  {!item.completed && (
+                    <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
+                      <Button
+                        style={{ outline: 'none', padding: 0 }}
+                        kind="minimal"
+                        size={SIZE.compact}
+                        onClick={() => {
+                          if (item.assignedUser) {
+                            alert(
+                              'someone is already helping on this task - please look other requests'
+                            );
+                            return;
+                          }
+
+                          if (
+                            window.confirm(
+                              'Please confirm your committment to helping this person - by saying yes, other people cannot claim this request.'
+                            )
+                          ) {
+                            console.log('ok');
+                          }
+                        }}
+                      >
+                        <img
+                          src="https://d1ppmvgsdgdlyy.cloudfront.net/help_color.svg"
+                          alt="help"
+                          style={{ height: 22, width: 'auto', display: 'block' }}
+                        />
+                        <div style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}>
+                          <strong>Help</strong>
+                        </div>
+                      </Button>
+                    </div>
+                  )}
                   <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
                     <CopyToClipboard text={`${window.location.origin}/post/${item._id}`}>
                       <StatefulPopover
@@ -673,7 +733,11 @@ function Home(props) {
                           />
                         )}
                       >
-                        <Button style={{ outline: 'none', padding: 0 }} kind="minimal" size={SIZE.compact}>
+                        <Button
+                          style={{ outline: 'none', padding: 0 }}
+                          kind="minimal"
+                          size={SIZE.compact}
+                        >
                           <img
                             src="https://d1ppmvgsdgdlyy.cloudfront.net/share.svg"
                             alt="share"

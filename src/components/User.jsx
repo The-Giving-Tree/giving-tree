@@ -366,7 +366,9 @@ function User(props) {
                     {post && `Description: ${JSON.parse(post.text).foodDescription}`}
                   </div>
                   <div className="mt-4"></div>
-                  {post.text && JSON.parse(post.text).type === 'food' && foodCartJSX(JSON.parse(post.text).foodCart)}
+                  {post.text &&
+                    JSON.parse(post.text).type === 'food' &&
+                    foodCartJSX(JSON.parse(post.text).foodCart)}
                 </div>
               </div>
             </div>

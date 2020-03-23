@@ -978,10 +978,8 @@ function Post(props) {
                               {foundPost.type === 'Post' ? (
                                 <div style={{ marginTop: 20 }}>
                                   <div>
-                                    <div class="font-bold text-base text-left my-1 mt-4">
-                                      {text && text.address}
-                                    </div>
-                                    <div className="font-bold text-base text-left my-1 mt-4">
+                                    <div className="text-sm my-1 mt-4">{text && text.address}</div>
+                                    <div className="text-sm my-1 mt-4">
                                       {text && `Description: ${text.foodDescription}`}
                                     </div>
                                     <div className="mt-4"></div>

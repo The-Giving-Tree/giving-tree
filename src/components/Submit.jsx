@@ -327,7 +327,8 @@ function Submit(props) {
         address,
         type: selectedRequest,
         foodDescription,
-        foodCart
+        foodCart,
+        location: latLngFood
       };
 
       await publishPostDispatch({
@@ -671,7 +672,7 @@ function Submit(props) {
               </div>
             </Card>
           )}
-          {submitPostSuccess && (
+          {submitPostSuccess ? (
             <Card
               overrides={{
                 Root: {
@@ -684,190 +685,195 @@ function Submit(props) {
                 }
               }}
             >
-              Your post is now live! Check it out{' '}
-              <a style={{ textDecoration: 'none' }} href={`/post/${submittedPost._id}`}>
+              Your post is now live! 🥳Check it out{' '}
+              <a
+                className="text-indigo-600 hover:text-indigo-800 transition duration-150"
+                style={{ textDecoration: 'none' }}
+                href={`/post/${submittedPost._id}`}
+              >
                 here
               </a>
               .
             </Card>
-          )}
-          <Card
-            overrides={{
-              Root: {
-                style: {
-                  width: '60%',
-                  margin: '0 auto'
+          ) : (
+            <Card
+              overrides={{
+                Root: {
+                  style: {
+                    width: '60%',
+                    margin: '0 auto'
+                  }
                 }
-              }
-            }}
-          >
-            <div className="flex justify-between items-center my-4 mb-6" style={{ height: 36 }}>
-              {!checkout ? (
-                <React.Fragment>
-                  <div class="font-bold text-xl text-left">I need:</div>
-                  <div>
-                    {selectedRequest !== '' && (
-                      <button
-                        onClick={() => setCheckout(true)}
-                        style={{ outline: 'none' }}
-                        class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
-                      >
-                        Next
-                      </button>
-                    )}
-                  </div>
-                </React.Fragment>
-              ) : (
-                <React.Fragment>
+              }}
+            >
+              <div className="flex justify-between items-center my-4 mb-6" style={{ height: 36 }}>
+                {!checkout ? (
+                  <React.Fragment>
+                    <div class="font-bold text-xl text-left">I need:</div>
+                    <div>
+                      {selectedRequest !== '' && (
+                        <button
+                          onClick={() => setCheckout(true)}
+                          style={{ outline: 'none' }}
+                          class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
+                        >
+                          Next
+                        </button>
+                      )}
+                    </div>
+                  </React.Fragment>
+                ) : (
+                  <React.Fragment>
+                    <div
+                      onClick={() => {
+                        setRequest('');
+                        setCheckout(false);
+                      }}
+                      class="font-bold text-xl text-left"
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <ArrowLeft size={20} />
+                    </div>
+                    <div>
+                      {selectedRequest !== '' && (
+                        <button
+                          onClick={() => {
+                            if (title && address && foodDescription && foodCart.length > 0) {
+                              let foodString = {
+                                address,
+                                type: selectedRequest,
+                                foodDescription,
+                                foodCart,
+                                location: latLngFood
+                              };
+
+                              if (isEmpty(submittedDraft)) {
+                                submitDraftDispatch({
+                                  env: process.env.NODE_ENV,
+                                  title,
+                                  text: JSON.stringify(foodString),
+                                  categories: [selectedRequest].join(',')
+                                });
+                              } else {
+                                alert('draft already submitted');
+                              }
+                            } else {
+                              alert('please fill out all fields');
+                            }
+                          }}
+                          style={{ outline: 'none' }}
+                          class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                        >
+                          Submit
+                        </button>
+                      )}
+                    </div>
+                  </React.Fragment>
+                )}
+              </div>
+              {!checkout && (
+                <div class="grid grid-cols-3 gap-4">
                   <div
                     onClick={() => {
-                      setRequest('');
-                      setCheckout(false);
+                      if (selectedRequest) {
+                        setRequest('');
+                      } else {
+                        setRequest('food');
+                      }
                     }}
-                    class="font-bold text-xl text-left"
+                    className={`max-w-sm rounded overflow-hidden shadow-lg border ${selectedRequest ===
+                      'food' &&
+                      'border-indigo-600'} hover:border-indigo-600 rounded-lg hover:text-green-600 transition duration-150`}
                     style={{ cursor: 'pointer' }}
                   >
-                    <ArrowLeft size={20} />
-                  </div>
-                  <div>
-                    {selectedRequest !== '' && (
-                      <button
-                        onClick={() => {
-                          if (title && address && foodDescription && foodCart.length > 0) {
-                            let foodString = {
-                              address,
-                              type: selectedRequest,
-                              foodDescription,
-                              foodCart
-                            };
-
-                            if (isEmpty(submittedDraft)) {
-                              submitDraftDispatch({
-                                env: process.env.NODE_ENV,
-                                title,
-                                text: JSON.stringify(foodString),
-                                categories: [selectedRequest].join(',')
-                              });
-                            } else {
-                              alert('draft already submitted');
-                            }
-                          } else {
-                            alert('please fill out all fields');
-                          }
-                        }}
-                        style={{ outline: 'none' }}
-                        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                    <img
+                      style={{ objectFit: 'cover', maxHeight: 150, width: 400, overflow: 'auto' }}
+                      src="https://d1ppmvgsdgdlyy.cloudfront.net/groceries.jpg"
+                      alt="Food"
+                    ></img>
+                    <div class="px-6 py-8">
+                      <div
+                        className={`font-bold text-xl text-center ${selectedRequest === 'food' &&
+                          'text-green-600'}`}
                       >
-                        Submit
-                      </button>
-                    )}
+                        Food
+                      </div>
+                    </div>
                   </div>
+                  <div
+                    onClick={() => {
+                      if (selectedRequest) {
+                        setRequest('');
+                      } else {
+                        // setRequest('supplies');
+                      }
+                    }}
+                    className={`max-w-sm rounded overflow-hidden shadow-lg border ${selectedRequest ===
+                      'supplies' && 'border-indigo-600'} rounded-lg transition duration-150`}
+                    style={{ cursor: 'not-allowed' }}
+                  >
+                    <img
+                      style={{
+                        objectFit: 'cover',
+                        maxHeight: 150,
+                        width: 400,
+                        overflow: 'auto',
+                        filter: 'grayscale(100%)'
+                      }}
+                      src="https://d1ppmvgsdgdlyy.cloudfront.net/supplies.jpg"
+                      alt="Supplies"
+                    ></img>
+                    <div class="px-6 py-8">
+                      <div
+                        className={`font-bold text-xl text-center ${selectedRequest ===
+                          'supplies' && 'text-green-600'}`}
+                      >
+                        Supplies (coming soon)
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    onClick={() => {
+                      if (selectedRequest) {
+                        setRequest('');
+                      } else {
+                        // setRequest('transportation');
+                      }
+                    }}
+                    className={`max-w-sm rounded overflow-hidden shadow-lg border ${selectedRequest ===
+                      'transportation' && 'border-indigo-600'} rounded-lg transition duration-150`}
+                    style={{ cursor: 'not-allowed' }}
+                  >
+                    <img
+                      style={{
+                        objectFit: 'cover',
+                        maxHeight: 150,
+                        width: 400,
+                        overflow: 'auto',
+                        filter: 'grayscale(100%)'
+                      }}
+                      src="https://d1ppmvgsdgdlyy.cloudfront.net/transportation.jpg"
+                      alt="Transportation"
+                    ></img>
+                    <div class="px-6 py-8">
+                      <div
+                        className={`font-bold text-xl text-center ${selectedRequest ===
+                          'transportation' && 'text-green-600'}`}
+                      >
+                        Transportation (coming soon)
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {checkout && (
+                <React.Fragment>
+                  {selectedRequest === 'food' && foodJSX()}
+                  {selectedRequest === 'supplies' && 'supplies'}
+                  {selectedRequest === 'transportation' && transportationJSX}
                 </React.Fragment>
               )}
-            </div>
-            {!checkout && (
-              <div class="grid grid-cols-3 gap-4">
-                <div
-                  onClick={() => {
-                    if (selectedRequest) {
-                      setRequest('');
-                    } else {
-                      setRequest('food');
-                    }
-                  }}
-                  className={`max-w-sm rounded overflow-hidden shadow-lg border ${selectedRequest ===
-                    'food' &&
-                    'border-indigo-600'} hover:border-indigo-600 rounded-lg hover:text-green-600 transition duration-150`}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <img
-                    style={{ objectFit: 'cover', maxHeight: 150, width: 400, overflow: 'auto' }}
-                    src="https://d1ppmvgsdgdlyy.cloudfront.net/groceries.jpg"
-                    alt="Food"
-                  ></img>
-                  <div class="px-6 py-8">
-                    <div
-                      className={`font-bold text-xl text-center ${selectedRequest === 'food' &&
-                        'text-green-600'}`}
-                    >
-                      Food
-                    </div>
-                  </div>
-                </div>
-                <div
-                  onClick={() => {
-                    if (selectedRequest) {
-                      setRequest('');
-                    } else {
-                      // setRequest('supplies');
-                    }
-                  }}
-                  className={`max-w-sm rounded overflow-hidden shadow-lg border ${selectedRequest ===
-                    'supplies' && 'border-indigo-600'} rounded-lg transition duration-150`}
-                  style={{ cursor: 'not-allowed' }}
-                >
-                  <img
-                    style={{
-                      objectFit: 'cover',
-                      maxHeight: 150,
-                      width: 400,
-                      overflow: 'auto',
-                      filter: 'grayscale(100%)'
-                    }}
-                    src="https://d1ppmvgsdgdlyy.cloudfront.net/supplies.jpg"
-                    alt="Supplies"
-                  ></img>
-                  <div class="px-6 py-8">
-                    <div
-                      className={`font-bold text-xl text-center ${selectedRequest === 'supplies' &&
-                        'text-green-600'}`}
-                    >
-                      Supplies (coming soon)
-                    </div>
-                  </div>
-                </div>
-                <div
-                  onClick={() => {
-                    if (selectedRequest) {
-                      setRequest('');
-                    } else {
-                      // setRequest('transportation');
-                    }
-                  }}
-                  className={`max-w-sm rounded overflow-hidden shadow-lg border ${selectedRequest ===
-                    'transportation' && 'border-indigo-600'} rounded-lg transition duration-150`}
-                  style={{ cursor: 'not-allowed' }}
-                >
-                  <img
-                    style={{
-                      objectFit: 'cover',
-                      maxHeight: 150,
-                      width: 400,
-                      overflow: 'auto',
-                      filter: 'grayscale(100%)'
-                    }}
-                    src="https://d1ppmvgsdgdlyy.cloudfront.net/transportation.jpg"
-                    alt="Transportation"
-                  ></img>
-                  <div class="px-6 py-8">
-                    <div
-                      className={`font-bold text-xl text-center ${selectedRequest ===
-                        'transportation' && 'text-green-600'}`}
-                    >
-                      Transportation (coming soon)
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-            {checkout && (
-              <React.Fragment>
-                {selectedRequest === 'food' && foodJSX()}
-                {selectedRequest === 'supplies' && 'supplies'}
-                {selectedRequest === 'transportation' && transportationJSX}
-              </React.Fragment>
-            )}
-            {/* <div
+              {/* <div
               style={{ display: 'flex', justifyContent: 'space-between', alignContent: 'center' }}
             >
               <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -989,7 +995,7 @@ function Submit(props) {
                 )}
               </div>
             </div> */}
-            {/* <div
+              {/* <div
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -1249,7 +1255,8 @@ function Submit(props) {
                 />
               </ContextMenu>
             </div> */}
-          </Card>
+            </Card>
+          )}
         </div>
       </div>
     </div>
