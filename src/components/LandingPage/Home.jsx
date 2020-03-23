@@ -463,6 +463,7 @@ function Home(props) {
                                 <div className="text-sm my-1 mt-4">
                                   {item && `Description: ${JSON.parse(item.text).foodDescription}`}
                                 </div>
+                                  {item && props.match.url === '/home/ongoing' && JSON.parse(item.text).phoneNumber && <div className="text-sm my-1 mt-4">Phone Number: {JSON.parse(item.text).phoneNumber}</div>}
                                 <div className="mt-4"></div>
                                 {item.text &&
                                   props.match.url !== '/home/ongoing' &&
