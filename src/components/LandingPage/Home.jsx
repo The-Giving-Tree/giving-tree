@@ -205,7 +205,7 @@ function Home(props) {
             overrides={{
               Root: {
                 style: {
-                  width: '50%',
+                  width: '100%',
                   margin: '10px auto 0px auto',
                   maxHeight: '800px',
                   overflow: 'hidden'
@@ -399,6 +399,7 @@ function Home(props) {
                         verticalAlign: 'middle',
                         tableLayout: 'fixed',
                         width: '100%',
+                        textAlign: 'left',
                         maxHeight: 'calc(0.7 * 300px)'
                       }}
                     >
@@ -533,16 +534,19 @@ function Home(props) {
                               {/* String length <= 250 or add '...' */}
                               {item.parent && item.parent.type === 'Post'
                                 ? item.parent && (
-                                  <div>
-                                  <div className="text-sm my-1 mt-4">{item && item.address}</div>
-                                  <div className="text-sm my-1 mt-4">
-                                    {item && `Description: ${item.foodDescription}`}
-                                  </div>
-                                  <div className="mt-4"></div>
-                                  {item.text &&
-                    JSON.parse(item.text).type === 'food' &&
-                    foodCartJSX(JSON.parse(item.text).foodCart)}
-                                </div>
+                                    <div>
+                                      <div className="text-sm my-1 mt-4">
+                                        {item.parent && item.parent.address}
+                                      </div>
+                                      <div className="text-sm my-1 mt-4">
+                                        {item.parent &&
+                                          `Description: ${item.parent.foodDescription}`}
+                                      </div>
+                                      <div className="mt-4"></div>
+                                      {item.parent.text &&
+                                        JSON.parse(item.parent.text).type === 'food' &&
+                                        foodCartJSX(JSON.parse(item.parent.text).foodCart)}
+                                    </div>
                                   )
                                 : item.parent && shorten(250, item.parent.content)}
                               <div
@@ -662,7 +666,7 @@ function Home(props) {
                   </Button>
                 </div> */}
                   {confetti && <Confetti width={width} height={height} recycle={false} />}
-                  {!item.completed && (
+                  {item.type === 'Post' && !item.completed && (
                     <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
                       <Button
                         style={{ outline: 'none', padding: 0 }}
@@ -717,7 +721,7 @@ function Home(props) {
                               }
                             }}
                             overrides={{
-                              List: { style: { padding: '0px' } }
+                              List: { style: { outline: 'none', padding: '0px' } }
                             }}
                           />
                         )}
@@ -865,134 +869,211 @@ function Home(props) {
     >
       <Navigation searchBarPosition="center" />
       {authenticated ? (
-        <div
-          style={{
-            width: '100%',
-            background: '#F5F5F5',
-            height: `calc(100vh - 70px + ${60 + items.length * 60}px)`
-          }}
-        >
-          <div style={{ paddingLeft: 24, paddingRight: 24, paddingTop: 30 }}>
-            <Card
-              overrides={{
-                Root: {
-                  style: {
-                    width: '50%',
-                    margin: '0 auto'
-                  }
-                },
-                Body: {
-                  style: {
-                    margin: '-15px'
-                  }
-                }
-              }}
-            >
-              <div
-                style={{ display: 'flex', justifyContent: 'space-between', alignContent: 'center' }}
-              >
-                <StatefulPopover
-                  placement={PLACEMENT.bottomLeft}
-                  content={({ close }) => (
-                    <StatefulMenu
-                      items={[
-                        // {
-                        //   label: 'Home'
-                        // },
-                        // {
-                        //   label: 'Popular'
-                        // },
-                        // {
-                        //   label: 'Newest'
-                        // },
-                        {
-                          label: 'Discover'
-                        }
-                      ]}
-                      onItemSelect={item => {
-                        close();
-                        switch (item.item.label) {
-                          case 'Home':
-                            window.location = '/';
-                            break;
-                          case 'Popular':
-                            window.location = '/home/popular';
-                            break;
-                          case 'Newest':
-                            window.location = '/home/newest';
-                            break;
-                          case 'Discover':
-                            window.location = '/home/discover';
-                            break;
-                          default:
-                            break;
-                        }
-                      }}
-                      overrides={{
-                        List: { style: { outline: 'none' } }
-                      }}
-                    />
-                  )}
+        <table class="table-auto" style={{ width: '100%', background: '#F5F5F5' }}>
+          <thead>
+            <tr>
+              <th class="px-4 py-2 text-right" style={{ width: '25%' }}>
+                <div
+                  style={{
+                    width: '100%',
+                    height: `calc(100vh - 70px + ${60 + items.length * 60}px)`
+                  }}
                 >
-                  <Button
-                    size={'compact'}
-                    kind={'secondary'}
-                    style={{ marginRight: 10 }}
-                    endEnhancer={() => <ChevronDown size={24} />}
-                  >
-                    {newsfeedSort}
-                  </Button>
-                </StatefulPopover>
-                <Input
-                  value={newPost}
-                  onClick={() => (window.location = '/submit')}
-                  onChange={event => setNewPost(event.currentTarget.value)}
-                  placeholder="Ask for help / assistance"
-                />
-                <Button
-                  onClick={() => (window.location = '/submit')}
-                  kind="secondary"
-                  style={{ marginLeft: 10, fontSize: 14 }}
-                  shape={SHAPE.square}
-                >
-                  Submit
-                </Button>
-              </div>
-            </Card>
-            <InfiniteScroll
-              pageStart={1}
-              loadMore={() => setUpdateNews(true)}
-              hasMore={hasMoreItems}
-              loader={
-                <StyledBody
-                  className="loader"
-                  style={{ textAlign: 'center', padding: 10, marginTop: 20 }}
-                  key={0}
-                >
-                  Loading...
-                </StyledBody>
-              }
-            >
-              {items}
-            </InfiniteScroll>
-            <div style={{ paddingTop: 30 }} />
-            {items.length === 0 && newsfeedSuccess && !newsfeedLoading && (
-              <StyledBody style={{ margin: '0 auto', textAlign: 'center', marginTop: 20 }}>
-                {id !== 'discover' ? `You don't follow anyone yet :(` : 'No requests yet'}
-                {id !== 'discover' && (
                   <div
-                    onClick={() => {
-                      window.location = '/home/discover';
-                    }}
-                    style={{ cursor: 'pointer', color: 'rgb(25, 103, 210)' }}
+                    className="text-black transition duration-150 hover:text-indigo-600 flex items-center justify-between"
+                    style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 30 }}
                   >
-                    Click here to discover topics and people to follow.
+                    <span />
+                    <div className='flex items-center'>
+                      <img
+                        src="https://d1ppmvgsdgdlyy.cloudfront.net/search.svg"
+                        alt="search"
+                        style={{ height: 20, marginRight: 10 }}
+                      />
+                      Discover Tasks
+                    </div>
                   </div>
-                )}
-              </StyledBody>
-            )}
-          </div>
-        </div>
+                  <div
+                    className="text-black transition duration-150 hover:text-indigo-600 flex items-center justify-between"
+                    style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
+                  >
+                    <span />
+                    <div className='flex items-center'>
+                      <img
+                        src="https://d1ppmvgsdgdlyy.cloudfront.net/care.svg"
+                        alt="care"
+                        style={{ height: 20, marginRight: 10 }}
+                      />
+                      Your Tasks
+                    </div>
+                  </div>
+                  <div
+                    className="text-black transition duration-150 hover:text-indigo-600 flex items-center justify-between"
+                    style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
+                  >
+                    <span />
+                    <div className='flex items-center'>
+                      <img
+                        src="https://d1ppmvgsdgdlyy.cloudfront.net/gift.svg"
+                        alt="gift"
+                        style={{ height: 20, marginRight: 10 }}
+                      />
+                      Completed Tasks
+                    </div>
+                  </div>
+                  <div
+                    className="text-black transition duration-150 hover:text-indigo-600 flex items-center justify-between"
+                    style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
+                  >
+                    <span />
+                    <div className='flex items-center'>
+                      <img
+                        src="https://d1ppmvgsdgdlyy.cloudfront.net/global.svg"
+                        alt="global"
+                        style={{ height: 20, marginRight: 10 }}
+                      />
+                      Global Tasks
+                    </div>
+                  </div>
+                </div>
+              </th>
+              <th class="px-4 py-2" style={{ width: '50%' }}>
+                <div
+                  style={{
+                    width: '100%',
+                    height: `calc(100vh - 70px + ${60 + items.length * 60}px)`
+                  }}
+                >
+                  <div style={{ paddingLeft: 24, paddingRight: 24, paddingTop: 30 }}>
+                    <Card
+                      overrides={{
+                        Root: {
+                          style: {
+                            width: '100%',
+                            margin: '0 auto'
+                          }
+                        },
+                        Body: {
+                          style: {
+                            margin: '-15px'
+                          }
+                        }
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignContent: 'center'
+                        }}
+                      >
+                        <StatefulPopover
+                          placement={PLACEMENT.bottomLeft}
+                          content={({ close }) => (
+                            <StatefulMenu
+                              items={[
+                                // {
+                                //   label: 'Home'
+                                // },
+                                // {
+                                //   label: 'Popular'
+                                // },
+                                // {
+                                //   label: 'Newest'
+                                // },
+                                {
+                                  label: 'Discover'
+                                }
+                              ]}
+                              onItemSelect={item => {
+                                close();
+                                switch (item.item.label) {
+                                  case 'Home':
+                                    window.location = '/';
+                                    break;
+                                  case 'Popular':
+                                    window.location = '/home/popular';
+                                    break;
+                                  case 'Newest':
+                                    window.location = '/home/newest';
+                                    break;
+                                  case 'Discover':
+                                    window.location = '/home/discover';
+                                    break;
+                                  default:
+                                    break;
+                                }
+                              }}
+                              overrides={{
+                                List: { style: { outline: 'none' } }
+                              }}
+                            />
+                          )}
+                        >
+                          <Button
+                            size={'compact'}
+                            kind={'secondary'}
+                            style={{ marginRight: 10 }}
+                            endEnhancer={() => <ChevronDown size={24} />}
+                          >
+                            {newsfeedSort}
+                          </Button>
+                        </StatefulPopover>
+                        <Input
+                          value={newPost}
+                          onClick={() => (window.location = '/submit')}
+                          onChange={event => setNewPost(event.currentTarget.value)}
+                          placeholder="Ask for help / assistance"
+                        />
+                        <Button
+                          onClick={() => (window.location = '/submit')}
+                          kind="secondary"
+                          style={{ marginLeft: 10, fontSize: 14 }}
+                          shape={SHAPE.square}
+                        >
+                          Submit
+                        </Button>
+                      </div>
+                    </Card>
+                    <InfiniteScroll
+                      pageStart={1}
+                      loadMore={() => setUpdateNews(true)}
+                      hasMore={hasMoreItems}
+                      loader={
+                        <StyledBody
+                          className="loader"
+                          style={{ textAlign: 'center', padding: 10, marginTop: 20 }}
+                          key={0}
+                        >
+                          Loading...
+                        </StyledBody>
+                      }
+                    >
+                      {items}
+                    </InfiniteScroll>
+                    <div style={{ paddingTop: 30 }} />
+                    {items.length === 0 && newsfeedSuccess && !newsfeedLoading && (
+                      <StyledBody style={{ margin: '0 auto', textAlign: 'center', marginTop: 20 }}>
+                        {id !== 'discover' ? `You don't follow anyone yet :(` : 'No requests yet'}
+                        {id !== 'discover' && (
+                          <div
+                            onClick={() => {
+                              window.location = '/home/discover';
+                            }}
+                            style={{ cursor: 'pointer', color: 'rgb(25, 103, 210)' }}
+                          >
+                            Click here to discover topics and people to follow.
+                          </div>
+                        )}
+                      </StyledBody>
+                    )}
+                  </div>
+                </div>
+              </th>
+              <th class="px-4 py-2" style={{ width: '25%' }}></th>
+            </tr>
+          </thead>
+        </table>
       ) : (
         <div style={{ paddingLeft: 24, paddingRight: 24, height: `calc(100vh - 70px)` }}>
           <Block>
