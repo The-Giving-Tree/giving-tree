@@ -12,6 +12,8 @@ import { Button, SHAPE } from 'baseui/button';
 import { StatefulSelect as Search, TYPE } from 'baseui/select';
 import { withHistory } from 'slate-history';
 import useWindowSize from 'react-use/lib/useWindowSize';
+import { Modal, ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/modal';
+import { RadioGroup, Radio } from 'baseui/radio';
 import Confetti from 'react-confetti';
 import Navigation from './../Navigation';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -61,6 +63,10 @@ function Home(props) {
 
   let items = [];
   const [news, setNews] = React.useState([]);
+  const [openFoodTracking, setOpenFoodTracking] = React.useState(false);
+  const [eta, setETA] = React.useState('');
+  const [missing, setOrderMissing] = React.useState('');
+  const [deliverer, setOrderDeliverer] = React.useState('');
   const [newsfeedDictionary, setNewsfeedDictionary] = React.useState({});
   const [updatedNews, setUpdateNews] = React.useState(false);
   const [newsfeedSort, setSort] = React.useState('');
@@ -233,6 +239,44 @@ function Home(props) {
     news.map((item, i) => {
       items.push(
         <div className="item" key={i}>
+          <Modal
+            overrides={{ Dialog: { style: { borderRadius: '7px' } } }}
+            onClose={() => setOpenFoodTracking(false)}
+            isOpen={openFoodTracking}
+          >
+            <ModalHeader>Add Tracking Details</ModalHeader>
+            <ModalBody>
+              When is the food arriving (ETA)?
+              <Input
+                value={eta}
+                onChange={e => setETA(e.target.value)}
+                placeholder="4/2/2020 @ 6:40pm"
+              />
+              <br />
+              Are you missing anything from the order?
+              <Input
+                value={missing}
+                onChange={e => setOrderMissing(e.target.value)}
+                placeholder="spinach was out"
+              />
+              <br />
+              Who is delivering the food? (name, phone number, etc)
+              <Input
+                value={deliverer}
+                onChange={e => setOrderDeliverer(e.target.value)}
+                placeholder="Barack Obama, 6465335281"
+              />
+              <br />
+            </ModalBody>
+            <ModalFooter>
+              <ModalButton size={'compact'} kind={'minimal'} onClick={() => setOpenFoodTracking(false)}>
+                Cancel
+              </ModalButton>
+              <ModalButton size={'compact'} onClick={() => alert('submitted')}>
+                Submit
+              </ModalButton>
+            </ModalFooter>
+          </Modal>
           <Card
             overrides={{
               Root: {
@@ -813,44 +857,16 @@ function Home(props) {
                   )}
                   {props.match.url === '/home/ongoing' && (
                     <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
-                      <CopyToClipboard text={`${window.location.origin}/post/${item._id}`}>
-                        <StatefulPopover
-                          placement={PLACEMENT.bottomLeft}
-                          content={({ close }) => (
-                            <StatefulMenu
-                              items={[
-                                {
-                                  label: 'PostMates'
-                                }
-                              ]}
-                              onItemSelect={item => {
-                                close();
-                                switch (item.item.label) {
-                                  case 'PostMates':
-                                    break;
-                                  default:
-                                    break;
-                                }
-                              }}
-                              overrides={{
-                                List: { style: { outline: 'none', padding: '0px' } }
-                              }}
-                            />
-                          )}
-                        >
-                          <Button
-                            style={{ outline: 'none', padding: 0 }}
-                            kind="minimal"
-                            size={SIZE.compact}
-                          >
-                            <div
-                              style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}
-                            >
-                              <strong>Order Now</strong>
-                            </div>
-                          </Button>
-                        </StatefulPopover>
-                      </CopyToClipboard>
+                      <Button
+                        onClick={() => setOpenFoodTracking(true)}
+                        style={{ outline: 'none', padding: 0 }}
+                        kind="minimal"
+                        size={SIZE.compact}
+                      >
+                        <div style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}>
+                          <strong>Add Tracking Details</strong>
+                        </div>
+                      </Button>
                     </div>
                   )}
                 </div>
