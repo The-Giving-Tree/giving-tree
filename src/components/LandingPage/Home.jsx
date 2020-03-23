@@ -106,6 +106,36 @@ function Home(props) {
           });
         }
         break;
+      case 'ongoing':
+        if (newsfeedSort !== 'Discover') {
+          setSort('Discover');
+          loadNewsfeedDispatch({
+            env: process.env.NODE_ENV,
+            page: Number(currentPage),
+            feed: 'Discover'
+          });
+        }
+        break;
+      case 'completed':
+        if (newsfeedSort !== 'Completed') {
+          setSort('Completed');
+          loadNewsfeedDispatch({
+            env: process.env.NODE_ENV,
+            page: Number(currentPage),
+            feed: 'Completed'
+          });
+        }
+        break;
+        case 'global':
+          if (newsfeedSort !== 'Global') {
+            setSort('Global');
+            loadNewsfeedDispatch({
+              env: process.env.NODE_ENV,
+              page: Number(currentPage),
+              feed: 'Global'
+            });
+          }
+          break;
       case 'popular':
         if (newsfeedSort !== 'Popular') {
           setSort('Popular');
@@ -898,7 +928,7 @@ function Home(props) {
                     style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
                   >
                     <span />
-                    <div className='flex items-center' onClick={() => alert('coming soon')}>
+                    <div className='flex items-center' onClick={() => window.location = '/home/ongoing'}>
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/care.svg"
                         alt="care"
@@ -912,7 +942,7 @@ function Home(props) {
                     style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
                   >
                     <span />
-                    <div className='flex items-center' onClick={() => alert('coming soon')}>
+                    <div className='flex items-center' onClick={() => window.location = '/home/completed'}>
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/gift.svg"
                         alt="gift"
@@ -926,7 +956,7 @@ function Home(props) {
                     style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
                   >
                     <span />
-                    <div className='flex items-center' onClick={() => alert('coming soon')}>
+                    <div className='flex items-center' onClick={() => window.location = '/home/global'}>
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/global.svg"
                         alt="global"
