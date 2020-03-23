@@ -6,8 +6,7 @@ import isHotkey from 'is-hotkey';
 import { Range } from 'slate';
 import { css, cx } from 'emotion';
 import { withHistory } from 'slate-history';
-import PlacesAutocomplete from 'react-places-autocomplete';
-import phoneFormatter from 'phone-formatter';
+import PlacesAutocomplete from 'react-places-autocomplete';s
 import { geocodeByAddress, geocodeByPlaceId, getLatLng } from 'react-places-autocomplete';
 import isUrl from 'is-url';
 import {
