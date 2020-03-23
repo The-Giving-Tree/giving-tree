@@ -993,9 +993,7 @@ function Home(props) {
                     </div>
                   </div>
                   <div
-                    className={`text-black transition duration-150 hover:text-indigo-600 ${props
-                      .match.url === '/home/global' &&
-                      'text-indigo-600'} flex items-center justify-between`}
+                    className={`text-black transition duration-150 hover:text-indigo-600 flex items-center justify-between`}
                     style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
                   >
                     <span />
