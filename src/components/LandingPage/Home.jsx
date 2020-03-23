@@ -11,6 +11,8 @@ import { Block } from 'baseui/block';
 import { Button, SHAPE } from 'baseui/button';
 import { StatefulSelect as Search, TYPE } from 'baseui/select';
 import { withHistory } from 'slate-history';
+import useWindowSize from 'react-use/lib/useWindowSize';
+import Confetti from 'react-confetti';
 import Navigation from './../Navigation';
 import InfiniteScroll from 'react-infinite-scroller';
 import { Card, StyledBody, StyledAction } from 'baseui/card';
@@ -66,6 +68,8 @@ function Home(props) {
   const [downvoteHover, setDownvoteHover] = React.useState([]);
   const [hasMoreItems, setHasMoreItems] = React.useState(true);
   const [newPost, setNewPost] = React.useState('');
+  const [confetti, showConfetti] = React.useState(false);
+  const { width, height } = useWindowSize();
 
   const isEmpty = obj => {
     for (var key in obj) {
@@ -673,6 +677,7 @@ function Home(props) {
                     </div>
                   </Button>
                 </div> */}
+                  {confetti && <Confetti width={width} height={height} recycle={false} />}
                   {!item.completed && (
                     <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
                       <Button
@@ -692,7 +697,7 @@ function Home(props) {
                               'Please confirm your committment to helping this person - by saying yes, other people cannot claim this request.'
                             )
                           ) {
-                            console.log('ok');
+                            showConfetti(true);
                           }
                         }}
                       >
