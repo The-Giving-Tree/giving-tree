@@ -465,6 +465,7 @@ function Home(props) {
                                 </div>
                                 <div className="mt-4"></div>
                                 {item.text &&
+                                  props.match.url !== '/home/ongoing' &&
                                   JSON.parse(item.text).type === 'food' &&
                                   foodCartJSX(JSON.parse(item.text).foodCart)}
                               </div>
@@ -698,7 +699,7 @@ function Home(props) {
                   </Button>
                 </div> */}
                   {confetti && <Confetti width={width} height={height} recycle={false} />}
-                  {item.type === 'Post' && !item.completed && (
+                  {item.type === 'Post' && !item.completed && props.match.url === '/home/discover' && (
                     <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
                       <Button
                         style={{ outline: 'none', padding: 0 }}
@@ -737,66 +738,114 @@ function Home(props) {
                       </Button>
                     </div>
                   )}
-                  <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
-                    <CopyToClipboard text={`${window.location.origin}/post/${item._id}`}>
-                      <StatefulPopover
-                        placement={PLACEMENT.bottomLeft}
-                        content={({ close }) => (
-                          <StatefulMenu
-                            items={[
-                              {
-                                label: 'Copy Link'
-                              }
-                            ]}
-                            onItemSelect={item => {
-                              close();
-                              switch (item.item.label) {
-                                case 'Copy Link':
-                                  break;
-                                default:
-                                  break;
-                              }
-                            }}
-                            overrides={{
-                              List: { style: { outline: 'none', padding: '0px' } }
-                            }}
-                          />
-                        )}
-                      >
-                        <Button
-                          style={{ outline: 'none', padding: 0 }}
-                          kind="minimal"
-                          size={SIZE.compact}
+                  {props.match.url !== '/home/ongoing' && (
+                    <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
+                      <CopyToClipboard text={`${window.location.origin}/post/${item._id}`}>
+                        <StatefulPopover
+                          placement={PLACEMENT.bottomLeft}
+                          content={({ close }) => (
+                            <StatefulMenu
+                              items={[
+                                {
+                                  label: 'Copy Link'
+                                }
+                              ]}
+                              onItemSelect={item => {
+                                close();
+                                switch (item.item.label) {
+                                  case 'Copy Link':
+                                    break;
+                                  default:
+                                    break;
+                                }
+                              }}
+                              overrides={{
+                                List: { style: { outline: 'none', padding: '0px' } }
+                              }}
+                            />
+                          )}
                         >
-                          <img
-                            src="https://d1ppmvgsdgdlyy.cloudfront.net/share.svg"
-                            alt="share"
-                            style={{ height: 22, width: 'auto', display: 'block' }}
-                          />
-                          <div style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}>
-                            <strong>Share</strong>
-                          </div>
-                        </Button>
-                      </StatefulPopover>
-                    </CopyToClipboard>
-                  </div>
-                  <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
-                    <Button
-                      style={{ outline: 'none', padding: 0 }}
-                      kind="minimal"
-                      size={SIZE.compact}
-                      onClick={() => (window.location = `/post/${item._id}`)}
-                    >
-                      <img
-                        src="https://d1ppmvgsdgdlyy.cloudfront.net/comment.svg"
-                        alt="comment"
-                        style={{ height: 22, width: 'auto', display: 'block' }}
-                      />
-                      <div style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}>
-                        <strong>{item.comments.length}&nbsp;&nbsp;Comments</strong>
-                      </div>
-                    </Button>
-                  </div>
+                          <Button
+                            style={{ outline: 'none', padding: 0 }}
+                            kind="minimal"
+                            size={SIZE.compact}
+                          >
+                            <img
+                              src="https://d1ppmvgsdgdlyy.cloudfront.net/share.svg"
+                              alt="share"
+                              style={{ height: 22, width: 'auto', display: 'block' }}
+                            />
+                            <div
+                              style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}
+                            >
+                              <strong>Share</strong>
+                            </div>
+                          </Button>
+                        </StatefulPopover>
+                      </CopyToClipboard>
+                    </div>
+                  )}
+                  {props.match.url !== '/home/ongoing' && (
+                    <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
+                      <Button
+                        style={{ outline: 'none', padding: 0 }}
+                        kind="minimal"
+                        size={SIZE.compact}
+                        onClick={() => (window.location = `/post/${item._id}`)}
+                      >
+                        <img
+                          src="https://d1ppmvgsdgdlyy.cloudfront.net/comment.svg"
+                          alt="comment"
+                          style={{ height: 22, width: 'auto', display: 'block' }}
+                        />
+                        <div style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}>
+                          <strong>{item.comments.length}&nbsp;&nbsp;Comments</strong>
+                        </div>
+                      </Button>
+                    </div>
+                  )}
+                  {props.match.url === '/home/ongoing' && (
+                    <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
+                      <CopyToClipboard text={`${window.location.origin}/post/${item._id}`}>
+                        <StatefulPopover
+                          placement={PLACEMENT.bottomLeft}
+                          content={({ close }) => (
+                            <StatefulMenu
+                              items={[
+                                {
+                                  label: 'PostMates'
+                                }
+                              ]}
+                              onItemSelect={item => {
+                                close();
+                                switch (item.item.label) {
+                                  case 'PostMates':
+                                    break;
+                                  default:
+                                    break;
+                                }
+                              }}
+                              overrides={{
+                                List: { style: { outline: 'none', padding: '0px' } }
+                              }}
+                            />
+                          )}
+                        >
+                          <Button
+                            style={{ outline: 'none', padding: 0 }}
+                            kind="minimal"
+                            size={SIZE.compact}
+                          >
+                            <div
+                              style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}
+                            >
+                              <strong>Order Now</strong>
+                            </div>
+                          </Button>
+                        </StatefulPopover>
+                      </CopyToClipboard>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -1152,8 +1201,8 @@ function Home(props) {
                         )}
                         {id === 'global' && (
                           <div className="mb-2">
-                            No requests globally yet! Invite your friends and start spreading the
-                            love
+                            No requests globally completed yet! Invite your friends and start
+                            spreading the love
                           </div>
                         )}
                         {id !== 'discover' && (

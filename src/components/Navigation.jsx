@@ -356,7 +356,7 @@ function Navigation(props) {
             <NavigationItem>
               <div
                 style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}
-                onClick={() => (window.location = '/')}
+                onClick={() => (window.location = '/home/discover')}
               >
                 <img
                   src="https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg"
@@ -371,7 +371,7 @@ function Navigation(props) {
           </NavigationList>
           {!center && <NavigationList $align={ALIGN.center} />}
           <NavigationList $align={center ? ALIGN.center : ALIGN.right}>
-            <NavigationItem style={{ width: `${center ? '600px' : '200px'}` }}>
+            <NavigationItem style={{ width: `${center ? '576px' : '200px'}` }}>
               <Input
                 overrides={{
                   Before,
@@ -401,7 +401,7 @@ function Navigation(props) {
                         outline: 'none',
                         padding: '0px',
                         position: 'absolute',
-                        width: `${center ? '600px' : '200px'}`,
+                        width: `${center ? '576px' : '200px'}`,
                         maxHeight: '400px',
                         borderBottomLeftRadius: '25px',
                         borderBottomRightRadius: '25px',

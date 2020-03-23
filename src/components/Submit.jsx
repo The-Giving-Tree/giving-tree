@@ -7,6 +7,7 @@ import { Range } from 'slate';
 import { css, cx } from 'emotion';
 import { withHistory } from 'slate-history';
 import PlacesAutocomplete from 'react-places-autocomplete';
+import phoneFormatter from 'phone-formatter';
 import { geocodeByAddress, geocodeByPlaceId, getLatLng } from 'react-places-autocomplete';
 import isUrl from 'is-url';
 import {
@@ -117,6 +118,7 @@ function Submit(props) {
   } = props;
 
   const [title, setTitle] = React.useState('');
+  const [phoneNumber, setPhoneNumber] = React.useState('');
   const [imagePreview, setPreview] = React.useState('');
   const [text, setText] = React.useState('');
   const [address, setAddress] = useState('');
@@ -328,7 +330,8 @@ function Submit(props) {
         type: selectedRequest,
         foodDescription,
         foodCart,
-        location: latLngFood
+        location: latLngFood,
+        phoneNumber
       };
 
       await publishPostDispatch({
@@ -498,17 +501,47 @@ function Submit(props) {
   const foodJSX = () => {
     return (
       <div>
-        <div className="font-bold text-base text-left my-1">Title</div>
-        <input
-          onChange={e => {
-            setTitle(e.target.value);
-          }}
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          id="title"
-          value={title}
-          type="text"
-          placeholder="Title"
-        />
+        <div className="flex justify-between">
+          <div className="font-bold text-base text-left my-1">Title</div>
+          <div className="font-bold text-base text-left ml-3 my-1">Phone Number</div>
+        </div>
+        <div className="flex justify-content">
+          <input
+            onChange={e => {
+              setTitle(e.target.value);
+            }}
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="title"
+            value={title}
+            type="text"
+            placeholder="Title"
+          />
+          <input
+            onChange={e => {
+              var phoneValue = e.target.value;
+              var output;
+              phoneValue = phoneValue.replace(/[^0-9]/g, '');
+              var area = phoneValue.substr(0, 3);
+              var pre = phoneValue.substr(3, 3);
+              var tel = phoneValue.substr(6, 4);
+
+              if (area.length < 3) {
+                output = area;
+              } else if (area.length === 3 && pre.length < 3) {
+                output = ' ' + area + ' ' + ' ' + pre;
+              } else if (area.length === 3 && pre.length === 3) {
+                output = '' + area + '' + ' ' + pre + ' ' + tel;
+              }
+              setPhoneNumber(output);
+            }}
+            class="ml-3 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="title"
+            value={phoneNumber}
+            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+            type="tel"
+            placeholder="Phone Number (for delivery confirmation)"
+          />
+        </div>
         <div class="font-bold text-base text-left my-1 mt-4">Delivery Address</div>
         <PlacesAutocomplete
           value={address}
@@ -744,7 +777,8 @@ function Submit(props) {
                                 type: selectedRequest,
                                 foodDescription,
                                 foodCart,
-                                location: latLngFood
+                                location: latLngFood,
+                                phoneNumber
                               };
 
                               if (isEmpty(submittedDraft)) {
@@ -762,7 +796,15 @@ function Submit(props) {
                             }
                           }}
                           style={{ outline: 'none' }}
-                          class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                          class={`${
+                            title && address && foodDescription && foodCart.length > 0
+                              ? 'bg-green-500'
+                              : 'bg-gray-500'
+                          } ${title &&
+                            address &&
+                            foodDescription &&
+                            foodCart.length > 0 &&
+                            'hover:bg-green-700'} text-white font-bold py-2 px-4 rounded`}
                         >
                           Submit
                         </button>
