@@ -402,6 +402,52 @@ function Submit(props) {
             Add
           </button>
         </div>
+        <div className="flex justify-between items-center mt-6">
+          <span />
+          <div>
+            {selectedRequest !== '' && (
+              <button
+                onClick={() => {
+                  if (title && address && description && cart.length > 0) {
+                    let foodString = {
+                      address,
+                      type: selectedRequest,
+                      description,
+                      cart,
+                      location: latLng,
+                      phoneNumber
+                    };
+
+                    if (isEmpty(submittedDraft)) {
+                      submitDraftDispatch({
+                        env: process.env.NODE_ENV,
+                        title,
+                        text: JSON.stringify(foodString),
+                        categories: [selectedRequest].join(',')
+                      });
+                    } else {
+                      alert('draft already submitted');
+                    }
+                  } else {
+                    alert('please fill out all fields');
+                  }
+                }}
+                style={{ outline: 'none' }}
+                class={`${
+                  title && address && description && cart.length > 0
+                    ? 'bg-green-500'
+                    : 'bg-gray-500'
+                } ${title &&
+                  address &&
+                  description &&
+                  cart.length > 0 &&
+                  'hover:bg-green-700'} text-white font-bold py-2 px-4 rounded`}
+              >
+                Submit
+              </button>
+            )}
+          </div>
+        </div>
       </div>
     );
   };
@@ -520,49 +566,6 @@ function Submit(props) {
                       style={{ cursor: 'pointer' }}
                     >
                       <ArrowLeft size={20} />
-                    </div>
-                    <div>
-                      {selectedRequest !== '' && (
-                        <button
-                          onClick={() => {
-                            if (title && address && description && cart.length > 0) {
-                              let foodString = {
-                                address,
-                                type: selectedRequest,
-                                description,
-                                cart,
-                                location: latLng,
-                                phoneNumber
-                              };
-
-                              if (isEmpty(submittedDraft)) {
-                                submitDraftDispatch({
-                                  env: process.env.NODE_ENV,
-                                  title,
-                                  text: JSON.stringify(foodString),
-                                  categories: [selectedRequest].join(',')
-                                });
-                              } else {
-                                alert('draft already submitted');
-                              }
-                            } else {
-                              alert('please fill out all fields');
-                            }
-                          }}
-                          style={{ outline: 'none' }}
-                          class={`${
-                            title && address && description && cart.length > 0
-                              ? 'bg-green-500'
-                              : 'bg-gray-500'
-                          } ${title &&
-                            address &&
-                            description &&
-                            cart.length > 0 &&
-                            'hover:bg-green-700'} text-white font-bold py-2 px-4 rounded`}
-                        >
-                          Submit
-                        </button>
-                      )}
                     </div>
                   </React.Fragment>
                 )}

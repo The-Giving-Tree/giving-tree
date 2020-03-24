@@ -1531,8 +1531,7 @@ function Home(props) {
                               onClick={() => {
                                 selectMenuDispatch({ selectMenu: '' }); // to show base page
                                 history.push('/submit');
-                              }
-                              }
+                              }}
                             >
                               create a new request if you need help
                             </span>
