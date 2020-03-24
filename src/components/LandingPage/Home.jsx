@@ -1527,14 +1527,19 @@ function Home(props) {
                             No requests yet -{' '}
                             <span
                               className={`text-indigo-600 hover:text-indigo-800 transition duration-150`}
-                              onClick={() => history.push('/submit')}
+                              style={{ cursor: 'pointer' }}
+                              onClick={() => {
+                                selectMenuDispatch({ selectMenu: '' }); // to show base page
+                                history.push('/submit');
+                              }
+                              }
                             >
                               create a new request if you need help
                             </span>
                           </div>
                         )}
                         {id === 'ongoing' && (
-                          <div className="mb-2">You haven't requested to help anyone yet</div>
+                          <div className="mb-2">You don't have any ongoing tasks yet</div>
                         )}
                         {id === 'completed' && (
                           <div className="mb-2">You haven't completed any tasks yet</div>
