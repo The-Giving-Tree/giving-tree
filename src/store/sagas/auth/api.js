@@ -295,11 +295,23 @@ const loadUser = async (env, username) => {
   }
 };
 
-const loadNewsFeed = async (env, page, feed, token) => {
+const isEmpty = obj => {
+  for (var key in obj) {
+    if (obj.hasOwnProperty(key)) return false;
+  }
+  return true;
+};
+
+const loadNewsFeed = async (env, page, location = undefined, feed, token) => {
   try {
     const headers = {
       headers: { Authorization: `Bearer ${token}` }
     };
+
+    let query = '';
+    if (location && !isEmpty(location)) {
+      query += `lat=${location.lat}&lng=${location.lng}`
+    }
 
     let data = '';
     switch (feed) {
@@ -307,7 +319,7 @@ const loadNewsFeed = async (env, page, feed, token) => {
         data = await Axios.get(`${ROUTES[env].giving_tree}/home/${page}`, headers);
         break;
       case 'Discover':
-        data = await Axios.get(`${ROUTES[env].giving_tree}/discover/${page}`, headers);
+        data = await Axios.get(`${ROUTES[env].giving_tree}/discover/${page}?${query}`, headers);
         break;
       case 'Newest':
         data = await Axios.get(`${ROUTES[env].giving_tree}/newest/${page}`, headers);

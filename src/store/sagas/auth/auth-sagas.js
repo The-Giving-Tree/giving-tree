@@ -324,6 +324,7 @@ export function* loadNewsfeed(action) {
       Api.loadNewsFeed,
       action.payload.env,
       action.payload.page,
+      action.payload.location, // for location
       action.payload.feed,
       token
     );

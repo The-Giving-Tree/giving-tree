@@ -7,15 +7,20 @@ import {
   StyledNavigationList as NavigationList
 } from 'baseui/header-navigation';
 import { StyledLink as Link } from 'baseui/link';
+import { useStyletron } from 'baseui';
 import { Block } from 'baseui/block';
 import { Button, SHAPE } from 'baseui/button';
+import PlacesAutocomplete from 'react-places-autocomplete';
+import { geocodeByAddress, geocodeByPlaceId, getLatLng } from 'react-places-autocomplete';
 import { StatefulSelect as Search, TYPE } from 'baseui/select';
 import { withHistory } from 'slate-history';
 import useWindowSize from 'react-use/lib/useWindowSize';
+import { Slider } from 'baseui/slider';
 import { Modal, ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/modal';
 import { RadioGroup, Radio } from 'baseui/radio';
 import Confetti from 'react-confetti';
 import Navigation from './../Navigation';
+import { geolocated } from 'react-geolocated';
 import InfiniteScroll from 'react-infinite-scroller';
 import { Card, StyledBody, StyledAction } from 'baseui/card';
 import { StatefulPopover, PLACEMENT } from 'baseui/popover';
@@ -67,6 +72,10 @@ function Home(props) {
 
   let items = [];
   const [news, setNews] = React.useState([]);
+  const [openCustomAddress, setOpenCustomAddress] = React.useState(false);
+  const [distance, setDistance] = React.useState([1000]);
+  const [latLng, setLatLng] = React.useState({});
+  const [address, setAddress] = React.useState('');
   const [openFoodTracking, setOpenFoodTracking] = React.useState(false);
   const [postId, setPostId] = React.useState('');
   const [eta, setETA] = React.useState('');
@@ -83,6 +92,10 @@ function Home(props) {
   const [newPost, setNewPost] = React.useState('');
   const [confetti, showConfetti] = React.useState(false);
   const { width, height } = useWindowSize();
+
+  const mToKm = value => `${(value / 1000).toFixed(1)}km`;
+
+  const [css, theme] = useStyletron();
 
   const isEmpty = obj => {
     for (var key in obj) {
@@ -105,6 +118,7 @@ function Home(props) {
           loadNewsfeedDispatch({
             env: process.env.NODE_ENV,
             page: Number(currentPage),
+            location: latLng,
             feed: 'Home'
           });
         }
@@ -115,6 +129,7 @@ function Home(props) {
           loadNewsfeedDispatch({
             env: process.env.NODE_ENV,
             page: Number(currentPage),
+            location: latLng,
             feed: 'Discover'
           });
         }
@@ -125,6 +140,7 @@ function Home(props) {
           loadNewsfeedDispatch({
             env: process.env.NODE_ENV,
             page: Number(currentPage),
+            location: latLng,
             feed: 'Ongoing'
           });
         }
@@ -135,6 +151,7 @@ function Home(props) {
           loadNewsfeedDispatch({
             env: process.env.NODE_ENV,
             page: Number(currentPage),
+            location: latLng,
             feed: 'Completed'
           });
         }
@@ -165,6 +182,7 @@ function Home(props) {
           loadNewsfeedDispatch({
             env: process.env.NODE_ENV,
             page: Number(currentPage),
+            location: latLng,
             feed: 'Newest'
           });
         }
@@ -827,7 +845,7 @@ function Home(props) {
                         onClick={() => {
                           if (item.assignedUser) {
                             alert(
-                              'someone is already helping on this task - please look other requests'
+                              'someone is already helping on this task (in progress) - please look other requests'
                             );
                             return;
                           }
@@ -997,12 +1015,21 @@ function Home(props) {
     setUpdateNews(false);
   }, [updatedNews]);
 
+  React.useEffect(() => {
+    loadNewsfeedDispatch({
+      env: process.env.NODE_ENV,
+      page: Number(currentPage),
+      location: latLng,
+      feed: 'Discover'
+    });
+  }, [latLng, address, !openCustomAddress])
+
   async function loadNewsfeedHelper() {
     if (pages === '') {
     } else if (Number(currentPage) < Number(pages)) {
       let nextPage = Number(currentPage) + 1;
       console.log('here');
-      await loadNewsfeedDispatch({ env: process.env.NODE_ENV, page: nextPage, feed: newsfeedSort });
+      await loadNewsfeedDispatch({ env: process.env.NODE_ENV, location: latLng, page: nextPage, feed: newsfeedSort });
       for (var j = 0; j < newsfeed.length; j++) {
         if (newsfeedDictionary[newsfeed[j]._id] === undefined) {
           news.push(newsfeed[j]);
@@ -1282,32 +1309,55 @@ function Home(props) {
                               <StatefulMenu
                                 items={[
                                   // {
-                                  //   label: 'Home'
+                                  //   key: 'Home'
                                   // },
                                   // {
-                                  //   label: 'Popular'
+                                  //   key: 'Popular'
                                   // },
                                   // {
-                                  //   label: 'Newest'
+                                  //   key: 'Newest'
                                   // },
                                   {
-                                    label: 'Your current location'
+                                    label: (
+                                      <div>
+                                        Your current location
+                                        <br />
+                                        {props.coords && props.coords.latitude},{' '}
+                                        {props.coords && props.coords.longitude}
+                                      </div>
+                                    ),
+                                    key: 'Your current location'
+                                  },
+                                  {
+                                    label: <div>Enter Address</div>,
+                                    key: 'Custom Address'
                                   }
                                   // {
-                                  //   label: 'Your Tasks'
+                                  //   key: 'Your Tasks'
                                   // },
                                   // {
-                                  //   label: 'Completed Tasks'
+                                  //   key: 'Completed Tasks'
                                   // },
                                   // {
-                                  //   label: 'Global Tasks'
+                                  //   key: 'Global Tasks'
                                   // }
                                 ]}
                                 onItemSelect={item => {
                                   close();
-                                  switch (item.item.label) {
+                                  switch (item.item.key) {
                                     case 'Home':
                                       window.location = '/';
+                                      break;
+                                    case 'Your current location':
+                                      // set current location
+                                      let lat = props.coords && props.coords.latitude;
+                                      let lng = props.coords && props.coords.longitude;
+                                      setLatLng({ lat, lng });
+                                      setOpenCustomAddress(false);
+                                      setAddress('');
+                                      break;
+                                    case 'Custom Address':
+                                      setOpenCustomAddress(true);
                                       break;
                                     case 'Popular':
                                       window.location = '/home/popular';
@@ -1371,6 +1421,84 @@ function Home(props) {
                           </Button>
                         </div>
                       </Card>
+                    )}
+                    {openCustomAddress ? (
+                      <div className="flex justify-between items-center mt-2">
+                        <PlacesAutocomplete
+                          value={address}
+                          onChange={address => setAddress(address)}
+                          onSelect={address => {
+                            setAddress(address);
+                            geocodeByAddress(address)
+                              .then(results => getLatLng(results[0]))
+                              .then(latLng => {
+                                setLatLng(latLng);
+                              })
+                              .catch(error => console.error('Error', error));
+                          }}
+                        >
+                          {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                            <div style={{ width: '100%' }}>
+                              <input
+                                {...getInputProps({
+                                  placeholder: 'Enter an address',
+                                  className: 'location-search-input'
+                                })}
+                                value={address}
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none"
+                                id="address"
+                                type="text"
+                              />
+                              <div className="autocomplete-dropdown-container">
+                                {loading && <div>Loading...</div>}
+                                {suggestions.map(suggestion => {
+                                  const className = suggestion.active
+                                    ? 'suggestion-item--active'
+                                    : 'suggestion-item';
+                                  // inline style for demonstration purpose
+                                  const style = suggestion.active
+                                    ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                    : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                                  return (
+                                    <div
+                                      {...getSuggestionItemProps(suggestion, {
+                                        className,
+                                        style
+                                      })}
+                                    >
+                                      <span>{suggestion.description}</span>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          )}
+                        </PlacesAutocomplete>
+                        <div>
+                          <button
+                            className={`ml-4 bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
+                            type="button"
+                            onClick={() => {
+                              setOpenCustomAddress(false);
+                            }}
+                          >
+                            Save
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className={`text-left mt-2`} style={{ fontSize: 12 }}>
+                        {address ||
+                          `Your current location (${props.coords &&
+                            props.coords.latitude}, ${props.coords && props.coords.longitude})`}
+                        &nbsp;<span
+                          onClick={() => setOpenCustomAddress(true)}
+                          className="text-indigo-600 hover:text-indigo-800 transition duration-150"
+                          style={{ cursor: 'pointer' }}
+                        >
+                          (edit)
+                        </span>
+                      </div>
                     )}
                     <InfiniteScroll
                       pageStart={1}
@@ -1472,4 +1600,4 @@ Home.defaultProps = {};
 
 Home.propTypes = {};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(geolocated()(Home));
