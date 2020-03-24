@@ -601,7 +601,7 @@ function Home(props) {
                                   foodCartJSX(JSON.parse(item.text).foodCart)}
                                 {item.text &&
                                   props.match.url === '/home/completed' &&
-                                  completedOrderJSX(item.trackingDetails)}
+                                  item.trackingDetails && completedOrderJSX(item.trackingDetails)}
                                 {item.text &&
                                   props.match.url === '/home/global' &&
                                   completedOrderGlobalJSX(item)}
@@ -1016,12 +1016,14 @@ function Home(props) {
   }, [updatedNews]);
 
   React.useEffect(() => {
-    loadNewsfeedDispatch({
-      env: process.env.NODE_ENV,
-      page: Number(currentPage),
-      location: latLng,
-      feed: 'Discover'
-    });
+    if (props.match.url === '/home/discover') {
+      loadNewsfeedDispatch({
+        env: process.env.NODE_ENV,
+        page: Number(currentPage),
+        location: latLng,
+        feed: 'Discover'
+      });
+    }
   }, [latLng, address, !openCustomAddress]);
 
   async function loadNewsfeedHelper() {
@@ -1043,7 +1045,6 @@ function Home(props) {
       }
     } else {
       setHasMoreItems(false);
-      console.log('not here');
       if (newsfeed) {
         for (var k = 0; k < newsfeed.length; k++) {
           if (newsfeedDictionary[newsfeed[k]._id] === undefined) {
