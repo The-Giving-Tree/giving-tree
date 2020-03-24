@@ -279,31 +279,35 @@ function Home(props) {
           class="bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-4 mt-8"
           role="alert"
         >
-          <div
-            style={{
-              textTransform: 'capitalize',
-              fontSize: 16,
-              fontWeight: 600,
-              marginBottom: 10,
-              textDecoration: 'underline'
-            }}
-          >
-            Order Details:
-          </div>
-          <p style={{ textTransform: 'capitalize' }}>
-            order created: {moment(item.trackingDetails.created).format('MMM D, YYYY h:mm A')}
-          </p>
-          <p style={{ textTransform: 'capitalize' }}>
-            dropoff ETA: {item.trackingDetails.dropoffEta}
-          </p>
-          <p style={{ textTransform: 'capitalize' }}>method: {item.trackingDetails.method}</p>
-          <p style={{ textTransform: 'capitalize' }}>notes: {item.trackingDetails.notes}</p>
+          {item.trackingDetails && (
+            <React.Fragment>
+              <div
+                style={{
+                  textTransform: 'capitalize',
+                  fontSize: 16,
+                  fontWeight: 600,
+                  marginBottom: 10,
+                  textDecoration: 'underline'
+                }}
+              >
+                Order Details:
+              </div>
+              <p style={{ textTransform: 'capitalize' }}>
+                order created: {moment(item.trackingDetails.created).format('MMM D, YYYY h:mm A')}
+              </p>
+              <p style={{ textTransform: 'capitalize' }}>
+                dropoff ETA: {item.trackingDetails.dropoffEta}
+              </p>
+              <p style={{ textTransform: 'capitalize' }}>method: {item.trackingDetails.method}</p>
+              <p style={{ textTransform: 'capitalize' }}>notes: {item.trackingDetails.notes}</p>
+            </React.Fragment>
+          )}
 
           <div
             style={{
               fontSize: 16,
               fontWeight: 600,
-              marginTop: 15,
+              marginTop: item.trackingDetails ? 15 : 0,
               textDecoration: 'underline'
             }}
           >
@@ -581,9 +585,7 @@ function Home(props) {
                                   props.match.url === '/home/completed' &&
                                   completedOrderJSX(item.trackingDetails)}
                                 {item.text &&
-                                props.match.url === '/home/global' &&
-                                (user._id === item.assignedUser._id || // if user is the assigned user
-                                  user._id === item.authorId) && // if user is the create
+                                  props.match.url === '/home/global' &&
                                   completedOrderGlobalJSX(item)}
                               </div>
                             </div>
