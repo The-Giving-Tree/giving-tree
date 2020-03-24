@@ -893,7 +893,7 @@ function Post(props) {
                                       env: process.env.NODE_ENV,
                                       postId: foundPost._id,
                                       title,
-                                      text: JSON.stringify(slateValue),
+                                      text: foundPost.text,
                                       categories: tags.join(',')
                                     });
 
