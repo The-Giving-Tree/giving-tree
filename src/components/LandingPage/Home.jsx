@@ -1156,8 +1156,8 @@ function Home(props) {
                 }
               });
 
-              setConfetti(false);
-              setConfetti(true);
+              showConfetti(false);
+              showConfetti(true);
             }}
           >
             Submit
