@@ -245,11 +245,11 @@ function Home(props) {
     return foodCart.length === 0 ? (
       <div className="text-center">no items in cart</div>
     ) : (
-      <table class="table-auto" style={{ width: '99%' }}>
+      <table className="table-auto" style={{ width: '99%' }}>
         <thead>
           <tr>
-            <th class="px-4 py-2">Item Description</th>
-            <th class="px-4 py-2">Quantity</th>
+            <th className="px-4 py-2">Item Description</th>
+            <th className="px-4 py-2">Quantity</th>
           </tr>
         </thead>
         <tbody>
@@ -271,7 +271,7 @@ function Home(props) {
     ) : (
       <React.Fragment>
         <div
-          class="bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-4 mt-8"
+          className="bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-4 mt-8"
           role="alert"
         >
           <div
@@ -300,7 +300,7 @@ function Home(props) {
     ) : (
       <React.Fragment>
         <div
-          class="bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-4 mt-8"
+          className="bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-4 mt-8"
           role="alert"
         >
           {item.trackingDetails && (
@@ -587,7 +587,7 @@ function Home(props) {
                           {item.type === 'Post' ? (
                             <div style={{ marginTop: 20 }}>
                               <div>
-                                <div class="text-sm my-1 mt-4">
+                                <div className="text-sm my-1 mt-4">
                                   {item.text && `Address: ${JSON.parse(item.text).address}`}
                                 </div>
                                 <div className="text-sm my-1 mt-4">
@@ -1165,10 +1165,10 @@ function Home(props) {
         </ModalFooter>
       </Modal>
       {authenticated ? (
-        <table class="table-auto" style={{ width: '100%', background: '#F5F5F5' }}>
+        <table className="table-auto" style={{ width: '100%', background: '#F5F5F5' }}>
           <thead>
             <tr>
-              <th class="px-4 py-2 text-right" style={{ width: '25%' }}>
+              <th className="px-4 py-2 text-right" style={{ width: '25%' }}>
                 <div
                   style={{
                     width: '100%',
@@ -1262,7 +1262,7 @@ function Home(props) {
                   </div>
                 </div>
               </th>
-              <th class="px-4 py-2" style={{ width: '50%' }}>
+              <th className="px-4 py-2" style={{ width: '50%' }}>
                 <div
                   style={{
                     width: '100%',
@@ -1548,7 +1548,7 @@ function Home(props) {
                   </div>
                 </div>
               </th>
-              <th class="px-4 py-2" style={{ width: '25%' }}></th>
+              <th className="px-4 py-2" style={{ width: '25%' }}></th>
             </tr>
           </thead>
         </table>

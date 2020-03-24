@@ -204,11 +204,11 @@ function Submit(props) {
     return cart.length === 0 ? (
       <div className="text-center">no items in cart</div>
     ) : (
-      <table class="table-auto" style={{ width: '100%' }}>
+      <table className="table-auto" style={{ width: '100%' }}>
         <thead>
           <tr>
-            <th class="px-4 py-2">Item Description</th>
-            <th class="px-4 py-2">Quantity</th>
+            <th className="px-4 py-2">Item Description</th>
+            <th className="px-4 py-2">Quantity</th>
             <th></th>
           </tr>
         </thead>
@@ -254,7 +254,7 @@ function Submit(props) {
             onChange={e => {
               setTitle(e.target.value);
             }}
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="title"
             value={title}
             type="text"
@@ -278,7 +278,7 @@ function Submit(props) {
               }
               setPhoneNumber(output);
             }}
-            class="ml-3 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="ml-3 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="title"
             value={phoneNumber}
             pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
@@ -286,7 +286,7 @@ function Submit(props) {
             placeholder="Phone Number (for delivery confirmation)"
           />
         </div>
-        <div class="font-bold text-base text-left my-1 mt-4">Delivery Address</div>
+        <div className="font-bold text-base text-left my-1 mt-4">Delivery Address</div>
         <PlacesAutocomplete
           value={address}
           onChange={address => setAddress(address)}
@@ -343,7 +343,7 @@ function Submit(props) {
           onChange={e => {
             setDescription(e.target.value);
           }}
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           id="description"
           value={description}
           type="text"
@@ -356,7 +356,7 @@ function Submit(props) {
             onChange={e => {
               setCartName(e.target.value);
             }}
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="food"
             value={cartName}
             type="text"
@@ -372,7 +372,7 @@ function Submit(props) {
             onChange={e => {
               setCartQuantity(e.target.value);
             }}
-            class="mx-4 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="mx-4 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             style={{ width: 100 }}
             value={cartQuantity}
             id={selectMenu === 'Food' ? `food` : selectMenu === 'Supplies' ? 'supplies' : ''}
@@ -492,13 +492,13 @@ function Submit(props) {
               <div className="flex justify-between items-center my-4 mb-6" style={{ height: 36 }}>
                 {!checkout ? (
                   <React.Fragment>
-                    <div class="font-bold text-xl text-left">I need:</div>
+                    <div className="font-bold text-xl text-left">I need:</div>
                     <div>
                       {selectedRequest !== '' && (
                         <button
                           onClick={() => setCheckout(true)}
                           style={{ outline: 'none' }}
-                          class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
+                          className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
                         >
                           Next
                         </button>
@@ -512,7 +512,7 @@ function Submit(props) {
                         setRequest('');
                         setCheckout(false);
                       }}
-                      class="font-bold text-xl text-left"
+                      className="font-bold text-xl text-left"
                       style={{ cursor: 'pointer' }}
                     >
                       <ArrowLeft size={20} />
@@ -564,7 +564,7 @@ function Submit(props) {
                 )}
               </div>
               {!checkout && (
-                <div class="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                   <div
                     onClick={() => {
                       if (selectedRequest) {
@@ -583,7 +583,7 @@ function Submit(props) {
                       src="https://d1ppmvgsdgdlyy.cloudfront.net/groceries.jpg"
                       alt="Food"
                     ></img>
-                    <div class="px-6 py-8">
+                    <div className="px-6 py-8">
                       <div
                         className={`font-bold text-xl text-center ${selectedRequest === 'food' &&
                           'text-green-600'}`}
@@ -614,7 +614,7 @@ function Submit(props) {
                       src="https://d1ppmvgsdgdlyy.cloudfront.net/supplies.jpg"
                       alt="Supplies"
                     ></img>
-                    <div class="px-6 py-8">
+                    <div className="px-6 py-8">
                       <div
                         className={`font-bold text-xl text-center ${selectedRequest ===
                           'supplies' && 'text-green-600'}`}
@@ -646,7 +646,7 @@ function Submit(props) {
                       src="https://d1ppmvgsdgdlyy.cloudfront.net/transportation.jpg"
                       alt="Transportation"
                     ></img>
-                    <div class="px-6 py-8">
+                    <div className="px-6 py-8">
                       <div
                         className={`font-bold text-xl text-center ${selectedRequest ===
                           'transportation' && 'text-green-600'}`}

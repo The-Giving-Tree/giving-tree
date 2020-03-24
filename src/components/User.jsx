@@ -234,11 +234,11 @@ function User(props) {
     return foodCart.length === 0 ? (
       <div className="text-center">no items in cart</div>
     ) : (
-      <table class="table-auto" style={{ width: '100%' }}>
+      <table className="table-auto" style={{ width: '100%' }}>
         <thead>
           <tr>
-            <th class="px-4 py-2">Item Description</th>
-            <th class="px-4 py-2">Quantity</th>
+            <th className="px-4 py-2">Item Description</th>
+            <th className="px-4 py-2">Quantity</th>
           </tr>
         </thead>
         <tbody>
@@ -362,7 +362,7 @@ function User(props) {
               </div>
               <div style={{ margin: 7 }}>
                 <div>
-                  <div class="font-bold text-base text-left my-1 mt-4">
+                  <div className="font-bold text-base text-left my-1 mt-4">
                     {post.text && JSON.parse(post.text).address}
                   </div>
                   <div className="font-bold text-base text-left my-1 mt-4">
@@ -611,7 +611,7 @@ function User(props) {
               <strong>{shorten(100, vote.title)}</strong>
               <br />
               <div>
-                <div class="font-bold text-base text-left my-1 mt-4">
+                <div className="font-bold text-base text-left my-1 mt-4">
                   {vote.text && JSON.parse(vote.text).address}
                 </div>
                 <div className="font-bold text-base text-left my-1 mt-4">

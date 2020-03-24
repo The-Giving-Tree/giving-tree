@@ -208,7 +208,7 @@ function Post(props) {
     }
   }, [foundPost, loadPostSuccess]);
 
-  const foodCart = text ? text.foodCart : [];
+  const cart = text ? text.cart : [];
 
   const isEmpty = obj => {
     for (var key in obj) {
@@ -671,21 +671,19 @@ function Post(props) {
 
   createCommentFeed();
 
-  const search = 'text';
-
-  const foodCartJSX = () => {
-    return foodCart.length === 0 ? (
+  const cartJSX = () => {
+    return cart.length === 0 ? (
       <div className="text-center">no items in cart</div>
     ) : (
-      <table class="table-auto" style={{ width: '100%' }}>
+      <table className="table-auto" style={{ width: '100%' }}>
         <thead>
           <tr>
-            <th class="px-4 py-2">Item Description</th>
-            <th class="px-4 py-2">Quantity</th>
+            <th className="px-4 py-2">Item Description</th>
+            <th className="px-4 py-2">Quantity</th>
           </tr>
         </thead>
         <tbody>
-          {foodCart.map((item, i) => (
+          {cart.map((item, i) => (
             <tr className={i % 2 === 0 && `bg-gray-100`}>
               <td className={`border px-4 py-2`}>{item.name}</td>
               <td className={`border px-4 py-2`}>{item.quantity}</td>
@@ -1019,10 +1017,10 @@ function Post(props) {
                                   <div>
                                     <div className="text-sm my-1 mt-4">{text && text.address}</div>
                                     <div className="text-sm my-1 mt-4">
-                                      {text && `Description: ${text.foodDescription}`}
+                                      {text && `Description: ${text.description}`}
                                     </div>
                                     <div className="mt-4"></div>
-                                    {foodCartJSX()}
+                                    {cartJSX()}
                                   </div>
                                 </div>
                               ) : editor ? (
