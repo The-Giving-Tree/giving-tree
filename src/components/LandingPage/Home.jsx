@@ -999,6 +999,10 @@ function Home(props) {
   }, [updatedNews]);
 
   React.useEffect(() => {
+    selectMenuDispatch({ selectMenu: 'Food' });
+  }, []);
+
+  React.useEffect(() => {
     if (props.match.url === '/home/discover') {
       loadNewsfeedDispatch({
         env: process.env.NODE_ENV,
@@ -1306,11 +1310,11 @@ function Home(props) {
                                   {
                                     label: 'Food',
                                     key: 'Food'
-                                  }
-                                  // {
-                                  //   label: 'Supplies (coming soon)',
-                                  //   key: 'Supplies'
-                                  // },
+                                  },
+                                  {
+                                    label: 'Supplies',
+                                    key: 'Supplies'
+                                  },
                                   // {
                                   //   label: 'Transportation (coming soon)',
                                   //   key: 'Transportation'
@@ -1332,7 +1336,7 @@ function Home(props) {
                                       selectMenuDispatch({ selectMenu: 'Food', title: newPost });
                                       break;
                                     case 'Supplies':
-                                      alert('coming soon');
+                                      selectMenuDispatch({ selectMenu: 'Supplies', title: newPost });
                                       break;
                                     case 'Transportation':
                                       alert('coming soon');

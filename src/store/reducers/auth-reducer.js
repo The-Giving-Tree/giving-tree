@@ -51,7 +51,7 @@ const initialState = {
   completeTaskSuccess: false,
   completeTaskFailure: false,
 
-  selectMenu: 'Food',
+  selectMenu: '',
   title: ''
 };
 

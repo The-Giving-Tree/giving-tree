@@ -350,7 +350,7 @@ function Submit(props) {
             id="food"
             value={foodCartName}
             type="text"
-            placeholder="food item"
+            placeholder={selectMenu === 'Food' ? `food item` : selectMenu === 'Supplies' ? 'household supplies' : ''}
           />
           <input
             onChange={e => {
@@ -581,12 +581,12 @@ function Submit(props) {
                       if (selectedRequest) {
                         setRequest('');
                       } else {
-                        // setRequest('supplies');
+                        setRequest('supplies');
                       }
                     }}
-                    className={`max-w-sm rounded overflow-hidden shadow-lg border ${selectedRequest ===
+                    className={`max-w-sm rounded  hover:border-indigo-600 overflow-hidden shadow-lg border ${selectedRequest ===
                       'supplies' && 'border-indigo-600'} rounded-lg transition duration-150`}
-                    style={{ cursor: 'not-allowed' }}
+                    style={{ cursor: 'pointer' }}
                   >
                     <img
                       style={{
@@ -594,7 +594,6 @@ function Submit(props) {
                         maxHeight: 150,
                         width: 400,
                         overflow: 'auto',
-                        filter: 'grayscale(100%)'
                       }}
                       src="https://d1ppmvgsdgdlyy.cloudfront.net/supplies.jpg"
                       alt="Supplies"
@@ -604,7 +603,7 @@ function Submit(props) {
                         className={`font-bold text-xl text-center ${selectedRequest ===
                           'supplies' && 'text-green-600'}`}
                       >
-                        Supplies (coming soon)
+                        Supplies
                       </div>
                     </div>
                   </div>
