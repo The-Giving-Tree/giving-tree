@@ -117,7 +117,7 @@ function Home(props) {
   if (!isEmpty(user)) {
     switch (id) {
       case '':
-        history.push('/home/discover'); // temporary to redirect to discover
+        window.location = ('/home/discover'); // temporary to redirect to discover
         return;
         if (newsfeedSort !== 'Home') {
           setSort('Home');
