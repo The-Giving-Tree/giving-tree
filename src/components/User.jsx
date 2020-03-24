@@ -1014,7 +1014,8 @@ function User(props) {
                     className="my-2"
                     style={{ textTransform: 'capitalize', margin: 'auto 0', fontSize: 12 }}
                   >
-                    {Number(karma) >= 0 ? Number(karma) : 0} karma · Member since {moment(createdAt).format('MMM D, YYYY')}
+                    {Number(karma) >= 0 ? Number(karma) : 0} karma · Member since{' '}
+                    {moment(createdAt).format('MMM D, YYYY')}
                   </p>
                 )}
 

@@ -828,42 +828,42 @@ function Post(props) {
                                 {i}
                               </Tag>
                             ))}
-                            {foundPost.assignedUser && !foundPost.completed && (
-                        <Tag
-                          overrides={{
-                            Root: {
-                              style: {
-                                marginRight: '15px',
-                                marginTop: '0px',
-                                marginBottom: '0px'
-                              }
-                            }
-                          }}
-                          closeable={false}
-                          color="#FFA500"
-                          kind={KIND.custom}
-                        >
-                          In Progress
-                        </Tag>
-                      )}
-                      {foundPost.assignedUser && foundPost.completed && (
-                        <Tag
-                          overrides={{
-                            Root: {
-                              style: {
-                                marginRight: '15px',
-                                marginTop: '0px',
-                                marginBottom: '0px'
-                              }
-                            }
-                          }}
-                          closeable={false}
-                          color="#4BCA81"
-                          kind={KIND.custom}
-                        >
-                          Completed
-                        </Tag>
-                      )}
+                          {foundPost.assignedUser && !foundPost.completed && (
+                            <Tag
+                              overrides={{
+                                Root: {
+                                  style: {
+                                    marginRight: '15px',
+                                    marginTop: '0px',
+                                    marginBottom: '0px'
+                                  }
+                                }
+                              }}
+                              closeable={false}
+                              color="#FFA500"
+                              kind={KIND.custom}
+                            >
+                              In Progress
+                            </Tag>
+                          )}
+                          {foundPost.assignedUser && foundPost.completed && (
+                            <Tag
+                              overrides={{
+                                Root: {
+                                  style: {
+                                    marginRight: '15px',
+                                    marginTop: '0px',
+                                    marginBottom: '0px'
+                                  }
+                                }
+                              }}
+                              closeable={false}
+                              color="#4BCA81"
+                              kind={KIND.custom}
+                            >
+                              Completed
+                            </Tag>
+                          )}
                           {!isEmpty(user) &&
                             user._id.toString() === foundPost.authorId.toString() &&
                             (editor ? (

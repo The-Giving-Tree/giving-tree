@@ -309,13 +309,19 @@ function Home(props) {
           >
             Fulfilled By:
           </div>
-          <p style={{ textTransform: 'lowercase', cursor: 'pointer' }} className='flex items-center'>
+          <p
+            style={{ textTransform: 'lowercase', cursor: 'pointer' }}
+            className="flex items-center"
+          >
             <span
               onClick={() => (window.location = `/user/${item.assignedUser.username}`)}
               className="hover:text-indigo-800"
             >
               {item.assignedUser.username}
-            </span>{Number(item.assignedUser.karma) >= 0 && <div>&nbsp;&bull; {item.assignedUser.karma} karma</div>}
+            </span>
+            {Number(item.assignedUser.karma) >= 0 && (
+              <div>&nbsp;&bull; {item.assignedUser.karma} karma</div>
+            )}
           </p>
           <p style={{ textTransform: 'lowercase' }}>
             email: <a href={`mailto:${item.assignedUser.email}`}>{item.assignedUser.email}</a>
@@ -575,7 +581,9 @@ function Home(props) {
                                   props.match.url === '/home/completed' &&
                                   completedOrderJSX(item.trackingDetails)}
                                 {item.text &&
-                                  props.match.url === '/home/global' &&
+                                props.match.url === '/home/global' &&
+                                (user._id === item.assignedUser._id || // if user is the assigned user
+                                  user._id === item.authorId) && // if user is the create
                                   completedOrderGlobalJSX(item)}
                               </div>
                             </div>
@@ -1281,17 +1289,17 @@ function Home(props) {
                                   //   label: 'Newest'
                                   // },
                                   {
-                                    label: 'Discover'
-                                  },
-                                  {
-                                    label: 'Your Tasks'
-                                  },
-                                  {
-                                    label: 'Completed Tasks'
-                                  },
-                                  {
-                                    label: 'Global Tasks'
+                                    label: 'Your current location'
                                   }
+                                  // {
+                                  //   label: 'Your Tasks'
+                                  // },
+                                  // {
+                                  //   label: 'Completed Tasks'
+                                  // },
+                                  // {
+                                  //   label: 'Global Tasks'
+                                  // }
                                 ]}
                                 onItemSelect={item => {
                                   close();
@@ -1330,10 +1338,19 @@ function Home(props) {
                             <Button
                               size={'compact'}
                               kind={'secondary'}
-                              style={{ marginRight: 10 }}
+                              style={{ marginRight: 0, outline: 'none' }}
                               endEnhancer={() => <ChevronDown size={24} />}
                             >
-                              {newsfeedSort}
+                              <img
+                                src="https://d1ppmvgsdgdlyy.cloudfront.net/pin.svg"
+                                alt="location"
+                                style={{
+                                  marginLeft: 10,
+                                  marginRight: -10,
+                                  outline: 'none',
+                                  height: 30
+                                }}
+                              />
                             </Button>
                           </StatefulPopover>
                           <Input
