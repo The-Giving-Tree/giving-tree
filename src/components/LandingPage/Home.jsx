@@ -948,10 +948,11 @@ function Home(props) {
                                 key: 'postmates'
                               }
                             ]}
-                            onItemSelect={item => {
+                            onItemSelect={i => {
                               close();
-                              switch (item.item.key) {
+                              switch (i.item.key) {
                                 case 'manual':
+                                  console.log('item: ', item);
                                   setPostId(item._id);
                                   setOpenFoodTracking(true);
                                   break;
@@ -1143,7 +1144,7 @@ function Home(props) {
           <ModalButton
             size={'compact'}
             onClick={() => {
-              if (eta && missing && deliverer) {
+              if (eta && missing && deliverer && postId) {
                 completeTaskDispatch({
                   env: process.env.NODE_ENV,
                   postId: postId,
