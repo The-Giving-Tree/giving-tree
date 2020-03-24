@@ -7,6 +7,7 @@ import {
 } from 'baseui/header-navigation';
 import { StyledLink as Link } from 'baseui/link';
 import { Button, SHAPE, SIZE } from 'baseui/button';
+import { useHistory } from 'react-router-dom';
 import { useStyletron } from 'baseui';
 import { TYPE } from 'baseui/select';
 import { Spinner } from 'baseui/spinner';
@@ -68,6 +69,8 @@ function Navigation(props) {
   } = props;
 
   require('dotenv').config();
+
+  const history = useHistory();
 
   function After() {
     const [css, theme] = useStyletron();
@@ -235,7 +238,7 @@ function Navigation(props) {
           if (item.item.label === 'Clear All Notifications') {
             clearAllNotificationsDispatch({ env: process.env.NODE_ENV });
           } else {
-            window.location = `/post/${item.item.postId}/?user=${user._id}`;
+            history.push(`/post/${item.item.postId}/?user=${user._id}`);
           }
         }}
         overrides={{
@@ -356,7 +359,7 @@ function Navigation(props) {
             <NavigationItem>
               <div
                 style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}
-                onClick={() => (window.location = '/home/discover')}
+                onClick={() => history.push('/home/discover')}
               >
                 <img
                   src="https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg"
@@ -439,12 +442,13 @@ function Navigation(props) {
                   items={searchResults}
                   noResultsMsg="No Results"
                   onItemSelect={item => {
-                    window.location =
+                    history.push(
                       item.item.type === 'post'
                         ? `/post/${item.item._id}`
                         : item.item.type === 'user'
                         ? `/user/${item.item.username}`
-                        : '';
+                        : ''
+                    );
                   }}
                 />
               )}
@@ -454,7 +458,7 @@ function Navigation(props) {
             <NavigationItem>
               <div style={{ display: 'flex', alignContent: 'center' }}>
                 <Button
-                  onClick={() => (window.location = '/submit')}
+                  onClick={() => history.push('/submit')}
                   size={'compact'}
                   shape={'pill'}
                   style={{ outline: 'none', marginRight: 25 }}
@@ -503,10 +507,10 @@ function Navigation(props) {
                         close();
                         switch (item.item.label) {
                           case 'My Profile':
-                            window.location = `/user/${user.username}`;
+                            history.push(`/user/${user.username}`);
                             break;
                           case 'Settings':
-                            window.location = `/settings`;
+                            history.push(`/settings`);
                             break;
                           case 'Log Out':
                             logoutDispatch({
@@ -578,7 +582,7 @@ function Navigation(props) {
             <NavigationItem>
               <div
                 style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}
-                onClick={() => (window.location = '/')}
+                onClick={() => history.push('/')}
               >
                 <img
                   src="https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg"
@@ -655,7 +659,7 @@ function Navigation(props) {
                 }}
                 size={SIZE.compact}
                 shape={SHAPE.pill}
-                onClick={() => (window.location = '/signup')}
+                onClick={() => history.push('/signup')}
               >
                 Get started
               </Button>

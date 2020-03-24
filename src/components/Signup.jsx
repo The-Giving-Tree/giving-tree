@@ -6,7 +6,7 @@ import {
   StyledNavigationList as NavigationList
 } from 'baseui/header-navigation';
 import { Card, StyledAction } from 'baseui/card';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Input } from 'baseui/input';
 import { Button, SHAPE } from 'baseui/button';
@@ -43,6 +43,8 @@ function Signup(props) {
   const authenticated = localStorage.getItem('giving_tree_jwt');
 
   const { signupDispatch, errorMessage, registerLoading, registerSuccess, registerFailure } = props;
+  
+  const history = useHistory();
 
   function Negative() {
     const [css, theme] = useStyletron();
@@ -113,7 +115,7 @@ function Signup(props) {
             <NavigationItem>
               <div
                 style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}
-                onClick={() => (window.location = '/')}
+                onClick={() => history.push('/')}
               >
                 <img
                   src="https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg"

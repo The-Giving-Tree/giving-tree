@@ -10,6 +10,7 @@ import { useStyletron } from 'baseui';
 import { Button, SHAPE } from 'baseui/button';
 import { Input, SIZE } from 'baseui/input';
 import { Tag, VARIANT, KIND } from 'baseui/tag';
+import { useHistory } from 'react-router-dom';
 import { StatefulMenu } from 'baseui/menu';
 import { withHistory } from 'slate-history';
 import queryString from 'query-string';
@@ -149,6 +150,8 @@ function Post(props) {
 
   const renderElement = React.useCallback(props => <Element {...props} />, []);
   const renderLeaf = React.useCallback(props => <Leaf {...props} />, []);
+
+  const history = useHistory();
 
   const [title, setTitle] = React.useState('');
   const [updated, setUpdated] = React.useState(true);
@@ -399,7 +402,7 @@ function Post(props) {
                         }}
                       >
                         <div
-                          onClick={() => (window.location = `/user/${childComment.username}`)}
+                          onClick={() => history.push(`/user/${childComment.username}`)}
                           style={{
                             width: 32,
                             height: 32,
@@ -775,7 +778,7 @@ function Post(props) {
                         }}
                       >
                         <div
-                          onClick={() => (window.location = `/user/${foundPost.username}`)}
+                          onClick={() => history.push(`/user/${foundPost.username}`)}
                           style={{
                             width: 32,
                             height: 32,

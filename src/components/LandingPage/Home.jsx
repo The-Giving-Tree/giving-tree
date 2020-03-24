@@ -10,6 +10,7 @@ import { StyledLink as Link } from 'baseui/link';
 import { useStyletron } from 'baseui';
 import { Block } from 'baseui/block';
 import { Button, SHAPE } from 'baseui/button';
+import { useHistory } from 'react-router-dom';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import { geocodeByAddress, geocodeByPlaceId, getLatLng } from 'react-places-autocomplete';
 import { StatefulSelect as Search, TYPE } from 'baseui/select';
@@ -70,6 +71,8 @@ function Home(props) {
     newsfeedUpdated
   } = props;
 
+  const history = useHistory();
+
   let items = [];
   const [news, setNews] = React.useState([]);
   const [openCustomAddress, setOpenCustomAddress] = React.useState(false);
@@ -111,7 +114,7 @@ function Home(props) {
   if (!isEmpty(user)) {
     switch (id) {
       case '':
-        window.location = '/home/discover'; // temporary to redirect to discover
+        history.push('/home/discover'); // temporary to redirect to discover
         return;
         if (newsfeedSort !== 'Home') {
           setSort('Home');
@@ -336,7 +339,7 @@ function Home(props) {
             className="flex items-center"
           >
             <span
-              onClick={() => (window.location = `/user/${item.assignedUser.username}`)}
+              onClick={() => history.push(`/user/${item.assignedUser.username}`)}
               className="hover:text-indigo-800"
             >
               {item.assignedUser.username}
@@ -400,7 +403,7 @@ function Home(props) {
                     }}
                   >
                     <div
-                      onClick={() => (window.location = `/user/${item.username}`)}
+                      onClick={() => history.push(`/user/${item.username}`)}
                       style={{
                         width: 32,
                         height: 32,
@@ -488,7 +491,7 @@ function Home(props) {
                         </Tag>
                       )}
                       <img
-                        onClick={() => (window.location = `/post/${item._id}`)}
+                        onClick={() => history.push(`/post/${item._id}`)}
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/more.svg"
                         alt="more"
                         style={{ width: 15, height: 'auto', cursor: 'pointer' }}
@@ -643,7 +646,7 @@ function Home(props) {
                                 >
                                   <div
                                     onClick={() =>
-                                      (window.location = `/user/${item.parent.username}`)
+                                      history.push(`/user/${item.parent.username}`)
                                     }
                                     style={{
                                       width: 32,
@@ -692,7 +695,7 @@ function Home(props) {
                                 <div style={{ alignContent: 'flex-start' }}>
                                   <img
                                     onClick={() =>
-                                      (window.location = `/post/${item.parent && item.parent._id}`)
+                                      history.push(`/post/${item.parent && item.parent._id}`)
                                     }
                                     src="https://d1ppmvgsdgdlyy.cloudfront.net/more.svg"
                                     alt="more"
@@ -780,7 +783,7 @@ function Home(props) {
                                 }
                               }}
                               clearable
-                              onClick={() => (window.location = '/submit')}
+                              onClick={() => history.push('/submit')}
                               size={SIZE.compact}
                               onKeyPress={async event => {
                                 var code = event.keyCode || event.which;
@@ -801,7 +804,7 @@ function Home(props) {
                                     });
                                   }
 
-                                  window.location = `/post/${item._id}`;
+                                  history.push(`/post/${item._id}`);
                                 }
                               }}
                               placeholder="add a comment..."
@@ -928,7 +931,7 @@ function Home(props) {
                         style={{ outline: 'none', padding: 0 }}
                         kind="minimal"
                         size={SIZE.compact}
-                        onClick={() => (window.location = `/post/${item._id}`)}
+                        onClick={() => history.push(`/post/${item._id}`)}
                       >
                         <img
                           src="https://d1ppmvgsdgdlyy.cloudfront.net/comment.svg"
@@ -1197,7 +1200,7 @@ function Home(props) {
                     <span />
                     <div
                       className="flex items-center"
-                      onClick={() => (window.location = '/home/discover')}
+                      onClick={() => history.push('/home/discover')}
                     >
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/search.svg"
@@ -1216,7 +1219,7 @@ function Home(props) {
                     <span />
                     <div
                       className="flex items-center"
-                      onClick={() => (window.location = '/home/ongoing')}
+                      onClick={() => history.push('/home/ongoing')}
                     >
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/care.svg"
@@ -1235,7 +1238,7 @@ function Home(props) {
                     <span />
                     <div
                       className="flex items-center"
-                      onClick={() => (window.location = '/home/completed')}
+                      onClick={() => history.push('/home/completed')}
                     >
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/gift.svg"
@@ -1254,7 +1257,7 @@ function Home(props) {
                     <span />
                     <div
                       className="flex items-center"
-                      onClick={() => (window.location = '/home/global')}
+                      onClick={() => history.push('/home/global')}
                     >
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/global.svg"
@@ -1271,7 +1274,7 @@ function Home(props) {
                     <span />
                     <div
                       className="flex items-center"
-                      onClick={() => (window.location = '/submit')}
+                      onClick={() => history.push('/submit')}
                     >
                       ❤️Ask for Help
                     </div>
@@ -1352,7 +1355,7 @@ function Home(props) {
                                   close();
                                   switch (item.item.key) {
                                     case 'Home':
-                                      window.location = '/';
+                                      history.push('/');
                                       break;
                                     case 'Your current location':
                                       // set current location
@@ -1366,22 +1369,22 @@ function Home(props) {
                                       setOpenCustomAddress(true);
                                       break;
                                     case 'Popular':
-                                      window.location = '/home/popular';
+                                      history.push('/home/popular');
                                       break;
                                     case 'Newest':
-                                      window.location = '/home/newest';
+                                      history.push('/home/newest');
                                       break;
                                     case 'Discover':
-                                      window.location = '/home/discover';
+                                      history.push('/home/discover');
                                       break;
                                     case 'Your Tasks':
-                                      window.location = '/home/ongoing';
+                                      history.push('/home/ongoing');
                                       break;
                                     case 'Completed Tasks':
-                                      window.location = '/home/completed';
+                                      history.push('/home/completed');
                                       break;
                                     case 'Global Tasks':
-                                      window.location = '/home/global';
+                                      history.push('/home/global');
                                       break;
                                     default:
                                       break;
@@ -1413,12 +1416,12 @@ function Home(props) {
                           </StatefulPopover>
                           <Input
                             value={newPost}
-                            onClick={() => (window.location = '/submit')}
+                            onClick={() => history.push('/submit')}
                             onChange={event => setNewPost(event.currentTarget.value)}
                             placeholder="Ask for help / assistance"
                           />
                           <Button
-                            onClick={() => (window.location = '/submit')}
+                            onClick={() => history.push('/submit')}
                             kind="secondary"
                             style={{ marginLeft: 10, fontSize: 14 }}
                             shape={SHAPE.square}
@@ -1544,7 +1547,7 @@ function Home(props) {
                         {id !== 'discover' && (
                           <div
                             onClick={() => {
-                              window.location = '/home/discover';
+                              history.push('/home/discover');
                             }}
                             style={{ cursor: 'pointer', color: 'rgb(25, 103, 210)' }}
                           >

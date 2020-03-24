@@ -11,6 +11,7 @@ import lifecycle from 'react-pure-lifecycle';
 import { Card, StyledAction } from 'baseui/card';
 import { Input } from 'baseui/input';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import { Button, SHAPE } from 'baseui/button';
 import { useStyletron } from 'baseui';
 import Alert from 'baseui/icon/alert';
@@ -63,6 +64,8 @@ function ResetPassword(props) {
 
   const token = props.match.params.token;
 
+  const history = useHistory();
+
   const enterPressed = async event => {
     var code = event.keyCode || event.which;
     if (code === 13) {
@@ -107,7 +110,7 @@ function ResetPassword(props) {
   }
 
   if (confirmPasswordSuccess) {
-    window.location = '/login';
+    history.push('/login');
   }
 
   return (
@@ -126,7 +129,7 @@ function ResetPassword(props) {
           <NavigationItem>
             <div
               style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}
-              onClick={() => (window.location = '/')}
+              onClick={() => history.push('/')}
             >
               <img
                 src="https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg"

@@ -10,7 +10,7 @@ import { Button, SHAPE, SIZE } from 'baseui/button';
 import { StatefulSelect as Search, TYPE } from 'baseui/select';
 import Navigation from './Navigation';
 import { Avatar } from 'baseui/avatar';
-import { Redirect } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Card, StyledBody, StyledAction } from 'baseui/card';
 import { Block } from 'baseui/block';
 import { H1, H2, H3, H4, H5, H6 } from 'baseui/typography';
@@ -66,6 +66,8 @@ function User(props) {
     updatedProfile
   } = props;
   const id = props.match.params.id.toLowerCase();
+
+  const history = useHistory();
 
   const [followHover, setFollowHover] = React.useState(false);
   const [hoverHeader, setHoverHeader] = React.useState(false);
@@ -292,7 +294,7 @@ function User(props) {
             }}
             onMouseEnter={() => mouseOverDown(post._id)}
             onMouseLeave={() => mouseOutDown(post._id)}
-            onClick={() => (window.location = `/post/${post._id}`)}
+            onClick={() => history.push(`/post/${post._id}`)}
           >
             <div>
               <div
@@ -463,7 +465,7 @@ function User(props) {
               }}
             >
               <div
-                onClick={() => (window.location = `/user/${comment.username}`)}
+                onClick={() => history.push(`/user/${comment.username}`)}
                 style={{
                   width: 32,
                   height: 32,
@@ -490,7 +492,7 @@ function User(props) {
             </div>
             <div style={{ alignContent: 'flex-start' }}>
               <img
-                onClick={() => (window.location = `/post/${comment._id}`)}
+                onClick={() => history.push(`/post/${comment._id}`)}
                 src="https://d1ppmvgsdgdlyy.cloudfront.net/more.svg"
                 alt="more"
                 style={{ width: 15, height: 'auto', cursor: 'pointer' }}
@@ -567,7 +569,7 @@ function User(props) {
               }}
             >
               <div
-                onClick={() => (window.location = `/user/${vote.username}`)}
+                onClick={() => history.push(`/user/${vote.username}`)}
                 style={{
                   width: 32,
                   height: 32,
@@ -594,7 +596,7 @@ function User(props) {
             </div>
             <div style={{ alignContent: 'flex-start' }}>
               <img
-                onClick={() => (window.location = `/post/${vote._id}`)}
+                onClick={() => history.push(`/post/${vote._id}`)}
                 src="https://d1ppmvgsdgdlyy.cloudfront.net/more.svg"
                 alt="more"
                 style={{ width: 15, height: 'auto', cursor: 'pointer' }}

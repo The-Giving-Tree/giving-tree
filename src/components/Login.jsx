@@ -6,6 +6,7 @@ import {
   StyledNavigationList as NavigationList
 } from 'baseui/header-navigation';
 import { Notification } from 'baseui/notification';
+import { useHistory } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import lifecycle from 'react-pure-lifecycle';
 import { Card, StyledAction } from 'baseui/card';
@@ -63,6 +64,8 @@ function Login(props) {
     });
   };
 
+  let history = useHistory();
+
   if (authenticated) {
     return <Redirect to="/" />;
   } else {
@@ -82,7 +85,7 @@ function Login(props) {
             <NavigationItem>
               <div
                 style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}
-                onClick={() => (window.location = '/')}
+                onClick={() => history.push('/')}
               >
                 <img
                   src="https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg"

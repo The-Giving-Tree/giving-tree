@@ -117,7 +117,6 @@ function Setting(props) {
               <Button
                 onClick={() => {
                   logoutAllDispatch({ env: process.env.NODE_ENV });
-                  //   window.location = `/`;
                 }}
               >
                 Logout of all accounts
