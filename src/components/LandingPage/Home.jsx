@@ -952,6 +952,7 @@ function Home(props) {
                               close();
                               switch (item.item.key) {
                                 case 'manual':
+                                  setPostId(item._id);
                                   setOpenFoodTracking(true);
                                   break;
                                 case 'postmates':
@@ -968,9 +969,6 @@ function Home(props) {
                         )}
                       >
                         <Button
-                          onClick={() => {
-                            setPostId(item._id);
-                          }}
                           style={{ outline: 'none', padding: 0 }}
                           kind="minimal"
                           size={SIZE.compact}
@@ -1145,19 +1143,23 @@ function Home(props) {
           <ModalButton
             size={'compact'}
             onClick={() => {
-              completeTaskDispatch({
-                env: process.env.NODE_ENV,
-                postId: postId,
-                trackingDetails: {
-                  method: 'manual',
-                  created: new Date(),
-                  dropoffEta: eta,
-                  notes: `${missing}. \n\n${deliverer}`
-                }
-              });
-
-              showConfetti(false);
-              showConfetti(true);
+              if (eta && missing && deliverer) {
+                completeTaskDispatch({
+                  env: process.env.NODE_ENV,
+                  postId: postId,
+                  trackingDetails: {
+                    method: 'manual',
+                    created: new Date(),
+                    dropoffEta: eta,
+                    notes: `${missing}. \n\n${deliverer}`
+                  }
+                });
+  
+                showConfetti(false);
+                showConfetti(true);
+              } else {
+                alert('you need to fill all the details')
+              }
             }}
           >
             Submit
