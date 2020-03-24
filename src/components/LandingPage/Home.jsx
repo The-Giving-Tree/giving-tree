@@ -241,8 +241,8 @@ function Home(props) {
   // keep track of which sub comment/post is overflowing div
   let overFlowList = {};
 
-  const foodCartJSX = foodCart => {
-    return foodCart.length === 0 ? (
+  const cartJSX = cart => {
+    return cart.length === 0 ? (
       <div className="text-center">no items in cart</div>
     ) : (
       <table className="table-auto" style={{ width: '99%' }}>
@@ -253,7 +253,7 @@ function Home(props) {
           </tr>
         </thead>
         <tbody>
-          {foodCart.map((item, i) => (
+          {cart.map((item, i) => (
             <tr className={i % 2 === 0 && `bg-gray-100`}>
               <td className={`border px-4 py-2`}>{item.name}</td>
               <td className={`border px-4 py-2`}>{item.quantity}</td>
@@ -604,7 +604,7 @@ function Home(props) {
                                 {item.text &&
                                   props.match.url !== '/home/ongoing' &&
                                   JSON.parse(item.text).type === 'food' &&
-                                  foodCartJSX(JSON.parse(item.text).foodCart)}
+                                  cartJSX(JSON.parse(item.text).cart)}
                                 {item.text &&
                                   props.match.url === '/home/completed' &&
                                   item.trackingDetails &&
@@ -720,7 +720,7 @@ function Home(props) {
                                       <div className="mt-4"></div>
                                       {item.parent.text &&
                                         JSON.parse(item.parent.text).type === 'food' &&
-                                        foodCartJSX(JSON.parse(item.parent.text).foodCart)}
+                                        cartJSX(JSON.parse(item.parent.text).cart)}
                                     </div>
                                   )
                                 : item.parent && shorten(250, item.parent.content)}

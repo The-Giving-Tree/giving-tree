@@ -198,7 +198,7 @@ function Submit(props) {
     </div>
   );
 
-  const validFoodCart = cartName && cartQuantity && Number(cartQuantity) > 0;
+  const validCart = cartName && cartQuantity && Number(cartQuantity) > 0;
 
   const cartJSX = () => {
     return cart.length === 0 ? (
@@ -221,9 +221,9 @@ function Submit(props) {
                 {' '}
                 <img
                   onClick={() => {
-                    let foodCartNow = cart;
-                    foodCartNow.splice(i, 1);
-                    setCart(foodCartNow);
+                    let cartNow = cart;
+                    cartNow.splice(i, 1);
+                    setCart(cartNow);
                     setChangedCart((changedCart += 1)); // to update state every time
                   }}
                   style={{ objectFit: 'cover', maxHeight: 15, overflow: 'auto' }}
@@ -380,11 +380,11 @@ function Submit(props) {
             placeholder="quantity"
           />
           <button
-            className={`${validFoodCart ? 'bg-indigo-500' : 'bg-gray-500'} ${validFoodCart &&
+            className={`${validCart ? 'bg-indigo-500' : 'bg-gray-500'} ${validCart &&
               'hover:bg-indigo-700'} text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
             type="button"
             onClick={() => {
-              if (validFoodCart) {
+              if (validCart) {
                 let cartNew = cart;
                 cartNew.push({ name: cartName, quantity: cartQuantity });
                 setCart(cartNew);

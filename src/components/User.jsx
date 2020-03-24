@@ -230,8 +230,8 @@ function User(props) {
     return 'https://d1ppmvgsdgdlyy.cloudfront.net/user/' + hash;
   }
 
-  const foodCartJSX = foodCart => {
-    return foodCart.length === 0 ? (
+  const cartJSX = cart => {
+    return cart.length === 0 ? (
       <div className="text-center">no items in cart</div>
     ) : (
       <table className="table-auto" style={{ width: '100%' }}>
@@ -242,7 +242,7 @@ function User(props) {
           </tr>
         </thead>
         <tbody>
-          {foodCart.map((item, i) => (
+          {cart.map((item, i) => (
             <tr className={i % 2 === 0 && `bg-gray-100`}>
               <td className={`border px-4 py-2`}>{item.name}</td>
               <td className={`border px-4 py-2`}>{item.quantity}</td>
@@ -371,7 +371,7 @@ function User(props) {
                   <div className="mt-4"></div>
                   {post.text &&
                     JSON.parse(post.text).type === 'food' &&
-                    foodCartJSX(JSON.parse(post.text).foodCart)}
+                    cartJSX(JSON.parse(post.text).cart)}
                 </div>
               </div>
             </div>
@@ -620,7 +620,7 @@ function User(props) {
                 <div className="mt-4"></div>
                 {vote.text &&
                   JSON.parse(vote.text).type === 'food' &&
-                  foodCartJSX(JSON.parse(vote.text).foodCart)}
+                  cartJSX(JSON.parse(vote.text).cart)}
               </div>
             </div>
           ) : (
