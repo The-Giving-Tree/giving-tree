@@ -714,8 +714,7 @@ function Home(props) {
                                         {item.parent && item.parent.address}
                                       </div>
                                       <div className="text-sm my-1 mt-4">
-                                        {item.parent &&
-                                          `Description: ${item.parent.description}`}
+                                        {item.parent && `Description: ${item.parent.description}`}
                                       </div>
                                       <div className="mt-4"></div>
                                       {item.parent.text &&
@@ -1155,11 +1154,11 @@ function Home(props) {
                     notes: `${missing}. \n\n${deliverer}`
                   }
                 });
-  
+
                 showConfetti(false);
                 showConfetti(true);
               } else {
-                alert('you need to fill all the details')
+                alert('you need to fill all the details');
               }
             }}
           >
@@ -1523,7 +1522,17 @@ function Home(props) {
                     <div style={{ paddingTop: 30 }} />
                     {items.length === 0 && newsfeedSuccess && !newsfeedLoading && (
                       <StyledBody style={{ margin: '0 auto', textAlign: 'center', marginTop: 20 }}>
-                        {id === 'discover' && <div className="mb-2">No requests yet</div>}
+                        {id === 'discover' && (
+                          <div className="mb-2">
+                            No requests yet -{' '}
+                            <span
+                              className={`text-indigo-600 hover:text-indigo-800 transition duration-150`}
+                              onClick={() => history.push('/submit')}
+                            >
+                              create a new request if you need help
+                            </span>
+                          </div>
+                        )}
                         {id === 'ongoing' && (
                           <div className="mb-2">You haven't requested to help anyone yet</div>
                         )}
@@ -1539,7 +1548,7 @@ function Home(props) {
                         {id !== 'discover' && (
                           <div
                             onClick={() => {
-                              window.location = ('/home/discover');
+                              window.location = '/home/discover';
                             }}
                             style={{ cursor: 'pointer', color: 'rgb(25, 103, 210)' }}
                           >

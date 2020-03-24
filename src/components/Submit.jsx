@@ -391,7 +391,11 @@ function Submit(props) {
                 setCartQuantity('');
                 setCartName('');
               } else {
-                alert(`please enter a valid ${selectMenu === 'Food' ? `food` : selectMenu === 'Supplies' ? 'supplies' : ''} cart item`);
+                alert(
+                  `please enter a valid ${
+                    selectMenu === 'Food' ? `food` : selectMenu === 'Supplies' ? 'supplies' : ''
+                  } cart item`
+                );
               }
             }}
           >
