@@ -239,7 +239,7 @@ function Submit(props) {
   };
 
   const suppliesJSX = () => {
-    foodJSX();
+    return foodJSX();
   };
 
   const foodJSX = () => {
@@ -361,9 +361,9 @@ function Submit(props) {
             value={cartName}
             type="text"
             placeholder={
-              selectMenu === 'Food'
+              selectedRequest === 'food'
                 ? `food item`
-                : selectMenu === 'Supplies'
+                : selectedRequest === 'supplies'
                 ? 'household supplies'
                 : ''
             }
@@ -375,12 +375,12 @@ function Submit(props) {
             className="mx-4 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             style={{ width: 100 }}
             value={cartQuantity}
-            id={selectMenu === 'Food' ? `food` : selectMenu === 'Supplies' ? 'supplies' : ''}
+            id={selectedRequest === 'food' ? `food` : selectedRequest === 'supplies' ? 'supplies' : ''}
             type="number"
             placeholder="quantity"
           />
           <button
-            className={`${validCart ? 'bg-indigo-500' : 'bg-gray-500'} ${validCart &&
+            className={`bg-indigo-500 ${validCart &&
               'hover:bg-indigo-700'} text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
             type="button"
             onClick={() => {
@@ -393,7 +393,7 @@ function Submit(props) {
               } else {
                 alert(
                   `please enter a valid ${
-                    selectMenu === 'Food' ? `food` : selectMenu === 'Supplies' ? 'supplies' : ''
+                    selectedRequest === 'food' ? `food` : selectedRequest === 'supplies' ? 'supplies' : ''
                   } cart item`
                 );
               }
@@ -433,15 +433,7 @@ function Submit(props) {
                   }
                 }}
                 style={{ outline: 'none' }}
-                class={`${
-                  title && address && description && cart.length > 0
-                    ? 'bg-green-500'
-                    : 'bg-gray-500'
-                } ${title &&
-                  address &&
-                  description &&
-                  cart.length > 0 &&
-                  'hover:bg-green-700'} text-white font-bold py-2 px-4 rounded`}
+                class={`bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded`}
               >
                 Submit
               </button>
