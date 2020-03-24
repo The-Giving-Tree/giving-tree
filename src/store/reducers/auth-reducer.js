@@ -49,7 +49,10 @@ const initialState = {
 
   completeTaskLoading: false,
   completeTaskSuccess: false,
-  completeTaskFailure: false
+  completeTaskFailure: false,
+
+  selectMenu: 'Food',
+  title: ''
 };
 
 const auth = (state = initialState, action) => {
@@ -71,6 +74,12 @@ const auth = (state = initialState, action) => {
       return Object.assign({}, state, {
         updatedProfile: false,
         errorMessage: action.payload.message
+      });
+
+    case ACTION_TYPE.SELECT_MENU_REQUESTED:
+      return Object.assign({}, state, {
+        selectMenu: action.payload.selectMenu,
+        title: action.payload.title
       });
 
     case ACTION_TYPE.CLAIM_TASK_REQUESTED:

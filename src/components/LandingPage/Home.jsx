@@ -47,7 +47,8 @@ import {
   upvote,
   downvote,
   addComment,
-  addReply
+  addReply,
+  selectMenu
 } from '../../store/actions/auth/auth-actions';
 
 function Home(props) {
@@ -66,8 +67,10 @@ function Home(props) {
     currentPage,
     pages,
     numOfResults,
+    selectMenu,
     addCommentDispatch,
     addReplyDispatch,
+    selectMenuDispatch,
     newsfeedUpdated
   } = props;
 
@@ -1177,7 +1180,7 @@ function Home(props) {
                     <span />
                     <div
                       className="flex items-center"
-                      onClick={() => window.location = ('/home/discover')}
+                      onClick={() => (window.location = '/home/discover')}
                     >
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/search.svg"
@@ -1196,7 +1199,7 @@ function Home(props) {
                     <span />
                     <div
                       className="flex items-center"
-                      onClick={() => window.location = ('/home/ongoing')}
+                      onClick={() => (window.location = '/home/ongoing')}
                     >
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/care.svg"
@@ -1215,7 +1218,7 @@ function Home(props) {
                     <span />
                     <div
                       className="flex items-center"
-                      onClick={() => window.location = ('/home/completed')}
+                      onClick={() => (window.location = '/home/completed')}
                     >
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/gift.svg"
@@ -1232,7 +1235,10 @@ function Home(props) {
                     style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
                   >
                     <span />
-                    <div className="flex items-center" onClick={() => window.location = ('/home/global')}>
+                    <div
+                      className="flex items-center"
+                      onClick={() => (window.location = '/home/global')}
+                    >
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/global.svg"
                         alt="global"
@@ -1298,22 +1304,16 @@ function Home(props) {
                                   //   key: 'Newest'
                                   // },
                                   {
-                                    label: (
-                                      <div>
-                                        Your current location
-                                        <br />
-                                        {props.coords && props.coords.latitude},{' '}
-                                        {props.coords && props.coords.longitude}
-                                      </div>
-                                    ),
-                                    key: 'Your current location'
-                                  },
-                                  {
-                                    label: <div>Enter Address</div>,
-                                    key: 'Custom Address'
+                                    label: 'Food',
+                                    key: 'Food'
                                   }
                                   // {
-                                  //   key: 'Your Tasks'
+                                  //   label: 'Supplies (coming soon)',
+                                  //   key: 'Supplies'
+                                  // },
+                                  // {
+                                  //   label: 'Transportation (coming soon)',
+                                  //   key: 'Transportation'
                                   // },
                                   // {
                                   //   key: 'Completed Tasks'
@@ -1328,13 +1328,14 @@ function Home(props) {
                                     case 'Home':
                                       history.push('/');
                                       break;
-                                    case 'Your current location':
-                                      // set current location
-                                      let lat = props.coords && props.coords.latitude;
-                                      let lng = props.coords && props.coords.longitude;
-                                      setLatLng({ lat, lng });
-                                      setOpenCustomAddress(false);
-                                      setAddress('');
+                                    case 'Food':
+                                      selectMenuDispatch({ selectMenu: 'Food', title: newPost });
+                                      break;
+                                    case 'Supplies':
+                                      alert('coming soon');
+                                      break;
+                                    case 'Transportation':
+                                      alert('coming soon');
                                       break;
                                     case 'Custom Address':
                                       setOpenCustomAddress(true);
@@ -1373,22 +1374,15 @@ function Home(props) {
                               style={{ marginRight: 0, outline: 'none' }}
                               endEnhancer={() => <ChevronDown size={24} />}
                             >
-                              <img
-                                src="https://d1ppmvgsdgdlyy.cloudfront.net/pin.svg"
-                                alt="location"
-                                style={{
-                                  marginLeft: 10,
-                                  marginRight: -10,
-                                  outline: 'none',
-                                  height: 30
-                                }}
-                              />
+                              {selectMenu}
                             </Button>
                           </StatefulPopover>
                           <Input
                             value={newPost}
-                            onClick={() => history.push('/submit')}
-                            onChange={event => setNewPost(event.currentTarget.value)}
+                            onChange={event => {
+                              setNewPost(event.currentTarget.value);
+                              selectMenuDispatch({ selectMenu, title: event.currentTarget.value });
+                            }}
                             placeholder="Ask for help / assistance"
                           />
                           <Button
@@ -1454,12 +1448,29 @@ function Home(props) {
                             </div>
                           )}
                         </PlacesAutocomplete>
-                        <div>
+                        <div className="flex items-center">
                           <button
-                            className={`ml-4 bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
+                            className={`ml-4 bg-gray-500 hover:bg-gray-700 text-white py-2 px-3 rounded focus:outline-none focus:shadow-outline`}
                             type="button"
                             onClick={() => {
+                              let lat = props.coords && props.coords.latitude;
+                              let lng = props.coords && props.coords.longitude;
+                              setLatLng({ lat, lng });
                               setOpenCustomAddress(false);
+                              setAddress('');
+                            }}
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            className={`ml-4 bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-3 rounded focus:outline-none focus:shadow-outline`}
+                            type="button"
+                            onClick={() => {
+                              if (address) {
+                                setOpenCustomAddress(false);
+                              } else {
+                                alert('you must enter an address to save!');
+                              }
                             }}
                           >
                             Save
@@ -1565,13 +1576,15 @@ const mapDispatchToProps = dispatch => ({
   upvoteDispatch: payload => dispatch(upvote(payload)),
   downvoteDispatch: payload => dispatch(downvote(payload)),
   addCommentDispatch: payload => dispatch(addComment(payload)),
-  addReplyDispatch: payload => dispatch(addReply(payload))
+  addReplyDispatch: payload => dispatch(addReply(payload)),
+  selectMenuDispatch: payload => dispatch(selectMenu(payload))
 });
 
 const mapStateToProps = state => ({
   user: state.auth.user,
   newsfeed: state.auth.newsfeed,
   currentPage: state.auth.currentPage,
+  selectMenu: state.auth.selectMenu,
   pages: state.auth.pages,
   numOfResults: state.auth.numOfResults,
   newsfeedSuccess: state.auth.newsfeedSuccess,

@@ -101,6 +101,11 @@ export const loadNewsfeed = payload => ({
   payload
 });
 
+export const selectMenu = payload => ({
+  type: ACTION_TYPE.SELECT_MENU_REQUESTED,
+  payload
+});
+
 export const getCurrentUser = payload => ({
   type: ACTION_TYPE.GET_CURRENT_USER_REQUESTED,
   payload
