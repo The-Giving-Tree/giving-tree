@@ -604,7 +604,8 @@ function Home(props) {
                                   foodCartJSX(JSON.parse(item.text).foodCart)}
                                 {item.text &&
                                   props.match.url === '/home/completed' &&
-                                  item.trackingDetails && completedOrderJSX(item.trackingDetails)}
+                                  item.trackingDetails &&
+                                  completedOrderJSX(item.trackingDetails)}
                                 {item.text &&
                                   props.match.url === '/home/global' &&
                                   completedOrderGlobalJSX(item)}
@@ -645,9 +646,7 @@ function Home(props) {
                                   }}
                                 >
                                   <div
-                                    onClick={() =>
-                                      history.push(`/user/${item.parent.username}`)
-                                    }
+                                    onClick={() => history.push(`/user/${item.parent.username}`)}
                                     style={{
                                       width: 32,
                                       height: 32,
@@ -1255,10 +1254,7 @@ function Home(props) {
                     style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
                   >
                     <span />
-                    <div
-                      className="flex items-center"
-                      onClick={() => history.push('/home/global')}
-                    >
+                    <div className="flex items-center" onClick={() => history.push('/home/global')}>
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/global.svg"
                         alt="global"
@@ -1272,10 +1268,7 @@ function Home(props) {
                     style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
                   >
                     <span />
-                    <div
-                      className="flex items-center"
-                      onClick={() => history.push('/submit')}
-                    >
+                    <div className="flex items-center" onClick={() => history.push('/submit')}>
                       ❤️Ask for Help
                     </div>
                   </div>

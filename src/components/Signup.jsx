@@ -43,7 +43,7 @@ function Signup(props) {
   const authenticated = localStorage.getItem('giving_tree_jwt');
 
   const { signupDispatch, errorMessage, registerLoading, registerSuccess, registerFailure } = props;
-  
+
   const history = useHistory();
 
   function Negative() {
