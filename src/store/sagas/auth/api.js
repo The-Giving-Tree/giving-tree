@@ -310,7 +310,7 @@ const loadNewsFeed = async (env, page, location = undefined, feed, token) => {
 
     let query = '';
     if (location && !isEmpty(location)) {
-      query += `lat=${location.lat}&lng=${location.lng}`
+      query += `lat=${location.lat}&lng=${location.lng}`;
     }
 
     let data = '';

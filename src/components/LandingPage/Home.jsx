@@ -1022,14 +1022,19 @@ function Home(props) {
       location: latLng,
       feed: 'Discover'
     });
-  }, [latLng, address, !openCustomAddress])
+  }, [latLng, address, !openCustomAddress]);
 
   async function loadNewsfeedHelper() {
     if (pages === '') {
     } else if (Number(currentPage) < Number(pages)) {
       let nextPage = Number(currentPage) + 1;
       console.log('here');
-      await loadNewsfeedDispatch({ env: process.env.NODE_ENV, location: latLng, page: nextPage, feed: newsfeedSort });
+      await loadNewsfeedDispatch({
+        env: process.env.NODE_ENV,
+        location: latLng,
+        page: nextPage,
+        feed: newsfeedSort
+      });
       for (var j = 0; j < newsfeed.length; j++) {
         if (newsfeedDictionary[newsfeed[j]._id] === undefined) {
           news.push(newsfeed[j]);
@@ -1487,18 +1492,21 @@ function Home(props) {
                         </div>
                       </div>
                     ) : (
-                      <div className={`text-left mt-2`} style={{ fontSize: 12 }}>
-                        {address ||
-                          `Your current location (${props.coords &&
-                            props.coords.latitude}, ${props.coords && props.coords.longitude})`}
-                        &nbsp;<span
-                          onClick={() => setOpenCustomAddress(true)}
-                          className="text-indigo-600 hover:text-indigo-800 transition duration-150"
-                          style={{ cursor: 'pointer' }}
-                        >
-                          (edit)
-                        </span>
-                      </div>
+                      props.match.url === '/home/discover' && (
+                        <div className={`text-left mt-2`} style={{ fontSize: 12 }}>
+                          {address ||
+                            `Your current location (${props.coords &&
+                              props.coords.latitude}, ${props.coords && props.coords.longitude})`}
+                          &nbsp;
+                          <span
+                            onClick={() => setOpenCustomAddress(true)}
+                            className="text-indigo-600 hover:text-indigo-800 transition duration-150"
+                            style={{ cursor: 'pointer' }}
+                          >
+                            (edit)
+                          </span>
+                        </div>
+                      )
                     )}
                     <InfiniteScroll
                       pageStart={1}
