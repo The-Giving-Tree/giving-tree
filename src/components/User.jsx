@@ -366,7 +366,7 @@ function User(props) {
                     {post.text && JSON.parse(post.text).address}
                   </div>
                   <div className="font-bold text-base text-left my-1 mt-4">
-                    {post && `Description: ${JSON.parse(post.text).foodDescription}`}
+                    {post && `Description: ${JSON.parse(post.text).description}`}
                   </div>
                   <div className="mt-4"></div>
                   {post.text &&
@@ -615,7 +615,7 @@ function User(props) {
                   {vote.text && JSON.parse(vote.text).address}
                 </div>
                 <div className="font-bold text-base text-left my-1 mt-4">
-                  {vote && `Description: ${JSON.parse(vote.text).foodDescription}`}
+                  {vote && `Description: ${JSON.parse(vote.text).description}`}
                 </div>
                 <div className="mt-4"></div>
                 {vote.text &&
