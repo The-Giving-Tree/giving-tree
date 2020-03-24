@@ -241,7 +241,7 @@ function Home(props) {
   // keep track of which sub comment/post is overflowing div
   let overFlowList = {};
 
-  const cartJSX = cart => {
+  const foodCartJSX = cart => {
     return cart.length === 0 ? (
       <div className="text-center">no items in cart</div>
     ) : (
@@ -591,7 +591,7 @@ function Home(props) {
                                   {item.text && `Address: ${JSON.parse(item.text).address}`}
                                 </div>
                                 <div className="text-sm my-1 mt-4">
-                                  {item && `Description: ${JSON.parse(item.text).foodDescription}`}
+                                  {item && `Description: ${JSON.parse(item.text).description}`}
                                 </div>
                                 {item &&
                                   props.match.url === '/home/ongoing' &&
@@ -604,7 +604,7 @@ function Home(props) {
                                 {item.text &&
                                   props.match.url !== '/home/ongoing' &&
                                   JSON.parse(item.text).type === 'food' &&
-                                  cartJSX(JSON.parse(item.text).cart)}
+                                  foodCartJSX(JSON.parse(item.text).cart)}
                                 {item.text &&
                                   props.match.url === '/home/completed' &&
                                   item.trackingDetails &&
@@ -715,12 +715,12 @@ function Home(props) {
                                       </div>
                                       <div className="text-sm my-1 mt-4">
                                         {item.parent &&
-                                          `Description: ${item.parent.foodDescription}`}
+                                          `Description: ${item.parent.description}`}
                                       </div>
                                       <div className="mt-4"></div>
                                       {item.parent.text &&
                                         JSON.parse(item.parent.text).type === 'food' &&
-                                        cartJSX(JSON.parse(item.parent.text).cart)}
+                                        foodCartJSX(JSON.parse(item.parent.text).cart)}
                                     </div>
                                   )
                                 : item.parent && shorten(250, item.parent.content)}
@@ -1536,7 +1536,7 @@ function Home(props) {
                         {id !== 'discover' && (
                           <div
                             onClick={() => {
-                              history.push('/home/discover');
+                              window.location = ('/home/discover');
                             }}
                             style={{ cursor: 'pointer', color: 'rgb(25, 103, 210)' }}
                           >
