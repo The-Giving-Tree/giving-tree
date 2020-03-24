@@ -757,17 +757,6 @@ function Home(props) {
                                 </div>
                               </div>
                             </Card>
-                            {/* {overFlowList[item._id] === true && (
-                              <div
-                                className="fade"
-                                style={{
-                                  background: `linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255, 1) 100%)`,
-                                  height: `100px`,
-                                  marginTop: `-100px`,
-                                  position: `relative`
-                                }}
-                              />
-                            )} */}
                           </div>
                         )}
                         {item.type === 'Comment' && (
@@ -826,17 +815,6 @@ function Home(props) {
               >
                 <div />
                 <div style={{ display: 'flex', alignContent: 'center' }}>
-                  {/* <div style={{ display: 'flex', alignContent: 'center' }}>
-                  <Button
-                    style={{ padding: 0, cursor: 'initial', backgroundColor: 'white' }}
-                    kind="minimal"
-                    size={SIZE.compact}
-                  >
-                    <div style={{ textTransform: 'uppercase', fontSize: 12 }}>
-                      <strong>{0}&nbsp;&nbsp;Views</strong>
-                    </div>
-                  </Button>
-                </div> */}
                   {confetti && <Confetti width={width} height={height} recycle={false} />}
                   {item.type === 'Post' && !item.completed && props.match.url === '/home/discover' && (
                     <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
@@ -1199,7 +1177,7 @@ function Home(props) {
                     <span />
                     <div
                       className="flex items-center"
-                      onClick={() => history.push('/home/discover')}
+                      onClick={() => window.location = ('/home/discover')}
                     >
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/search.svg"
@@ -1218,7 +1196,7 @@ function Home(props) {
                     <span />
                     <div
                       className="flex items-center"
-                      onClick={() => history.push('/home/ongoing')}
+                      onClick={() => window.location = ('/home/ongoing')}
                     >
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/care.svg"
@@ -1237,7 +1215,7 @@ function Home(props) {
                     <span />
                     <div
                       className="flex items-center"
-                      onClick={() => history.push('/home/completed')}
+                      onClick={() => window.location = ('/home/completed')}
                     >
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/gift.svg"
@@ -1254,7 +1232,7 @@ function Home(props) {
                     style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
                   >
                     <span />
-                    <div className="flex items-center" onClick={() => history.push('/home/global')}>
+                    <div className="flex items-center" onClick={() => window.location = ('/home/global')}>
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/global.svg"
                         alt="global"
