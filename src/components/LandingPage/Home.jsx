@@ -117,7 +117,7 @@ function Home(props) {
   if (!isEmpty(user)) {
     switch (id) {
       case '':
-        window.location = ('/home/discover'); // temporary to redirect to discover
+        window.location = '/home/discover'; // temporary to redirect to discover
         return;
         if (newsfeedSort !== 'Home') {
           setSort('Home');
@@ -1314,7 +1314,7 @@ function Home(props) {
                                   {
                                     label: 'Supplies',
                                     key: 'Supplies'
-                                  },
+                                  }
                                   // {
                                   //   label: 'Transportation (coming soon)',
                                   //   key: 'Transportation'
@@ -1336,7 +1336,10 @@ function Home(props) {
                                       selectMenuDispatch({ selectMenu: 'Food', title: newPost });
                                       break;
                                     case 'Supplies':
-                                      selectMenuDispatch({ selectMenu: 'Supplies', title: newPost });
+                                      selectMenuDispatch({
+                                        selectMenu: 'Supplies',
+                                        title: newPost
+                                      });
                                       break;
                                     case 'Transportation':
                                       alert('coming soon');

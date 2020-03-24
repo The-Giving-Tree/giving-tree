@@ -123,22 +123,28 @@ function Submit(props) {
   const [imagePreview, setPreview] = React.useState('');
   const [text, setText] = React.useState('');
   const [address, setAddress] = useState('');
-  const [latLngFood, setLatLngFood] = useState({});
-  const [foodCart, setFoodCart] = React.useState([]);
+  const [latLng, setLatLng] = useState({});
+  const [cart, setCart] = React.useState([]);
   const [selectedRequest, setRequest] = React.useState('');
   const [value, setValue] = React.useState('');
   const [checkout, setCheckout] = React.useState(false);
   const [tags, setTags] = React.useState([]);
-  let [changedFoodCart, setChangedFoodCart] = useState(0);
-  const [foodCartQuantity, setFoodCartQuantity] = React.useState('');
-  const [foodCartName, setFoodCartName] = React.useState('');
-  const [foodDescription, setFoodDescription] = useState('');
+  let [changedCart, setChangedCart] = useState(0);
+  const [cartQuantity, setCartQuantity] = React.useState('');
+  const [cartName, setCartName] = React.useState('');
+  const [description, setDescription] = useState('');
 
   // initialize state
   React.useEffect(() => {
     setTitle(titleStore);
     if (selectMenu !== '') {
       setCheckout(true);
+
+      if (selectMenu === 'Food') {
+        setRequest('food');
+      } else if (selectMenu === 'Supplies') {
+        setRequest('supplies');
+      }
     }
   }, [titleStore, selectMenu]);
 
@@ -157,9 +163,9 @@ function Submit(props) {
       let foodString = {
         address,
         type: selectedRequest,
-        foodDescription,
-        foodCart,
-        location: latLngFood,
+        description,
+        cart,
+        location: latLng,
         phoneNumber
       };
 
@@ -175,7 +181,7 @@ function Submit(props) {
     submitDraft();
   }, [props.submitDraftSuccess]);
 
-  useEffect(() => {}, [changedFoodCart]);
+  useEffect(() => {}, [changedCart]);
 
   const isEmpty = obj => {
     for (var key in obj) {
@@ -192,10 +198,10 @@ function Submit(props) {
     </div>
   );
 
-  const validFoodCart = foodCartName && foodCartQuantity && Number(foodCartQuantity) > 0;
+  const validFoodCart = cartName && cartQuantity && Number(cartQuantity) > 0;
 
-  const foodCartJSX = () => {
-    return foodCart.length === 0 ? (
+  const cartJSX = () => {
+    return cart.length === 0 ? (
       <div className="text-center">no items in cart</div>
     ) : (
       <table class="table-auto" style={{ width: '100%' }}>
@@ -207,7 +213,7 @@ function Submit(props) {
           </tr>
         </thead>
         <tbody>
-          {foodCart.map((item, i) => (
+          {cart.map((item, i) => (
             <tr className={i % 2 === 0 && `bg-gray-100`}>
               <td className={`border px-4 py-2`}>{item.name}</td>
               <td className={`border px-4 py-2`}>{item.quantity}</td>
@@ -215,10 +221,10 @@ function Submit(props) {
                 {' '}
                 <img
                   onClick={() => {
-                    let foodCartNow = foodCart;
+                    let foodCartNow = cart;
                     foodCartNow.splice(i, 1);
-                    setFoodCart(foodCartNow);
-                    setChangedFoodCart((changedFoodCart += 1)); // to update state every time
+                    setCart(foodCartNow);
+                    setChangedCart((changedCart += 1)); // to update state every time
                   }}
                   style={{ objectFit: 'cover', maxHeight: 15, overflow: 'auto' }}
                   src="https://d1ppmvgsdgdlyy.cloudfront.net/trash.svg"
@@ -230,6 +236,10 @@ function Submit(props) {
         </tbody>
       </table>
     );
+  };
+
+  const suppliesJSX = () => {
+    foodJSX();
   };
 
   const foodJSX = () => {
@@ -286,7 +296,7 @@ function Submit(props) {
               .then(results => getLatLng(results[0]))
               .then(latLng => {
                 console.log('Success', latLng);
-                setLatLngFood(latLng);
+                setLatLng(latLng);
               })
               .catch(error => console.error('Error', error));
           }}
@@ -331,35 +341,41 @@ function Submit(props) {
         <div className="font-bold text-base text-left my-1 mt-4">Description</div>
         <input
           onChange={e => {
-            setFoodDescription(e.target.value);
+            setDescription(e.target.value);
           }}
           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           id="description"
-          value={foodDescription}
+          value={description}
           type="text"
           placeholder="tell us a little more about your request..."
         />
         <div className="mt-4"></div>
-        {foodCartJSX()}
+        {cartJSX()}
         <div className={`flex items-center mt-4`}>
           <input
             onChange={e => {
-              setFoodCartName(e.target.value);
+              setCartName(e.target.value);
             }}
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="food"
-            value={foodCartName}
+            value={cartName}
             type="text"
-            placeholder={selectMenu === 'Food' ? `food item` : selectMenu === 'Supplies' ? 'household supplies' : ''}
+            placeholder={
+              selectMenu === 'Food'
+                ? `food item`
+                : selectMenu === 'Supplies'
+                ? 'household supplies'
+                : ''
+            }
           />
           <input
             onChange={e => {
-              setFoodCartQuantity(e.target.value);
+              setCartQuantity(e.target.value);
             }}
             class="mx-4 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             style={{ width: 100 }}
-            value={foodCartQuantity}
-            id="food"
+            value={cartQuantity}
+            id={selectMenu === 'Food' ? `food` : selectMenu === 'Supplies' ? 'supplies' : ''}
             type="number"
             placeholder="quantity"
           />
@@ -369,13 +385,13 @@ function Submit(props) {
             type="button"
             onClick={() => {
               if (validFoodCart) {
-                let foodCartNew = foodCart;
-                foodCartNew.push({ name: foodCartName, quantity: foodCartQuantity });
-                setFoodCart(foodCartNew);
-                setFoodCartQuantity('');
-                setFoodCartName('');
+                let cartNew = cart;
+                cartNew.push({ name: cartName, quantity: cartQuantity });
+                setCart(cartNew);
+                setCartQuantity('');
+                setCartName('');
               } else {
-                alert('please enter a valid food cart item');
+                alert(`please enter a valid ${selectMenu === 'Food' ? `food` : selectMenu === 'Supplies' ? 'supplies' : ''} cart item`);
               }
             }}
           >
@@ -505,13 +521,13 @@ function Submit(props) {
                       {selectedRequest !== '' && (
                         <button
                           onClick={() => {
-                            if (title && address && foodDescription && foodCart.length > 0) {
+                            if (title && address && description && cart.length > 0) {
                               let foodString = {
                                 address,
                                 type: selectedRequest,
-                                foodDescription,
-                                foodCart,
-                                location: latLngFood,
+                                description,
+                                cart,
+                                location: latLng,
                                 phoneNumber
                               };
 
@@ -531,13 +547,13 @@ function Submit(props) {
                           }}
                           style={{ outline: 'none' }}
                           class={`${
-                            title && address && foodDescription && foodCart.length > 0
+                            title && address && description && cart.length > 0
                               ? 'bg-green-500'
                               : 'bg-gray-500'
                           } ${title &&
                             address &&
-                            foodDescription &&
-                            foodCart.length > 0 &&
+                            description &&
+                            cart.length > 0 &&
                             'hover:bg-green-700'} text-white font-bold py-2 px-4 rounded`}
                         >
                           Submit
@@ -593,7 +609,7 @@ function Submit(props) {
                         objectFit: 'cover',
                         maxHeight: 150,
                         width: 400,
-                        overflow: 'auto',
+                        overflow: 'auto'
                       }}
                       src="https://d1ppmvgsdgdlyy.cloudfront.net/supplies.jpg"
                       alt="Supplies"
@@ -643,8 +659,8 @@ function Submit(props) {
               )}
               {checkout && (
                 <React.Fragment>
-                  {(selectedRequest === 'food' || selectMenu === 'Food') && foodJSX()}
-                  {selectedRequest === 'supplies' && 'supplies'}
+                  {selectedRequest === 'food' && foodJSX()}
+                  {selectedRequest === 'supplies' && suppliesJSX()}
                   {selectedRequest === 'transportation' && transportationJSX()}
                 </React.Fragment>
               )}
