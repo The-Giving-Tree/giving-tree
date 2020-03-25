@@ -1157,6 +1157,7 @@ function Home(props) {
 
                 showConfetti(false);
                 showConfetti(true);
+                setOpenFoodTracking(false); // close dialog
               } else {
                 alert('you need to fill all the details');
               }
