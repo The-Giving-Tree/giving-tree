@@ -114,11 +114,14 @@ function Home(props) {
   let id = props.match.params.id ? props.match.params.id.toLowerCase() : '';
 
   // if user is logged in
-  if (!isEmpty(user)) {
+  // if (!isEmpty(user)) {
+  if (true) {
     switch (id) {
       case '':
-        window.location = '/home/discover'; // temporary to redirect to discover
-        return;
+        if (newsfeedSort !== 'Home') {
+          setSort('Home');
+        }
+        break;
         if (newsfeedSort !== 'Home') {
           setSort('Home');
           loadNewsfeedDispatch({
@@ -523,13 +526,18 @@ function Home(props) {
                         style={{ alignContent: 'center', cursor: 'pointer' }}
                         onMouseEnter={() => mouseOverUp(i)}
                         onMouseLeave={() => mouseOutUp(i)}
-                        onClick={async () =>
-                          await handleUpClick(
-                            item.type,
-                            item._id,
-                            item.type === 'Comment' && item.postId
-                          )
-                        }
+                        onClick={async () => {
+                          if (authenticated) {
+                            await handleUpClick(
+                              item.type,
+                              item._id,
+                              item.type === 'Comment' && item.postId
+                            );
+                          } else {
+                            alert('please signup first');
+                            history.push('/signup');
+                          }
+                        }}
                       />
                       <div style={{ alignContent: 'center', marginBottom: 3 }}>
                         {item.voteTotal}
@@ -546,13 +554,18 @@ function Home(props) {
                         style={{ alignContent: 'center', cursor: 'pointer' }}
                         onMouseEnter={() => mouseOverDown(i)}
                         onMouseLeave={() => mouseOutDown(i)}
-                        onClick={async () =>
-                          await handleDownClick(
-                            item.type,
-                            item._id,
-                            item.type === 'Comment' && item.postId
-                          )
-                        }
+                        onClick={async () => {
+                          if (authenticated) {
+                            await handleDownClick(
+                              item.type,
+                              item._id,
+                              item.type === 'Comment' && item.postId
+                            );
+                          } else {
+                            alert('please signup first');
+                            history.push('/signup');
+                          }
+                        }}
                       />
                     </div>
                     <div
@@ -1016,6 +1029,7 @@ function Home(props) {
     } else if (Number(currentPage) < Number(pages)) {
       let nextPage = Number(currentPage) + 1;
       console.log('here');
+
       await loadNewsfeedDispatch({
         env: process.env.NODE_ENV,
         location: latLng,
@@ -1157,6 +1171,7 @@ function Home(props) {
 
                 showConfetti(false);
                 showConfetti(true);
+                setOpenFoodTracking(false); // close dialog
               } else {
                 alert('you need to fill all the details');
               }
@@ -1166,7 +1181,7 @@ function Home(props) {
           </ModalButton>
         </ModalFooter>
       </Modal>
-      {authenticated ? (
+      {props.match.url !== '/' ? (
         <table className="table-auto" style={{ width: '100%', background: '#F5F5F5' }}>
           <thead>
             <tr>
@@ -1205,7 +1220,14 @@ function Home(props) {
                     <span />
                     <div
                       className="flex items-center"
-                      onClick={() => (window.location = '/home/ongoing')}
+                      onClick={() => {
+                        if (authenticated) {
+                          window.location = '/home/ongoing';
+                        } else {
+                          alert('please login/signup before you can view your tasks');
+                          history.push('/signup');
+                        }
+                      }}
                     >
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/care.svg"
@@ -1224,7 +1246,14 @@ function Home(props) {
                     <span />
                     <div
                       className="flex items-center"
-                      onClick={() => (window.location = '/home/completed')}
+                      onClick={() => {
+                        if (authenticated) {
+                          window.location = '/home/completed';
+                        } else {
+                          alert('please login/signup before you can view your completed tasks');
+                          history.push('/signup');
+                        }
+                      }}
                     >
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/gift.svg"
@@ -1258,7 +1287,17 @@ function Home(props) {
                     style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
                   >
                     <span />
-                    <div className="flex items-center" onClick={() => history.push('/submit')}>
+                    <div
+                      className="flex items-center"
+                      onClick={() => {
+                        if (authenticated) {
+                          history.push('/submit');
+                        } else {
+                          alert('please login/signup before you can ask for help');
+                          history.push('/signup');
+                        }
+                      }}
+                    >
                       ❤️Ask for Help
                     </div>
                   </div>
@@ -1584,6 +1623,13 @@ function Home(props) {
               Request help or give to neighbors in need.
             </h2>
           </Block>
+          <button
+            style={{ outline: 'none' }}
+            className="mt-5 bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => history.push('/home/discover')}
+          >
+            see leaderboard
+          </button>
         </div>
       )}
     </div>

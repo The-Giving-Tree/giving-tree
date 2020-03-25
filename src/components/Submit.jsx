@@ -375,7 +375,9 @@ function Submit(props) {
             className="mx-4 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             style={{ width: 100 }}
             value={cartQuantity}
-            id={selectedRequest === 'food' ? `food` : selectedRequest === 'supplies' ? 'supplies' : ''}
+            id={
+              selectedRequest === 'food' ? `food` : selectedRequest === 'supplies' ? 'supplies' : ''
+            }
             type="number"
             placeholder="quantity"
           />
@@ -393,7 +395,11 @@ function Submit(props) {
               } else {
                 alert(
                   `please enter a valid ${
-                    selectedRequest === 'food' ? `food` : selectedRequest === 'supplies' ? 'supplies' : ''
+                    selectedRequest === 'food'
+                      ? `food`
+                      : selectedRequest === 'supplies'
+                      ? 'supplies'
+                      : ''
                   } cart item`
                 );
               }
