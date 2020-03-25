@@ -362,6 +362,11 @@ function Home(props) {
     );
   };
 
+  function removeIndex(array, element) {
+    const index = array.indexOf(element);
+    array.splice(index, 1);
+  }
+
   const render = async () => {
     news.map((item, i) => {
       items.push(
@@ -533,6 +538,12 @@ function Home(props) {
                               item._id,
                               item.type === 'Comment' && item.postId
                             );
+
+                            if (upvoteIndex.includes(i)) {
+                              removeIndex(upvoteIndex, i);
+                            } else {
+                              upvoteIndex.push(i);
+                            }
                           } else {
                             alert('please signup first');
                             history.push('/signup');
@@ -540,7 +551,9 @@ function Home(props) {
                         }}
                       />
                       <div style={{ alignContent: 'center', marginBottom: 3 }}>
-                        {item.voteTotal}
+                        {item.voteTotal +
+                          Number(upvoteIndex.includes(i) ? 1 : 0) -
+                          Number(downvoteIndex.includes(i) ? 1 : 0)}
                       </div>
                       <ChevronDown
                         color={
@@ -561,6 +574,12 @@ function Home(props) {
                               item._id,
                               item.type === 'Comment' && item.postId
                             );
+
+                            if (downvoteIndex.includes(i)) {
+                              removeIndex(downvoteIndex, i);
+                            } else {
+                              downvoteIndex.push(i);
+                            }
                           } else {
                             alert('please signup first');
                             history.push('/signup');
