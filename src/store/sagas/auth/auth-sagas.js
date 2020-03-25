@@ -329,7 +329,13 @@ export function* loadNewsfeed(action) {
       token
     );
 
+    // return if no more
+    if (!data.data) {
+      return;
+    }
     const { newsfeed, currentPage, pages, numOfResults } = data.data;
+
+    console.log('newsfeed: ', newsfeed);
 
     yield put({
       type: ACTION_TYPE.LOAD_NEWSFEED_SUCCESS,

@@ -319,7 +319,7 @@ const loadNewsFeed = async (env, page, location = undefined, feed, token) => {
         data = await Axios.get(`${ROUTES[env].giving_tree}/home/${page}`, headers);
         break;
       case 'Discover':
-        data = await Axios.get(`${ROUTES[env].giving_tree}/discover/${page}?${query}`, headers);
+        data = await Axios.get(`${ROUTES[env].giving_tree}/discover/${page}?${query}`);
         break;
       case 'Newest':
         data = await Axios.get(`${ROUTES[env].giving_tree}/newest/${page}`, headers);
@@ -337,6 +337,7 @@ const loadNewsFeed = async (env, page, location = undefined, feed, token) => {
         data = await Axios.get(`${ROUTES[env].giving_tree}/global/${page}`, headers);
         break;
       default:
+        data = await Axios.get(`${ROUTES[env].giving_tree}/discover/${page}?${query}`);
         break;
     }
 
