@@ -236,7 +236,7 @@ function Home(props) {
     return text;
   };
 
-  refresh();
+  // refresh();
 
   // keep track of which sub comment/post is overflowing div
   let overFlowList = {};
