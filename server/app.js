@@ -33,7 +33,8 @@ const db = mongoose
   .connect(dbUrl, {
     useNewUrlParser: true,
     autoIndex: false,
-    useFindAndModify: false
+    useFindAndModify: false,
+    useUnifiedTopology: true
   })
   .then(
     () => {
@@ -108,6 +109,6 @@ function split(thing) {
   }
 }
 
-app._router.stack.forEach(print.bind(null, []));
+// app._router.stack.forEach(print.bind(null, []));
 
 module.exports = app;
