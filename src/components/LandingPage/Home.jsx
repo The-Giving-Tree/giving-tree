@@ -539,8 +539,16 @@ function Home(props) {
                               item.type === 'Comment' && item.postId
                             );
 
+                            if (downvoteIndex.includes(i)) {
+                              removeIndex(downvoteIndex, i);
+                            }
+
                             if (upvoteIndex.includes(i)) {
                               removeIndex(upvoteIndex, i);
+
+                              if (item.upVotes.includes(user._id)) {
+                                downvoteIndex.push(i);
+                              }
                             } else {
                               upvoteIndex.push(i);
                             }
@@ -575,8 +583,16 @@ function Home(props) {
                               item.type === 'Comment' && item.postId
                             );
 
+                            if (upvoteIndex.includes(i)) {
+                              removeIndex(upvoteIndex, i);
+                            }
+
                             if (downvoteIndex.includes(i)) {
                               removeIndex(downvoteIndex, i);
+
+                              if (item.downVotes.includes(user._id)) {
+                                upvotesIndex.push(i);
+                              }
                             } else {
                               downvoteIndex.push(i);
                             }
