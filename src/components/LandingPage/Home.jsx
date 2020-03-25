@@ -526,13 +526,18 @@ function Home(props) {
                         style={{ alignContent: 'center', cursor: 'pointer' }}
                         onMouseEnter={() => mouseOverUp(i)}
                         onMouseLeave={() => mouseOutUp(i)}
-                        onClick={async () =>
-                          await handleUpClick(
-                            item.type,
-                            item._id,
-                            item.type === 'Comment' && item.postId
-                          )
-                        }
+                        onClick={async () => {
+                          if (authenticated) {
+                            await handleUpClick(
+                              item.type,
+                              item._id,
+                              item.type === 'Comment' && item.postId
+                            );
+                          } else {
+                            alert('please signup first');
+                            history.push('/signup');
+                          }
+                        }}
                       />
                       <div style={{ alignContent: 'center', marginBottom: 3 }}>
                         {item.voteTotal}
@@ -549,13 +554,18 @@ function Home(props) {
                         style={{ alignContent: 'center', cursor: 'pointer' }}
                         onMouseEnter={() => mouseOverDown(i)}
                         onMouseLeave={() => mouseOutDown(i)}
-                        onClick={async () =>
-                          await handleDownClick(
-                            item.type,
-                            item._id,
-                            item.type === 'Comment' && item.postId
-                          )
-                        }
+                        onClick={async () => {
+                          if (authenticated) {
+                            await handleDownClick(
+                              item.type,
+                              item._id,
+                              item.type === 'Comment' && item.postId
+                            );
+                          } else {
+                            alert('please signup first');
+                            history.push('/signup');
+                          }
+                        }}
                       />
                     </div>
                     <div
