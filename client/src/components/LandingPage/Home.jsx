@@ -1220,7 +1220,8 @@ function Home(props) {
         <table className="table-auto" style={{ width: '100%', background: '#F5F5F5' }}>
           <thead>
             <tr>
-              <th className="px-4 py-2 text-right" style={{ width: '25%' }}>
+              {/* START OF SIDEBAR */}
+              <th className="px-4 py-2 text-right" style={{ width: '25%', borderWidth: 1, borderColor: 'red' }}>
                 <div
                   style={{
                     width: '100%',
@@ -1238,12 +1239,12 @@ function Home(props) {
                       className="flex items-center"
                       onClick={() => (window.location = '/home/discover')}
                     >
+                      Discover Tasks
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/search.svg"
                         alt="search"
-                        style={{ height: 20, marginRight: 10 }}
+                        style={{ height: 20, marginLeft: 10 }}
                       />
-                      Discover Tasks
                     </div>
                   </div>
                   <div
@@ -1264,12 +1265,12 @@ function Home(props) {
                         }
                       }}
                     >
+                      Your Tasks
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/care.svg"
                         alt="care"
-                        style={{ height: 20, marginRight: 10 }}
+                        style={{ height: 20, marginLeft: 10 }}
                       />
-                      Your Tasks
                     </div>
                   </div>
                   <div
@@ -1290,12 +1291,12 @@ function Home(props) {
                         }
                       }}
                     >
+                      Completed Tasks
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/gift.svg"
                         alt="gift"
-                        style={{ height: 20, marginRight: 10 }}
+                        style={{ height: 20, marginLeft: 10 }}
                       />
-                      Completed Tasks
                     </div>
                   </div>
                   <div
@@ -1309,12 +1310,12 @@ function Home(props) {
                       className="flex items-center"
                       onClick={() => (window.location = '/home/global')}
                     >
+                      Global Tasks
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/global.svg"
                         alt="global"
-                        style={{ height: 20, marginRight: 10 }}
+                        style={{ height: 20, marginLeft: 10 }}
                       />
-                      Global Tasks
                     </div>
                   </div>
                   <div
@@ -1333,7 +1334,7 @@ function Home(props) {
                         }
                       }}
                     >
-                      ❤️Ask for Help
+                      Ask for Help<span style={{ marginLeft: 10 }}>❤️</span>
                     </div>
                   </div>
                 </div>
