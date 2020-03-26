@@ -511,14 +511,16 @@ function Navigation(props) {
                   content={({ close }) => notificationMenu(close)}
                 >
                   <div style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}>
-                    {notifications.length > 0 && (
-                      <NotificationBadge count={notifications.length} effect={Effect.SCALE} />
-                    )}
                     <img
                       src="https://d1ppmvgsdgdlyy.cloudfront.net/notification.svg"
                       alt="notification"
                       style={{ width: 25, marginRight: 25 }}
                     />
+                    {notifications.length > 0 && (
+                      <div style={{ marginLeft: -10, marginRight: 20 }}>
+                        <NotificationBadge count={notifications.length} effect={Effect.SCALE} />
+                      </div>
+                    )}
                   </div>
                 </StatefulPopover>
                 <StatefulPopover
