@@ -97,7 +97,7 @@ function Signup(props) {
   };
 
   if (authenticated) {
-    return <Redirect to="/" />;
+    return <Redirect to="/home/discover" />; // better home page redirect experience
   } else {
     return (
       <div style={{ width: '100%' }}>
