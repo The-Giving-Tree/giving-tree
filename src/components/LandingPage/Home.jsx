@@ -849,7 +849,7 @@ function Home(props) {
 
                           if (
                             window.confirm(
-                              'Please confirm your committment to helping this person - by saying yes, other people cannot claim this request.'
+                              'Please confirm your commitment to helping this person - by saying yes, other people cannot claim this request.'
                             )
                           ) {
                             claimTaskDispatch({
