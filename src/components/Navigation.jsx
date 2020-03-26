@@ -72,13 +72,12 @@ function Navigation(props) {
   const history = useHistory();
 
   // Detects when mouse is clicked outside of search results
-  const [clickedOutsideDropdown, setClickedOutsideDropdown] = React.useState(false);
-  console.log(clickedOutsideDropdown);
+  const [shouldCloseSearchResults, setShouldCloseSearchResults] = React.useState(false);
   function useOutsideDetector(ref) {
     React.useEffect(() => {
       function handleClickOutside(event) {
         if (ref.current && !ref.current.contains(event.target)) {
-          setClickedOutsideDropdown(true);
+          setShouldCloseSearchResults(true);
         }
       }
 
@@ -158,7 +157,6 @@ function Navigation(props) {
   function close() {
     setIsOpen(false);
   }
-
 
   const handleFeedback = () => {
     const msg = {
@@ -424,72 +422,70 @@ function Navigation(props) {
                 onChange={e => {
                   console.log('e: ', e.target.value);
                   searchDispatch({ env: process.env.NODE_ENV, query: e.target.value });
-                  setClickedOutsideDropdown(false);
+                  setShouldCloseSearchResults(false);
                 }}
               />
-              {searchResults.length !== 0 &&
-                !clickedOutsideDropdown && (
-                  <OutsideDetector>
-                    <StatefulMenu
-                      overrides={{
-                        List: {
-                          style: {
-                            outline: 'none',
-                            padding: '0px',
-                            position: 'absolute',
-                            width: `${center ? '576px' : '200px'}`,
-                            maxHeight: '400px',
-                            borderBottomLeftRadius: '25px',
-                            borderBottomRightRadius: '25px',
-                            zIndex: 100
-                          }
-                        },
-                        ProfileImgContainer: { style: { height: '32px', width: '32px' } },
-                        ListItemProfile: { style: { display: 'flex', alignContent: 'center' } },
-                        ProfileLabelsContainer: {
-                          style: { display: 'flex', alignContent: 'center' }
-                        },
-                        Option: {
-                          component: OptionProfile,
-                          props: {
-                            getProfileItemLabels: ({ username, label, name, title, type }) => ({
-                              title: username,
-                              subtitle: (
-                                <div style={{ display: 'inline' }}>
-                                  ...{sanitize(label.split('<em>')[0])}
-                                  <div style={{ backgroundColor: '#FFFF00', display: 'inline' }}>
-                                    {sanitize(label.split('<em>')[1].split('</em>')[0])}
-                                  </div>
-                                  {sanitize(label.split('</em>')[1])}...
-                                </div>
-                              ),
-                              body: type === 'post' ? title : name
-                            }),
-                            getProfileItemImg: item => item.image,
-                            getProfileItemImgText: item => (
-                              <div>
-                                {item.label
-                                  .replace('<em>', '<strong>')
-                                  .replace('</em>', '</strong>')}
-                              </div>
-                            )
-                          }
+              {searchResults.length !== 0 && !shouldCloseSearchResults && (
+                <OutsideDetector>
+                  <StatefulMenu
+                    overrides={{
+                      List: {
+                        style: {
+                          outline: 'none',
+                          padding: '0px',
+                          position: 'absolute',
+                          width: `${center ? '576px' : '200px'}`,
+                          maxHeight: '400px',
+                          borderBottomLeftRadius: '25px',
+                          borderBottomRightRadius: '25px',
+                          zIndex: 100
                         }
-                      }}
-                      items={searchResults}
-                      noResultsMsg="No Results"
-                      onItemSelect={item => {
-                        history.push(
-                          item.item.type === 'post'
-                            ? `/post/${item.item._id}`
-                            : item.item.type === 'user'
-                            ? `/user/${item.item.username}`
-                            : ''
-                        );
-                      }}
-                    />
-                  </OutsideDetector>
-                )}
+                      },
+                      ProfileImgContainer: { style: { height: '32px', width: '32px' } },
+                      ListItemProfile: { style: { display: 'flex', alignContent: 'center' } },
+                      ProfileLabelsContainer: {
+                        style: { display: 'flex', alignContent: 'center' }
+                      },
+                      Option: {
+                        component: OptionProfile,
+                        props: {
+                          getProfileItemLabels: ({ username, label, name, title, type }) => ({
+                            title: username,
+                            subtitle: (
+                              <div style={{ display: 'inline' }}>
+                                ...{sanitize(label.split('<em>')[0])}
+                                <div style={{ backgroundColor: '#FFFF00', display: 'inline' }}>
+                                  {sanitize(label.split('<em>')[1].split('</em>')[0])}
+                                </div>
+                                {sanitize(label.split('</em>')[1])}...
+                              </div>
+                            ),
+                            body: type === 'post' ? title : name
+                          }),
+                          getProfileItemImg: item => item.image,
+                          getProfileItemImgText: item => (
+                            <div>
+                              {item.label.replace('<em>', '<strong>').replace('</em>', '</strong>')}
+                            </div>
+                          )
+                        }
+                      }
+                    }}
+                    items={searchResults}
+                    noResultsMsg="No Results"
+                    onItemSelect={item => {
+                      setShouldCloseSearchResults(true);
+                      history.push(
+                        item.item.type === 'post'
+                          ? `/post/${item.item._id}`
+                          : item.item.type === 'user'
+                          ? `/user/${item.item.username}`
+                          : ''
+                      );
+                    }}
+                  />
+                </OutsideDetector>
+              )}
             </NavigationItem>
           </NavigationList>
           <NavigationList $align={ALIGN.right}>
