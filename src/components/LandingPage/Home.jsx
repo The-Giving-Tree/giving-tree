@@ -33,6 +33,8 @@ import { Upload, ChevronUp, ChevronDown } from 'baseui/icon';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Tag, VARIANT, KIND } from 'baseui/tag';
 import moment from 'moment';
+import Sidebar from '../universal/Sidebar';
+import NewsfeedTable from './NewsfeedTable';
 
 import { withImages, withRichText, Element, Leaf, MarkButton, BlockButton } from '../submitHelper';
 
@@ -362,7 +364,7 @@ function Home(props) {
     );
   };
 
-  const render = async () => {
+  const generateNewsfeedItems = async () => {
     news.map((item, i) => {
       items.push(
         <div className="item" key={i}>
@@ -1002,7 +1004,7 @@ function Home(props) {
     });
   };
 
-  render();
+  generateNewsfeedItems();
 
   React.useEffect(() => {
     loadNewsfeedHelper();
@@ -1114,10 +1116,10 @@ function Home(props) {
   return (
     <div
       style={{
-        width: '100%',
         background: `url(https://d1ppmvgsdgdlyy.cloudfront.net/pangaea.jpg)`,
         backgroundPosition: '50% 50%',
-        backgroundSize: 'cover'
+        backgroundSize: 'cover',
+        width: '100%'
       }}
     >
       <Navigation searchBarPosition="center" />
@@ -1181,434 +1183,7 @@ function Home(props) {
           </ModalButton>
         </ModalFooter>
       </Modal>
-      {props.match.url !== '/' ? (
-        <table className="table-auto" style={{ width: '100%', background: '#F5F5F5' }}>
-          <thead>
-            <tr>
-              {/* START OF SIDEBAR */}
-              <th className="px-4 py-2 text-right" style={{ width: '25%', borderWidth: 1, borderColor: 'red' }}>
-                <div
-                  style={{
-                    width: '100%',
-                    height: `calc(100vh - 70px + ${60 + items.length * 60}px)`
-                  }}
-                >
-                  <div
-                    className={`text-black transition duration-150 hover:text-indigo-600 ${props
-                      .match.url === '/home/discover' &&
-                      'text-indigo-600'} flex items-center justify-between`}
-                    style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 30 }}
-                  >
-                    <span />
-                    <div
-                      className="flex items-center"
-                      onClick={() => (window.location = '/home/discover')}
-                    >
-                      Discover Tasks
-                      <img
-                        src="https://d1ppmvgsdgdlyy.cloudfront.net/search.svg"
-                        alt="search"
-                        style={{ height: 20, marginLeft: 10 }}
-                      />
-                    </div>
-                  </div>
-                  <div
-                    className={`text-black transition duration-150 hover:text-indigo-600 ${props
-                      .match.url === '/home/ongoing' &&
-                      'text-indigo-600'} flex items-center justify-between`}
-                    style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
-                  >
-                    <span />
-                    <div
-                      className="flex items-center"
-                      onClick={() => {
-                        if (authenticated) {
-                          window.location = '/home/ongoing';
-                        } else {
-                          alert('please login/signup before you can view your tasks');
-                          history.push('/signup');
-                        }
-                      }}
-                    >
-                      Your Tasks
-                      <img
-                        src="https://d1ppmvgsdgdlyy.cloudfront.net/care.svg"
-                        alt="care"
-                        style={{ height: 20, marginLeft: 10 }}
-                      />
-                    </div>
-                  </div>
-                  <div
-                    className={`text-black transition duration-150 hover:text-indigo-600 ${props
-                      .match.url === '/home/completed' &&
-                      'text-indigo-600'} flex items-center justify-between`}
-                    style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
-                  >
-                    <span />
-                    <div
-                      className="flex items-center"
-                      onClick={() => {
-                        if (authenticated) {
-                          window.location = '/home/completed';
-                        } else {
-                          alert('please login/signup before you can view your completed tasks');
-                          history.push('/signup');
-                        }
-                      }}
-                    >
-                      Completed Tasks
-                      <img
-                        src="https://d1ppmvgsdgdlyy.cloudfront.net/gift.svg"
-                        alt="gift"
-                        style={{ height: 20, marginLeft: 10 }}
-                      />
-                    </div>
-                  </div>
-                  <div
-                    className={`text-black transition duration-150 hover:text-indigo-600 ${props
-                      .match.url === '/home/global' &&
-                      'text-indigo-600'} flex items-center justify-between`}
-                    style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
-                  >
-                    <span />
-                    <div
-                      className="flex items-center"
-                      onClick={() => (window.location = '/home/global')}
-                    >
-                      Global Tasks
-                      <img
-                        src="https://d1ppmvgsdgdlyy.cloudfront.net/global.svg"
-                        alt="global"
-                        style={{ height: 20, marginLeft: 10 }}
-                      />
-                    </div>
-                  </div>
-                  <div
-                    className={`text-black transition duration-150 hover:text-indigo-600 flex items-center justify-between`}
-                    style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
-                  >
-                    <span />
-                    <div
-                      className="flex items-center"
-                      onClick={() => {
-                        if (authenticated) {
-                          history.push('/submit');
-                        } else {
-                          alert('please login/signup before you can ask for help');
-                          history.push('/signup');
-                        }
-                      }}
-                    >
-                      Ask for Help<span style={{ marginLeft: 10 }}>❤️</span>
-                    </div>
-                  </div>
-                </div>
-              </th>
-              <th className="px-4 py-2" style={{ width: '50%' }}>
-                <div
-                  style={{
-                    width: '100%',
-                    height: `calc(100vh - 70px + ${60 + items.length * 60}px)`
-                  }}
-                >
-                  <div style={{ paddingLeft: 24, paddingRight: 24, paddingTop: 30 }}>
-                    {props.match.url === '/home/discover' && (
-                      <Card
-                        overrides={{
-                          Root: {
-                            style: {
-                              width: '100%',
-                              margin: '0 auto'
-                            }
-                          },
-                          Body: {
-                            style: {
-                              margin: '-15px'
-                            }
-                          }
-                        }}
-                      >
-                        <div
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignContent: 'center'
-                          }}
-                        >
-                          <StatefulPopover
-                            placement={PLACEMENT.bottomLeft}
-                            content={({ close }) => (
-                              <StatefulMenu
-                                items={[
-                                  // {
-                                  //   key: 'Home'
-                                  // },
-                                  // {
-                                  //   key: 'Popular'
-                                  // },
-                                  // {
-                                  //   key: 'Newest'
-                                  // },
-                                  {
-                                    label: 'Food',
-                                    key: 'Food'
-                                  },
-                                  {
-                                    label: 'Supplies',
-                                    key: 'Supplies'
-                                  }
-                                  // {
-                                  //   label: 'Transportation (coming soon)',
-                                  //   key: 'Transportation'
-                                  // },
-                                  // {
-                                  //   key: 'Completed Tasks'
-                                  // },
-                                  // {
-                                  //   key: 'Global Tasks'
-                                  // }
-                                ]}
-                                onItemSelect={item => {
-                                  close();
-                                  switch (item.item.key) {
-                                    case 'Home':
-                                      history.push('/');
-                                      break;
-                                    case 'Food':
-                                      selectMenuDispatch({ selectMenu: 'Food', title: newPost });
-                                      break;
-                                    case 'Supplies':
-                                      selectMenuDispatch({
-                                        selectMenu: 'Supplies',
-                                        title: newPost
-                                      });
-                                      break;
-                                    case 'Transportation':
-                                      alert('coming soon');
-                                      break;
-                                    case 'Custom Address':
-                                      setOpenCustomAddress(true);
-                                      break;
-                                    case 'Popular':
-                                      history.push('/home/popular');
-                                      break;
-                                    case 'Newest':
-                                      history.push('/home/newest');
-                                      break;
-                                    case 'Discover':
-                                      history.push('/home/discover');
-                                      break;
-                                    case 'Your Tasks':
-                                      history.push('/home/ongoing');
-                                      break;
-                                    case 'Completed Tasks':
-                                      history.push('/home/completed');
-                                      break;
-                                    case 'Global Tasks':
-                                      history.push('/home/global');
-                                      break;
-                                    default:
-                                      break;
-                                  }
-                                }}
-                                overrides={{
-                                  List: { style: { outline: 'none' } }
-                                }}
-                              />
-                            )}
-                          >
-                            <Button
-                              size={'compact'}
-                              kind={'secondary'}
-                              style={{ marginRight: 0, outline: 'none' }}
-                              endEnhancer={() => <ChevronDown size={24} />}
-                            >
-                              {selectMenu}
-                            </Button>
-                          </StatefulPopover>
-                          <Input
-                            value={newPost}
-                            onChange={event => {
-                              setNewPost(event.currentTarget.value);
-                              selectMenuDispatch({ selectMenu, title: event.currentTarget.value });
-                            }}
-                            placeholder="Ask for help / assistance"
-                          />
-                          <Button
-                            onClick={() => history.push('/submit')}
-                            kind="secondary"
-                            style={{ marginLeft: 10, fontSize: 14 }}
-                            shape={SHAPE.square}
-                          >
-                            Submit
-                          </Button>
-                        </div>
-                      </Card>
-                    )}
-                    {openCustomAddress ? (
-                      <div className="flex justify-between items-center mt-2">
-                        <PlacesAutocomplete
-                          value={address}
-                          onChange={address => setAddress(address)}
-                          onSelect={address => {
-                            setAddress(address);
-                            geocodeByAddress(address)
-                              .then(results => getLatLng(results[0]))
-                              .then(latLng => {
-                                setLatLng(latLng);
-                              })
-                              .catch(error => console.error('Error', error));
-                          }}
-                        >
-                          {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-                            <div style={{ width: '100%' }}>
-                              <input
-                                {...getInputProps({
-                                  placeholder: 'Enter an address',
-                                  className: 'location-search-input'
-                                })}
-                                value={address}
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none"
-                                id="address"
-                                type="text"
-                              />
-                              <div className="autocomplete-dropdown-container">
-                                {loading && <div>Loading...</div>}
-                                {suggestions.map(suggestion => {
-                                  const className = suggestion.active
-                                    ? 'suggestion-item--active'
-                                    : 'suggestion-item';
-                                  // inline style for demonstration purpose
-                                  const style = suggestion.active
-                                    ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                                    : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                                  return (
-                                    <div
-                                      {...getSuggestionItemProps(suggestion, {
-                                        className,
-                                        style
-                                      })}
-                                    >
-                                      <span>{suggestion.description}</span>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            </div>
-                          )}
-                        </PlacesAutocomplete>
-                        <div className="flex items-center">
-                          <button
-                            className={`ml-4 bg-gray-500 hover:bg-gray-700 text-white py-2 px-3 rounded focus:outline-none focus:shadow-outline`}
-                            type="button"
-                            onClick={() => {
-                              let lat = props.coords && props.coords.latitude;
-                              let lng = props.coords && props.coords.longitude;
-                              setLatLng({ lat, lng });
-                              setOpenCustomAddress(false);
-                              setAddress('');
-                            }}
-                          >
-                            Cancel
-                          </button>
-                          <button
-                            className={`ml-4 bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-3 rounded focus:outline-none focus:shadow-outline`}
-                            type="button"
-                            onClick={() => {
-                              if (address) {
-                                setOpenCustomAddress(false);
-                              } else {
-                                alert('you must enter an address to save!');
-                              }
-                            }}
-                          >
-                            Save
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      props.match.url === '/home/discover' && (
-                        <div className={`text-left mt-2`} style={{ fontSize: 12 }}>
-                          {address ||
-                            `Your current location (${props.coords &&
-                              props.coords.latitude}, ${props.coords && props.coords.longitude})`}
-                          &nbsp;
-                          <span
-                            onClick={() => setOpenCustomAddress(true)}
-                            className="text-indigo-600 hover:text-indigo-800 transition duration-150"
-                            style={{ cursor: 'pointer' }}
-                          >
-                            (edit)
-                          </span>
-                        </div>
-                      )
-                    )}
-                    <InfiniteScroll
-                      pageStart={1}
-                      loadMore={() => setUpdateNews(true)}
-                      hasMore={hasMoreItems}
-                      loader={
-                        <StyledBody
-                          className="loader"
-                          style={{ textAlign: 'center', padding: 10, marginTop: 20 }}
-                          key={0}
-                        >
-                          Loading...
-                        </StyledBody>
-                      }
-                    >
-                      {items}
-                    </InfiniteScroll>
-                    <div style={{ paddingTop: 30 }} />
-                    {items.length === 0 && newsfeedSuccess && !newsfeedLoading && (
-                      <StyledBody style={{ margin: '0 auto', textAlign: 'center', marginTop: 20 }}>
-                        {id === 'discover' && (
-                          <div className="mb-2">
-                            No requests yet -{' '}
-                            <span
-                              className={`text-indigo-600 hover:text-indigo-800 transition duration-150`}
-                              style={{ cursor: 'pointer' }}
-                              onClick={() => {
-                                selectMenuDispatch({ selectMenu: '' }); // to show base page
-                                history.push('/submit');
-                              }}
-                            >
-                              create a new request if you need help
-                            </span>
-                          </div>
-                        )}
-                        {id === 'ongoing' && (
-                          <div className="mb-2">You don't have any ongoing tasks yet</div>
-                        )}
-                        {id === 'completed' && (
-                          <div className="mb-2">You haven't completed any tasks yet</div>
-                        )}
-                        {id === 'global' && (
-                          <div className="mb-2">
-                            No requests globally completed yet! Invite your friends and start
-                            spreading the love
-                          </div>
-                        )}
-                        {id !== 'discover' && (
-                          <div
-                            onClick={() => {
-                              window.location = '/home/discover';
-                            }}
-                            style={{ cursor: 'pointer', color: 'rgb(25, 103, 210)' }}
-                          >
-                            Click here to discover topics and people to follow.
-                          </div>
-                        )}
-                      </StyledBody>
-                    )}
-                  </div>
-                </div>
-              </th>
-              <th className="px-4 py-2" style={{ width: '25%' }}></th>
-            </tr>
-          </thead>
-        </table>
-      ) : (
+      {props.match.url === '/' && (
         <div
           style={{
             background: 'url(https://d1ppmvgsdgdlyy.cloudfront.net/eat2.jpg)',
@@ -1631,6 +1206,27 @@ function Home(props) {
           >
             see leaderboard
           </button>
+        </div>
+      )}
+      {props.match.url !== '/' && (
+        <div
+          className="sidebar-table-container"
+          style={{
+            backgroundColor: '#F5F5F5',
+            display: 'flex',
+            flexDirection: 'row'
+          }}
+        >
+          <Sidebar {...props} />
+          <NewsfeedTable
+            {...props}
+            address={address}
+            hasMoreItems={hasMoreItems}
+            items={items}
+            newPost={newPost}
+            openCustomAddress={openCustomAddress}
+            setUpdateNews={setUpdateNews}
+          />
         </div>
       )}
     </div>
