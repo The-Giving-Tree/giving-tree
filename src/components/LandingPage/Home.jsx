@@ -1222,6 +1222,7 @@ function Home(props) {
             {...props}
             address={address}
             hasMoreItems={hasMoreItems}
+            id={id}
             items={items}
             newPost={newPost}
             openCustomAddress={openCustomAddress}

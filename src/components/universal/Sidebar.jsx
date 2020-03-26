@@ -63,10 +63,6 @@ function Sidebar(props) {
     <th
       className="px-4 py-2 text-right"
       style={{
-        borderColor: 'lightblue',
-        borderStyle: 'solid',
-        borderWidth: 1,
-        // TODO: remove the 3 styles above
         alignItems: 'start',
         display: 'flex',
         width: '25%',
@@ -75,7 +71,6 @@ function Sidebar(props) {
       <div
         style={{
           width: '100%',
-          // height: `calc(100vh - 70px + ${60 + items.length * 60}px)`,
         }}
       >
         <div
