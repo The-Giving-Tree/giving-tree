@@ -965,7 +965,30 @@ function Home(props) {
                     </div>
                   )}
                   {props.match.url === '/home/ongoing' && (
-                    <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
+                    <div className='flex justify-between items-center' style={{ marginLeft: 15 }}>
+                      <Button
+                          style={{ outline: 'none', padding: 0, marginRight: 15 }}
+                          kind="minimal"
+                          size={SIZE.compact}
+                          onClick={() => {
+                            if (
+                              window.confirm(
+                                'Are you sure you want cancel?'
+                              )
+                            ) {
+                              unclaimTaskDispatch({
+                                env: process.env.NODE_ENV,
+                                postId: item._id
+                              });
+
+                              // window.location = ('/home/ongoing'); // refresh
+                            }
+                          }}
+                        >
+                          <div style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}>
+                            cancel
+                          </div>
+                      </Button>
                       <StatefulPopover
                         placement={PLACEMENT.bottomLeft}
                         content={({ close }) => (
