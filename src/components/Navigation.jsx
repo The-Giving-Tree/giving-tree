@@ -420,7 +420,7 @@ function Navigation(props) {
                     }
                   }
                 }}
-                placeholder={center ? 'HELLO' : 'Search'}
+                placeholder={center ? 'Search Giving Tree' : 'Search'}
                 onChange={e => {
                   console.log('e: ', e.target.value);
                   searchDispatch({ env: process.env.NODE_ENV, query: e.target.value });
