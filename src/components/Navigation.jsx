@@ -402,15 +402,15 @@ function Navigation(props) {
           </NavigationList>
           {!center && <NavigationList $align={ALIGN.center} />}
           <NavigationList $align={center ? ALIGN.center : ALIGN.right}>
-            <NavigationItem style={{ width: `${center ? '576px' : '200px'}` }}>
+            <NavigationItem style={{ width: `${center ? '600px' : '200px'}` }}>
               <Input
                 overrides={{
                   Before,
                   After,
                   InputContainer: {
                     style: {
-                      borderBottomLeftRadius: searchResults.length !== 0 ? '0px' : '25px',
-                      borderBottomRightRadius: searchResults.length !== 0 ? '0px' : '25px',
+                      borderBottomLeftRadius: searchResults.length !== 0 && !shouldCloseSearchResults ? '0px' : '25px',
+                      borderBottomRightRadius: searchResults.length !== 0 && !shouldCloseSearchResults ? '0px' : '25px',
                       borderTopLeftRadius: '25px',
                       borderTopRightRadius: '25px',
                       border: '0',
