@@ -92,6 +92,8 @@ function Home(props) {
   const [newsfeedSort, setSort] = React.useState('');
   const [upvoteIndex, setUpvoteIndex] = React.useState([]);
   const [downvoteIndex, setDownvoteIndex] = React.useState([]);
+  const [initialUpvotes, setInitialUpvotes] = React.useState([]);
+  const [initialDownvotes, setInitialDownvotes] = React.useState([]);
   const [upvoteHover, setUpvoteHover] = React.useState([]);
   const [downvoteHover, setDownvoteHover] = React.useState([]);
   const [hasMoreItems, setHasMoreItems] = React.useState(true);
@@ -224,9 +226,6 @@ function Home(props) {
 
     return 'https://d1ppmvgsdgdlyy.cloudfront.net/user/' + hash;
   }
-
-  const renderElement = React.useCallback(props => <Element {...props} />, []);
-  const renderLeaf = React.useCallback(props => <Leaf {...props} />, []);
 
   const shorten = (length, text) => {
     if (text) {
@@ -367,8 +366,16 @@ function Home(props) {
     array.splice(index, 1);
   }
 
-  const render = async () => {
+  const render = () => {
     news.map((item, i) => {
+      if (item.downVotes.includes(user._id) && !downvoteIndex.includes(i) && !initialDownvotes.includes(i)) {
+        initialDownvotes.push(i);
+        downvoteIndex.push(i);
+      }
+      if (item.upVotes.includes(user._id) && !upvoteIndex.includes(i) && !initialUpvotes.includes(i)) {
+        initialUpvotes.push(i);
+        upvoteIndex.push(i);
+      }
       items.push(
         <div className="item" key={i}>
           <Card
@@ -522,11 +529,7 @@ function Home(props) {
                       <ChevronUp
                         size={25}
                         color={
-                          (item.upVotes.includes(user._id) && !downvoteIndex.includes(i)) ||
-                          upvoteIndex.includes(i) ||
-                          upvoteHover.includes(i)
-                            ? '#268bd2'
-                            : '#aaa'
+                          upvoteIndex.includes(i) || upvoteHover.includes(i) ? '#268bd2' : '#aaa'
                         }
                         style={{ alignContent: 'center', cursor: 'pointer' }}
                         onMouseEnter={() => mouseOverUp(i)}
@@ -545,10 +548,6 @@ function Home(props) {
 
                             if (upvoteIndex.includes(i)) {
                               removeIndex(upvoteIndex, i);
-
-                              if (item.upVotes.includes(user._id)) {
-                                downvoteIndex.push(i);
-                              }
                             } else {
                               upvoteIndex.push(i);
                             }
@@ -560,30 +559,12 @@ function Home(props) {
                       />
                       <div style={{ alignContent: 'center', marginBottom: 3 }}>
                         {item.voteTotal +
-                          Number(
-                            upvoteIndex.includes(i)
-                              ? item.downVotes.includes(user._id)
-                                ? 2
-                                : item.upVotes.includes(user._id)
-                                ? -1
-                                : 1
-                              : 0
-                          ) -
-                          Number(
-                            downvoteIndex.includes(i)
-                              ? item.downVotes.includes(user._id)
-                                ? -1
-                                : item.upVotes.includes(user._id)
-                                ? 2
-                                : 1
-                              : 0
-                          )}
+                          Number(upvoteIndex.includes(i) ? item.upVotes.includes(user._id) ? 0 : 1 : item.upVotes.includes(user._id) ? -1 : 0) -
+                          Number(downvoteIndex.includes(i) ? item.downVotes.includes(user._id) ? 0 : 1 : item.downVotes.includes(user._id) ? -1 : 0)}
                       </div>
                       <ChevronDown
                         color={
-                          (item.downVotes.includes(user._id) && !upvoteIndex.includes(i)) ||
-                          downvoteIndex.includes(i) ||
-                          downvoteHover.includes(i)
+                          downvoteIndex.includes(i) || downvoteHover.includes(i)
                             ? '#268bd2'
                             : '#aaa'
                         }
@@ -605,10 +586,6 @@ function Home(props) {
 
                             if (downvoteIndex.includes(i)) {
                               removeIndex(downvoteIndex, i);
-
-                              if (item.downVotes.includes(user._id)) {
-                                upvotesIndex.push(i);
-                              }
                             } else {
                               downvoteIndex.push(i);
                             }
@@ -1015,7 +992,6 @@ function Home(props) {
                               close();
                               switch (i.item.key) {
                                 case 'manual':
-                                  console.log('item: ', item);
                                   setPostId(item._id);
                                   setOpenFoodTracking(true);
                                   break;
@@ -1079,7 +1055,6 @@ function Home(props) {
     if (pages === '') {
     } else if (Number(currentPage) < Number(pages)) {
       let nextPage = Number(currentPage) + 1;
-      console.log('here');
 
       await loadNewsfeedDispatch({
         env: process.env.NODE_ENV,
@@ -1166,7 +1141,6 @@ function Home(props) {
     <div
       style={{
         width: '100%',
-        background: `url(https://d1ppmvgsdgdlyy.cloudfront.net/pangaea.jpg)`,
         backgroundPosition: '50% 50%',
         backgroundSize: 'cover'
       }}
@@ -1671,7 +1645,7 @@ function Home(props) {
           <Block>
             <h1 style={{ fontSize: 100, color: 'white' }}>We're one big family</h1>
             <h2 style={{ color: 'rgb(247, 242, 233)', fontSize: 40 }}>
-              Request help or give to neighbors in need.
+              We are waves of the same sea, leaves of the same tree, flowers of the same garden.
             </h2>
           </Block>
           <button
