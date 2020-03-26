@@ -522,7 +522,7 @@ function Home(props) {
                       <ChevronUp
                         size={25}
                         color={
-                          item.upVotes.includes(user._id) ||
+                          (item.upVotes.includes(user._id) && !downvoteIndex.includes(i)) ||
                           upvoteIndex.includes(i) ||
                           upvoteHover.includes(i)
                             ? '#268bd2'
@@ -560,12 +560,28 @@ function Home(props) {
                       />
                       <div style={{ alignContent: 'center', marginBottom: 3 }}>
                         {item.voteTotal +
-                          Number(upvoteIndex.includes(i) ? 1 : 0) -
-                          Number(downvoteIndex.includes(i) ? 1 : 0)}
+                          Number(
+                            upvoteIndex.includes(i)
+                              ? item.downVotes.includes(user._id)
+                                ? 2
+                                : item.upVotes.includes(user._id)
+                                ? -1
+                                : 1
+                              : 0
+                          ) -
+                          Number(
+                            downvoteIndex.includes(i)
+                              ? item.downVotes.includes(user._id)
+                                ? -1
+                                : item.upVotes.includes(user._id)
+                                ? 2
+                                : 1
+                              : 0
+                          )}
                       </div>
                       <ChevronDown
                         color={
-                          item.downVotes.includes(user._id) ||
+                          (item.downVotes.includes(user._id) && !upvoteIndex.includes(i)) ||
                           downvoteIndex.includes(i) ||
                           downvoteHover.includes(i)
                             ? '#268bd2'

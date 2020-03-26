@@ -409,8 +409,10 @@ function Navigation(props) {
                   After,
                   InputContainer: {
                     style: {
-                      borderBottomLeftRadius: searchResults.length !== 0 && !shouldCloseSearchResults ? '0px' : '25px',
-                      borderBottomRightRadius: searchResults.length !== 0 && !shouldCloseSearchResults ? '0px' : '25px',
+                      borderBottomLeftRadius:
+                        searchResults.length !== 0 && !shouldCloseSearchResults ? '0px' : '25px',
+                      borderBottomRightRadius:
+                        searchResults.length !== 0 && !shouldCloseSearchResults ? '0px' : '25px',
                       borderTopLeftRadius: '25px',
                       borderTopRightRadius: '25px',
                       border: '0',
