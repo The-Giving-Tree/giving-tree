@@ -36,7 +36,6 @@ import { subscribeToNotifications } from '../utils/socket';
 import moment from 'moment';
 
 import { connect } from 'react-redux';
-
 function Before() {
   const [css, theme] = useStyletron();
   return (
@@ -71,6 +70,35 @@ function Navigation(props) {
   require('dotenv').config();
 
   const history = useHistory();
+
+  // Detects when mouse is clicked outside of search results
+  const [shouldCloseSearchResults, setShouldCloseSearchResults] = React.useState(false);
+  function useOutsideDetector(ref) {
+    React.useEffect(() => {
+      function handleClickOutside(event) {
+        if (ref.current && !ref.current.contains(event.target)) {
+          setShouldCloseSearchResults(true);
+        }
+      }
+
+      // Bind the event listener
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        // Unbind the event listener on clean up
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }, [ref]);
+  }
+
+  /**
+   * Wrapper around search results that detects when mouse clicks outside
+   */
+  function OutsideDetector(props) {
+    const wrapperRef = React.useRef(null);
+    useOutsideDetector(wrapperRef);
+
+    return <div ref={wrapperRef}>{props.children}</div>;
+  }
 
   function After() {
     const [css, theme] = useStyletron();
@@ -394,63 +422,69 @@ function Navigation(props) {
                 onChange={e => {
                   console.log('e: ', e.target.value);
                   searchDispatch({ env: process.env.NODE_ENV, query: e.target.value });
+                  setShouldCloseSearchResults(false);
                 }}
               />
-              {searchResults.length !== 0 && (
-                <StatefulMenu
-                  overrides={{
-                    List: {
-                      style: {
-                        outline: 'none',
-                        padding: '0px',
-                        position: 'absolute',
-                        width: `${center ? '576px' : '200px'}`,
-                        maxHeight: '400px',
-                        borderBottomLeftRadius: '25px',
-                        borderBottomRightRadius: '25px',
-                        zIndex: 100
-                      }
-                    },
-                    ProfileImgContainer: { style: { height: '32px', width: '32px' } },
-                    ListItemProfile: { style: { display: 'flex', alignContent: 'center' } },
-                    ProfileLabelsContainer: { style: { display: 'flex', alignContent: 'center' } },
-                    Option: {
-                      component: OptionProfile,
-                      props: {
-                        getProfileItemLabels: ({ username, label, name, title, type }) => ({
-                          title: username,
-                          subtitle: (
-                            <div style={{ display: 'inline' }}>
-                              ...{sanitize(label.split('<em>')[0])}
-                              <div style={{ backgroundColor: '#FFFF00', display: 'inline' }}>
-                                {sanitize(label.split('<em>')[1].split('</em>')[0])}
+              {searchResults.length !== 0 && !shouldCloseSearchResults && (
+                <OutsideDetector>
+                  <StatefulMenu
+                    overrides={{
+                      List: {
+                        style: {
+                          outline: 'none',
+                          padding: '0px',
+                          position: 'absolute',
+                          width: `${center ? '576px' : '200px'}`,
+                          maxHeight: '400px',
+                          borderBottomLeftRadius: '25px',
+                          borderBottomRightRadius: '25px',
+                          zIndex: 100
+                        }
+                      },
+                      ProfileImgContainer: { style: { height: '32px', width: '32px' } },
+                      ListItemProfile: { style: { display: 'flex', alignContent: 'center' } },
+                      ProfileLabelsContainer: {
+                        style: { display: 'flex', alignContent: 'center' }
+                      },
+                      Option: {
+                        component: OptionProfile,
+                        props: {
+                          getProfileItemLabels: ({ username, label, name, title, type }) => ({
+                            title: username,
+                            subtitle: (
+                              <div style={{ display: 'inline' }}>
+                                ...{sanitize(label.split('<em>')[0])}
+                                <div style={{ backgroundColor: '#FFFF00', display: 'inline' }}>
+                                  {sanitize(label.split('<em>')[1].split('</em>')[0])}
+                                </div>
+                                {sanitize(label.split('</em>')[1])}...
                               </div>
-                              {sanitize(label.split('</em>')[1])}...
+                            ),
+                            body: type === 'post' ? title : name
+                          }),
+                          getProfileItemImg: item => item.image,
+                          getProfileItemImgText: item => (
+                            <div>
+                              {item.label.replace('<em>', '<strong>').replace('</em>', '</strong>')}
                             </div>
-                          ),
-                          body: type === 'post' ? title : name
-                        }),
-                        getProfileItemImg: item => item.image,
-                        getProfileItemImgText: item => (
-                          <div>
-                            {item.label.replace('<em>', '<strong>').replace('</em>', '</strong>')}
-                          </div>
-                        )
+                          )
+                        }
                       }
-                    }
-                  }}
-                  items={searchResults}
-                  noResultsMsg="No Results"
-                  onItemSelect={item => {
-                    history.push(
-                      item.item.type === 'post'
-                        ? `/post/${item.item._id}`
-                        : item.item.type === 'user'
-                        ? `/user/${item.item.username}`
-                        : ''
-                    );
-                  }}
-                />
+                    }}
+                    items={searchResults}
+                    noResultsMsg="No Results"
+                    onItemSelect={item => {
+                      setShouldCloseSearchResults(true);
+                      history.push(
+                        item.item.type === 'post'
+                          ? `/post/${item.item._id}`
+                          : item.item.type === 'user'
+                          ? `/user/${item.item.username}`
+                          : ''
+                      );
+                    }}
+                  />
+                </OutsideDetector>
               )}
             </NavigationItem>
           </NavigationList>
