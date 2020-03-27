@@ -499,7 +499,7 @@ function Home(props) {
         upvoteIndex.push(i);
       }
       items.push(
-        <div className='shadow' className="item" key={i}>
+        <div className="shadow" className="item" key={i}>
           <Expand key={i} open={openCard(item._id)}>
             <Card
               overrides={{

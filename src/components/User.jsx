@@ -140,7 +140,7 @@ function User(props) {
   let followers = foundUser.followers ? foundUser.followers.length : '0';
   let following = foundUser.following ? foundUser.following.length : '0';
   let createdAt = foundUser.createdAt ? foundUser.createdAt : '';
-  let karma = foundUser.karma ? foundUser.karma : '';
+  let karma = Number(foundUser.karma) >= 0 ? foundUser.karma : '';
   let name = foundUser.name;
   let username = foundUser.username;
   let verified = foundUser.verified;
@@ -685,6 +685,11 @@ function User(props) {
     downvoteFeed = <StyledBody>{foundUser.username} hasn't downvoted anything yet!</StyledBody>;
   }
 
+  function dayAge(date) {
+    var diff = new Date() - new Date(date);
+    return diff / 1000 / (60 * 60 * 24);
+  }
+
   return (
     <div style={{ width: '100%' }}>
       <Navigation searchBarPosition="center" />
@@ -975,6 +980,23 @@ function User(props) {
                               <strong>verified</strong>
                             </div>
                           </div>
+                        )}
+                        {createdAt ? (
+                          dayAge(createdAt) < 5 ? (
+                            <img
+                              src="https://d1ppmvgsdgdlyy.cloudfront.net/new2.svg"
+                              alt="new"
+                              style={{ height: 20, marginLeft: 5 }}
+                            />
+                          ) : (
+                            <img
+                              src="https://d1ppmvgsdgdlyy.cloudfront.net/star.svg"
+                              alt="new"
+                              style={{ height: 20, marginLeft: 5 }}
+                            />
+                          )
+                        ) : (
+                          ''
                         )}
                       </div>
                       <div>
