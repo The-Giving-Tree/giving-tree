@@ -106,6 +106,11 @@ export const selectMenu = payload => ({
   payload
 });
 
+export const getLeaderboard = payload => ({
+  type: ACTION_TYPE.GET_LEADERBOARD_REQUESTED,
+  payload
+});
+
 export const getCurrentUser = payload => ({
   type: ACTION_TYPE.GET_CURRENT_USER_REQUESTED,
   payload
