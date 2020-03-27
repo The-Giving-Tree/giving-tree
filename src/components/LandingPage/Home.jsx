@@ -1832,7 +1832,7 @@ function Home(props) {
                           Most helpful people in your area
                         </div>
                       </div>
-                      <button class="bg-transparent hover:bg-gray-600 text-gray-700 font-semibold hover:text-white py-1 px-3 border border-gray-600 hover:border-transparent transition duration-150 rounded">
+                      <button class="bg-transparent hover:bg-gray-600 text-gray-700 font-semibold hover:text-white py-1 px-3 border border-gray-600 hover:border-transparent transition duration-150 rounded" style={{ outline: 'none' }}>
                         <span style={{ fontSize: 12 }}>See full list</span>
                       </button>
                     </div>
