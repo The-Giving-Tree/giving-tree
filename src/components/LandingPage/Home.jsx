@@ -499,7 +499,7 @@ function Home(props) {
         upvoteIndex.push(i);
       }
       items.push(
-        <div className="item" key={i}>
+        <div className='shadow' className="item" key={i}>
           <Expand key={i} open={openCard(item._id)}>
             <Card
               overrides={{
@@ -510,7 +510,8 @@ function Home(props) {
                       props.match.url === '/home/discover' ? '10px' : '0px'
                     } auto 0px auto`,
                     maxHeight: '800px',
-                    overflow: 'hidden'
+                    overflow: 'hidden',
+                    boxShadow: 'none'
                   }
                 },
                 Body: {
@@ -1539,137 +1540,144 @@ function Home(props) {
                 >
                   <div style={{ paddingLeft: 24, paddingRight: 24, paddingTop: 30 }}>
                     {props.match.url === '/home/discover' && (
-                      <Card
-                        overrides={{
-                          Root: {
-                            style: {
-                              width: '100%',
-                              margin: '0 auto'
+                      <div>
+                        <Card
+                          elavation={0}
+                          overrides={{
+                            Root: {
+                              style: {
+                                width: '100%',
+                                margin: '0 auto',
+                                boxShadow: 'none'
+                              }
+                            },
+                            Body: {
+                              style: {
+                                margin: '-15px'
+                              }
                             }
-                          },
-                          Body: {
-                            style: {
-                              margin: '-15px'
-                            }
-                          }
-                        }}
-                      >
-                        <div
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignContent: 'center'
                           }}
                         >
-                          <StatefulPopover
-                            placement={PLACEMENT.bottomLeft}
-                            content={({ close }) => (
-                              <StatefulMenu
-                                items={[
-                                  // {
-                                  //   key: 'Home'
-                                  // },
-                                  // {
-                                  //   key: 'Popular'
-                                  // },
-                                  // {
-                                  //   key: 'Newest'
-                                  // },
-                                  {
-                                    label: 'Food',
-                                    key: 'Food'
-                                  },
-                                  {
-                                    label: 'Supplies',
-                                    key: 'Supplies'
-                                  }
-                                  // {
-                                  //   label: 'Transportation (coming soon)',
-                                  //   key: 'Transportation'
-                                  // },
-                                  // {
-                                  //   key: 'Completed Tasks'
-                                  // },
-                                  // {
-                                  //   key: 'Global Tasks'
-                                  // }
-                                ]}
-                                onItemSelect={item => {
-                                  close();
-                                  switch (item.item.key) {
-                                    case 'Home':
-                                      history.push('/home/discover');
-                                      break;
-                                    case 'Food':
-                                      selectMenuDispatch({ selectMenu: 'Food', title: newPost });
-                                      break;
-                                    case 'Supplies':
-                                      selectMenuDispatch({
-                                        selectMenu: 'Supplies',
-                                        title: newPost
-                                      });
-                                      break;
-                                    case 'Transportation':
-                                      alert('coming soon');
-                                      break;
-                                    case 'Custom Address':
-                                      setOpenCustomAddress(true);
-                                      break;
-                                    case 'Popular':
-                                      history.push('/home/popular');
-                                      break;
-                                    case 'Newest':
-                                      history.push('/home/newest');
-                                      break;
-                                    case 'Discover':
-                                      history.push('/home/discover');
-                                      break;
-                                    case 'Your Tasks':
-                                      history.push('/home/ongoing');
-                                      break;
-                                    case 'Completed Tasks':
-                                      history.push('/home/completed');
-                                      break;
-                                    case 'Global Tasks':
-                                      history.push('/home/global');
-                                      break;
-                                    default:
-                                      break;
-                                  }
-                                }}
-                                overrides={{
-                                  List: { style: { outline: 'none' } }
-                                }}
-                              />
-                            )}
-                          >
-                            <Button
-                              size={'compact'}
-                              kind={'secondary'}
-                              style={{ marginRight: 0, outline: 'none' }}
-                              endEnhancer={() => <ChevronDown size={24} />}
-                            >
-                              {selectMenu}
-                            </Button>
-                          </StatefulPopover>
-                          <Input
-                            value={newPost}
-                            onChange={event => {
-                              setNewPost(event.currentTarget.value);
-                              selectMenuDispatch({ selectMenu, title: event.currentTarget.value });
+                          <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignContent: 'center'
                             }}
-                            placeholder="Ask for help / assistance"
-                          />
-                          <Button
-                            onClick={() => history.push('/submit')}
-                            kind="secondary"
-                            style={{ marginLeft: 10, fontSize: 14 }}
-                            shape={SHAPE.square}
                           >
-                            Submit
-                          </Button>
-                        </div>
-                      </Card>
+                            <StatefulPopover
+                              placement={PLACEMENT.bottomLeft}
+                              content={({ close }) => (
+                                <StatefulMenu
+                                  items={[
+                                    // {
+                                    //   key: 'Home'
+                                    // },
+                                    // {
+                                    //   key: 'Popular'
+                                    // },
+                                    // {
+                                    //   key: 'Newest'
+                                    // },
+                                    {
+                                      label: 'Food',
+                                      key: 'Food'
+                                    },
+                                    {
+                                      label: 'Supplies',
+                                      key: 'Supplies'
+                                    }
+                                    // {
+                                    //   label: 'Transportation (coming soon)',
+                                    //   key: 'Transportation'
+                                    // },
+                                    // {
+                                    //   key: 'Completed Tasks'
+                                    // },
+                                    // {
+                                    //   key: 'Global Tasks'
+                                    // }
+                                  ]}
+                                  onItemSelect={item => {
+                                    close();
+                                    switch (item.item.key) {
+                                      case 'Home':
+                                        history.push('/home/discover');
+                                        break;
+                                      case 'Food':
+                                        selectMenuDispatch({ selectMenu: 'Food', title: newPost });
+                                        break;
+                                      case 'Supplies':
+                                        selectMenuDispatch({
+                                          selectMenu: 'Supplies',
+                                          title: newPost
+                                        });
+                                        break;
+                                      case 'Transportation':
+                                        alert('coming soon');
+                                        break;
+                                      case 'Custom Address':
+                                        setOpenCustomAddress(true);
+                                        break;
+                                      case 'Popular':
+                                        history.push('/home/popular');
+                                        break;
+                                      case 'Newest':
+                                        history.push('/home/newest');
+                                        break;
+                                      case 'Discover':
+                                        history.push('/home/discover');
+                                        break;
+                                      case 'Your Tasks':
+                                        history.push('/home/ongoing');
+                                        break;
+                                      case 'Completed Tasks':
+                                        history.push('/home/completed');
+                                        break;
+                                      case 'Global Tasks':
+                                        history.push('/home/global');
+                                        break;
+                                      default:
+                                        break;
+                                    }
+                                  }}
+                                  overrides={{
+                                    List: { style: { outline: 'none' } }
+                                  }}
+                                />
+                              )}
+                            >
+                              <Button
+                                size={'compact'}
+                                kind={'secondary'}
+                                style={{ marginRight: 0, outline: 'none' }}
+                                endEnhancer={() => <ChevronDown size={24} />}
+                              >
+                                {selectMenu}
+                              </Button>
+                            </StatefulPopover>
+                            <Input
+                              value={newPost}
+                              onChange={event => {
+                                setNewPost(event.currentTarget.value);
+                                selectMenuDispatch({
+                                  selectMenu,
+                                  title: event.currentTarget.value
+                                });
+                              }}
+                              placeholder="Ask for help / assistance"
+                            />
+                            <Button
+                              onClick={() => history.push('/submit')}
+                              kind="secondary"
+                              style={{ marginLeft: 10, fontSize: 14 }}
+                              shape={SHAPE.square}
+                            >
+                              Submit
+                            </Button>
+                          </div>
+                        </Card>
+                      </div>
                     )}
                     {openCustomAddress ? (
                       <div className="flex justify-between items-center mt-2">
