@@ -302,8 +302,10 @@ function Home(props) {
                 {Number(i) + 1}
               </td>
               <td
-                className={`px-4 py-2 text-left`}
+                onClick={() => history.push(`/user/${item.username}`)}
+                className={`px-4 py-2 text-left hover:text-indigo-600 transition duration-150`}
                 style={{
+                  cursor: 'pointer',
                   fontSize: '14px',
                   lineHeight: '17px',
                   fontStyle: 'normal',
@@ -1865,13 +1867,22 @@ function Home(props) {
                                 {Number(userRanking) + 1}
                               </td>
                               <td
-                                className={`px-4 py-2 text-left`}
+                                className={`px-4 py-2 text-left hover:text-indigo-600 transition duration-150`}
                                 style={{
+                                  cursor: 'pointer',
                                   fontSize: '14px',
                                   lineHeight: '17px',
                                   fontStyle: 'normal',
                                   fontWeight: 'normal'
                                 }}
+                                onClick={() =>
+                                  history.push(
+                                    `/user/${Number(userRanking) >= 0 &&
+                                      leaderboard &&
+                                      leaderboard[Number(userRanking)] &&
+                                      leaderboard[Number(userRanking)].username}`
+                                  )
+                                }
                               >
                                 {Number(userRanking) >= 0 &&
                                   leaderboard &&
