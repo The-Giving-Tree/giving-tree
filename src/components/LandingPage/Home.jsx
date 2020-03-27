@@ -48,7 +48,8 @@ import {
   downvote,
   addComment,
   addReply,
-  selectMenu
+  selectMenu,
+  getLeaderboard
 } from '../../store/actions/auth/auth-actions';
 
 function Home(props) {
@@ -56,6 +57,7 @@ function Home(props) {
     user,
     getCurrentUserDispatch,
     loadNewsfeedDispatch,
+    getLeaderboardDispatch,
     claimTaskDispatch,
     unclaimTaskDispatch,
     completeTaskDispatch,
@@ -64,6 +66,8 @@ function Home(props) {
     downvoteDispatch,
     newsfeedSuccess,
     newsfeedLoading,
+    userRanking,
+    leaderboard,
     currentPage,
     pages,
     numOfResults,
@@ -238,10 +242,95 @@ function Home(props) {
     return text;
   };
 
-  // refresh();
-
   // keep track of which sub comment/post is overflowing div
   let overFlowList = {};
+
+  const leaderboardJSX = () => {
+    return leaderboard.length === 0 ? (
+      <div className="text-center">no items in leaderboard</div>
+    ) : (
+      <table className="table-auto border-transparent" style={{ width: '99%' }}>
+        <thead>
+          <tr>
+            <th
+              className="px-4 py-2"
+              style={{
+                fontStyle: 'normal',
+                fontWeight: 'bold',
+                fontSize: '12px',
+                lineHeight: '15px'
+              }}
+            >
+              Rank
+            </th>
+            <th
+              className="px-4 py-2 text-left"
+              style={{
+                fontStyle: 'normal',
+                fontWeight: 'bold',
+                fontSize: '12px',
+                lineHeight: '15px'
+              }}
+            >
+              Helper
+            </th>
+            <th
+              className="px-4 py-2"
+              style={{
+                fontStyle: 'normal',
+                fontWeight: 'bold',
+                fontSize: '12px',
+                lineHeight: '15px'
+              }}
+            >
+              Karma
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {leaderboard.map((item, i) => (
+            <tr className={i % 2 === 0 && `bg-white`}>
+              <td
+                className={`px-4 py-2`}
+                style={{
+                  fontSize: '14px',
+                  lineHeight: '17px',
+                  fontStyle: 'normal',
+                  fontWeight: 'normal'
+                }}
+              >
+                {Number(i) + 1}
+              </td>
+              <td
+                onClick={() => history.push(`/user/${item.username}`)}
+                className={`px-4 py-2 text-left hover:text-indigo-600 transition duration-150`}
+                style={{
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  lineHeight: '17px',
+                  fontStyle: 'normal',
+                  fontWeight: 'normal'
+                }}
+              >
+                {item.username}
+              </td>
+              <td
+                className={`px-4 py-2`}
+                style={{
+                  fontSize: '14px',
+                  lineHeight: '17px',
+                  fontStyle: 'normal',
+                  fontWeight: 'normal'
+                }}
+              >
+                {item.karma}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  };
 
   const foodCartJSX = cart => {
     return cart.length === 0 ? (
@@ -257,8 +346,8 @@ function Home(props) {
         <tbody>
           {cart.map((item, i) => (
             <tr className={i % 2 === 0 && `bg-gray-100`}>
-              <td className={`border px-4 py-2`}>{item.name}</td>
-              <td className={`border px-4 py-2`}>{item.quantity}</td>
+              <td className={`px-4 py-2`}>{item.name}</td>
+              <td className={`px-4 py-2`}>{item.quantity}</td>
             </tr>
           ))}
         </tbody>
@@ -368,11 +457,19 @@ function Home(props) {
 
   const render = () => {
     news.map((item, i) => {
-      if (item.downVotes.includes(user._id) && !downvoteIndex.includes(i) && !initialDownvotes.includes(i)) {
+      if (
+        item.downVotes.includes(user._id) &&
+        !downvoteIndex.includes(i) &&
+        !initialDownvotes.includes(i)
+      ) {
         initialDownvotes.push(i);
         downvoteIndex.push(i);
       }
-      if (item.upVotes.includes(user._id) && !upvoteIndex.includes(i) && !initialUpvotes.includes(i)) {
+      if (
+        item.upVotes.includes(user._id) &&
+        !upvoteIndex.includes(i) &&
+        !initialUpvotes.includes(i)
+      ) {
         initialUpvotes.push(i);
         upvoteIndex.push(i);
       }
@@ -559,8 +656,24 @@ function Home(props) {
                       />
                       <div style={{ alignContent: 'center', marginBottom: 3 }}>
                         {item.voteTotal +
-                          Number(upvoteIndex.includes(i) ? item.upVotes.includes(user._id) ? 0 : 1 : item.upVotes.includes(user._id) ? -1 : 0) -
-                          Number(downvoteIndex.includes(i) ? item.downVotes.includes(user._id) ? 0 : 1 : item.downVotes.includes(user._id) ? -1 : 0)}
+                          Number(
+                            upvoteIndex.includes(i)
+                              ? item.upVotes.includes(user._id)
+                                ? 0
+                                : 1
+                              : item.upVotes.includes(user._id)
+                              ? -1
+                              : 0
+                          ) -
+                          Number(
+                            downvoteIndex.includes(i)
+                              ? item.downVotes.includes(user._id)
+                                ? 0
+                                : 1
+                              : item.downVotes.includes(user._id)
+                              ? -1
+                              : 0
+                          )}
                       </div>
                       <ChevronDown
                         color={
@@ -965,29 +1078,25 @@ function Home(props) {
                     </div>
                   )}
                   {props.match.url === '/home/ongoing' && (
-                    <div className='flex justify-between items-center' style={{ marginLeft: 15 }}>
+                    <div className="flex justify-between items-center" style={{ marginLeft: 15 }}>
                       <Button
-                          style={{ outline: 'none', padding: 0, marginRight: 15 }}
-                          kind="minimal"
-                          size={SIZE.compact}
-                          onClick={() => {
-                            if (
-                              window.confirm(
-                                'Are you sure you want cancel?'
-                              )
-                            ) {
-                              unclaimTaskDispatch({
-                                env: process.env.NODE_ENV,
-                                postId: item._id
-                              });
+                        style={{ outline: 'none', padding: 0, marginRight: 15 }}
+                        kind="minimal"
+                        size={SIZE.compact}
+                        onClick={() => {
+                          if (window.confirm('Are you sure you want cancel?')) {
+                            unclaimTaskDispatch({
+                              env: process.env.NODE_ENV,
+                              postId: item._id
+                            });
 
-                              // window.location = ('/home/ongoing'); // refresh
-                            }
-                          }}
-                        >
-                          <div style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}>
-                            cancel
-                          </div>
+                            // window.location = ('/home/ongoing'); // refresh
+                          }
+                        }}
+                      >
+                        <div style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}>
+                          cancel
+                        </div>
                       </Button>
                       <StatefulPopover
                         placement={PLACEMENT.bottomLeft}
@@ -1061,6 +1170,7 @@ function Home(props) {
 
   React.useEffect(() => {
     selectMenuDispatch({ selectMenu: 'Food' });
+    getLeaderboardDispatch({ env: process.env.NODE_ENV, location: 'global' });
   }, []);
 
   React.useEffect(() => {
@@ -1546,7 +1656,7 @@ function Home(props) {
                         </PlacesAutocomplete>
                         <div className="flex items-center">
                           <button
-                            className={`ml-4 bg-gray-500 hover:bg-gray-700 text-white py-2 px-3 rounded focus:outline-none focus:shadow-outline`}
+                            className={`ml-4 bg-gray-500 hover:bg-gray-700 textWhite py-2 px-3 rounded focus:outline-none focus:shadow-outline`}
                             type="button"
                             onClick={() => {
                               let lat = props.coords && props.coords.latitude;
@@ -1651,7 +1761,172 @@ function Home(props) {
                   </div>
                 </div>
               </th>
-              <th className="px-4 py-2" style={{ width: '25%' }}></th>
+              <th className="px-4 py-2" style={{ width: '25%' }}>
+                <div style={{ paddingTop: 30 }}>
+                  <div
+                    style={{
+                      width: '344px'
+                    }}
+                    className="bg-white rounded-lg p-6 shadow-lg"
+                  >
+                    <div className="flex justify-between items-center">
+                      <div className="text-left" style={{ fontWeight: 300 }}>
+                        <div
+                          style={{
+                            fontStyle: 'normal',
+                            fontWeight: 500,
+                            fontSize: 16,
+                            lineHeight: '20px',
+                            color: '#545454',
+                            paddingTop: '0px'
+                          }}
+                          className={`mb-4`}
+                        >
+                          Leaderboard
+                        </div>
+                        <div
+                          style={{
+                            fontStyle: 'normal',
+                            fontWeight: 'normal',
+                            fontSize: 12,
+                            lineHeight: '14px',
+                            color: '#545454'
+                          }}
+                        >
+                          Most helpful people in your area
+                        </div>
+                      </div>
+                      <button class="bg-transparent hover:bg-gray-600 text-gray-700 font-semibold hover:text-white py-1 px-3 border border-gray-600 hover:border-transparent transition duration-150 rounded">
+                        <span style={{ fontSize: 12 }}>See full list</span>
+                      </button>
+                    </div>
+                    <div className="mt-4">{leaderboardJSX()}</div>
+                    {Number(userRanking) >= 0 && (
+                      <div className="mt-4">
+                        <div
+                          style={{
+                            fontStyle: 'normal',
+                            fontWeight: 'normal',
+                            fontSize: 12,
+                            lineHeight: '14px',
+                            color: '#545454'
+                          }}
+                          className="text-left mb-6"
+                        >
+                          Your Ranking
+                        </div>
+                        <table className="table-auto border-transparent" style={{ width: '99%' }}>
+                          <thead>
+                            <tr>
+                              <th
+                                className="px-4 py-2"
+                                style={{
+                                  fontStyle: 'normal',
+                                  fontWeight: 'bold',
+                                  fontSize: '12px',
+                                  lineHeight: '15px'
+                                }}
+                              >
+                                Rank
+                              </th>
+                              <th
+                                className="px-4 py-2 text-left"
+                                style={{
+                                  fontStyle: 'normal',
+                                  fontWeight: 'bold',
+                                  fontSize: '12px',
+                                  lineHeight: '15px'
+                                }}
+                              >
+                                Helper
+                              </th>
+                              <th
+                                className="px-4 py-2"
+                                style={{
+                                  fontStyle: 'normal',
+                                  fontWeight: 'bold',
+                                  fontSize: '12px',
+                                  lineHeight: '15px'
+                                }}
+                              >
+                                Karma
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr className={`bg-white`}>
+                              <td
+                                className={`px-4 py-2`}
+                                style={{
+                                  fontSize: '14px',
+                                  lineHeight: '17px',
+                                  fontStyle: 'normal',
+                                  fontWeight: 'normal'
+                                }}
+                              >
+                                {Number(userRanking) + 1}
+                              </td>
+                              <td
+                                className={`px-4 py-2 text-left hover:text-indigo-600 transition duration-150`}
+                                style={{
+                                  cursor: 'pointer',
+                                  fontSize: '14px',
+                                  lineHeight: '17px',
+                                  fontStyle: 'normal',
+                                  fontWeight: 'normal'
+                                }}
+                                onClick={() =>
+                                  history.push(
+                                    `/user/${Number(userRanking) >= 0 &&
+                                      leaderboard &&
+                                      leaderboard[Number(userRanking)] &&
+                                      leaderboard[Number(userRanking)].username}`
+                                  )
+                                }
+                              >
+                                {Number(userRanking) >= 0 &&
+                                  leaderboard &&
+                                  leaderboard[Number(userRanking)] &&
+                                  leaderboard[Number(userRanking)].username}
+                              </td>
+                              <td
+                                className={`px-4 py-2`}
+                                style={{
+                                  fontSize: '14px',
+                                  lineHeight: '17px',
+                                  fontStyle: 'normal',
+                                  fontWeight: 'normal'
+                                }}
+                              >
+                                {Number(userRanking) >= 0 &&
+                                  leaderboard &&
+                                  leaderboard[Number(userRanking)] &&
+                                  leaderboard[Number(userRanking)].karma}
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <div
+                          style={{
+                            fontStyle: 'normal',
+                            fontWeight: 'normal',
+                            fontSize: 12,
+                            lineHeight: '14px',
+                            color: '#545454',
+                            cursor: 'pointer'
+                          }}
+                          className="text-left mt-4"
+                        >
+                          Want to improve your ranking?{' '}
+                          <span className="font-bold hover:text-indigo-600 transition duration-150">
+                            Find out how
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </th>
             </tr>
           </thead>
         </table>
@@ -1694,7 +1969,8 @@ const mapDispatchToProps = dispatch => ({
   downvoteDispatch: payload => dispatch(downvote(payload)),
   addCommentDispatch: payload => dispatch(addComment(payload)),
   addReplyDispatch: payload => dispatch(addReply(payload)),
-  selectMenuDispatch: payload => dispatch(selectMenu(payload))
+  selectMenuDispatch: payload => dispatch(selectMenu(payload)),
+  getLeaderboardDispatch: payload => dispatch(getLeaderboard(payload))
 });
 
 const mapStateToProps = state => ({
@@ -1706,7 +1982,9 @@ const mapStateToProps = state => ({
   numOfResults: state.auth.numOfResults,
   newsfeedSuccess: state.auth.newsfeedSuccess,
   newsfeedUpdated: state.auth.newsfeedUpdated,
-  newsfeedLoading: state.auth.newsfeedLoading
+  newsfeedLoading: state.auth.newsfeedLoading,
+  userRanking: state.auth.userRanking,
+  leaderboard: state.auth.leaderboard
 });
 
 Home.defaultProps = {};

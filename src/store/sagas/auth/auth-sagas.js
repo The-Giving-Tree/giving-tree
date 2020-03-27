@@ -317,6 +317,34 @@ export function* unfollow(action) {
   }
 }
 
+export function* getLeaderboard(action) {
+  try {
+    const token = localStorage.getItem('giving_tree_jwt');
+    const data = yield call(
+      Api.getLeaderboard,
+      action.payload.env,
+      action.payload.location, // global by default and can specify locations in the future
+      token
+    );
+
+    // return if no more
+    if (!data.data) {
+      return;
+    }
+    const { leaderboard, userRanking } = data.data;
+
+    yield put({
+      type: ACTION_TYPE.GET_LEADERBOARD_SUCCESS,
+      payload: {
+        leaderboard,
+        userRanking
+      }
+    });
+  } catch (error) {
+    yield put({ type: ACTION_TYPE.GET_LEADERBOARD_FAILURE, payload: error });
+  }
+}
+
 export function* loadNewsfeed(action) {
   try {
     const token = localStorage.getItem('giving_tree_jwt');
@@ -334,8 +362,6 @@ export function* loadNewsfeed(action) {
       return;
     }
     const { newsfeed, currentPage, pages, numOfResults } = data.data;
-
-    console.log('newsfeed: ', newsfeed);
 
     yield put({
       type: ACTION_TYPE.LOAD_NEWSFEED_SUCCESS,
@@ -621,4 +647,5 @@ export default function* watchAuthSagas() {
   yield takeLatest(ACTION_TYPE.LOAD_USER_REQUESTED, loadUser);
   yield takeLatest(ACTION_TYPE.LOGOUT_REQUESTED, logout);
   yield takeLatest(ACTION_TYPE.LOGOUT_ALL_REQUESTED, logoutAll);
+  yield takeLatest(ACTION_TYPE.GET_LEADERBOARD_REQUESTED, getLeaderboard);
 }

@@ -52,7 +52,12 @@ const initialState = {
   completeTaskFailure: false,
 
   selectMenu: '',
-  title: ''
+  title: '',
+  leaderboard: [],
+  userRanking: 0,
+  loadLeaderboardLoading: false,
+  loadLeaderboardSuccess: false,
+  loadLeaderboardFailure: false
 };
 
 const auth = (state = initialState, action) => {
@@ -74,6 +79,27 @@ const auth = (state = initialState, action) => {
       return Object.assign({}, state, {
         updatedProfile: false,
         errorMessage: action.payload.message
+      });
+
+    case ACTION_TYPE.GET_LEADERBOARD_REQUESTED:
+      return Object.assign({}, state, {
+        claimTaskLoading: true,
+        claimTaskSuccess: false,
+        claimTaskFailure: false
+      });
+    case ACTION_TYPE.GET_LEADERBOARD_SUCCESS:
+      return Object.assign({}, state, {
+        claimTaskLoading: false,
+        claimTaskSuccess: true,
+        claimTaskFailure: false,
+        leaderboard: action.payload.leaderboard,
+        userRanking: action.payload.userRanking
+      });
+    case ACTION_TYPE.GET_LEADERBOARD_FAILURE:
+      return Object.assign({}, state, {
+        claimTaskLoading: false,
+        claimTaskSuccess: false,
+        claimTaskFailure: true
       });
 
     case ACTION_TYPE.SELECT_MENU_REQUESTED:

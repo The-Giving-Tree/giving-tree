@@ -387,7 +387,7 @@ function Navigation(props) {
             <NavigationItem>
               <div
                 style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}
-                onClick={() => history.push('/home/discover')}
+                onClick={() => window.location = ('/home/discover')}
               >
                 <img
                   src="https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg"
@@ -620,7 +620,7 @@ function Navigation(props) {
             <NavigationItem>
               <div
                 style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}
-                onClick={() => history.push('/home/discover')}
+                onClick={() => window.location = ('/home/discover')}
               >
                 <img
                   src="https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg"
