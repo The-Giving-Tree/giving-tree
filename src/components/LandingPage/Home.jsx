@@ -288,10 +288,10 @@ function Home(props) {
           </tr>
         </thead>
         <tbody>
-          {leaderboard.map((item, i) => (
+          {leaderboard.slice(0, 10).map((item, i) => (
             <tr className={i % 2 === 0 && `bg-white`}>
               <td
-                className={`px-4 py-2`}
+                className={`px-4 py-2 flex justify-center items-center`}
                 style={{
                   fontSize: '14px',
                   lineHeight: '17px',
@@ -299,7 +299,7 @@ function Home(props) {
                   fontWeight: 'normal'
                 }}
               >
-                {Number(i) + 1}
+                {getLeaderboardIcon(Number(i) + 1)}
               </td>
               <td
                 onClick={() => history.push(`/user/${item.username}`)}
@@ -1270,6 +1270,37 @@ function Home(props) {
     }
   }
 
+  const getLeaderboardIcon = place => {
+    switch (place.toString()) {
+      case "1":
+        return (
+          <img
+            src="https://d1ppmvgsdgdlyy.cloudfront.net/1st.svg"
+            alt="1st"
+            style={{ height: 20 }}
+          />
+        );
+      case "2":
+        return (
+          <img
+            src="https://d1ppmvgsdgdlyy.cloudfront.net/2nd.svg"
+            alt="2nd"
+            style={{ height: 20 }}
+          />
+        );
+      case "3":
+        return (
+          <img
+            src="https://d1ppmvgsdgdlyy.cloudfront.net/3rd.svg"
+            alt="3rd"
+            style={{ height: 20 }}
+          />
+        );
+      default:
+        return place;
+    }
+  };
+
   return (
     <div
       style={{
@@ -1762,7 +1793,12 @@ function Home(props) {
                 </div>
               </th>
               <th className="px-4 py-2" style={{ width: '25%' }}>
-                <div style={{ paddingTop: 30 }}>
+                <div
+                  style={{
+                    paddingTop: 30,
+                    height: `calc(100vh - 70px + ${60 + items.length * 60}px)`
+                  }}
+                >
                   <div
                     style={{
                       width: '344px'
@@ -1802,7 +1838,7 @@ function Home(props) {
                     </div>
                     <div className="mt-4">{leaderboardJSX()}</div>
                     {Number(userRanking) >= 0 && (
-                      <div className="mt-4">
+                      <div className="mt-8">
                         <div
                           style={{
                             fontStyle: 'normal',
@@ -1811,7 +1847,7 @@ function Home(props) {
                             lineHeight: '14px',
                             color: '#545454'
                           }}
-                          className="text-left mb-6"
+                          className="text-left mb-4"
                         >
                           Your Ranking
                         </div>
@@ -1856,7 +1892,7 @@ function Home(props) {
                           <tbody>
                             <tr className={`bg-white`}>
                               <td
-                                className={`px-4 py-2`}
+                                className={`px-4 py-2 flex justify-center items-center`}
                                 style={{
                                   fontSize: '14px',
                                   lineHeight: '17px',
@@ -1864,7 +1900,7 @@ function Home(props) {
                                   fontWeight: 'normal'
                                 }}
                               >
-                                {Number(userRanking) + 1}
+                                {getLeaderboardIcon(Number(userRanking) + 1)}
                               </td>
                               <td
                                 className={`px-4 py-2 text-left hover:text-indigo-600 transition duration-150`}
