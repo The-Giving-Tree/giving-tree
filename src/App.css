@@ -11,6 +11,13 @@
   color:    #03a87c;
 }
 
+.side-table-heading {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+}
+
 .profilePic {
   background-position: 50% 50% !important;
   background-size: cover !important;

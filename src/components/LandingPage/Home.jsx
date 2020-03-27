@@ -456,7 +456,7 @@ function Home(props) {
               {item.assignedUser.username}
             </span>
             {Number(item.assignedUser.karma) >= 0 && (
-              <div>&nbsp;&bull; {item.assignedUser.karma} karma</div>
+              <span>&nbsp;&bull; {item.assignedUser.karma} karma</span>
             )}
           </p>
           <p style={{ textTransform: 'lowercase' }}>
@@ -477,7 +477,7 @@ function Home(props) {
       ? !helpArrayDiscover[i]
       : props.match.url === '/home/ongoing'
       ? !helpArrayOngoing[i]
-      : false;
+      : true;
   }
 
   const render = () => {
@@ -1428,7 +1428,7 @@ function Home(props) {
                   >
                     <span />
                     <div
-                      className="flex items-center"
+                      className="flex items-center side-table-heading"
                       onClick={() => (window.location = '/home/discover')}
                     >
                       <img
@@ -1447,7 +1447,7 @@ function Home(props) {
                   >
                     <span />
                     <div
-                      className="flex items-center"
+                      className="flex items-center side-table-heading"
                       onClick={() => {
                         if (authenticated) {
                           window.location = '/home/ongoing';
@@ -1473,7 +1473,7 @@ function Home(props) {
                   >
                     <span />
                     <div
-                      className="flex items-center"
+                      className="flex items-center side-table-heading"
                       onClick={() => {
                         if (authenticated) {
                           window.location = '/home/completed';
@@ -1499,7 +1499,7 @@ function Home(props) {
                   >
                     <span />
                     <div
-                      className="flex items-center"
+                      className="flex items-center side-table-heading"
                       onClick={() => (window.location = '/home/global')}
                     >
                       <img
@@ -1516,7 +1516,7 @@ function Home(props) {
                   >
                     <span />
                     <div
-                      className="flex items-center"
+                      className="flex items-center side-table-heading"
                       onClick={() => {
                         if (authenticated) {
                           history.push('/submit');
