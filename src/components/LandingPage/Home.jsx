@@ -1598,7 +1598,7 @@ function Home(props) {
                                   close();
                                   switch (item.item.key) {
                                     case 'Home':
-                                      history.push('/');
+                                      history.push('/home/discover');
                                       break;
                                     case 'Food':
                                       selectMenuDispatch({ selectMenu: 'Food', title: newPost });
