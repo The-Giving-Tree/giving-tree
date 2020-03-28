@@ -573,27 +573,27 @@ function Home(props) {
                     <div
                       style={{
                         display: 'table-cell',
-                        verticalAlign: 'middle',
+                        maxHeight: 'calc(0.7 * 300px)',
                         tableLayout: 'fixed',
-                        width: '100%',
                         textAlign: 'left',
-                        maxHeight: 'calc(0.7 * 300px)'
+                        verticalAlign: 'middle',
+                        width: '100%',
                       }}
                     >
                       <div
                         style={{
-                          display: 'block',
                           alignContent: 'center',
+                          display: 'block',
                           marginBottom: 3,
-                          marginLeft: 20
+                          marginLeft: 20,
                         }}
                       >
                         <div
                           style={{
-                            textTransform: 'capitalize',
                             fontSize: 20,
                             fontWeight: 600,
-                            marginTop: 5
+                            marginTop: 5,
+                            textTransform: 'capitalize',
                           }}
                         >
                           {item.title}
