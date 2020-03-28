@@ -11,6 +11,7 @@ import Check from 'baseui/icon/check';
 import { Input } from 'baseui/input';
 import { StatefulTooltip } from 'baseui/tooltip';
 import Dropzone from 'react-dropzone';
+
 import { connect } from 'react-redux';
 
 import {
@@ -46,15 +47,12 @@ function User(props) {
   const [activeKey, setActiveKey] = React.useState('0');
   const [editorMode, setEditorMode] = React.useState(false);
   const [summaryText, setSummaryText] = React.useState('');
-  const [setProfilePictureUrl] = React.useState('');
+  const [profilePictureUrl, setProfilePictureUrl] = React.useState('');
   const [image, setImage] = React.useState({ preview: '', raw: '' });
   const [newFileName, setNewFileName] = React.useState('');
   const [header, setHeader] = React.useState({ preview: '', raw: '' });
-  const [setNewHeaderFileName] = React.useState('');
+  const [newHeaderFileName, setNewHeaderFileName] = React.useState('');
   const [hoverPost, setHoverPost] = React.useState([]);
-
-  // const renderElement = React.useCallback(props => <Element {...props} />, []);
-  // const renderLeaf = React.useCallback(props => <Leaf {...props} />, []);
 
   // load on page load
   React.useEffect(() => {
@@ -77,11 +75,6 @@ function User(props) {
       username: id
     });
   }, [props.updatedProfile, id, loadUserDispatch]);
-
-  // const slateEditor = React.useMemo(
-  //   () => withImages(withRichText(withHistory(withReact(createEditor())))),
-  //   []
-  // );
 
   function mouseOut() {
     setFollowHover(false);
@@ -384,7 +377,6 @@ function User(props) {
       </a>
     </StyledBody>
   );
-  
   if (!isEmpty(user) && user.drafts.length > 0) {
     draftElements = user.drafts.map(draft => (
       <div style={{ display: 'flex', alignItems: 'center' }}>
