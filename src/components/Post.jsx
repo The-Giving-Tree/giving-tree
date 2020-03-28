@@ -33,6 +33,7 @@ import moment from 'moment';
 import axios from 'axios';
 import isHotkey from 'is-hotkey';
 import { Modal, ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/modal';
+import Sidebar from './universal/Sidebar';
 import ROUTES from '../utils/routes';
 import {
   ButtonEditor,
@@ -695,105 +696,143 @@ function Post(props) {
   };
 
   return (
-    <div style={{ width: '100%' }}>
+    <div
+      style={{
+        width: '100%',
+      }}
+    >
       <Navigation searchBarPosition="center" />
       {successComment && (
         <Notification
           autoHideDuration={3000}
+          kind="positive"
           overrides={{
             Body: {
               style: {
-                position: 'fixed',
-                margin: '0 auto',
-                bottom: 0,
-                textAlign: 'center',
                 backgroundColor: 'rgb(54, 135, 89)',
-                color: 'white'
+                bottom: 0,
+                color: 'white',
+                margin: '0 auto',
+                position: 'fixed',
+                textAlign: 'center',
               }
             }
           }}
-          kind={'positive'}
         >
           Added comment successfully!
         </Notification>
       )}
-      <div style={{ width: '100%', background: '#F5F5F5', height: 'calc(100vh - 70px)' }}>
-        {errorMessage ? (
+      <div
+        style={{
+          background: '#F5F5F5',
+          height: 'calc(100vh - 70px)',
+          width: '100%',
+        }}
+      >
+        {/* ELEMENT TO SHOW IF THERE IS AN ERROR MESSAGE */}
+        {errorMessage && (
           <div
             style={{
               color: 'rgb(204, 50, 63)',
               margin: '0 auto',
+              paddingTop: 30,
               textAlign: 'center',
-              paddingTop: 30
             }}
           >
             {errorMessage}
           </div>
-        ) : (
-          <React.Fragment>
+        )}
+        {/* SHOW THE ACTUAL POST IF THERE IS NO ERROR MESSAGE */}
+        {!errorMessage && (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+            }}
+          >
             <Drawer
-              isOpen={annotationOpen}
               autoFocus
-              size={'auto'}
-              overrides={{ Backdrop: { style: { opacity: 0 } }, Close: { style: { border: 0 } } }}
+              isOpen={annotationOpen}
               onClose={() => setAnnotationOpen(false)}
+              overrides={{
+                Backdrop: {
+                  style: {
+                    opacity: 0,
+                  },
+                },
+                Close: {
+                  style: {
+                    border: 0
+                  },
+                },
+              }}
+              size="auto"
             >
               <div style={{ width: '17vw' }}>NOTES!</div>
             </Drawer>
-            <div style={{ paddingLeft: 24, paddingRight: 24, paddingTop: 50 }}>
+            <Sidebar {...props} />
+            <div
+              style={{
+                paddingLeft: 24,
+                paddingRight: 24,
+                paddingTop: 30,
+              }}
+            >
               {!isEmpty(foundPost) && (
                 <React.Fragment>
                   <Card
                     overrides={{
                       Root: {
                         style: {
-                          width: '55%',
-                          margin: '10px auto 0px auto'
-                        }
+                          width: '45vw',
+                        },
                       },
                       Body: {
                         style: {
                           margin: '-10px'
-                        }
-                      }
+                        },
+                      },
                     }}
                   >
                     <div
                       style={{
+                        alignContent: 'center',
                         display: 'flex',
                         justifyContent: 'space-between',
-                        alignContent: 'center',
-                        paddingBottom: 15
+                        paddingBottom: 15,
                       }}
                     >
                       <div
                         style={{
-                          textTransform: 'lowercase',
+                          alignItems: 'center',
+                          display: 'flex',
                           fontSize: 12,
                           marginLeft: 5,
-                          display: 'flex',
-                          alignItems: 'center'
+                          textTransform: 'lowercase',
                         }}
                       >
                         <div
                           onClick={() => history.push(`/user/${foundPost.username}`)}
                           style={{
-                            width: 32,
-                            height: 32,
                             background: `url(${generateHash(
                               foundPost.username
                             )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
                             backgroundPosition: '50% 50%',
                             backgroundSize: 'cover',
                             borderRadius: '50%',
+                            cursor: 'pointer',
+                            height: 32,
                             marginRight: 10,
-                            cursor: 'pointer'
+                            width: 32,
                           }}
                         />
                         <div>
                           <strong>
                             <a
-                              style={{ textDecoration: 'none', color: 'rgb(0, 121, 211)' }}
+                              style={{
+                                color: 'rgb(0, 121, 211)',
+                                textDecoration: 'none',
+                              }}
                               href={`/user/${foundPost.username}`}
                             >
                               {foundPost.username}
@@ -808,12 +847,24 @@ function Post(props) {
                         </div>
                         {/* <div style={{ textTransform: 'capitalize' }}>&nbsp;·&nbsp;{0}&nbsp;Views</div> */}
                       </div>
-                      <div style={{ alignContent: 'flex-start' }}>
-                        <div style={{ display: 'flex', alignContent: 'center' }}>
+                      <div
+                        style={{
+                          alignContent: 'flex-start',
+                        }}
+                      >
+                        <div
+                          style={{
+                            alignContent: 'center',
+                            display: 'flex',
+                          }}
+                        >
                           {foundPost.type === 'Post' &&
                             !editor &&
                             foundPost.categories.map(i => (
                               <Tag
+                                closeable={false}
+                                color="#4327F1"
+                                kind={KIND.custom}
                                 overrides={{
                                   Root: {
                                     style: {
@@ -822,33 +873,33 @@ function Post(props) {
                                     }
                                   }
                                 }}
-                                closeable={false}
-                                color="#4327F1"
-                                kind={KIND.custom}
                               >
                                 {i}
                               </Tag>
                             ))}
                           {foundPost.assignedUser && !foundPost.completed && (
                             <Tag
-                              overrides={{
-                                Root: {
-                                  style: {
-                                    marginRight: '15px',
-                                    marginTop: '0px',
-                                    marginBottom: '0px'
-                                  }
-                                }
-                              }}
                               closeable={false}
                               color="#FFA500"
                               kind={KIND.custom}
+                              overrides={{
+                                Root: {
+                                  style: {
+                                    marginBottom: '0px',
+                                    marginRight: '15px',
+                                    marginTop: '0px',
+                                  }
+                                }
+                              }}
                             >
                               In Progress
                             </Tag>
                           )}
                           {foundPost.assignedUser && foundPost.completed && (
                             <Tag
+                              closeable={false}
+                              color="#4BCA81"
+                              kind={KIND.custom}
                               overrides={{
                                 Root: {
                                   style: {
@@ -858,9 +909,6 @@ function Post(props) {
                                   }
                                 }
                               }}
-                              closeable={false}
-                              color="#4BCA81"
-                              kind={KIND.custom}
                             >
                               Completed
                             </Tag>
@@ -870,24 +918,21 @@ function Post(props) {
                             (editor ? (
                               <div>
                                 <Button
-                                  style={{ marginRight: 10, marginLeft: 10, fontSize: '12px' }}
-                                  size={'compact'}
-                                  shape={'pill'}
                                   kind={'secondary'}
                                   onClick={() => setEditor(false)}
+                                  shape={'pill'}
+                                  size={'compact'}
+                                  style={{
+                                    fontSize: '12px',
+                                    marginLeft: 10,
+                                    marginRight: 10,
+                                  }}
                                 >
                                   Cancel
                                 </Button>
                                 <Button
-                                  style={{
-                                    fontSize: '12px',
-                                    backgroundColor: '#03a87c',
-                                    color: 'white'
-                                  }}
-                                  size={SIZE.compact}
-                                  kind={KIND.secondary}
-                                  shape={SHAPE.pill}
                                   disabled={editPostLoading}
+                                  kind={KIND.secondary}
                                   onClick={() => {
                                     editPostDispatch({
                                       env: process.env.NODE_ENV,
@@ -899,6 +944,13 @@ function Post(props) {
 
                                     setEditor(false);
                                   }}
+                                  shape={SHAPE.pill}
+                                  size={SIZE.compact}
+                                  style={{
+                                    backgroundColor: '#03a87c',
+                                    color: 'white',
+                                    fontSize: '12px',
+                                  }}
                                 >
                                   {editPostLoading
                                     ? 'Saving...'
@@ -909,16 +961,16 @@ function Post(props) {
                               </div>
                             ) : (
                               <img
+                                alt="edit"
                                 onClick={() => {
                                   setEditor(true);
                                 }}
                                 src="https://d1ppmvgsdgdlyy.cloudfront.net/edit.svg"
-                                alt="edit"
                                 style={{
+                                  cursor: 'pointer',
+                                  height: 'auto',
                                   marginLeft: 15,
                                   width: 15,
-                                  height: 'auto',
-                                  cursor: 'pointer'
                                 }}
                               />
                             ))}
@@ -1075,7 +1127,7 @@ function Post(props) {
                 </React.Fragment>
               )}
             </div>
-          </React.Fragment>
+          </div>
         )}
       </div>
     </div>

@@ -65,7 +65,7 @@ function Sidebar(props) {
       style={{
         alignItems: 'start',
         display: 'flex',
-        width: '25%',
+        width: '25vw',
       }}
     >
       <div
