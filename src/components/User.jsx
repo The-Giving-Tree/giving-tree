@@ -1,41 +1,16 @@
 import * as React from 'react';
-import {
-  HeaderNavigation,
-  ALIGN,
-  StyledNavigationItem as NavigationItem,
-  StyledNavigationList as NavigationList
-} from 'baseui/header-navigation';
-import { StyledLink as Link } from 'baseui/link';
-import { Button, SHAPE, SIZE } from 'baseui/button';
-import { StatefulSelect as Search, TYPE } from 'baseui/select';
+import { Button, SIZE } from 'baseui/button';
 import Navigation from './Navigation';
 import { Avatar } from 'baseui/avatar';
 import { useHistory } from 'react-router-dom';
-import { Card, StyledBody, StyledAction } from 'baseui/card';
+import { Card, StyledBody } from 'baseui/card';
 import { Block } from 'baseui/block';
-import { H1, H2, H3, H4, H5, H6 } from 'baseui/typography';
 import { Tabs, Tab } from 'baseui/tabs';
-import { Slate, Editable, ReactEditor, withReact, useSlate } from 'slate-react';
-import { Editor, Text, createEditor } from 'slate';
-import { withHistory } from 'slate-history';
 import moment from 'moment';
-import Upload from 'baseui/icon/upload';
 import Check from 'baseui/icon/check';
 import { Input } from 'baseui/input';
 import { StatefulTooltip } from 'baseui/tooltip';
 import Dropzone from 'react-dropzone';
-import {
-  ButtonEditor,
-  Icon,
-  Toolbar,
-  withRichText,
-  withImages,
-  Element,
-  Leaf,
-  MarkButton,
-  BlockButton
-} from './submitHelper';
-
 import { connect } from 'react-redux';
 
 import {
@@ -45,7 +20,6 @@ import {
   unfollow,
   updateProfile
 } from '../store/actions/auth/auth-actions';
-import { findByLabelText } from '@testing-library/dom';
 
 // check to see if valid user or not
 // if valid, show
@@ -55,9 +29,6 @@ function User(props) {
   const {
     user,
     foundUser,
-    errorMessage,
-    foundUserUpdated,
-    getCurrentUserDispatch,
     followDispatch,
     unfollowDispatch,
     foundUserNull,
@@ -75,16 +46,15 @@ function User(props) {
   const [activeKey, setActiveKey] = React.useState('0');
   const [editorMode, setEditorMode] = React.useState(false);
   const [summaryText, setSummaryText] = React.useState('');
-  const [profilePictureUrl, setProfilePictureUrl] = React.useState('');
+  const [setProfilePictureUrl] = React.useState('');
   const [image, setImage] = React.useState({ preview: '', raw: '' });
   const [newFileName, setNewFileName] = React.useState('');
   const [header, setHeader] = React.useState({ preview: '', raw: '' });
-  const [newHeaderFileName, setNewHeaderFileName] = React.useState('');
+  const [setNewHeaderFileName] = React.useState('');
   const [hoverPost, setHoverPost] = React.useState([]);
-  const [errorMessageFile, setErrorMessage] = React.useState('');
 
-  const renderElement = React.useCallback(props => <Element {...props} />, []);
-  const renderLeaf = React.useCallback(props => <Leaf {...props} />, []);
+  // const renderElement = React.useCallback(props => <Element {...props} />, []);
+  // const renderLeaf = React.useCallback(props => <Leaf {...props} />, []);
 
   // load on page load
   React.useEffect(() => {
@@ -108,10 +78,10 @@ function User(props) {
     });
   }, [props.updatedProfile, id, loadUserDispatch]);
 
-  const slateEditor = React.useMemo(
-    () => withImages(withRichText(withHistory(withReact(createEditor())))),
-    []
-  );
+  // const slateEditor = React.useMemo(
+  //   () => withImages(withRichText(withHistory(withReact(createEditor())))),
+  //   []
+  // );
 
   function mouseOut() {
     setFollowHover(false);

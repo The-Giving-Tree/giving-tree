@@ -24,19 +24,17 @@ import Confetti from 'react-confetti';
 import Navigation from './../Navigation';
 import { geolocated } from 'react-geolocated';
 import InfiniteScroll from 'react-infinite-scroller';
-import { Card, StyledBody, StyledAction } from 'baseui/card';
+import { Card, StyledBody } from 'baseui/card';
 import { StatefulPopover, PLACEMENT } from 'baseui/popover';
 import { StatefulMenu } from 'baseui/menu';
-import { Slate, Editable, ReactEditor, withReact, useSlate } from 'slate-react';
-import { Editor, Text, createEditor } from 'slate';
+import { withReact } from 'slate-react';
+import { createEditor } from 'slate';
 import { Input, SIZE } from 'baseui/input';
-import { Upload, ChevronUp, ChevronDown } from 'baseui/icon';
+import { ChevronUp, ChevronDown } from 'baseui/icon';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { Tag, VARIANT, KIND } from 'baseui/tag';
+import { Tag, KIND } from 'baseui/tag';
 import moment from 'moment';
-
-import { withImages, withRichText, Element, Leaf, MarkButton, BlockButton } from '../submitHelper';
-
+import { withImages, withRichText } from '../submitHelper';
 import { connect } from 'react-redux';
 
 import {
@@ -1879,7 +1877,7 @@ function Home(props) {
                         </div>
                       </div>
                       <button
-                        class="bg-transparent hover:bg-gray-600 text-gray-700 font-semibold hover:text-white py-1 px-3 border border-gray-600 hover:border-transparent transition duration-150 rounded"
+                        className="bg-transparent hover:bg-gray-600 text-gray-700 font-semibold hover:text-white py-1 px-3 border border-gray-600 hover:border-transparent transition duration-150 rounded"
                         style={{ outline: 'none' }}
                       >
                         <span style={{ fontSize: 12 }}>See full list</span>

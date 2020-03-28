@@ -9,14 +9,12 @@ import { StyledLink as Link } from 'baseui/link';
 import { Button, SHAPE, SIZE } from 'baseui/button';
 import { useHistory } from 'react-router-dom';
 import { useStyletron } from 'baseui';
-import { TYPE } from 'baseui/select';
 import { Spinner } from 'baseui/spinner';
 import Search from 'baseui/icon/search';
 import { Input } from 'baseui/input';
 import { Select } from 'baseui/select';
 import { StatefulMenu, OptionProfile } from 'baseui/menu';
 import { StatefulPopover, PLACEMENT } from 'baseui/popover';
-import Plus from 'baseui/icon/plus';
 import { RadioGroup, Radio } from 'baseui/radio';
 import ChevronDown from 'baseui/icon/chevron-down';
 import {
@@ -57,10 +55,7 @@ function Navigation(props) {
     searchBarPosition,
     logoutDispatch,
     getCurrentUserDispatch,
-    userLoggedIn,
-    loggingOut,
     addToNotificationsDispatch,
-    updatedUser,
     searchResults,
     searchLoading,
     clearAllNotificationsDispatch,
@@ -148,10 +143,10 @@ function Navigation(props) {
 
   console.log('searchBarPosition: ', searchBarPosition);
 
-  const options = {
-    placeholder: `${center ? 'Search Giving Tree' : 'Search'}`,
-    maxDropdownHeight: '300px'
-  };
+  // const options = {
+  //   placeholder: `${center ? 'Search Giving Tree' : 'Search'}`,
+  //   maxDropdownHeight: '300px'
+  // };
 
   const [isOpen, setIsOpen] = React.useState(false);
   function close() {

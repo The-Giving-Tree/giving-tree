@@ -1,14 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  HeaderNavigation,
-  ALIGN,
-  StyledNavigationItem as NavigationItem,
-  StyledNavigationList as NavigationList
-} from 'baseui/header-navigation';
-import { StyledLink as Link } from 'baseui/link';
-import { Button, SHAPE } from 'baseui/button';
-import { StatefulSelect as Search, TYPE } from 'baseui/select';
 import Navigation from './../Navigation';
 
 class ErrorPage extends Component {

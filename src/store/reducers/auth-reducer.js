@@ -288,9 +288,9 @@ const auth = (state = initialState, action) => {
     case ACTION_TYPE.UPVOTE_SUCCESS:
     case ACTION_TYPE.DOWNVOTE_SUCCESS: {
       let newsfeed = state.newsfeed;
-      for (var i = 0; i < newsfeed.length; i++) {
-        if (newsfeed[i]._id.toString() === action.payload.newItem._id.toString()) {
-          newsfeed[i] = action.payload.newItem;
+      for (var j = 0; j < newsfeed.length; j++) {
+        if (newsfeed[j]._id.toString() === action.payload.newItem._id.toString()) {
+          newsfeed[j] = action.payload.newItem;
         }
       }
       return Object.assign({}, state, {
