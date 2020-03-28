@@ -2016,8 +2016,8 @@ function Home(props) {
       ) : (
         <div
           style={{
-            background: 'url(https://d1ppmvgsdgdlyy.cloudfront.net/eat2.jpg)',
-            backgroundSize: '100%',
+            background: 'url(https://d1ppmvgsdgdlyy.cloudfront.net/eat2.jpg) center center',
+            backgroundSize: 'cover',
             paddingLeft: 24,
             paddingRight: 24,
             height: `calc(100vh - 70px)`
