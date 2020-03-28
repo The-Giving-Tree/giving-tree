@@ -63,7 +63,7 @@ function Submit(props) {
     submitDraftDispatch,
     publishPostDispatch,
     handleSeenSubmitDispatch,
-    getCurrentUserDispatch,
+    getCurrentUserDispatch
   } = props;
 
   const [title, setTitle] = React.useState('');
@@ -99,9 +99,7 @@ function Submit(props) {
     }
 
     updateUser();
-  }, [ props.submitDraftSuccess, props.markSeenSubmitTutorial,
-    getCurrentUserDispatch
-  ]);
+  }, [props.submitDraftSuccess, props.markSeenSubmitTutorial, getCurrentUserDispatch]);
 
   React.useEffect(() => {
     console.log('submitted draft');
@@ -215,7 +213,8 @@ function Submit(props) {
             id="title"
             value={title}
             type="text"
-            placeholder="Title"/>
+            placeholder="Title"
+          />
           <input
             onChange={e => {
               var phoneValue = e.target.value;
@@ -472,7 +471,11 @@ function Submit(props) {
                 }
               }}
             >
-              Your post is now live! <span role="img" aria-label="Smiley emoji with party hat">🥳</span>Check it out{' '}
+              Your post is now live!{' '}
+              <span role="img" aria-label="Smiley emoji with party hat">
+                🥳
+              </span>
+              Check it out{' '}
               <a
                 className="text-indigo-600 hover:text-indigo-800 transition duration-150"
                 style={{ textDecoration: 'none' }}

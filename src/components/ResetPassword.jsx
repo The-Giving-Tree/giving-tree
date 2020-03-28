@@ -49,12 +49,7 @@ const methods = {
  * @returns {Element}
  */
 function ResetPassword(props) {
-  const {
-    errorMessage,
-    loginLoading,
-    confirmPasswordDispatch,
-    confirmPasswordSuccess
-  } = props;
+  const { errorMessage, loginLoading, confirmPasswordDispatch, confirmPasswordSuccess } = props;
   const [password, setPassword] = React.useState('');
   const [validPassword, setValidPassword] = React.useState(false);
 

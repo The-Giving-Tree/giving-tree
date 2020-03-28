@@ -1879,6 +1879,7 @@ function Home(props) {
                       <button
                         className="bg-transparent hover:bg-gray-600 text-gray-700 font-semibold hover:text-white py-1 px-3 border border-gray-600 hover:border-transparent transition duration-150 rounded"
                         style={{ outline: 'none' }}
+                        onClick={() => history.push('/leaderboard')}
                       >
                         <span style={{ fontSize: 12 }}>See full list</span>
                       </button>
@@ -1989,22 +1990,65 @@ function Home(props) {
                             </tr>
                           </tbody>
                         </table>
-                        <div
-                          style={{
-                            fontStyle: 'normal',
-                            fontWeight: 'normal',
-                            fontSize: 12,
-                            lineHeight: '14px',
-                            color: '#545454',
-                            cursor: 'pointer'
+                        <StatefulPopover
+                          placement={PLACEMENT.bottomRight}
+                          overrides={{
+                            Arrow: {
+                              style: {
+                                borderRadius: '50px'
+                              }
+                            },
+                            Body: {
+                              style: {
+                                borderRadius: '50px'
+                              }
+                            },
+                            Root: {
+                              style: {
+                                borderRadius: '50px',
+                                boxShadow: `0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)`
+                              }
+                            }
                           }}
-                          className="text-left mt-4"
+                          content={({ close }) => (
+                            <div className="bg-white rounded-lg p-5 shadow-lg">
+                              <div className="tooltip-heading py-1 mb-1">
+                                How does Karma on Giving Tree work?
+                              </div>
+                              <div className="tooltip-text py-1">
+                                Your karma points accumulate when other users upvote your completed
+                                tasks.
+                              </div>
+                              <div className="tooltip-text py-1">
+                                Upvotes you receive from users with higher karma have a greater
+                                influence on your karma points.
+                              </div>
+                              <div className="tooltip-text py-1">
+                                Have thoughts about our karma system?{' '}
+                                <a className="tooltip-heading" href="mailto:givingtree@gmail.com">
+                                  Email Us
+                                </a>
+                              </div>
+                            </div>
+                          )}
                         >
-                          Want to improve your ranking?{' '}
-                          <span className="font-bold hover:text-indigo-600 transition duration-150">
-                            Find out how
-                          </span>
-                        </div>
+                          <div
+                            style={{
+                              fontStyle: 'normal',
+                              fontWeight: 'normal',
+                              fontSize: 12,
+                              lineHeight: '14px',
+                              color: '#545454',
+                              cursor: 'pointer'
+                            }}
+                            className="text-left mt-4"
+                          >
+                            Want to improve your ranking?{' '}
+                            <span className="font-bold hover:text-indigo-600 transition duration-150">
+                              Find out how
+                            </span>
+                          </div>
+                        </StatefulPopover>
                       </div>
                     )}
                   </div>

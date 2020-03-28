@@ -9,18 +9,14 @@ import { Button } from 'baseui/button';
 import Navigation from './Navigation';
 import { Block } from 'baseui/block';
 import { connect } from 'react-redux';
-import {
-  getCurrentUser, loadUser, logoutAll
-} from '../store/actions/auth/auth-actions';
+import { getCurrentUser, loadUser, logoutAll } from '../store/actions/auth/auth-actions';
 
 // check to see if valid user or not
 // if valid, show
 // if invalid, redirect to error page
 
 function Setting(props) {
-  const {
-    logoutAllDispatch
-  } = props;
+  const { logoutAllDispatch } = props;
   const tab = props.match.params.tab;
   console.log('tab: ', tab);
   if (tab === undefined) {
