@@ -465,10 +465,9 @@ function Submit(props) {
       >
         <Sidebar {...props} />
         <div style={{
-          paddingLeft: 40,
-          paddingRight: 40,
+          paddingLeft: 24,
           paddingTop: 30,
-          width: '50%',
+          width: '46.5vw',
         }}>
           {!isEmpty(user) && !user.seenSubmitTutorial && (
             <Card
