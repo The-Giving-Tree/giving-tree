@@ -384,6 +384,7 @@ function User(props) {
       </a>
     </StyledBody>
   );
+  
   if (!isEmpty(user) && user.drafts.length > 0) {
     draftElements = user.drafts.map(draft => (
       <div style={{ display: 'flex', alignItems: 'center' }}>

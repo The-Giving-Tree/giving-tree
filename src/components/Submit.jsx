@@ -99,7 +99,9 @@ function Submit(props) {
     }
 
     updateUser();
-  }, [props.submitDraftSuccess, props.markSeenSubmitTutorial, getCurrentUserDispatch]);
+  }, [ props.submitDraftSuccess, props.markSeenSubmitTutorial,
+    getCurrentUserDispatch
+  ]);
 
   React.useEffect(() => {
     console.log('submitted draft');
@@ -123,7 +125,18 @@ function Submit(props) {
     }
 
     submitDraft();
-  }, [props.submitDraftSuccess]);
+  }, [
+    props.submitDraftSuccess,
+    address,
+    cart,
+    description,
+    latLng,
+    phoneNumber,
+    publishPostDispatch,
+    selectedRequest,
+    submittedDraft._id,
+    title
+  ]);
 
   useEffect(() => {}, [changedCart]);
 
@@ -202,8 +215,7 @@ function Submit(props) {
             id="title"
             value={title}
             type="text"
-            placeholder="Title"
-          />
+            placeholder="Title"/>
           <input
             onChange={e => {
               var phoneValue = e.target.value;
