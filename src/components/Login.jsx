@@ -11,7 +11,6 @@ import { Redirect } from 'react-router-dom';
 import lifecycle from 'react-pure-lifecycle';
 import { Card, StyledAction } from 'baseui/card';
 import { Input } from 'baseui/input';
-import PropTypes from 'prop-types';
 import { Button, SHAPE } from 'baseui/button';
 import { connect } from 'react-redux';
 import Media from 'react-media';
@@ -36,8 +35,6 @@ function Login(props) {
     errorMessage,
     loginDispatch,
     loginLoading,
-    loginFailure,
-    loginSuccess,
     initiateResetDispatch,
     initiateResetSuccess
   } = props;

@@ -1,5 +1,4 @@
 import ACTION_TYPE from './action-types';
-import { ACCESSIBILITY_TYPE } from 'baseui/popover';
 
 /**
  * @function
