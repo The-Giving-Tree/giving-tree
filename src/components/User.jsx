@@ -101,7 +101,6 @@ function User(props) {
   let following = foundUser.following ? foundUser.following.length : '0';
   let createdAt = foundUser.createdAt ? foundUser.createdAt : '';
   let karma = Number(foundUser.karma) >= 0 ? foundUser.karma : '';
-  let name = foundUser.name;
   let username = foundUser.username;
   let verified = foundUser.verified;
   let summary = foundUser.summary;
@@ -180,14 +179,16 @@ function User(props) {
     setHoverPost(hoverPost.concat(i));
   }
 
-  function generateHash(username = '') {
+  function generateHash(username = '', version = 0) {
     const secret = 'givingtree';
     const hash = require('crypto')
       .createHmac('sha256', secret)
       .update(username.toLowerCase())
       .digest('hex');
 
-    return 'https://d1ppmvgsdgdlyy.cloudfront.net/user/' + hash;
+    const suffix = Number(version) === 0 || !version ? '' : `%3Fver%3D${version}`;
+    const url = `https://d1ppmvgsdgdlyy.cloudfront.net/user/${hash}${suffix}`;
+    return url;
   }
 
   const cartJSX = cart => {

@@ -30,7 +30,6 @@ import {
 } from '../store/actions/auth/auth-actions';
 
 import { editPost } from '../store/actions/user/user-actions';
-import Axios from 'axios';
 
 function Post(props) {
   const {
@@ -57,20 +56,13 @@ function Post(props) {
   let parsed = queryString.parse(window.location.href);
   parsed = Object.values(parsed)[0];
 
-  // const renderElement = React.useCallback(props => <Element {...props} />, []);
-  // const renderLeaf = React.useCallback(props => <Leaf {...props} />, []);
-
   const history = useHistory();
 
   const [title, setTitle] = React.useState('');
   const [updated, setUpdated] = React.useState(true);
-  const [commentObject, setCommentObject] = React.useState({});
-  // const [upvoteIndex, setUpvoteIndex] = React.useState([]);
-  // const [downvoteIndex, setDownvoteIndex] = React.useState([]);
   const [text, setText] = React.useState('');
   const [upvoteHover, setUpvoteHover] = React.useState([]);
   const [downvoteHover, setDownvoteHover] = React.useState([]);
-  // const [hiddenElements, setHidden] = React.useState([]);
   const [replyArray, setReplyArray] = React.useState([]);
   const [editArray, setEditArray] = React.useState([]);
   const [editState, setEditState] = React.useState({});
@@ -194,30 +186,16 @@ function Post(props) {
     setEditArray(editArray.filter(item => item !== id));
   }
 
-  function generateHash(username = '', version) {
+  function generateHash(username = '', version = 0) {
     const secret = 'givingtree';
     const hash = require('crypto')
       .createHmac('sha256', secret)
       .update(username.toLowerCase())
       .digest('hex');
 
-    const suffix = Number(version) === 0  || !version ? '' : `%3Fver%3D${version}`;
+    const suffix = Number(version) === 0 || !version ? '' : `%3Fver%3D${version}`;
     const url = `https://d1ppmvgsdgdlyy.cloudfront.net/user/${hash}${suffix}`;
     return url;
-  }
-
-  function getUserPicture(username = '') {
-    try {
-      // let result = await Axios.get(`https://api.givingtreeproject.org/v1/user/${username}/pictures`);
-      Axios.get(`http://localhost:3000/v1/user/${username}/pictures`).then(result => {
-        let url = result.data.profilePictureUrl;
-        commentObject[username] = url;
-        return <div></div>;
-      }).catch(err) => {
-      console.log('error: ', err);
-      commentObject[username] = 'https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg';
-      return <div></div></div>;
-    }
   }
 
   function generateCommentHTML(childComment, leftIndent) {
@@ -314,13 +292,12 @@ function Post(props) {
                           fontSize: 12
                         }}
                       >
-                        {getUserPicture(childComment.username)}
                         <div
                           onClick={() => history.push(`/user/${childComment.username}`)}
                           style={{
                             width: 32,
                             height: 32,
-                            background: `url(${commentObject[childComment.username] || 'https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg'})`,
+                            background: `url(${generateHash(childComment.username)})`,
                             backgroundPosition: '50% 50%',
                             backgroundSize: 'cover',
                             borderRadius: '50%',
@@ -726,7 +703,8 @@ function Post(props) {
                           onClick={() => history.push(`/user/${foundPost.username}`)}
                           style={{
                             background: `url(${generateHash(
-                              foundPost.username, foundPost.authorId.profileVersion
+                              foundPost.username,
+                              foundPost.authorId.profileVersion
                             )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
                             backgroundPosition: '50% 50%',
                             backgroundSize: 'cover',

@@ -236,14 +236,16 @@ function Home(props) {
     }
   };
 
-  function generateHash(username = '') {
+  function generateHash(username = '', version = 0) {
     const secret = 'givingtree';
     const hash = require('crypto')
       .createHmac('sha256', secret)
       .update(username.toLowerCase())
       .digest('hex');
 
-    return 'https://d1ppmvgsdgdlyy.cloudfront.net/user/' + hash;
+    const suffix = Number(version) === 0 || !version ? '' : `%3Fver%3D${version}`;
+    const url = `https://d1ppmvgsdgdlyy.cloudfront.net/user/${hash}${suffix}`;
+    return url;
   }
 
   const shorten = (length, text) => {
@@ -329,7 +331,9 @@ function Home(props) {
                     fontWeight: 'normal'
                   }}
                 >
-                  {item.username}
+                  <div className="flex items-center">
+                    {item.username}
+                  </div>
                 </td>
                 <td
                   className={`px-4 py-2`}
@@ -552,7 +556,8 @@ function Home(props) {
                           width: 32,
                           height: 32,
                           background: `url(${generateHash(
-                            item.username
+                            item.username,
+                            item.authorId.profileVersion
                           )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
                           backgroundPosition: '50% 50%',
                           backgroundSize: 'cover',
