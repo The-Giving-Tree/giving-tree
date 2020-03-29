@@ -414,7 +414,9 @@ export function* loadUser(action) {
       verified,
       _id,
       profilePictureUrl,
-      headerPictureUrl
+      headerPictureUrl,
+      headerVersion,
+      profileVersion
     } = data.data;
 
     yield put({
@@ -425,6 +427,8 @@ export function* loadUser(action) {
         email,
         karma,
         headerPictureUrl,
+        headerVersion,
+        profileVersion,
         username,
         upvotes,
         downvotes,

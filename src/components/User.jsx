@@ -117,8 +117,8 @@ function User(props) {
       })
     : [];
 
-  let userFollowsProfile = profileFollowersArray.includes(user._id);
-  let userLeadsProfile = profileFollowingArray.includes(user._id);
+  let userFollowsProfile = profileFollowersArray.includes(user._id && user._id.toString());
+  let userLeadsProfile = profileFollowingArray.includes(user._id && user._id.toString());
   let selfProfile = foundUser.username === user.username;
 
   function handleClick() {
@@ -889,75 +889,7 @@ function User(props) {
                       )}
                     </div>
                   )}
-                  {name ? (
-                    <Block>
-                      <h4 style={{ fontSize: 20, textTransform: 'capitalize', marginBottom: 0 }}>
-                        {name}
-                      </h4>
-                      <div
-                        style={{
-                          marginTop: 10,
-                          marginBottom: 0,
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignContent: 'center'
-                        }}
-                      >
-                        <p
-                          className="my-2"
-                          style={{ textTransform: 'lowercase', margin: 'auto 0' }}
-                        >
-                          <strong>{username}</strong>
-                        </p>
-                        {verified && (
-                          <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <img
-                              src="https://d1ppmvgsdgdlyy.cloudfront.net/verified.svg"
-                              alt="verified"
-                              style={{ marginLeft: 14, height: 20 }}
-                            />
-                            <div style={{ marginLeft: 5, fontSize: 12 }}>
-                              <strong>verified</strong>
-                            </div>
-                          </div>
-                        )}
-                        {createdAt ? (
-                          dayAge(createdAt) < 5 ? (
-                            <img
-                              src="https://d1ppmvgsdgdlyy.cloudfront.net/new2.svg"
-                              alt="new"
-                              style={{ height: 20, marginLeft: 5 }}
-                            />
-                          ) : (
-                            <img
-                              src="https://d1ppmvgsdgdlyy.cloudfront.net/star.svg"
-                              alt="new"
-                              style={{ height: 20, marginLeft: 5 }}
-                            />
-                          )
-                        ) : (
-                          ''
-                        )}
-                      </div>
-                      <div>
-                        {userLeadsProfile && (
-                          <div style={{ marginRight: 20, display: 'inline' }}>Follows You</div>
-                        )}
-                        {!selfProfile && (
-                          <Button
-                            style={{
-                              outline: 'none',
-                              backgroundColor: userFollowsProfile
-                                ? followHover
-                                  ? 'Unfollow'
-                                  : 'Following'
-                                : 'Follow'
-                            }}
-                          ></Button>
-                        )}
-                      </div>
-                    </Block>
-                  ) : (
+                  {
                     <div>
                       <div
                         style={{
@@ -1019,7 +951,7 @@ function User(props) {
                         </div>
                       </div>
                     </div>
-                  )}
+                  }
 
                   {createdAt && (
                     <p

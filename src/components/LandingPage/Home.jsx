@@ -1149,7 +1149,10 @@ function Home(props) {
                                 },
                                 {
                                   label: (
-                                    <div className="flex justify-center items-center" style={{ height: 40 }}>
+                                    <div
+                                      className="flex justify-center items-center"
+                                      style={{ height: 40 }}
+                                    >
                                       <img
                                         src="https://d1ppmvgsdgdlyy.cloudfront.net/postmates.svg"
                                         alt="postmates"
@@ -1161,7 +1164,10 @@ function Home(props) {
                                 },
                                 {
                                   label: (
-                                    <div className="flex justify-center items-center" style={{ height: 40 }}>
+                                    <div
+                                      className="flex justify-center items-center"
+                                      style={{ height: 40 }}
+                                    >
                                       <img
                                         src="https://d1ppmvgsdgdlyy.cloudfront.net/ubereats.svg"
                                         alt="ubereats"
@@ -1173,7 +1179,10 @@ function Home(props) {
                                 },
                                 {
                                   label: (
-                                    <div className="flex justify-center items-center" style={{ height: 40 }}>
+                                    <div
+                                      className="flex justify-center items-center"
+                                      style={{ height: 40 }}
+                                    >
                                       <img
                                         src="https://d1ppmvgsdgdlyy.cloudfront.net/amazonfresh.svg"
                                         alt="amazonfresh"
@@ -1185,7 +1194,10 @@ function Home(props) {
                                 },
                                 {
                                   label: (
-                                    <div className="flex justify-center items-center" style={{ height: 40 }}>
+                                    <div
+                                      className="flex justify-center items-center"
+                                      style={{ height: 40 }}
+                                    >
                                       <img
                                         src="https://d1ppmvgsdgdlyy.cloudfront.net/walmart.svg"
                                         alt="walmart"
@@ -1197,7 +1209,10 @@ function Home(props) {
                                 },
                                 {
                                   label: (
-                                    <div className="flex justify-center items-center" style={{ height: 40 }}>
+                                    <div
+                                      className="flex justify-center items-center"
+                                      style={{ height: 40 }}
+                                    >
                                       <img
                                         src="https://d1ppmvgsdgdlyy.cloudfront.net/costco.svg"
                                         alt="costco"
@@ -1209,7 +1224,10 @@ function Home(props) {
                                 },
                                 {
                                   label: (
-                                    <div className="flex justify-center items-center" style={{ height: 40 }}>
+                                    <div
+                                      className="flex justify-center items-center"
+                                      style={{ height: 40 }}
+                                    >
                                       <img
                                         src="https://d1ppmvgsdgdlyy.cloudfront.net/grubhub.svg"
                                         alt="grubhub"
@@ -1221,7 +1239,10 @@ function Home(props) {
                                 },
                                 {
                                   label: (
-                                    <div className="flex justify-center items-center" style={{ height: 40 }}>
+                                    <div
+                                      className="flex justify-center items-center"
+                                      style={{ height: 40 }}
+                                    >
                                       <img
                                         src="https://d1ppmvgsdgdlyy.cloudfront.net/seamless.svg"
                                         alt="seamless"
@@ -1231,9 +1252,12 @@ function Home(props) {
                                   ),
                                   key: 'seamless'
                                 },
-                                                                {
+                                {
                                   label: (
-                                    <div className="flex justify-center items-center" style={{ height: 40 }}>
+                                    <div
+                                      className="flex justify-center items-center"
+                                      style={{ height: 40 }}
+                                    >
                                       <img
                                         src="https://d1ppmvgsdgdlyy.cloudfront.net/doordash.svg"
                                         alt="doordash"
@@ -1245,7 +1269,10 @@ function Home(props) {
                                 },
                                 {
                                   label: (
-                                    <div className="flex justify-center items-center" style={{ height: 40 }}>
+                                    <div
+                                      className="flex justify-center items-center"
+                                      style={{ height: 40 }}
+                                    >
                                       <img
                                         src="https://d1ppmvgsdgdlyy.cloudfront.net/instacart.svg"
                                         alt="instacart"
@@ -1290,12 +1317,12 @@ function Home(props) {
                                   case 'seamless':
                                     window.open('https://www.seamless.com/', '_blank');
                                     break;
-                                    case 'instacart':
-                                      window.open('https://www.instacart.com/', '_blank');
-                                      break;
-                                      case 'doordash':
-                                        window.open('https://www.doordash.com/', '_blank');
-                                        break;
+                                  case 'instacart':
+                                    window.open('https://www.instacart.com/', '_blank');
+                                    break;
+                                  case 'doordash':
+                                    window.open('https://www.doordash.com/', '_blank');
+                                    break;
                                   default:
                                     break;
                                 }
