@@ -102,6 +102,7 @@ function User(props) {
   let createdAt = foundUser.createdAt ? foundUser.createdAt : '';
   let karma = Number(foundUser.karma) >= 0 ? foundUser.karma : '';
   let username = foundUser.username;
+  let name = foundUser.name;
   let verified = foundUser.verified;
   let summary = foundUser.summary;
 
@@ -905,7 +906,7 @@ function User(props) {
                             className="my-2"
                             style={{ textTransform: 'capitalize', margin: 'auto 0', fontSize: 20 }}
                           >
-                            <strong>{username}</strong>
+                            <strong>{username}</strong>{name && ` (${name})`}
                           </p>
                           {verified && (
                             <div style={{ display: 'flex', alignItems: 'center' }}>

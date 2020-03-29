@@ -418,6 +418,7 @@ export function* loadUser(action) {
     const {
       message,
       email,
+      name,
       username,
       posts,
       comments,
@@ -443,6 +444,7 @@ export function* loadUser(action) {
         message,
         email,
         karma,
+        name,
         headerPictureUrl,
         headerVersion,
         profileVersion,
@@ -475,6 +477,7 @@ export function* getCurrentUser(action) {
     const {
       message,
       email,
+      name,
       username,
       profileVersion,
       headerVersion,
@@ -491,6 +494,7 @@ export function* getCurrentUser(action) {
       payload: {
         message,
         email,
+        name,
         username,
         profileVersion,
         headerVersion,
