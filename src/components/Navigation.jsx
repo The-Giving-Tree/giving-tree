@@ -265,7 +265,7 @@ function Navigation(props) {
           }
         }}
         overrides={{
-          List: { style: { width: '400px', outline: 'none', maxHeight: '700px' } },
+          List: { style: { width: '400px', outline: 'none', maxHeight: '550px' } },
           ProfileImgContainer: { style: { height: '32px', width: '32px' } },
           ListItemProfile: { style: { display: 'flex', alignContent: 'center' } },
           ProfileLabelsContainer: { style: { display: 'flex', alignContent: 'center' } },
