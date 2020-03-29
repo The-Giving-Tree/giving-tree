@@ -9,6 +9,7 @@ import {
 import { StyledLink as Link } from 'baseui/link';
 import { useStyletron } from 'baseui';
 import { Block } from 'baseui/block';
+import Media from 'react-media';
 import queryString from 'query-string';
 import Expand from 'react-expand-animated';
 import { Button, SHAPE } from 'baseui/button';
@@ -1524,342 +1525,357 @@ function Home(props) {
   };
 
   return (
-    <div
-      style={{
-        width: '100%',
-        backgroundPosition: '50% 50%',
-        backgroundSize: 'cover'
+    <Media
+      queries={{
+        small: '(max-width: 599px)',
+        medium: '(min-width: 600px) and (max-width: 1199px)',
+        large: '(min-width: 1200px)'
       }}
     >
-      <Navigation searchBarPosition="center" />
-      <Modal
-        overrides={{ Dialog: { style: { borderRadius: '7px' } } }}
-        onClose={() => setOpenFoodTracking(false)}
-        isOpen={openFoodTracking}
-      >
-        <ModalHeader>Add Tracking Details</ModalHeader>
-        <ModalBody>
-          When is the food arriving (ETA)?
-          <Input
-            value={eta}
-            onChange={e => setETA(e.target.value)}
-            placeholder="4/2/2020 @ 6:40pm"
-          />
-          <br />
-          Are you missing anything from the order?
-          <Input
-            value={missing}
-            onChange={e => setOrderMissing(e.target.value)}
-            placeholder="spinach was out"
-          />
-          <br />
-          Who is delivering the food? (name, phone number, etc)
-          <Input
-            value={deliverer}
-            onChange={e => setOrderDeliverer(e.target.value)}
-            placeholder="Barack Obama, 6465335281"
-          />
-          <br />
-        </ModalBody>
-        <ModalFooter>
-          <ModalButton size={'compact'} kind={'minimal'} onClick={() => setOpenFoodTracking(false)}>
-            Cancel
-          </ModalButton>
-          <ModalButton
-            size={'compact'}
-            onClick={() => {
-              if (eta && missing && deliverer && postId) {
-                completeTaskDispatch({
-                  env: process.env.NODE_ENV,
-                  postId: postId,
-                  trackingDetails: {
-                    method: 'manual',
-                    created: new Date(),
-                    dropoffEta: eta,
-                    notes: `${missing}. \n\n${deliverer}`
-                  }
-                });
-
-                showConfetti(false);
-                showConfetti(true);
-                setOpenFoodTracking(false); // close dialog
-              } else {
-                alert('you need to fill all the details');
-              }
-            }}
-          >
-            Submit
-          </ModalButton>
-        </ModalFooter>
-      </Modal>
-      {props.match.url !== '/' ? (
+      {matches => (
         <div
-          className="sidebar-table-container"
           style={{
-            backgroundColor: '#F5F5F5',
-            display: 'flex',
-            flexDirection: 'row'
+            width: '100%',
+            backgroundPosition: '50% 50%',
+            backgroundSize: 'cover'
           }}
         >
-          <Sidebar {...props} />
-          <NewsfeedTable
-            {...props}
-            address={address}
-            hasMoreItems={hasMoreItems}
-            id={id}
-            items={items}
-            resetItems={resetItems}
-            setOpenCustomAddress={setOpenCustomAddress}
-            setAddress={setAddress}
-            setLatLng={setLatLng}
-            latLng={latLng}
-            newPost={newPost}
-            selectMenu={selectMenu}
-            openCustomAddress={openCustomAddress}
-            setUpdateNews={setUpdateNews}
-          />
-          <div
-            style={{
-              paddingTop: 30,
-              height: `calc(100vh - 70px + ${60 + items.length * 60}px)`
-            }}
+          <Navigation searchBarPosition="center" />
+          <Modal
+            overrides={{ Dialog: { style: { borderRadius: '7px' } } }}
+            onClose={() => setOpenFoodTracking(false)}
+            isOpen={openFoodTracking}
           >
+            <ModalHeader>Add Tracking Details</ModalHeader>
+            <ModalBody>
+              When is the food arriving (ETA)?
+              <Input
+                value={eta}
+                onChange={e => setETA(e.target.value)}
+                placeholder="4/2/2020 @ 6:40pm"
+              />
+              <br />
+              Are you missing anything from the order?
+              <Input
+                value={missing}
+                onChange={e => setOrderMissing(e.target.value)}
+                placeholder="spinach was out"
+              />
+              <br />
+              Who is delivering the food? (name, phone number, etc)
+              <Input
+                value={deliverer}
+                onChange={e => setOrderDeliverer(e.target.value)}
+                placeholder="Barack Obama, 6465335281"
+              />
+              <br />
+            </ModalBody>
+            <ModalFooter>
+              <ModalButton
+                size={'compact'}
+                kind={'minimal'}
+                onClick={() => setOpenFoodTracking(false)}
+              >
+                Cancel
+              </ModalButton>
+              <ModalButton
+                size={'compact'}
+                onClick={() => {
+                  if (eta && missing && deliverer && postId) {
+                    completeTaskDispatch({
+                      env: process.env.NODE_ENV,
+                      postId: postId,
+                      trackingDetails: {
+                        method: 'manual',
+                        created: new Date(),
+                        dropoffEta: eta,
+                        notes: `${missing}. \n\n${deliverer}`
+                      }
+                    });
+
+                    showConfetti(false);
+                    showConfetti(true);
+                    setOpenFoodTracking(false); // close dialog
+                  } else {
+                    alert('you need to fill all the details');
+                  }
+                }}
+              >
+                Submit
+              </ModalButton>
+            </ModalFooter>
+          </Modal>
+          {props.match.url !== '/' ? (
             <div
+              className="sidebar-table-container"
               style={{
-                width: '344px'
+                backgroundColor: '#F5F5F5',
+                display: 'flex',
+                flexDirection: 'row'
               }}
-              className="bg-white rounded-lg p-6 shadow-lg"
             >
-              <div className="flex justify-between items-center">
-                <div className="text-left" style={{ fontWeight: 300 }}>
-                  <div
-                    style={{
-                      fontStyle: 'normal',
-                      fontWeight: 500,
-                      fontSize: 16,
-                      lineHeight: '20px',
-                      color: '#545454',
-                      paddingTop: '0px'
-                    }}
-                    className={`mb-4`}
-                  >
-                    Leaderboard
-                  </div>
-                  <div
-                    style={{
-                      fontStyle: 'normal',
-                      fontWeight: 'normal',
-                      fontSize: 12,
-                      lineHeight: '14px',
-                      color: '#545454'
-                    }}
-                  >
-                    Most helpful people in your area
-                  </div>
-                </div>
-                <button
-                  className="bg-transparent hover:bg-gray-600 text-gray-700 font-semibold hover:text-white py-1 px-3 border border-gray-600 hover:border-transparent transition duration-150 rounded"
-                  style={{ outline: 'none' }}
-                  onClick={() => history.push('/leaderboard')}
+              <Sidebar {...props} />
+              <NewsfeedTable
+                {...props}
+                address={address}
+                hasMoreItems={hasMoreItems}
+                id={id}
+                items={items}
+                resetItems={resetItems}
+                setOpenCustomAddress={setOpenCustomAddress}
+                setAddress={setAddress}
+                setLatLng={setLatLng}
+                latLng={latLng}
+                newPost={newPost}
+                selectMenu={selectMenu}
+                openCustomAddress={openCustomAddress}
+                setUpdateNews={setUpdateNews}
+              />
+              <div
+                style={{
+                  paddingTop: 30,
+                  height: `calc(100vh - 70px + ${60 + items.length * 60}px)`
+                }}
+              >
+                <div
+                  style={{
+                    width: '344px'
+                  }}
+                  className="bg-white rounded-lg p-6 shadow-lg"
                 >
-                  <span style={{ fontSize: 12 }}>See full list</span>
-                </button>
-              </div>
-              <div className="mt-4">{leaderboardJSX()}</div>
-              {Number(userRanking) >= 0 && (
-                <div className="mt-8">
-                  <div
-                    style={{
-                      fontStyle: 'normal',
-                      fontWeight: 'normal',
-                      fontSize: 12,
-                      lineHeight: '14px',
-                      color: '#545454'
-                    }}
-                    className="text-left mb-4"
-                  >
-                    Your Ranking
+                  <div className="flex justify-between items-center">
+                    <div className="text-left" style={{ fontWeight: 300 }}>
+                      <div
+                        style={{
+                          fontStyle: 'normal',
+                          fontWeight: 500,
+                          fontSize: 16,
+                          lineHeight: '20px',
+                          color: '#545454',
+                          paddingTop: '0px'
+                        }}
+                        className={`mb-4`}
+                      >
+                        Leaderboard
+                      </div>
+                      <div
+                        style={{
+                          fontStyle: 'normal',
+                          fontWeight: 'normal',
+                          fontSize: 12,
+                          lineHeight: '14px',
+                          color: '#545454'
+                        }}
+                      >
+                        Most helpful people in your area
+                      </div>
+                    </div>
+                    <button
+                      className="bg-transparent hover:bg-gray-600 text-gray-700 font-semibold hover:text-white py-1 px-3 border border-gray-600 hover:border-transparent transition duration-150 rounded"
+                      style={{ outline: 'none' }}
+                      onClick={() => history.push('/leaderboard')}
+                    >
+                      <span style={{ fontSize: 12 }}>See full list</span>
+                    </button>
                   </div>
-                  <table className="table-auto border-transparent" style={{ width: '99%' }}>
-                    <thead>
-                      <tr>
-                        <th
-                          className="px-4 py-2"
-                          style={{
-                            fontStyle: 'normal',
-                            fontWeight: 'bold',
-                            fontSize: '12px',
-                            lineHeight: '15px'
-                          }}
-                        >
-                          Rank
-                        </th>
-                        <th
-                          className="px-4 py-2 text-left"
-                          style={{
-                            fontStyle: 'normal',
-                            fontWeight: 'bold',
-                            fontSize: '12px',
-                            lineHeight: '15px'
-                          }}
-                        >
-                          Helper
-                        </th>
-                        <th
-                          className="px-4 py-2"
-                          style={{
-                            fontStyle: 'normal',
-                            fontWeight: 'bold',
-                            fontSize: '12px',
-                            lineHeight: '15px'
-                          }}
-                        >
-                          Karma
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr className={`bg-white`}>
-                        <td
-                          className={`px-4 py-2 flex justify-center items-center`}
-                          style={{
-                            fontSize: '14px',
-                            lineHeight: '17px',
-                            fontStyle: 'normal',
-                            fontWeight: 'normal'
-                          }}
-                        >
-                          {getLeaderboardIcon(Number(userRanking) + 1)}
-                        </td>
-                        <td
-                          className={`px-4 py-2 text-left hover:text-indigo-600 transition duration-150`}
-                          style={{
-                            cursor: 'pointer',
-                            fontSize: '14px',
-                            lineHeight: '17px',
-                            fontStyle: 'normal',
-                            fontWeight: 'normal'
-                          }}
-                          onClick={() =>
-                            history.push(
-                              `/user/${Number(userRanking) >= 0 &&
+                  <div className="mt-4">{leaderboardJSX()}</div>
+                  {Number(userRanking) >= 0 && (
+                    <div className="mt-8">
+                      <div
+                        style={{
+                          fontStyle: 'normal',
+                          fontWeight: 'normal',
+                          fontSize: 12,
+                          lineHeight: '14px',
+                          color: '#545454'
+                        }}
+                        className="text-left mb-4"
+                      >
+                        Your Ranking
+                      </div>
+                      <table className="table-auto border-transparent" style={{ width: '99%' }}>
+                        <thead>
+                          <tr>
+                            <th
+                              className="px-4 py-2"
+                              style={{
+                                fontStyle: 'normal',
+                                fontWeight: 'bold',
+                                fontSize: '12px',
+                                lineHeight: '15px'
+                              }}
+                            >
+                              Rank
+                            </th>
+                            <th
+                              className="px-4 py-2 text-left"
+                              style={{
+                                fontStyle: 'normal',
+                                fontWeight: 'bold',
+                                fontSize: '12px',
+                                lineHeight: '15px'
+                              }}
+                            >
+                              Helper
+                            </th>
+                            <th
+                              className="px-4 py-2"
+                              style={{
+                                fontStyle: 'normal',
+                                fontWeight: 'bold',
+                                fontSize: '12px',
+                                lineHeight: '15px'
+                              }}
+                            >
+                              Karma
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr className={`bg-white`}>
+                            <td
+                              className={`px-4 py-2 flex justify-center items-center`}
+                              style={{
+                                fontSize: '14px',
+                                lineHeight: '17px',
+                                fontStyle: 'normal',
+                                fontWeight: 'normal'
+                              }}
+                            >
+                              {getLeaderboardIcon(Number(userRanking) + 1)}
+                            </td>
+                            <td
+                              className={`px-4 py-2 text-left hover:text-indigo-600 transition duration-150`}
+                              style={{
+                                cursor: 'pointer',
+                                fontSize: '14px',
+                                lineHeight: '17px',
+                                fontStyle: 'normal',
+                                fontWeight: 'normal'
+                              }}
+                              onClick={() =>
+                                history.push(
+                                  `/user/${Number(userRanking) >= 0 &&
+                                    leaderboard &&
+                                    leaderboard[Number(userRanking)] &&
+                                    leaderboard[Number(userRanking)].username}`
+                                )
+                              }
+                            >
+                              {Number(userRanking) >= 0 &&
                                 leaderboard &&
                                 leaderboard[Number(userRanking)] &&
-                                leaderboard[Number(userRanking)].username}`
-                            )
+                                leaderboard[Number(userRanking)].username}
+                            </td>
+                            <td
+                              className={`px-4 py-2`}
+                              style={{
+                                fontSize: '14px',
+                                lineHeight: '17px',
+                                fontStyle: 'normal',
+                                fontWeight: 'normal'
+                              }}
+                            >
+                              {Number(userRanking) >= 0 &&
+                                leaderboard &&
+                                leaderboard[Number(userRanking)] &&
+                                leaderboard[Number(userRanking)].karma}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <StatefulPopover
+                        placement={PLACEMENT.bottomRight}
+                        overrides={{
+                          Arrow: {
+                            style: {
+                              borderRadius: '50px'
+                            }
+                          },
+                          Body: {
+                            style: {
+                              borderRadius: '50px'
+                            }
+                          },
+                          Root: {
+                            style: {
+                              borderRadius: '50px',
+                              boxShadow: `0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)`
+                            }
                           }
-                        >
-                          {Number(userRanking) >= 0 &&
-                            leaderboard &&
-                            leaderboard[Number(userRanking)] &&
-                            leaderboard[Number(userRanking)].username}
-                        </td>
-                        <td
-                          className={`px-4 py-2`}
+                        }}
+                        content={({ close }) => (
+                          <div className="bg-white rounded-lg p-5 shadow-lg">
+                            <div className="tooltip-heading py-1 mb-1">
+                              How does Karma on Giving Tree work?
+                            </div>
+                            <div className="tooltip-text py-1">
+                              Your karma points accumulate when other users upvote your completed
+                              tasks.
+                            </div>
+                            <div className="tooltip-text py-1">
+                              Upvotes you receive from users with higher karma have a greater
+                              influence on your karma points.
+                            </div>
+                            <div className="tooltip-text py-1">
+                              Have thoughts about our karma system?{' '}
+                              <a className="tooltip-heading" href="mailto:givingtree@gmail.com">
+                                Email Us
+                              </a>
+                            </div>
+                          </div>
+                        )}
+                      >
+                        <div
                           style={{
-                            fontSize: '14px',
-                            lineHeight: '17px',
                             fontStyle: 'normal',
-                            fontWeight: 'normal'
+                            fontWeight: 'normal',
+                            fontSize: 12,
+                            lineHeight: '14px',
+                            color: '#545454',
+                            cursor: 'pointer'
                           }}
+                          className="text-left mt-4"
                         >
-                          {Number(userRanking) >= 0 &&
-                            leaderboard &&
-                            leaderboard[Number(userRanking)] &&
-                            leaderboard[Number(userRanking)].karma}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <StatefulPopover
-                    placement={PLACEMENT.bottomRight}
-                    overrides={{
-                      Arrow: {
-                        style: {
-                          borderRadius: '50px'
-                        }
-                      },
-                      Body: {
-                        style: {
-                          borderRadius: '50px'
-                        }
-                      },
-                      Root: {
-                        style: {
-                          borderRadius: '50px',
-                          boxShadow: `0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)`
-                        }
-                      }
-                    }}
-                    content={({ close }) => (
-                      <div className="bg-white rounded-lg p-5 shadow-lg">
-                        <div className="tooltip-heading py-1 mb-1">
-                          How does Karma on Giving Tree work?
+                          Want to improve your ranking?{' '}
+                          <span className="font-bold hover:text-indigo-600 transition duration-150">
+                            Find out how
+                          </span>
                         </div>
-                        <div className="tooltip-text py-1">
-                          Your karma points accumulate when other users upvote your completed tasks.
-                        </div>
-                        <div className="tooltip-text py-1">
-                          Upvotes you receive from users with higher karma have a greater influence
-                          on your karma points.
-                        </div>
-                        <div className="tooltip-text py-1">
-                          Have thoughts about our karma system?{' '}
-                          <a className="tooltip-heading" href="mailto:givingtree@gmail.com">
-                            Email Us
-                          </a>
-                        </div>
-                      </div>
-                    )}
-                  >
-                    <div
-                      style={{
-                        fontStyle: 'normal',
-                        fontWeight: 'normal',
-                        fontSize: 12,
-                        lineHeight: '14px',
-                        color: '#545454',
-                        cursor: 'pointer'
-                      }}
-                      className="text-left mt-4"
-                    >
-                      Want to improve your ranking?{' '}
-                      <span className="font-bold hover:text-indigo-600 transition duration-150">
-                        Find out how
-                      </span>
+                      </StatefulPopover>
                     </div>
-                  </StatefulPopover>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
-          </div>
-        </div>
-      ) : (
-        <div
-          style={{
-            background: 'url(https://d1ppmvgsdgdlyy.cloudfront.net/eat2.jpg) center center',
-            backgroundSize: 'cover',
-            paddingLeft: 24,
-            paddingRight: 24,
-            height: `calc(100vh - 70px)`
-          }}
-        >
-          <Block>
-            <h1 style={{ fontSize: 100, color: 'white' }}>We're one big family</h1>
-            <h2 style={{ color: 'rgb(247, 242, 233)', fontSize: 40 }}>
-              We are waves of the same sea, leaves of the same tree, flowers of the same garden.
-            </h2>
-          </Block>
-          <button
-            style={{ outline: 'none' }}
-            className="mt-5 bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => history.push('/home/discover')}
-          >
-            see leaderboard
-          </button>
+          ) : (
+            <div
+              style={{
+                background: 'url(https://d1ppmvgsdgdlyy.cloudfront.net/eat2.jpg) center center',
+                backgroundSize: 'cover',
+                paddingLeft: 24,
+                paddingRight: 24,
+                height: `calc(100vh - 60px)`
+              }}
+            >
+              <Block>
+                <h1 style={{ fontSize: matches.small ? 40 : 100, color: 'white' }}>We're one big family</h1>
+                <h2 style={{ color: 'rgb(247, 242, 233)', fontSize: matches.small ? 20 : 40 }}>
+                  We are waves of the same sea, leaves of the same tree, flowers of the same garden.
+                </h2>
+              </Block>
+              <button
+                style={{ outline: 'none' }}
+                className="mt-5 bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
+                onClick={() => history.push('/home/discover')}
+              >
+                see leaderboard
+              </button>
+            </div>
+          )}
         </div>
       )}
-    </div>
+    </Media>
   );
 }
 

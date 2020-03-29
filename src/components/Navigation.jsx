@@ -292,364 +292,411 @@ function Navigation(props) {
 
   if (authenticated) {
     return (
-      <div style={{ width: '100%', zIndex: 800, background: 'white' }}>
-        <HeaderNavigation
-          overrides={{
-            Root: {
-              style: {
-                width: '100%',
-                zIndex: 555
-              }
-            }
-          }}
-        >
-          <Button
-            size={'compact'}
-            style={{ position: 'fixed', bottom: 0, right: 0, zIndex: 999 }}
-            onClick={() => setIsOpen(true)}
-          >
-            Give Feedback!
-          </Button>
-          <Modal
-            overrides={{ Dialog: { style: { borderRadius: '7px' } } }}
-            onClose={close}
-            isOpen={isOpen}
-          >
-            <ModalHeader>Feedback for Giving Tree</ModalHeader>
-            <ModalBody>
-              How would you feel if you could no longer use Giving Tree?
-              <RadioGroup value={pmf} onChange={e => setPmf(e.target.value)} align={ALIGN.vertical}>
-                <Radio overrides={{ Label: { style: { fontSize: 14 } } }} value="1">
-                  Not disappointed
-                </Radio>
-                <Radio overrides={{ Label: { style: { fontSize: 14 } } }} value="2">
-                  Somewhat disappointed
-                </Radio>
-                <Radio overrides={{ Label: { style: { fontSize: 14 } } }} value="3">
-                  Very disappointed
-                </Radio>
-              </RadioGroup>
-              <br />
-              What type of people do you think would most benefit from Giving Tree?
-              <Input
-                value={benefit}
-                onChange={e => setBenefit(e.target.value)}
-                placeholder="Type your response"
-              />
-              <br />
-              What best describes your role?
-              <Select
-                options={[
-                  { id: 'Post Doc', value: 'Post Doc' },
-                  { id: 'Student', value: 'Student' },
-                  { id: 'Health Provider', value: 'Health Provider' },
-                  { id: 'Venture Capitalist', value: 'Venture Capitalist' },
-                  { id: 'Researcher', value: 'Researcher' },
-                  { id: 'Lab Director', value: 'Lab Director' },
-                  { id: 'Medical Doctor', value: 'Medical Doctor' },
-                  { id: 'Patient', value: 'Patient' },
-                  { id: 'Engineer', value: 'Engineer' },
-                  { id: 'Other', value: 'Other' }
-                ]}
-                labelKey="id"
-                valueKey="value"
-                maxDropdownHeight="250px"
-                placeholder="Select role"
-                onChange={({ value }) => setUserType(value)}
-                value={userType}
-              />
-              <br />
-              What is the main benefit <strong>you</strong> receive from Giving Tree?
-              <Input
-                value={personalBenefit}
-                onChange={e => setPersonalBenefit(e.target.value)}
-                placeholder="Type your response"
-              />
-              <br />
-              How can we improve Giving Tree for you?
-              <Input
-                value={suggestion}
-                onChange={e => setSuggestion(e.target.value)}
-                placeholder="Type your response"
-              />
-            </ModalBody>
-            <ModalFooter>
-              <ModalButton size={'compact'} kind={'minimal'} onClick={close}>
-                Cancel
-              </ModalButton>
-              <ModalButton size={'compact'} onClick={() => handleFeedback()}>
-                Submit
-              </ModalButton>
-            </ModalFooter>
-          </Modal>
-          <NavigationList $align={ALIGN.left}>
-            <NavigationItem>
-              <div
-                style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}
-                onClick={() => (window.location = '/home/discover')}
-              >
-                <img
-                  src="https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg"
-                  alt="Giving Tree"
-                  style={{ height: 30, marginRight: 12 }}
-                />
-                <strong>
-                  <div style={{ textDecoration: 'none', color: 'black' }}>Giving Tree</div>
-                </strong>
-              </div>
-            </NavigationItem>
-          </NavigationList>
-          {!center && <NavigationList $align={ALIGN.center} />}
-          <NavigationList $align={center ? ALIGN.center : ALIGN.right}>
-            <NavigationItem style={{ width: `${center ? '600px' : '200px'}` }}>
-              <Input
+      <Media
+        queries={{
+          small: '(max-width: 599px)',
+          medium: '(min-width: 600px) and (max-width: 1199px)',
+          large: '(min-width: 1200px)'
+        }}
+      >
+        {matches => (
+          <React.Fragment>
+            <div style={{ width: '100%', zIndex: 800, background: 'white' }}>
+              <HeaderNavigation
                 overrides={{
-                  Before,
-                  After,
-                  InputContainer: {
+                  Root: {
                     style: {
-                      borderBottomLeftRadius:
-                        searchResults.length !== 0 && !shouldCloseSearchResults ? '0px' : '25px',
-                      borderBottomRightRadius:
-                        searchResults.length !== 0 && !shouldCloseSearchResults ? '0px' : '25px',
-                      borderTopLeftRadius: '25px',
-                      borderTopRightRadius: '25px',
-                      border: '0',
-                      outlineOffset: '2px'
+                      width: '100%',
+                      zIndex: 555
                     }
                   }
                 }}
-                placeholder={center ? 'Search Giving Tree' : 'Search'}
-                onChange={e => {
-                  console.log('e: ', e.target.value);
-                  searchDispatch({ env: process.env.NODE_ENV, query: e.target.value });
-                  setShouldCloseSearchResults(false);
-                }}
-              />
-              {searchResults.length !== 0 && !shouldCloseSearchResults && (
-                <OutsideDetector>
-                  <StatefulMenu
-                    overrides={{
-                      List: {
-                        style: {
-                          outline: 'none',
-                          padding: '0px',
-                          position: 'absolute',
-                          width: `${center ? '576px' : '200px'}`,
-                          maxHeight: '400px',
-                          borderBottomLeftRadius: '25px',
-                          borderBottomRightRadius: '25px',
-                          zIndex: 100
-                        }
-                      },
-                      ProfileImgContainer: { style: { height: '32px', width: '32px' } },
-                      ListItemProfile: { style: { display: 'flex', alignContent: 'center' } },
-                      ProfileLabelsContainer: {
-                        style: { display: 'flex', alignContent: 'center' }
-                      },
-                      Option: {
-                        component: OptionProfile,
-                        props: {
-                          getProfileItemLabels: ({ username, label, name, title, type }) => ({
-                            title: username,
-                            subtitle: (
-                              <div style={{ display: 'inline' }}>
-                                ...{sanitize(label.split('<em>')[0])}
-                                <div style={{ backgroundColor: '#FFFF00', display: 'inline' }}>
-                                  {sanitize(label.split('<em>')[1].split('</em>')[0])}
-                                </div>
-                                {sanitize(label.split('</em>')[1])}...
-                              </div>
-                            ),
-                            body: type === 'post' ? title : name
-                          }),
-                          getProfileItemImg: item => item.image,
-                          getProfileItemImgText: item => (
-                            <div>
-                              {item.label.replace('<em>', '<strong>').replace('</em>', '</strong>')}
-                            </div>
-                          )
-                        }
-                      }
-                    }}
-                    items={searchResults}
-                    noResultsMsg="No Results"
-                    onItemSelect={item => {
-                      setShouldCloseSearchResults(true);
-                      history.push(
-                        item.item.type === 'post'
-                          ? `/post/${item.item._id}`
-                          : item.item.type === 'user'
-                          ? `/user/${item.item.username}`
-                          : ''
-                      );
-                    }}
-                  />
-                </OutsideDetector>
-              )}
-            </NavigationItem>
-          </NavigationList>
-          <NavigationList $align={ALIGN.right}>
-            <NavigationItem>
-              <div style={{ display: 'flex', alignContent: 'center' }}>
+              >
                 <Button
-                  onClick={() => history.push('/submit')}
                   size={'compact'}
-                  shape={'pill'}
-                  style={{ outline: 'none', marginRight: 25 }}
-                  kind={'secondary'}
+                  style={{ position: 'fixed', bottom: 0, right: 0, zIndex: 999 }}
+                  onClick={() => setIsOpen(true)}
                 >
-                  <img
-                    src="https://d1ppmvgsdgdlyy.cloudfront.net/submit.svg"
-                    alt="document"
-                    style={{ height: 26, marginLeft: '3px' }}
-                  />
+                  Give Feedback!
                 </Button>
-                <StatefulPopover
-                  placement={PLACEMENT.bottomLeft}
-                  content={({ close }) => notificationMenu(close)}
+                <Modal
+                  overrides={{ Dialog: { style: { borderRadius: '7px' } } }}
+                  onClose={close}
+                  isOpen={isOpen}
                 >
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignContent: 'center',
-                      cursor: 'pointer',
-                      height: 40
-                    }}
-                  >
-                    <img
-                      src="https://d1ppmvgsdgdlyy.cloudfront.net/notification.svg"
-                      alt="notification"
-                      style={{ width: 25, marginRight: 25 }}
+                  <ModalHeader>Feedback for Giving Tree</ModalHeader>
+                  <ModalBody>
+                    How would you feel if you could no longer use Giving Tree?
+                    <RadioGroup
+                      value={pmf}
+                      onChange={e => setPmf(e.target.value)}
+                      align={ALIGN.vertical}
+                    >
+                      <Radio overrides={{ Label: { style: { fontSize: 14 } } }} value="1">
+                        Not disappointed
+                      </Radio>
+                      <Radio overrides={{ Label: { style: { fontSize: 14 } } }} value="2">
+                        Somewhat disappointed
+                      </Radio>
+                      <Radio overrides={{ Label: { style: { fontSize: 14 } } }} value="3">
+                        Very disappointed
+                      </Radio>
+                    </RadioGroup>
+                    <br />
+                    What type of people do you think would most benefit from Giving Tree?
+                    <Input
+                      value={benefit}
+                      onChange={e => setBenefit(e.target.value)}
+                      placeholder="Type your response"
                     />
-                    {notifications.length > 0 && (
-                      <div style={{ marginLeft: -10, marginRight: 20 }}>
-                        <NotificationBadge count={notifications.length} effect={Effect.SCALE} />
-                      </div>
-                    )}
-                  </div>
-                </StatefulPopover>
-                <StatefulPopover
-                  placement={PLACEMENT.bottomLeft}
-                  content={({ close }) => (
-                    <StatefulMenu
-                      items={[
-                        {
-                          label: 'My Profile',
-                          icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/user.svg'
-                        },
-                        {
-                          label: 'Settings',
-                          icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/setting.svg'
-                        },
-                        {
-                          label: 'Log Out',
-                          icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/logout.svg'
-                        }
+                    <br />
+                    What best describes your role?
+                    <Select
+                      options={[
+                        { id: 'Post Doc', value: 'Post Doc' },
+                        { id: 'Student', value: 'Student' },
+                        { id: 'Health Provider', value: 'Health Provider' },
+                        { id: 'Venture Capitalist', value: 'Venture Capitalist' },
+                        { id: 'Researcher', value: 'Researcher' },
+                        { id: 'Lab Director', value: 'Lab Director' },
+                        { id: 'Medical Doctor', value: 'Medical Doctor' },
+                        { id: 'Patient', value: 'Patient' },
+                        { id: 'Engineer', value: 'Engineer' },
+                        { id: 'Other', value: 'Other' }
                       ]}
-                      onItemSelect={item => {
-                        close();
-                        switch (item.item.label) {
-                          case 'My Profile':
-                            history.push(`/user/${user.username}`);
-                            break;
-                          case 'Settings':
-                            history.push(`/settings`);
-                            break;
-                          case 'Log Out':
-                            logoutDispatch({
-                              env: process.env.NODE_ENV
-                            });
-                            break;
-                          default:
-                            break;
-                        }
-                      }}
-                      overrides={{
-                        List: { style: { width: '213px', outline: 'none' } }
-                      }}
+                      labelKey="id"
+                      valueKey="value"
+                      maxDropdownHeight="250px"
+                      placeholder="Select role"
+                      onChange={({ value }) => setUserType(value)}
+                      value={userType}
                     />
-                  )}
-                >
-                  <Button
-                    overrides={{
-                      BaseButton: {
-                        style: {
-                          marginRight: '24px'
-                        }
-                      }
-                    }}
-                    style={{ outline: 'none', fontSize: '14px' }}
-                    size={SIZE.compact}
-                    shape={SHAPE.pill}
-                    kind={'secondary'}
-                    endEnhancer={() => <ChevronDown size={24} />}
-                    startEnhancer={() => (
-                      <div
-                        className="profilePic"
-                        style={{
-                          width: 32,
-                          height: 32,
-                          background: `url(${generateHash(
-                            user.username,
-                            user.profileVersion
-                          )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
-                          backgroundPosition: '50% 50% !important',
-                          backgroundSize: 'cover !important',
-                          borderRadius: '50%',
-                          marginRight: 10
+                    <br />
+                    What is the main benefit <strong>you</strong> receive from Giving Tree?
+                    <Input
+                      value={personalBenefit}
+                      onChange={e => setPersonalBenefit(e.target.value)}
+                      placeholder="Type your response"
+                    />
+                    <br />
+                    How can we improve Giving Tree for you?
+                    <Input
+                      value={suggestion}
+                      onChange={e => setSuggestion(e.target.value)}
+                      placeholder="Type your response"
+                    />
+                  </ModalBody>
+                  <ModalFooter>
+                    <ModalButton size={'compact'} kind={'minimal'} onClick={close}>
+                      Cancel
+                    </ModalButton>
+                    <ModalButton size={'compact'} onClick={() => handleFeedback()}>
+                      Submit
+                    </ModalButton>
+                  </ModalFooter>
+                </Modal>
+                <NavigationList $align={ALIGN.left}>
+                  <NavigationItem>
+                    <div
+                      style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}
+                      onClick={() => (window.location = '/home/discover')}
+                    >
+                      <img
+                        src="https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg"
+                        alt="Giving Tree"
+                        style={{ height: 30, marginRight: 12 }}
+                      />
+                      {(matches.medium || matches.large) && (
+                        <strong>
+                          <div style={{ textDecoration: 'none', color: 'black' }}>Giving Tree</div>
+                        </strong>
+                      )}
+                    </div>
+                  </NavigationItem>
+                </NavigationList>
+                {!center && <NavigationList $align={ALIGN.center} />}
+                {(matches.medium || matches.large) && (
+                  <NavigationList $align={center ? ALIGN.center : ALIGN.right}>
+                    <NavigationItem style={{ width: `${center ? '600px' : '200px'}` }}>
+                      <Input
+                        overrides={{
+                          Before,
+                          After,
+                          InputContainer: {
+                            style: {
+                              borderBottomLeftRadius:
+                                searchResults.length !== 0 && !shouldCloseSearchResults
+                                  ? '0px'
+                                  : '25px',
+                              borderBottomRightRadius:
+                                searchResults.length !== 0 && !shouldCloseSearchResults
+                                  ? '0px'
+                                  : '25px',
+                              borderTopLeftRadius: '25px',
+                              borderTopRightRadius: '25px',
+                              border: '0',
+                              outlineOffset: '2px'
+                            }
+                          }
+                        }}
+                        placeholder={center ? 'Search Giving Tree' : 'Search'}
+                        onChange={e => {
+                          console.log('e: ', e.target.value);
+                          searchDispatch({ env: process.env.NODE_ENV, query: e.target.value });
+                          setShouldCloseSearchResults(false);
                         }}
                       />
-                    )}
-                  >
-                    {user.username && user.username.length < 12 ? user.username : 'Profile'}
-                  </Button>
-                </StatefulPopover>
-              </div>
-            </NavigationItem>
-          </NavigationList>
-        </HeaderNavigation>
-      </div>
+                      {searchResults.length !== 0 && !shouldCloseSearchResults && (
+                        <OutsideDetector>
+                          <StatefulMenu
+                            overrides={{
+                              List: {
+                                style: {
+                                  outline: 'none',
+                                  padding: '0px',
+                                  position: 'absolute',
+                                  width: `${center ? '576px' : '200px'}`,
+                                  maxHeight: '400px',
+                                  borderBottomLeftRadius: '25px',
+                                  borderBottomRightRadius: '25px',
+                                  zIndex: 100
+                                }
+                              },
+                              ProfileImgContainer: { style: { height: '32px', width: '32px' } },
+                              ListItemProfile: {
+                                style: { display: 'flex', alignContent: 'center' }
+                              },
+                              ProfileLabelsContainer: {
+                                style: { display: 'flex', alignContent: 'center' }
+                              },
+                              Option: {
+                                component: OptionProfile,
+                                props: {
+                                  getProfileItemLabels: ({
+                                    username,
+                                    label,
+                                    name,
+                                    title,
+                                    type
+                                  }) => ({
+                                    title: username,
+                                    subtitle: (
+                                      <div style={{ display: 'inline' }}>
+                                        ...{sanitize(label.split('<em>')[0])}
+                                        <div
+                                          style={{ backgroundColor: '#FFFF00', display: 'inline' }}
+                                        >
+                                          {sanitize(label.split('<em>')[1].split('</em>')[0])}
+                                        </div>
+                                        {sanitize(label.split('</em>')[1])}...
+                                      </div>
+                                    ),
+                                    body: type === 'post' ? title : name
+                                  }),
+                                  getProfileItemImg: item => item.image,
+                                  getProfileItemImgText: item => (
+                                    <div>
+                                      {item.label
+                                        .replace('<em>', '<strong>')
+                                        .replace('</em>', '</strong>')}
+                                    </div>
+                                  )
+                                }
+                              }
+                            }}
+                            items={searchResults}
+                            noResultsMsg="No Results"
+                            onItemSelect={item => {
+                              setShouldCloseSearchResults(true);
+                              history.push(
+                                item.item.type === 'post'
+                                  ? `/post/${item.item._id}`
+                                  : item.item.type === 'user'
+                                  ? `/user/${item.item.username}`
+                                  : ''
+                              );
+                            }}
+                          />
+                        </OutsideDetector>
+                      )}
+                    </NavigationItem>
+                  </NavigationList>
+                )}
+                <NavigationList $align={ALIGN.right}>
+                  <NavigationItem>
+                    <div style={{ display: 'flex', alignContent: 'center' }}>
+                      {(matches.medium || matches.large) && (
+                        <React.Fragment>
+                          <Button
+                            onClick={() => history.push('/submit')}
+                            size={'compact'}
+                            shape={'pill'}
+                            style={{ outline: 'none', marginRight: 25 }}
+                            kind={'secondary'}
+                          >
+                            <img
+                              src="https://d1ppmvgsdgdlyy.cloudfront.net/submit.svg"
+                              alt="document"
+                              style={{ height: 26, marginLeft: '3px' }}
+                            />
+                          </Button>
+
+                          <StatefulPopover
+                            placement={PLACEMENT.bottomLeft}
+                            content={({ close }) => notificationMenu(close)}
+                          >
+                            <div
+                              style={{
+                                display: 'flex',
+                                alignContent: 'center',
+                                cursor: 'pointer',
+                                height: 40
+                              }}
+                            >
+                              <img
+                                src="https://d1ppmvgsdgdlyy.cloudfront.net/notification.svg"
+                                alt="notification"
+                                style={{ width: 25, marginRight: 25 }}
+                              />
+                              {notifications.length > 0 && (
+                                <div style={{ marginLeft: -10, marginRight: 20 }}>
+                                  <NotificationBadge
+                                    count={notifications.length}
+                                    effect={Effect.SCALE}
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          </StatefulPopover>
+                        </React.Fragment>
+                      )}
+                      <StatefulPopover
+                        placement={PLACEMENT.bottomLeft}
+                        content={({ close }) => (
+                          <StatefulMenu
+                            items={[
+                              {
+                                label: 'My Profile',
+                                icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/user.svg'
+                              },
+                              {
+                                label: 'Settings',
+                                icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/setting.svg'
+                              },
+                              {
+                                label: 'Log Out',
+                                icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/logout.svg'
+                              }
+                            ]}
+                            onItemSelect={item => {
+                              close();
+                              switch (item.item.label) {
+                                case 'My Profile':
+                                  history.push(`/user/${user.username}`);
+                                  break;
+                                case 'Settings':
+                                  history.push(`/settings`);
+                                  break;
+                                case 'Log Out':
+                                  logoutDispatch({
+                                    env: process.env.NODE_ENV
+                                  });
+                                  break;
+                                default:
+                                  break;
+                              }
+                            }}
+                            overrides={{
+                              List: { style: { width: '213px', outline: 'none' } }
+                            }}
+                          />
+                        )}
+                      >
+                        <Button
+                          overrides={{
+                            BaseButton: {
+                              style: {
+                                marginRight: '24px'
+                              }
+                            }
+                          }}
+                          style={{ outline: 'none', fontSize: '14px' }}
+                          size={SIZE.compact}
+                          shape={SHAPE.pill}
+                          kind={'secondary'}
+                          endEnhancer={() => <ChevronDown size={24} />}
+                          startEnhancer={() => (
+                            <div
+                              className="profilePic"
+                              style={{
+                                width: 32,
+                                height: 32,
+                                background: `url(${generateHash(
+                                  user.username,
+                                  user.profileVersion
+                                )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
+                                backgroundPosition: '50% 50% !important',
+                                backgroundSize: 'cover !important',
+                                borderRadius: '50%',
+                                marginRight: 10
+                              }}
+                            />
+                          )}
+                        >
+                          {user.username && user.username.length < 12 ? user.username : 'Profile'}
+                        </Button>
+                      </StatefulPopover>
+                    </div>
+                  </NavigationItem>
+                </NavigationList>
+              </HeaderNavigation>
+            </div>
+          </React.Fragment>
+        )}
+      </Media>
     );
   } else {
     return (
-      <div style={{ width: '100%', zIndex: 800, background: 'white' }}>
-        <HeaderNavigation
-          overrides={{
-            Root: {
-              style: {
-                width: '100%'
-              }
-            }
-          }}
-        >
-          <NavigationList $align={ALIGN.left}>
-            <NavigationItem>
-              <div
-                style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}
-                onClick={() => (window.location = '/home/discover')}
+      <Media
+        queries={{
+          small: '(max-width: 599px)',
+          medium: '(min-width: 600px) and (max-width: 1199px)',
+          large: '(min-width: 1200px)'
+        }}
+      >
+        {matches => (
+          <React.Fragment>
+            <div style={{ width: '100%', zIndex: 800, background: 'white' }}>
+              <HeaderNavigation
+                overrides={{
+                  Root: {
+                    style: {
+                      width: '100%'
+                    }
+                  }
+                }}
               >
-                <img
-                  src="https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg"
-                  alt="Giving Tree"
-                  style={{ height: 30, marginRight: 12 }}
-                />
-                <strong>
-                  <div style={{ textDecoration: 'none', color: 'black' }}>Giving Tree</div>
-                </strong>
-              </div>
-            </NavigationItem>
-          </NavigationList>
-          <NavigationList $align={ALIGN.center} />
-          <Media
-            queries={{
-              small: '(max-width: 599px)',
-              medium: '(min-width: 600px) and (max-width: 1199px)',
-              large: '(min-width: 1200px)'
-            }}
-          >
-            {matches => (
-              <React.Fragment>
+                <NavigationList $align={ALIGN.left}>
+                  <NavigationItem>
+                    <div
+                      style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}
+                      onClick={() => (window.location = '/home/discover')}
+                    >
+                      <img
+                        src="https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg"
+                        alt="Giving Tree"
+                        style={{ height: 30, marginRight: 12 }}
+                      />
+                      {(matches.medium || matches.large) && (
+                        <strong>
+                          <div style={{ textDecoration: 'none', color: 'black' }}>Giving Tree</div>
+                        </strong>
+                      )}
+                    </div>
+                  </NavigationItem>
+                </NavigationList>
+                <NavigationList $align={ALIGN.center} />
+
                 {(matches.medium || matches.large) && (
                   <NavigationList $align={ALIGN.right}>
                     <NavigationItem style={{ width: '200px' }}>
@@ -689,29 +736,29 @@ function Navigation(props) {
                     </NavigationItem>
                   </NavigationList>
                 )}
-              </React.Fragment>
-            )}
-          </Media>
-          <NavigationList $align={ALIGN.right}>
-            <NavigationItem>
-              <Button
-                overrides={{
-                  BaseButton: {
-                    style: {
-                      marginRight: '24px'
-                    }
-                  }
-                }}
-                size={SIZE.compact}
-                shape={SHAPE.pill}
-                onClick={() => history.push('/signup')}
-              >
-                Get started
-              </Button>
-            </NavigationItem>
-          </NavigationList>
-        </HeaderNavigation>
-      </div>
+                <NavigationList $align={ALIGN.right}>
+                  <NavigationItem>
+                    <Button
+                      overrides={{
+                        BaseButton: {
+                          style: {
+                            marginRight: '24px'
+                          }
+                        }
+                      }}
+                      size={SIZE.compact}
+                      shape={SHAPE.pill}
+                      onClick={() => history.push('/signup')}
+                    >
+                      Get started
+                    </Button>
+                  </NavigationItem>
+                </NavigationList>
+              </HeaderNavigation>
+            </div>
+          </React.Fragment>
+        )}
+      </Media>
     );
   }
 }
