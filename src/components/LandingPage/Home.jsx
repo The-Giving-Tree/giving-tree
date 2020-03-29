@@ -1158,6 +1158,42 @@ function Home(props) {
                                     </div>
                                   ),
                                   key: 'postmates'
+                                },
+                                {
+                                  label: (
+                                    <div className="flex justify-center">
+                                      <img
+                                        src="https://d1ppmvgsdgdlyy.cloudfront.net/ubereats.svg"
+                                        alt="ubereats"
+                                        style={{ height: 50 }}
+                                      />
+                                    </div>
+                                  ),
+                                  key: 'ubereats'
+                                },
+                                {
+                                  label: (
+                                    <div className="flex justify-center">
+                                      <img
+                                        src="https://d1ppmvgsdgdlyy.cloudfront.net/amazonfresh.svg"
+                                        alt="amazonfresh"
+                                        style={{ height: 50 }}
+                                      />
+                                    </div>
+                                  ),
+                                  key: 'amazonfresh'
+                                },
+                                {
+                                  label: (
+                                    <div className="flex justify-center">
+                                      <img
+                                        src="https://d1ppmvgsdgdlyy.cloudfront.net/walmart.svg"
+                                        alt="walmart"
+                                        style={{ height: 50 }}
+                                      />
+                                    </div>
+                                  ),
+                                  key: 'walmart'
                                 }
                               ]}
                               onItemSelect={i => {
@@ -1168,8 +1204,17 @@ function Home(props) {
                                     setOpenFoodTracking(true);
                                     break;
                                   case 'postmates':
-                                    alert('coming soon');
+                                    window.open("https://postmates.com/", "_blank");
                                     break;
+                                  case 'ubereats':
+                                    window.open("https://www.ubereats.com/", "_blank");
+                                    break;
+                                  case 'amazonfresh':
+                                    window.open("https://www.amazon.com/alm/storefront?almBrandId=QW1hem9uIEZyZXNo", "_blank");
+                                    break;
+                                    case 'walmart':
+                                      window.open("https://grocery.walmart.com/", "_blank");
+                                      break;
                                   default:
                                     break;
                                 }
