@@ -827,8 +827,10 @@ function Post(props) {
                                         postId: foundPost._id
                                       });
 
-                                      // alert('post deleted succcessfully');
-                                      // window.location = '/home/discover';
+                                      setTimeout(function() {
+                                        alert('post deleted succcessfully');
+                                        window.location = '/home/discover';
+                                      }, 2000);
                                     }
                                   }}
                                   style={{
