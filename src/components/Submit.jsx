@@ -6,7 +6,7 @@ import Navigation from './Navigation';
 import { Card } from 'baseui/card';
 import { ArrowLeft } from 'baseui/icon';
 import { Tag } from 'baseui/tag';
-// Import the Slate editor factory.
+import Sidebar from './universal/Sidebar';
 
 import { connect } from 'react-redux';
 import { getCurrentUser, loadUser } from '../store/actions/auth/auth-actions';
@@ -408,14 +408,28 @@ function Submit(props) {
   return (
     <div style={{ width: '100%' }}>
       <Navigation searchBarPosition="center" />
-      <div style={{ width: '100%', background: '#F5F5F5', height: 'calc(100vh - 70px)' }}>
-        <div style={{ paddingLeft: 24, paddingRight: 24, paddingTop: 50 }}>
+      <div
+        style={{
+          background: '#F5F5F5',
+          display: 'flex',
+          flexDirection: 'row',
+          height: 'calc(100vh - 70px)',
+          width: '100%'
+        }}
+      >
+        <Sidebar {...props} />
+        <div
+          style={{
+            paddingLeft: 24,
+            paddingTop: 30,
+            width: '46.5vw'
+          }}
+        >
           {!isEmpty(user) && !user.seenSubmitTutorial && (
             <Card
               overrides={{
                 Root: {
                   style: {
-                    width: '60%',
                     margin: '0 auto',
                     marginBottom: '30px'
                   }
@@ -463,7 +477,6 @@ function Submit(props) {
               overrides={{
                 Root: {
                   style: {
-                    width: '60%',
                     margin: '0 auto',
                     marginBottom: '30px',
                     color: 'green'
@@ -490,7 +503,6 @@ function Submit(props) {
               overrides={{
                 Root: {
                   style: {
-                    width: '60%',
                     margin: '0 auto'
                   }
                 }
@@ -635,13 +647,6 @@ function Submit(props) {
     </div>
   );
 }
-
-// const initialValue = [
-//   {
-//     type: 'paragraph',
-//     children: [{ text: '' }]
-//   }
-// ];
 
 const mapDispatchToProps = dispatch => ({
   getCurrentUserDispatch: payload => dispatch(getCurrentUser(payload)),

@@ -383,12 +383,9 @@ const markSeen = async (env, postId, userId, token) => {
       userId
     };
 
-    console.log('env: ', env);
-
     const data = await Axios.post(`${ROUTES[env].giving_tree}/seen`, payload, headers);
     return data;
   } catch (e) {
-    console.log('e: ', e);
     const error = e.response.data ? e.response.data : e;
     Sentry.captureException(new Error(JSON.stringify(error)));
     throw error;

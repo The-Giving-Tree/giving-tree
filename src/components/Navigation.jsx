@@ -505,7 +505,14 @@ function Navigation(props) {
                   placement={PLACEMENT.bottomLeft}
                   content={({ close }) => notificationMenu(close)}
                 >
-                  <div style={{ display: 'flex', alignContent: 'center', cursor: 'pointer', height: 40 }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignContent: 'center',
+                      cursor: 'pointer',
+                      height: 40
+                    }}
+                  >
                     <img
                       src="https://d1ppmvgsdgdlyy.cloudfront.net/notification.svg"
                       alt="notification"
