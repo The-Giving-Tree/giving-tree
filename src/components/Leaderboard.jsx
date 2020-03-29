@@ -37,14 +37,16 @@ function Leaderboard(props) {
     }
   };
 
-  function generateHash(username = '') {
+  function generateHash(username = '', version) {
     const secret = 'givingtree';
     const hash = require('crypto')
       .createHmac('sha256', secret)
       .update(username.toLowerCase())
       .digest('hex');
 
-    return 'https://d1ppmvgsdgdlyy.cloudfront.net/user/' + hash;
+    const suffix = Number(version) === 0  || !version ? '' : `%3Fver%3D${version}`;
+    const url = `https://d1ppmvgsdgdlyy.cloudfront.net/user/${hash}${suffix}`;
+    return url;
   }
 
   const leaderboardJSX = () => {
@@ -120,12 +122,12 @@ function Leaderboard(props) {
                       width: 32,
                       height: 32,
                       background: `url(${generateHash(
-                        item.username
+                        item.username, item.profileVersion
                       )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
                       backgroundPosition: '50% 50%',
                       backgroundSize: 'cover',
                       borderRadius: '50%',
-                      marginRight: 10
+                      marginRight: 10,
                     }}
                   />
                   {item.username}

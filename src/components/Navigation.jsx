@@ -205,14 +205,16 @@ function Navigation(props) {
     return whole;
   }
 
-  function generateHash(username = '') {
+  function generateHash(username = '', version) {
     const secret = 'givingtree';
     const hash = require('crypto')
       .createHmac('sha256', secret)
       .update(username.toLowerCase())
       .digest('hex');
 
-    return 'https://d1ppmvgsdgdlyy.cloudfront.net/user/' + hash;
+    const suffix = Number(version) === 0  || !version ? '' : `%3Fver%3D${version}`;
+    const url = `https://d1ppmvgsdgdlyy.cloudfront.net/user/${hash}${suffix}`;
+    return url;
   }
 
   const notificationMenu = close => {
@@ -587,7 +589,7 @@ function Navigation(props) {
                           width: 32,
                           height: 32,
                           background: `url(${generateHash(
-                            user.username
+                            user.username, user.profileVersion
                           )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
                           backgroundPosition: '50% 50% !important',
                           backgroundSize: 'cover !important',
