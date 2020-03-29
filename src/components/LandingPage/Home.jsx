@@ -1435,655 +1435,245 @@ function Home(props) {
         </ModalFooter>
       </Modal>
       {props.match.url !== '/' ? (
-        <table className="table-auto" style={{ width: '100%', background: '#F5F5F5' }}>
-          <thead>
-            <tr>
-              <th className="px-4 py-2 text-right" style={{ width: '25%' }}>
-                <div
-                  style={{
-                    width: '100%',
-                    height: `calc(100vh - 70px + ${60 + items.length * 60}px)`
-                  }}
-                >
-                  <div
-                    className={`text-black transition duration-150 hover:text-indigo-600 ${props
-                      .match.url === '/home/discover' &&
-                      'text-indigo-600'} flex items-center justify-between`}
-                    style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 30 }}
-                  >
-                    <span />
-                    <div
-                      className="flex items-center side-table-heading"
-                      onClick={() => (window.location = '/home/discover')}
-                    >
-                      <img
-                        src="https://d1ppmvgsdgdlyy.cloudfront.net/search.svg"
-                        alt="search"
-                        style={{ height: 20, marginRight: 10 }}
-                      />
-                      Discover Tasks
-                    </div>
-                  </div>
-                  <div
-                    className={`text-black transition duration-150 hover:text-indigo-600 ${props
-                      .match.url === '/home/ongoing' &&
-                      'text-indigo-600'} flex items-center justify-between`}
-                    style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
-                  >
-                    <span />
-                    <div
-                      className="flex items-center side-table-heading"
-                      onClick={() => {
-                        if (authenticated) {
-                          window.location = '/home/ongoing';
-                        } else {
-                          alert('please login/signup before you can view your tasks');
-                          history.push('/signup');
-                        }
-                      }}
-                    >
-                      <img
-                        src="https://d1ppmvgsdgdlyy.cloudfront.net/care.svg"
-                        alt="care"
-                        style={{ height: 20, marginRight: 10 }}
-                      />
-                      Your Tasks
-                    </div>
-                  </div>
-                  <div
-                    className={`text-black transition duration-150 hover:text-indigo-600 ${props
-                      .match.url === '/home/completed' &&
-                      'text-indigo-600'} flex items-center justify-between`}
-                    style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
-                  >
-                    <span />
-                    <div
-                      className="flex items-center side-table-heading"
-                      onClick={() => {
-                        if (authenticated) {
-                          window.location = '/home/completed';
-                        } else {
-                          alert('please login/signup before you can view your completed tasks');
-                          history.push('/signup');
-                        }
-                      }}
-                    >
-                      <img
-                        src="https://d1ppmvgsdgdlyy.cloudfront.net/gift.svg"
-                        alt="gift"
-                        style={{ height: 20, marginRight: 10 }}
-                      />
-                      Completed Tasks
-                    </div>
-                  </div>
-                  <div
-                    className={`text-black transition duration-150 hover:text-indigo-600 ${props
-                      .match.url === '/home/global' &&
-                      'text-indigo-600'} flex items-center justify-between`}
-                    style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
-                  >
-                    <span />
-                    <div
-                      className="flex items-center side-table-heading"
-                      onClick={() => (window.location = '/home/global')}
-                    >
-                      <img
-                        src="https://d1ppmvgsdgdlyy.cloudfront.net/global.svg"
-                        alt="global"
-                        style={{ height: 20, marginRight: 10 }}
-                      />
-                      Global Tasks
-                    </div>
-                  </div>
-                  <div
-                    className={`text-black transition duration-150 hover:text-indigo-600 flex items-center justify-between`}
-                    style={{ cursor: 'pointer', paddingLeft: 24, paddingTop: 10 }}
-                  >
-                    <span />
-                    <div
-                      className="flex items-center side-table-heading"
-                      onClick={() => {
-                        if (authenticated) {
-                          history.push('/submit');
-                        } else {
-                          alert('please login/signup before you can ask for help');
-                          history.push('/signup');
-                        }
-                      }}
-                    >
-                      ❤️Ask for Help
-                    </div>
-                  </div>
-                </div>
-              </th>
-              <th className="px-4 py-2" style={{ width: '50%' }}>
-                <div
-                  style={{
-                    width: '100%',
-                    height: `calc(100vh - 70px + ${60 + items.length * 60}px)`
-                  }}
-                >
-                  <div style={{ paddingLeft: 24, paddingRight: 24, paddingTop: 30 }}>
-                    {props.match.url === '/home/discover' && (
-                      <div>
-                        <Card
-                          elavation={0}
-                          overrides={{
-                            Root: {
-                              style: {
-                                width: '100%',
-                                margin: '0 auto',
-                                boxShadow: 'none'
-                              }
-                            },
-                            Body: {
-                              style: {
-                                margin: '-15px'
-                              }
-                            }
-                          }}
-                        >
-                          <div
-                            style={{
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              alignContent: 'center'
-                            }}
-                          >
-                            <StatefulPopover
-                              placement={PLACEMENT.bottomLeft}
-                              content={({ close }) => (
-                                <StatefulMenu
-                                  items={[
-                                    // {
-                                    //   key: 'Home'
-                                    // },
-                                    // {
-                                    //   key: 'Popular'
-                                    // },
-                                    // {
-                                    //   key: 'Newest'
-                                    // },
-                                    {
-                                      label: 'Food',
-                                      key: 'Food'
-                                    },
-                                    {
-                                      label: 'Supplies',
-                                      key: 'Supplies'
-                                    }
-                                    // {
-                                    //   label: 'Transportation (coming soon)',
-                                    //   key: 'Transportation'
-                                    // },
-                                    // {
-                                    //   key: 'Completed Tasks'
-                                    // },
-                                    // {
-                                    //   key: 'Global Tasks'
-                                    // }
-                                  ]}
-                                  onItemSelect={item => {
-                                    close();
-                                    switch (item.item.key) {
-                                      case 'Home':
-                                        history.push('/home/discover');
-                                        break;
-                                      case 'Food':
-                                        selectMenuDispatch({ selectMenu: 'Food', title: newPost });
-                                        break;
-                                      case 'Supplies':
-                                        selectMenuDispatch({
-                                          selectMenu: 'Supplies',
-                                          title: newPost
-                                        });
-                                        break;
-                                      case 'Transportation':
-                                        alert('coming soon');
-                                        break;
-                                      case 'Custom Address':
-                                        setOpenCustomAddress(true);
-                                        break;
-                                      case 'Popular':
-                                        history.push('/home/popular');
-                                        break;
-                                      case 'Newest':
-                                        history.push('/home/newest');
-                                        break;
-                                      case 'Discover':
-                                        history.push('/home/discover');
-                                        break;
-                                      case 'Your Tasks':
-                                        history.push('/home/ongoing');
-                                        break;
-                                      case 'Completed Tasks':
-                                        history.push('/home/completed');
-                                        break;
-                                      case 'Global Tasks':
-                                        history.push('/home/global');
-                                        break;
-                                      default:
-                                        break;
-                                    }
-                                  }}
-                                  overrides={{
-                                    List: { style: { outline: 'none' } }
-                                  }}
-                                />
-                              )}
-                            >
-                              <Button
-                                size={'compact'}
-                                kind={'secondary'}
-                                style={{ marginRight: 0, outline: 'none' }}
-                                endEnhancer={() => <ChevronDown size={24} />}
-                              >
-                                {selectMenu}
-                              </Button>
-                            </StatefulPopover>
-                            <Input
-                              value={newPost}
-                              onChange={event => {
-                                setNewPost(event.currentTarget.value);
-                                selectMenuDispatch({
-                                  selectMenu,
-                                  title: event.currentTarget.value
-                                });
-                              }}
-                              placeholder="Ask for help / assistance"
-                            />
-                            <Button
-                              onClick={() => history.push('/submit')}
-                              kind="secondary"
-                              style={{ marginLeft: 10, fontSize: 14 }}
-                              shape={SHAPE.square}
-                            >
-                              Submit
-                            </Button>
-                          </div>
-                        </Card>
-                      </div>
-                    )}
-                    {openCustomAddress ? (
-                      <div className="flex justify-between items-center mt-2">
-                        <PlacesAutocomplete
-                          value={address}
-                          onChange={address => setAddress(address)}
-                          onSelect={address => {
-                            setAddress(address);
-                            geocodeByAddress(address)
-                              .then(results => getLatLng(results[0]))
-                              .then(latLng => {
-                                setLatLng(latLng);
-                              })
-                              .catch(error => console.error('Error', error));
-                          }}
-                        >
-                          {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-                            <div style={{ width: '100%' }}>
-                              <input
-                                {...getInputProps({
-                                  placeholder: 'Enter an address',
-                                  className: 'location-search-input'
-                                })}
-                                value={address}
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none"
-                                id="address"
-                                type="text"
-                              />
-                              <div className="autocomplete-dropdown-container">
-                                {loading && <div>Loading...</div>}
-                                {suggestions.map(suggestion => {
-                                  const className = suggestion.active
-                                    ? 'suggestion-item--active'
-                                    : 'suggestion-item';
-                                  // inline style for demonstration purpose
-                                  const style = suggestion.active
-                                    ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                                    : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                                  return (
-                                    <div
-                                      {...getSuggestionItemProps(suggestion, {
-                                        className,
-                                        style
-                                      })}
-                                    >
-                                      <span>{suggestion.description}</span>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            </div>
-                          )}
-                        </PlacesAutocomplete>
-                        <div className="flex items-center">
-                          <button
-                            className={`ml-4 bg-gray-500 hover:bg-gray-700 textWhite py-2 px-3 rounded focus:outline-none focus:shadow-outline`}
-                            type="button"
-                            onClick={() => {
-                              let lat = props.coords && props.coords.latitude;
-                              let lng = props.coords && props.coords.longitude;
-                              setLatLng({ lat, lng });
-                              setOpenCustomAddress(false);
-                              setAddress('');
-                            }}
-                          >
-                            Cancel
-                          </button>
-                          <button
-                            className={`ml-4 bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-3 rounded focus:outline-none focus:shadow-outline`}
-                            type="button"
-                            onClick={() => {
-                              if (address) {
-                                setOpenCustomAddress(false);
-                              } else {
-                                alert('you must enter an address to save!');
-                              }
-                            }}
-                          >
-                            Save
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      props.match.url === '/home/discover' && (
-                        <div className={`text-left mt-2`} style={{ fontSize: 12 }}>
-                          {address ||
-                            `Your current location (${props.coords &&
-                              props.coords.latitude}, ${props.coords && props.coords.longitude})`}
-                          &nbsp;
-                          <span
-                            onClick={() => setOpenCustomAddress(true)}
-                            className="text-indigo-600 hover:text-indigo-800 transition duration-150"
-                            style={{ cursor: 'pointer' }}
-                          >
-                            (edit)
-                          </span>
-                        </div>
-                      )
-                    )}
-                    <InfiniteScroll
-                      pageStart={1}
-                      loadMore={() => setUpdateNews(true)}
-                      hasMore={hasMoreItems}
-                      loader={
-                        <StyledBody
-                          className="loader"
-                          style={{ textAlign: 'center', padding: 10, marginTop: 20 }}
-                          key={0}
-                        >
-                          Loading...
-                        </StyledBody>
-                      }
-                    >
-                      {items}
-                    </InfiniteScroll>
-                    <div style={{ paddingTop: 30 }} />
-                    {items.length === 0 && newsfeedSuccess && !newsfeedLoading && (
-                      <StyledBody style={{ margin: '0 auto', textAlign: 'center', marginTop: 20 }}>
-                        {id === 'discover' && (
-                          <div className="mb-2">
-                            No requests yet -{' '}
-                            <span
-                              className={`text-indigo-600 hover:text-indigo-800 transition duration-150`}
-                              style={{ cursor: 'pointer' }}
-                              onClick={() => {
-                                selectMenuDispatch({ selectMenu: '' }); // to show base page
-                                history.push('/submit');
-                              }}
-                            >
-                              create a new request if you need help
-                            </span>
-                          </div>
-                        )}
-                        {id === 'ongoing' && (
-                          <div className="mb-2">You don't have any ongoing tasks yet</div>
-                        )}
-                        {id === 'completed' && (
-                          <div className="mb-2">You haven't completed any tasks yet</div>
-                        )}
-                        {id === 'global' && (
-                          <div className="mb-2">
-                            No requests globally completed yet! Invite your friends and start
-                            spreading the love
-                          </div>
-                        )}
-                        {id !== 'discover' && (
-                          <div
-                            onClick={() => {
-                              window.location = '/home/discover';
-                            }}
-                            style={{ cursor: 'pointer', color: 'rgb(25, 103, 210)' }}
-                          >
-                            Click here to discover topics and people to follow.
-                          </div>
-                        )}
-                      </StyledBody>
-                    )}
-                  </div>
-                </div>
-              </th>
-              <th className="px-4 py-2" style={{ width: '25%' }}>
-                <div
-                  style={{
-                    paddingTop: 30,
-                    height: `calc(100vh - 70px + ${60 + items.length * 60}px)`
-                  }}
-                >
+        <div
+          className="sidebar-table-container"
+          style={{
+            backgroundColor: '#F5F5F5',
+            display: 'flex',
+            flexDirection: 'row'
+          }}
+        >
+          <Sidebar {...props} />
+          <NewsfeedTable
+            {...props}
+            address={address}
+            hasMoreItems={hasMoreItems}
+            id={id}
+            items={items}
+            setOpenCustomAddress={setOpenCustomAddress}
+            setAddress={setAddress}
+            setLatLng={setLatLng}
+            newPost={newPost}
+            selectMenu={selectMenu}
+            openCustomAddress={openCustomAddress}
+            setUpdateNews={setUpdateNews}
+          />
+          <div
+            style={{
+              paddingTop: 30,
+              height: `calc(100vh - 70px + ${60 + items.length * 60}px)`
+            }}
+          >
+            <div
+              style={{
+                width: '344px'
+              }}
+              className="bg-white rounded-lg p-6 shadow-lg"
+            >
+              <div className="flex justify-between items-center">
+                <div className="text-left" style={{ fontWeight: 300 }}>
                   <div
                     style={{
-                      width: '344px'
+                      fontStyle: 'normal',
+                      fontWeight: 500,
+                      fontSize: 16,
+                      lineHeight: '20px',
+                      color: '#545454',
+                      paddingTop: '0px'
                     }}
-                    className="bg-white rounded-lg p-6 shadow-lg"
+                    className={`mb-4`}
                   >
-                    <div className="flex justify-between items-center">
-                      <div className="text-left" style={{ fontWeight: 300 }}>
-                        <div
-                          style={{
-                            fontStyle: 'normal',
-                            fontWeight: 500,
-                            fontSize: 16,
-                            lineHeight: '20px',
-                            color: '#545454',
-                            paddingTop: '0px'
-                          }}
-                          className={`mb-4`}
-                        >
-                          Leaderboard
-                        </div>
-                        <div
-                          style={{
-                            fontStyle: 'normal',
-                            fontWeight: 'normal',
-                            fontSize: 12,
-                            lineHeight: '14px',
-                            color: '#545454'
-                          }}
-                        >
-                          Most helpful people in your area
-                        </div>
-                      </div>
-                      <button
-                        className="bg-transparent hover:bg-gray-600 text-gray-700 font-semibold hover:text-white py-1 px-3 border border-gray-600 hover:border-transparent transition duration-150 rounded"
-                        style={{ outline: 'none' }}
-                        onClick={() => history.push('/leaderboard')}
-                      >
-                        <span style={{ fontSize: 12 }}>See full list</span>
-                      </button>
-                    </div>
-                    <div className="mt-4">{leaderboardJSX()}</div>
-                    {Number(userRanking) >= 0 && (
-                      <div className="mt-8">
-                        <div
-                          style={{
-                            fontStyle: 'normal',
-                            fontWeight: 'normal',
-                            fontSize: 12,
-                            lineHeight: '14px',
-                            color: '#545454'
-                          }}
-                          className="text-left mb-4"
-                        >
-                          Your Ranking
-                        </div>
-                        <table className="table-auto border-transparent" style={{ width: '99%' }}>
-                          <thead>
-                            <tr>
-                              <th
-                                className="px-4 py-2"
-                                style={{
-                                  fontStyle: 'normal',
-                                  fontWeight: 'bold',
-                                  fontSize: '12px',
-                                  lineHeight: '15px'
-                                }}
-                              >
-                                Rank
-                              </th>
-                              <th
-                                className="px-4 py-2 text-left"
-                                style={{
-                                  fontStyle: 'normal',
-                                  fontWeight: 'bold',
-                                  fontSize: '12px',
-                                  lineHeight: '15px'
-                                }}
-                              >
-                                Helper
-                              </th>
-                              <th
-                                className="px-4 py-2"
-                                style={{
-                                  fontStyle: 'normal',
-                                  fontWeight: 'bold',
-                                  fontSize: '12px',
-                                  lineHeight: '15px'
-                                }}
-                              >
-                                Karma
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr className={`bg-white`}>
-                              <td
-                                className={`px-4 py-2 flex justify-center items-center`}
-                                style={{
-                                  fontSize: '14px',
-                                  lineHeight: '17px',
-                                  fontStyle: 'normal',
-                                  fontWeight: 'normal'
-                                }}
-                              >
-                                {getLeaderboardIcon(Number(userRanking) + 1)}
-                              </td>
-                              <td
-                                className={`px-4 py-2 text-left hover:text-indigo-600 transition duration-150`}
-                                style={{
-                                  cursor: 'pointer',
-                                  fontSize: '14px',
-                                  lineHeight: '17px',
-                                  fontStyle: 'normal',
-                                  fontWeight: 'normal'
-                                }}
-                                onClick={() =>
-                                  history.push(
-                                    `/user/${Number(userRanking) >= 0 &&
-                                      leaderboard &&
-                                      leaderboard[Number(userRanking)] &&
-                                      leaderboard[Number(userRanking)].username}`
-                                  )
-                                }
-                              >
-                                {Number(userRanking) >= 0 &&
-                                  leaderboard &&
-                                  leaderboard[Number(userRanking)] &&
-                                  leaderboard[Number(userRanking)].username}
-                              </td>
-                              <td
-                                className={`px-4 py-2`}
-                                style={{
-                                  fontSize: '14px',
-                                  lineHeight: '17px',
-                                  fontStyle: 'normal',
-                                  fontWeight: 'normal'
-                                }}
-                              >
-                                {Number(userRanking) >= 0 &&
-                                  leaderboard &&
-                                  leaderboard[Number(userRanking)] &&
-                                  leaderboard[Number(userRanking)].karma}
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                        <StatefulPopover
-                          placement={PLACEMENT.bottomRight}
-                          overrides={{
-                            Arrow: {
-                              style: {
-                                borderRadius: '50px'
-                              }
-                            },
-                            Body: {
-                              style: {
-                                borderRadius: '50px'
-                              }
-                            },
-                            Root: {
-                              style: {
-                                borderRadius: '50px',
-                                boxShadow: `0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)`
-                              }
-                            }
-                          }}
-                          content={({ close }) => (
-                            <div className="bg-white rounded-lg p-5 shadow-lg">
-                              <div className="tooltip-heading py-1 mb-1">
-                                How does Karma on Giving Tree work?
-                              </div>
-                              <div className="tooltip-text py-1">
-                                Your karma points accumulate when other users upvote your completed
-                                tasks.
-                              </div>
-                              <div className="tooltip-text py-1">
-                                Upvotes you receive from users with higher karma have a greater
-                                influence on your karma points.
-                              </div>
-                              <div className="tooltip-text py-1">
-                                Have thoughts about our karma system?{' '}
-                                <a className="tooltip-heading" href="mailto:givingtree@gmail.com">
-                                  Email Us
-                                </a>
-                              </div>
-                            </div>
-                          )}
-                        >
-                          <div
-                            style={{
-                              fontStyle: 'normal',
-                              fontWeight: 'normal',
-                              fontSize: 12,
-                              lineHeight: '14px',
-                              color: '#545454',
-                              cursor: 'pointer'
-                            }}
-                            className="text-left mt-4"
-                          >
-                            Want to improve your ranking?{' '}
-                            <span className="font-bold hover:text-indigo-600 transition duration-150">
-                              Find out how
-                            </span>
-                          </div>
-                        </StatefulPopover>
-                      </div>
-                    )}
+                    Leaderboard
+                  </div>
+                  <div
+                    style={{
+                      fontStyle: 'normal',
+                      fontWeight: 'normal',
+                      fontSize: 12,
+                      lineHeight: '14px',
+                      color: '#545454'
+                    }}
+                  >
+                    Most helpful people in your area
                   </div>
                 </div>
-              </th>
-            </tr>
-          </thead>
-        </table>
+                <button
+                  className="bg-transparent hover:bg-gray-600 text-gray-700 font-semibold hover:text-white py-1 px-3 border border-gray-600 hover:border-transparent transition duration-150 rounded"
+                  style={{ outline: 'none' }}
+                  onClick={() => history.push('/leaderboard')}
+                >
+                  <span style={{ fontSize: 12 }}>See full list</span>
+                </button>
+              </div>
+              <div className="mt-4">{leaderboardJSX()}</div>
+              {Number(userRanking) >= 0 && (
+                <div className="mt-8">
+                  <div
+                    style={{
+                      fontStyle: 'normal',
+                      fontWeight: 'normal',
+                      fontSize: 12,
+                      lineHeight: '14px',
+                      color: '#545454'
+                    }}
+                    className="text-left mb-4"
+                  >
+                    Your Ranking
+                  </div>
+                  <table className="table-auto border-transparent" style={{ width: '99%' }}>
+                    <thead>
+                      <tr>
+                        <th
+                          className="px-4 py-2"
+                          style={{
+                            fontStyle: 'normal',
+                            fontWeight: 'bold',
+                            fontSize: '12px',
+                            lineHeight: '15px'
+                          }}
+                        >
+                          Rank
+                        </th>
+                        <th
+                          className="px-4 py-2 text-left"
+                          style={{
+                            fontStyle: 'normal',
+                            fontWeight: 'bold',
+                            fontSize: '12px',
+                            lineHeight: '15px'
+                          }}
+                        >
+                          Helper
+                        </th>
+                        <th
+                          className="px-4 py-2"
+                          style={{
+                            fontStyle: 'normal',
+                            fontWeight: 'bold',
+                            fontSize: '12px',
+                            lineHeight: '15px'
+                          }}
+                        >
+                          Karma
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className={`bg-white`}>
+                        <td
+                          className={`px-4 py-2 flex justify-center items-center`}
+                          style={{
+                            fontSize: '14px',
+                            lineHeight: '17px',
+                            fontStyle: 'normal',
+                            fontWeight: 'normal'
+                          }}
+                        >
+                          {getLeaderboardIcon(Number(userRanking) + 1)}
+                        </td>
+                        <td
+                          className={`px-4 py-2 text-left hover:text-indigo-600 transition duration-150`}
+                          style={{
+                            cursor: 'pointer',
+                            fontSize: '14px',
+                            lineHeight: '17px',
+                            fontStyle: 'normal',
+                            fontWeight: 'normal'
+                          }}
+                          onClick={() =>
+                            history.push(
+                              `/user/${Number(userRanking) >= 0 &&
+                                leaderboard &&
+                                leaderboard[Number(userRanking)] &&
+                                leaderboard[Number(userRanking)].username}`
+                            )
+                          }
+                        >
+                          {Number(userRanking) >= 0 &&
+                            leaderboard &&
+                            leaderboard[Number(userRanking)] &&
+                            leaderboard[Number(userRanking)].username}
+                        </td>
+                        <td
+                          className={`px-4 py-2`}
+                          style={{
+                            fontSize: '14px',
+                            lineHeight: '17px',
+                            fontStyle: 'normal',
+                            fontWeight: 'normal'
+                          }}
+                        >
+                          {Number(userRanking) >= 0 &&
+                            leaderboard &&
+                            leaderboard[Number(userRanking)] &&
+                            leaderboard[Number(userRanking)].karma}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <StatefulPopover
+                    placement={PLACEMENT.bottomRight}
+                    overrides={{
+                      Arrow: {
+                        style: {
+                          borderRadius: '50px'
+                        }
+                      },
+                      Body: {
+                        style: {
+                          borderRadius: '50px'
+                        }
+                      },
+                      Root: {
+                        style: {
+                          borderRadius: '50px',
+                          boxShadow: `0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)`
+                        }
+                      }
+                    }}
+                    content={({ close }) => (
+                      <div className="bg-white rounded-lg p-5 shadow-lg">
+                        <div className="tooltip-heading py-1 mb-1">
+                          How does Karma on Giving Tree work?
+                        </div>
+                        <div className="tooltip-text py-1">
+                          Your karma points accumulate when other users upvote your completed tasks.
+                        </div>
+                        <div className="tooltip-text py-1">
+                          Upvotes you receive from users with higher karma have a greater influence
+                          on your karma points.
+                        </div>
+                        <div className="tooltip-text py-1">
+                          Have thoughts about our karma system?{' '}
+                          <a className="tooltip-heading" href="mailto:givingtree@gmail.com">
+                            Email Us
+                          </a>
+                        </div>
+                      </div>
+                    )}
+                  >
+                    <div
+                      style={{
+                        fontStyle: 'normal',
+                        fontWeight: 'normal',
+                        fontSize: 12,
+                        lineHeight: '14px',
+                        color: '#545454',
+                        cursor: 'pointer'
+                      }}
+                      className="text-left mt-4"
+                    >
+                      Want to improve your ranking?{' '}
+                      <span className="font-bold hover:text-indigo-600 transition duration-150">
+                        Find out how
+                      </span>
+                    </div>
+                  </StatefulPopover>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       ) : (
         <div
           style={{
@@ -2107,28 +1697,6 @@ function Home(props) {
           >
             see leaderboard
           </button>
-        </div>
-      )}
-      {props.match.url !== '/' && (
-        <div
-          className="sidebar-table-container"
-          style={{
-            backgroundColor: '#F5F5F5',
-            display: 'flex',
-            flexDirection: 'row'
-          }}
-        >
-          <Sidebar {...props} />
-          <NewsfeedTable
-            {...props}
-            address={address}
-            hasMoreItems={hasMoreItems}
-            id={id}
-            items={items}
-            newPost={newPost}
-            openCustomAddress={openCustomAddress}
-            setUpdateNews={setUpdateNews}
-          />
         </div>
       )}
     </div>
