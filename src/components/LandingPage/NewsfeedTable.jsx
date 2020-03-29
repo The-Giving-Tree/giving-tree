@@ -256,14 +256,14 @@ function NewsfeedTable(props) {
                         onClick={() => {
                           let lat = coords && coords.latitude;
                           let lng = coords && coords.longitude;
-                          setLatLng({ lat, lng });
-                          setOpenCustomAddress(false);
 
                           // only refresh if the user is coming from a different location
-                          if (address !== '') {
+                          if (address !== 'Earth') {
                             window.location = '/home/discover'
                           }
-                          setAddress('');
+
+                          setLatLng({ lat, lng });
+                          setOpenCustomAddress(false);
                         }}
                       >
                         Cancel
@@ -287,7 +287,7 @@ function NewsfeedTable(props) {
                 ) : (
                   match.url === '/home/discover' && (
                     <div className={`text-left mt-2`} style={{ fontSize: 12 }}>
-                      Your current location: {address ||
+                      Your current location: {address === 'Earth' && 'Earth 🌍' ||
                         `(${
                           latLng.lat ? latLng.lat : coords && coords.latitude
                         }, ${latLng.lng ? latLng.lng : coords && coords.longitude})`}
