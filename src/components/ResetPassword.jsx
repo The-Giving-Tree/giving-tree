@@ -101,6 +101,7 @@ function ResetPassword(props) {
   }
 
   if (confirmPasswordSuccess) {
+    alert('succesfully changed password - please try logging in now');
     history.push('/login');
   }
 

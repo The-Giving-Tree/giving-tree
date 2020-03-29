@@ -64,7 +64,7 @@ function Login(props) {
   let history = useHistory();
 
   if (authenticated) {
-    return <Redirect to="/" />;
+    return <Redirect to="/home/discover" />;
   } else {
     return (
       <div style={{ width: '100%' }}>
