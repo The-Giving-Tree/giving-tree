@@ -9,6 +9,7 @@ import Home from './components/LandingPage/Home';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import User from './components/User';
+import Leaderboard from './components/Leaderboard';
 import Setting from './components/Setting';
 import Submit from './components/Submit';
 import Post from './components/Post';
@@ -32,6 +33,7 @@ function App() {
           <BrowserRouter>
             <Switch>
               <Route exact path={Constants.PATHS.HOME} component={Home} />
+              <Route exact path={Constants.PATHS.LEADERBOARD} component={Leaderboard} />
               <Route exact path="/home/:id" component={Home} />
               <Route exact path={Constants.PATHS.LOGIN} component={Login} />
               <Route exact path={Constants.PATHS.SIGNUP} component={Signup} />

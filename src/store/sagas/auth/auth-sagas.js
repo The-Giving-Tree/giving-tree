@@ -1,9 +1,6 @@
-import { call, delay, put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import ACTION_TYPE from '../../actions/auth/action-types';
 import Api from './api';
-import { getUserData } from '../user/user-sagas';
-import GLOBAL_TYPES from '../../actions/global/action-types';
-import ROUTES from '../../../utils/routes';
 
 export function* login(action) {
   try {
@@ -413,6 +410,7 @@ export function* loadUser(action) {
       createdAt,
       upvotes,
       downvotes,
+      karma,
       verified,
       _id,
       profilePictureUrl,
@@ -425,6 +423,7 @@ export function* loadUser(action) {
         _id,
         message,
         email,
+        karma,
         headerPictureUrl,
         username,
         upvotes,

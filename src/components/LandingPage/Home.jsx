@@ -9,6 +9,7 @@ import {
 import { StyledLink as Link } from 'baseui/link';
 import { useStyletron } from 'baseui';
 import { Block } from 'baseui/block';
+import Expand from 'react-expand-animated';
 import { Button, SHAPE } from 'baseui/button';
 import { useHistory } from 'react-router-dom';
 import PlacesAutocomplete from 'react-places-autocomplete';
@@ -23,15 +24,15 @@ import Confetti from 'react-confetti';
 import Navigation from './../Navigation';
 import { geolocated } from 'react-geolocated';
 import InfiniteScroll from 'react-infinite-scroller';
-import { Card, StyledBody, StyledAction } from 'baseui/card';
+import { Card, StyledBody } from 'baseui/card';
 import { StatefulPopover, PLACEMENT } from 'baseui/popover';
 import { StatefulMenu } from 'baseui/menu';
-import { Slate, Editable, ReactEditor, withReact, useSlate } from 'slate-react';
-import { Editor, Text, createEditor } from 'slate';
+import { withReact } from 'slate-react';
+import { createEditor } from 'slate';
 import { Input, SIZE } from 'baseui/input';
-import { Upload, ChevronUp, ChevronDown } from 'baseui/icon';
+import { ChevronUp, ChevronDown } from 'baseui/icon';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { Tag, VARIANT, KIND } from 'baseui/tag';
+import { Tag, KIND } from 'baseui/tag';
 import moment from 'moment';
 import Sidebar from '../universal/Sidebar';
 import NewsfeedTable from './NewsfeedTable';
@@ -102,12 +103,26 @@ function Home(props) {
   const [initialDownvotes, setInitialDownvotes] = React.useState([]);
   const [upvoteHover, setUpvoteHover] = React.useState([]);
   const [downvoteHover, setDownvoteHover] = React.useState([]);
+  const [helpArrayDiscover, setHelpArrayDiscover] = React.useState({}); // array to keep track of which items a user has claimed - to remove from newsfeed
+  const [helpArrayOngoing, setHelpArrayOngoing] = React.useState({}); // array to keep track of which items a user has claimed - to remove from newsfeed
   const [hasMoreItems, setHasMoreItems] = React.useState(true);
   const [newPost, setNewPost] = React.useState('');
   const [confetti, showConfetti] = React.useState(false);
   const { width, height } = useWindowSize();
 
-  const mToKm = value => `${(value / 1000).toFixed(1)}km`;
+  const removeDiscover = id => {
+    setHelpArrayDiscover(prevDiscover => ({
+      ...prevDiscover,
+      [id]: !prevDiscover[id]
+    }));
+  };
+
+  const removeOngoing = id => {
+    setHelpArrayOngoing(prevOngoing => ({
+      ...prevOngoing,
+      [id]: !prevOngoing[id]
+    }));
+  };
 
   const [css, theme] = useStyletron();
 
@@ -290,43 +305,47 @@ function Home(props) {
           </tr>
         </thead>
         <tbody>
-          {leaderboard.map((item, i) => (
-            <tr className={i % 2 === 0 && `bg-white`}>
-              <td
-                className={`px-4 py-2`}
-                style={{
-                  fontSize: '14px',
-                  lineHeight: '17px',
-                  fontStyle: 'normal',
-                  fontWeight: 'normal'
-                }}
-              >
-                {Number(i) + 1}
-              </td>
-              <td
-                className={`px-4 py-2 text-left`}
-                style={{
-                  fontSize: '14px',
-                  lineHeight: '17px',
-                  fontStyle: 'normal',
-                  fontWeight: 'normal'
-                }}
-              >
-                {item.username}
-              </td>
-              <td
-                className={`px-4 py-2`}
-                style={{
-                  fontSize: '14px',
-                  lineHeight: '17px',
-                  fontStyle: 'normal',
-                  fontWeight: 'normal'
-                }}
-              >
-                {item.karma}
-              </td>
-            </tr>
-          ))}
+          {leaderboard
+            .filter((item, i) => Number(i) < 10)
+            .map((item, i) => (
+              <tr className={i % 2 === 0 && `bg-white`}>
+                <td
+                  className={`px-4 py-2 flex justify-center items-center`}
+                  style={{
+                    fontSize: '14px',
+                    lineHeight: '17px',
+                    fontStyle: 'normal',
+                    fontWeight: 'normal'
+                  }}
+                >
+                  {getLeaderboardIcon(Number(i) + 1)}
+                </td>
+                <td
+                  onClick={() => history.push(`/user/${item.username}`)}
+                  className={`px-4 py-2 text-left hover:text-indigo-600 transition duration-150`}
+                  style={{
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                    lineHeight: '17px',
+                    fontStyle: 'normal',
+                    fontWeight: 'normal'
+                  }}
+                >
+                  {item.username}
+                </td>
+                <td
+                  className={`px-4 py-2`}
+                  style={{
+                    fontSize: '14px',
+                    lineHeight: '17px',
+                    fontStyle: 'normal',
+                    fontWeight: 'normal'
+                  }}
+                >
+                  {item.karma}
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     );
@@ -439,7 +458,7 @@ function Home(props) {
               {item.assignedUser.username}
             </span>
             {Number(item.assignedUser.karma) >= 0 && (
-              <div>&nbsp;&bull; {item.assignedUser.karma} karma</div>
+              <span>&nbsp;&bull; {item.assignedUser.karma} karma</span>
             )}
           </p>
           <p style={{ textTransform: 'lowercase' }}>
@@ -453,6 +472,14 @@ function Home(props) {
   function removeIndex(array, element) {
     const index = array.indexOf(element);
     array.splice(index, 1);
+  }
+
+  function openCard(i) {
+    return props.match.url === '/home/discover'
+      ? !helpArrayDiscover[i]
+      : props.match.url === '/home/ongoing'
+      ? !helpArrayOngoing[i]
+      : true;
   }
 
   const render = () => {
@@ -474,688 +501,725 @@ function Home(props) {
         upvoteIndex.push(i);
       }
       items.push(
-        <div className="item" key={i}>
-          <Card
-            overrides={{
-              Root: {
-                style: {
-                  width: '100%',
-                  margin: `${props.match.url === '/home/discover' ? '10px' : '0px'} auto 0px auto`,
-                  maxHeight: '800px',
-                  overflow: 'hidden'
+        <div className="shadow" className="item" key={i}>
+          <Expand key={i} open={openCard(item._id)}>
+            <Card
+              overrides={{
+                Root: {
+                  style: {
+                    width: '100%',
+                    margin: `${
+                      props.match.url === '/home/discover' ? '10px' : '0px'
+                    } auto 0px auto`,
+                    maxHeight: '800px',
+                    overflow: 'hidden',
+                    boxShadow: 'none'
+                  }
+                },
+                Body: {
+                  style: {
+                    margin: '-10px'
+                  }
                 }
-              },
-              Body: {
-                style: {
-                  margin: '-10px'
-                }
-              }
-            }}
-          >
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between'
               }}
             >
-              <div>
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignContent: 'center',
-                    paddingBottom: 15
-                  }}
-                >
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between'
+                }}
+              >
+                <div>
                   <div
                     style={{
-                      textTransform: 'lowercase',
-                      fontSize: 12,
-                      marginLeft: 5,
                       display: 'flex',
-                      alignContent: 'center'
+                      justifyContent: 'space-between',
+                      alignContent: 'center',
+                      paddingBottom: 15
                     }}
                   >
                     <div
-                      onClick={() => history.push(`/user/${item.username}`)}
                       style={{
-                        width: 32,
-                        height: 32,
-                        background: `url(${generateHash(
-                          item.username
-                        )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
-                        backgroundPosition: '50% 50%',
-                        backgroundSize: 'cover',
-                        borderRadius: '50%',
-                        marginRight: 10,
-                        cursor: 'pointer'
+                        textTransform: 'lowercase',
+                        fontSize: 12,
+                        marginLeft: 5,
+                        display: 'flex',
+                        alignContent: 'center'
                       }}
-                    />
-                    <div>
-                      <strong>
-                        <a
-                          style={{ textDecoration: 'none', color: 'rgb(0, 121, 211)' }}
-                          href={`/user/${item.username}`}
-                        >
-                          {item.username}
-                        </a>
-                      </strong>{' '}
-                      · {moment(new Date(item.createdAt)).fromNow()}
+                    >
+                      <div
+                        onClick={() => history.push(`/user/${item.username}`)}
+                        style={{
+                          width: 32,
+                          height: 32,
+                          background: `url(${generateHash(
+                            item.username
+                          )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
+                          backgroundPosition: '50% 50%',
+                          backgroundSize: 'cover',
+                          borderRadius: '50%',
+                          marginRight: 10,
+                          cursor: 'pointer'
+                        }}
+                      />
+                      <div>
+                        <strong>
+                          <a
+                            style={{ textDecoration: 'none', color: 'rgb(0, 121, 211)' }}
+                            href={`/user/${item.username}`}
+                          >
+                            {item.username}
+                          </a>
+                        </strong>{' '}
+                        · {moment(new Date(item.createdAt)).fromNow()}
+                      </div>
                     </div>
-                  </div>
-                  <div
-                    style={{
-                      alignContent: 'flex-start'
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignContent: 'center' }}>
-                      {item.type === 'Post' &&
-                        item.categories.map(i => (
+                    <div
+                      style={{
+                        alignContent: 'flex-start'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignContent: 'center' }}>
+                        {item.type === 'Post' &&
+                          item.categories.map(i => (
+                            <Tag
+                              overrides={{
+                                Root: {
+                                  style: {
+                                    marginRight: item.assignedUser ? '5px' : '15px',
+                                    marginTop: '0px',
+                                    marginBottom: '0px'
+                                  }
+                                }
+                              }}
+                              closeable={false}
+                              color="#4327F1"
+                              kind={KIND.custom}
+                            >
+                              {i}
+                            </Tag>
+                          ))}
+                        {item.assignedUser && !item.completed && (
                           <Tag
                             overrides={{
                               Root: {
                                 style: {
-                                  marginRight: item.assignedUser ? '5px' : '15px',
+                                  marginRight: '15px',
                                   marginTop: '0px',
                                   marginBottom: '0px'
                                 }
                               }
                             }}
                             closeable={false}
-                            color="#4327F1"
+                            color="#FFA500"
                             kind={KIND.custom}
                           >
-                            {i}
+                            In Progress
                           </Tag>
-                        ))}
-                      {item.assignedUser && !item.completed && (
-                        <Tag
-                          overrides={{
-                            Root: {
-                              style: {
-                                marginRight: '15px',
-                                marginTop: '0px',
-                                marginBottom: '0px'
+                        )}
+                        {item.assignedUser && item.completed && (
+                          <Tag
+                            overrides={{
+                              Root: {
+                                style: {
+                                  marginRight: '15px',
+                                  marginTop: '0px',
+                                  marginBottom: '0px'
+                                }
                               }
-                            }
-                          }}
-                          closeable={false}
-                          color="#FFA500"
-                          kind={KIND.custom}
-                        >
-                          In Progress
-                        </Tag>
-                      )}
-                      {item.assignedUser && item.completed && (
-                        <Tag
-                          overrides={{
-                            Root: {
-                              style: {
-                                marginRight: '15px',
-                                marginTop: '0px',
-                                marginBottom: '0px'
-                              }
-                            }
-                          }}
-                          closeable={false}
-                          color="#4BCA81"
-                          kind={KIND.custom}
-                        >
-                          Completed
-                        </Tag>
-                      )}
-                      <img
-                        onClick={() => history.push(`/post/${item._id}`)}
-                        src="https://d1ppmvgsdgdlyy.cloudfront.net/more.svg"
-                        alt="more"
-                        style={{ width: 15, height: 'auto', cursor: 'pointer' }}
-                      />
+                            }}
+                            closeable={false}
+                            color="#4BCA81"
+                            kind={KIND.custom}
+                          >
+                            Completed
+                          </Tag>
+                        )}
+                        <img
+                          onClick={() => history.push(`/post/${item._id}`)}
+                          src="https://d1ppmvgsdgdlyy.cloudfront.net/more.svg"
+                          alt="more"
+                          style={{ width: 15, height: 'auto', cursor: 'pointer' }}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div
-                  style={{
-                    alignContent: 'center',
-                    maxHeight: `calc(0.8 * 550px)`,
-                    overflow: 'hidden'
-                  }}
-                >
-                  <div style={{ display: 'table' }}>
-                    <div style={{ textAlign: 'center' }}>
-                      <ChevronUp
-                        size={25}
-                        color={
-                          upvoteIndex.includes(i) || upvoteHover.includes(i) ? '#268bd2' : '#aaa'
-                        }
-                        style={{ alignContent: 'center', cursor: 'pointer' }}
-                        onMouseEnter={() => mouseOverUp(i)}
-                        onMouseLeave={() => mouseOutUp(i)}
-                        onClick={async () => {
-                          if (authenticated) {
-                            await handleUpClick(
-                              item.type,
-                              item._id,
-                              item.type === 'Comment' && item.postId
-                            );
-
-                            if (downvoteIndex.includes(i)) {
-                              removeIndex(downvoteIndex, i);
-                            }
-
-                            if (upvoteIndex.includes(i)) {
-                              removeIndex(upvoteIndex, i);
-                            } else {
-                              upvoteIndex.push(i);
-                            }
-                          } else {
-                            alert('please signup first');
-                            history.push('/signup');
+                  <div
+                    style={{
+                      alignContent: 'center',
+                      maxHeight: `calc(0.8 * 550px)`,
+                      overflow: 'hidden'
+                    }}
+                  >
+                    <div style={{ display: 'table' }}>
+                      <div style={{ textAlign: 'center' }}>
+                        <ChevronUp
+                          size={25}
+                          color={
+                            upvoteIndex.includes(i) || upvoteHover.includes(i) ? '#268bd2' : '#aaa'
                           }
-                        }}
-                      />
-                      <div style={{ alignContent: 'center', marginBottom: 3 }}>
-                        {item.voteTotal +
-                          Number(
-                            upvoteIndex.includes(i)
-                              ? item.upVotes.includes(user._id)
-                                ? 0
-                                : 1
-                              : item.upVotes.includes(user._id)
-                              ? -1
-                              : 0
-                          ) -
-                          Number(
-                            downvoteIndex.includes(i)
-                              ? item.downVotes.includes(user._id)
-                                ? 0
-                                : 1
-                              : item.downVotes.includes(user._id)
-                              ? -1
-                              : 0
-                          )}
+                          style={{ alignContent: 'center', cursor: 'pointer' }}
+                          onMouseEnter={() => mouseOverUp(i)}
+                          onMouseLeave={() => mouseOutUp(i)}
+                          onClick={async () => {
+                            if (authenticated) {
+                              await handleUpClick(
+                                item.type,
+                                item._id,
+                                item.type === 'Comment' && item.postId
+                              );
+
+                              if (downvoteIndex.includes(i)) {
+                                removeIndex(downvoteIndex, i);
+                              }
+
+                              if (upvoteIndex.includes(i)) {
+                                removeIndex(upvoteIndex, i);
+                              } else {
+                                upvoteIndex.push(i);
+                              }
+                            } else {
+                              alert('please signup first');
+                              history.push('/signup');
+                            }
+                          }}
+                        />
+                        <div style={{ alignContent: 'center', marginBottom: 3 }}>
+                          {item.voteTotal +
+                            Number(
+                              upvoteIndex.includes(i)
+                                ? item.upVotes.includes(user._id)
+                                  ? 0
+                                  : 1
+                                : item.upVotes.includes(user._id)
+                                ? -1
+                                : 0
+                            ) -
+                            Number(
+                              downvoteIndex.includes(i)
+                                ? item.downVotes.includes(user._id)
+                                  ? 0
+                                  : 1
+                                : item.downVotes.includes(user._id)
+                                ? -1
+                                : 0
+                            )}
+                        </div>
+                        <ChevronDown
+                          color={
+                            downvoteIndex.includes(i) || downvoteHover.includes(i)
+                              ? '#268bd2'
+                              : '#aaa'
+                          }
+                          size={25}
+                          style={{ alignContent: 'center', cursor: 'pointer' }}
+                          onMouseEnter={() => mouseOverDown(i)}
+                          onMouseLeave={() => mouseOutDown(i)}
+                          onClick={async () => {
+                            if (authenticated) {
+                              await handleDownClick(
+                                item.type,
+                                item._id,
+                                item.type === 'Comment' && item.postId
+                              );
+
+                              if (upvoteIndex.includes(i)) {
+                                removeIndex(upvoteIndex, i);
+                              }
+
+                              if (downvoteIndex.includes(i)) {
+                                removeIndex(downvoteIndex, i);
+                              } else {
+                                downvoteIndex.push(i);
+                              }
+                            } else {
+                              alert('please signup first');
+                              history.push('/signup');
+                            }
+                          }}
+                        />
                       </div>
-                      <ChevronDown
-                        color={
-                          downvoteIndex.includes(i) || downvoteHover.includes(i)
-                            ? '#268bd2'
-                            : '#aaa'
-                        }
-                        size={25}
-                        style={{ alignContent: 'center', cursor: 'pointer' }}
-                        onMouseEnter={() => mouseOverDown(i)}
-                        onMouseLeave={() => mouseOutDown(i)}
-                        onClick={async () => {
-                          if (authenticated) {
-                            await handleDownClick(
-                              item.type,
-                              item._id,
-                              item.type === 'Comment' && item.postId
-                            );
-
-                            if (upvoteIndex.includes(i)) {
-                              removeIndex(upvoteIndex, i);
-                            }
-
-                            if (downvoteIndex.includes(i)) {
-                              removeIndex(downvoteIndex, i);
-                            } else {
-                              downvoteIndex.push(i);
-                            }
-                          } else {
-                            alert('please signup first');
-                            history.push('/signup');
-                          }
-                        }}
-                      />
-                    </div>
-                    <div
-                      style={{
-                        display: 'table-cell',
-                        maxHeight: 'calc(0.7 * 300px)',
-                        tableLayout: 'fixed',
-                        textAlign: 'left',
-                        verticalAlign: 'middle',
-                        width: '100%'
-                      }}
-                    >
                       <div
                         style={{
-                          alignContent: 'center',
-                          display: 'block',
-                          marginBottom: 3,
-                          marginLeft: 20
+                          display: 'table-cell',
+                          maxHeight: 'calc(0.7 * 300px)',
+                          tableLayout: 'fixed',
+                          textAlign: 'left',
+                          verticalAlign: 'middle',
+                          width: '100%'
                         }}
                       >
                         <div
                           style={{
-                            fontSize: 20,
-                            fontWeight: 600,
-                            marginTop: 5,
-                            textTransform: 'capitalize'
+                            alignContent: 'center',
+                            display: 'block',
+                            marginBottom: 3,
+                            marginLeft: 20
                           }}
                         >
-                          {item.title}
-                        </div>
-                        <div style={{ marginTop: 5 }}>
-                          {item.type === 'Post' ? (
-                            <div style={{ marginTop: 20 }}>
-                              <div>
-                                <div className="text-sm my-1 mt-4">
-                                  {item.text && `Address: ${JSON.parse(item.text).address}`}
-                                </div>
-                                <div className="text-sm my-1 mt-4">
-                                  {item && `Description: ${JSON.parse(item.text).description}`}
-                                </div>
-                                {item &&
-                                  props.match.url === '/home/ongoing' &&
-                                  JSON.parse(item.text).phoneNumber && (
-                                    <div className="text-sm my-1 mt-4">
-                                      Phone Number: {JSON.parse(item.text).phoneNumber}
-                                    </div>
-                                  )}
-                                <div className="mt-4"></div>
-                                {item.text &&
-                                  props.match.url !== '/home/ongoing' &&
-                                  JSON.parse(item.text).type === 'food' &&
-                                  foodCartJSX(JSON.parse(item.text).cart)}
-                                {item.text &&
-                                  props.match.url === '/home/completed' &&
-                                  item.trackingDetails &&
-                                  completedOrderJSX(item.trackingDetails)}
-                                {item.text &&
-                                  props.match.url === '/home/global' &&
-                                  completedOrderGlobalJSX(item)}
-                              </div>
-                            </div>
-                          ) : (
-                            item.content
-                          )}
-                        </div>
-                        {item.type === 'Comment' && (
-                          <div>
-                            <Card
-                              overrides={{
-                                Root: {
-                                  style: {
-                                    borderRadius: '10px',
-                                    maxHeight: '300px',
-                                    overflow: 'hidden'
-                                  }
-                                }
+                          <div
+                            style={{
+                              display: 'block',
+                              alignContent: 'center',
+                              marginBottom: 3,
+                              marginLeft: 20
+                            }}
+                          >
+                            <div
+                              style={{
+                                textTransform: 'capitalize',
+                                fontSize: 20,
+                                fontWeight: 600,
+                                marginTop: 5
                               }}
-                              style={{ /*width: '100%',*/ marginTop: 15 }}
                             >
-                              <div
-                                style={{
-                                  marginTop: -10,
-                                  display: 'flex',
-                                  justifyContent: 'space-between',
-                                  alignContent: 'center'
-                                }}
-                              >
-                                <div
-                                  style={{
-                                    display: 'flex',
-                                    alignContent: 'center',
-                                    textTransform: 'lowercase',
-                                    fontSize: 12
+                              {item.title}
+                            </div>
+                            <div style={{ marginTop: 5 }}>
+                              {item.type === 'Post' ? (
+                                <div style={{ marginTop: 20 }}>
+                                  <div>
+                                    <div className="text-sm my-1 mt-4">
+                                      {item.text && `Address: ${JSON.parse(item.text).address}`}
+                                    </div>
+                                    <div className="text-sm my-1 mt-4">
+                                      {item && `Description: ${JSON.parse(item.text).description}`}
+                                    </div>
+                                    {item &&
+                                      props.match.url === '/home/ongoing' &&
+                                      JSON.parse(item.text).phoneNumber && (
+                                        <div className="text-sm my-1 mt-4">
+                                          Phone Number: {JSON.parse(item.text).phoneNumber}
+                                        </div>
+                                      )}
+                                    <div className="mt-4"></div>
+                                    {item.text &&
+                                      props.match.url !== '/home/ongoing' &&
+                                      JSON.parse(item.text).type === 'food' &&
+                                      foodCartJSX(JSON.parse(item.text).cart)}
+                                    {item.text &&
+                                      props.match.url === '/home/completed' &&
+                                      item.trackingDetails &&
+                                      completedOrderJSX(item.trackingDetails)}
+                                    {item.text &&
+                                      props.match.url === '/home/global' &&
+                                      completedOrderGlobalJSX(item)}
+                                  </div>
+                                </div>
+                              ) : (
+                                item.content
+                              )}
+                            </div>
+                            {item.type === 'Comment' && (
+                              <div>
+                                <Card
+                                  overrides={{
+                                    Root: {
+                                      style: {
+                                        borderRadius: '10px',
+                                        maxHeight: '300px',
+                                        overflow: 'hidden'
+                                      }
+                                    }
                                   }}
+                                  style={{ /*width: '100%',*/ marginTop: 15 }}
                                 >
                                   <div
-                                    onClick={() => history.push(`/user/${item.parent.username}`)}
                                     style={{
-                                      width: 32,
-                                      height: 32,
-                                      background: `url(${generateHash(
-                                        item.parent.username
-                                      )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
-                                      backgroundPosition: '50% 50%',
-                                      backgroundSize: 'cover',
-                                      borderRadius: '50%',
-                                      marginRight: 10,
-                                      cursor: 'pointer'
+                                      marginTop: -10,
+                                      display: 'flex',
+                                      justifyContent: 'space-between',
+                                      alignContent: 'center'
                                     }}
-                                  />
-                                  <strong>
-                                    <a
+                                  >
+                                    <div
                                       style={{
-                                        textDecoration: 'none',
-                                        color: 'rgb(0, 121, 211)'
+                                        display: 'flex',
+                                        alignContent: 'center',
+                                        textTransform: 'lowercase',
+                                        fontSize: 12
                                       }}
-                                      href={`/user/${item.parent.username}`}
                                     >
-                                      {item.parent && item.parent.username}
-                                    </a>
-                                  </strong>
-                                  &nbsp;·&nbsp;
-                                  {moment(item.parent && item.parent.createdAt).format(
-                                    'MMM D, YYYY h:mm A'
-                                  )}
-                                  &nbsp;
-                                  {item.parent && item.parent.type === 'Post' && (
-                                    <React.Fragment>
-                                      ·&nbsp;
-                                      <a
-                                        href={`/post/${item.parent && item.parent._id}`}
+                                      <div
+                                        onClick={() =>
+                                          history.push(`/user/${item.parent.username}`)
+                                        }
                                         style={{
-                                          textDecoration: 'none',
-                                          color: 'rgb(0, 121, 211)'
+                                          width: 32,
+                                          height: 32,
+                                          background: `url(${generateHash(
+                                            item.parent.username
+                                          )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
+                                          backgroundPosition: '50% 50%',
+                                          backgroundSize: 'cover',
+                                          borderRadius: '50%',
+                                          marginRight: 10,
+                                          cursor: 'pointer'
                                         }}
-                                      >
-                                        {shorten(60, (item.parent && item.parent.title) || '')}
-                                      </a>
-                                    </React.Fragment>
-                                  )}
-                                </div>
-                                <div style={{ alignContent: 'flex-start' }}>
-                                  <img
-                                    onClick={() =>
-                                      history.push(`/post/${item.parent && item.parent._id}`)
-                                    }
-                                    src="https://d1ppmvgsdgdlyy.cloudfront.net/more.svg"
-                                    alt="more"
-                                    style={{ width: 15, height: 'auto', cursor: 'pointer' }}
-                                  />
-                                </div>
-                              </div>
-                              <br />
-                              {/* String length <= 250 or add '...' */}
-                              {item.parent && item.parent.type === 'Post'
-                                ? item.parent && (
+                                      />
+                                      <strong>
+                                        <a
+                                          style={{
+                                            textDecoration: 'none',
+                                            color: 'rgb(0, 121, 211)'
+                                          }}
+                                          href={`/user/${item.parent.username}`}
+                                        >
+                                          {item.parent && item.parent.username}
+                                        </a>
+                                      </strong>
+                                      &nbsp;·&nbsp;
+                                      {moment(item.parent && item.parent.createdAt).format(
+                                        'MMM D, YYYY h:mm A'
+                                      )}
+                                      &nbsp;
+                                      {item.parent && item.parent.type === 'Post' && (
+                                        <React.Fragment>
+                                          ·&nbsp;
+                                          <a
+                                            href={`/post/${item.parent && item.parent._id}`}
+                                            style={{
+                                              textDecoration: 'none',
+                                              color: 'rgb(0, 121, 211)'
+                                            }}
+                                          >
+                                            {shorten(60, (item.parent && item.parent.title) || '')}
+                                          </a>
+                                        </React.Fragment>
+                                      )}
+                                    </div>
+                                    <div style={{ alignContent: 'flex-start' }}>
+                                      <img
+                                        onClick={() =>
+                                          history.push(`/post/${item.parent && item.parent._id}`)
+                                        }
+                                        src="https://d1ppmvgsdgdlyy.cloudfront.net/more.svg"
+                                        alt="more"
+                                        style={{ width: 15, height: 'auto', cursor: 'pointer' }}
+                                      />
+                                    </div>
+                                  </div>
+                                  <br />
+                                  {/* String length <= 250 or add '...' */}
+                                  {item.parent && item.parent.type === 'Post'
+                                    ? item.parent && (
+                                        <div>
+                                          <div className="text-sm my-1 mt-4">
+                                            {item.parent && item.parent.address}
+                                          </div>
+                                          <div className="text-sm my-1 mt-4">
+                                            {item.parent &&
+                                              `Description: ${item.parent.description}`}
+                                          </div>
+                                          <div className="mt-4"></div>
+                                          {item.parent.text &&
+                                            JSON.parse(item.parent.text).type === 'food' &&
+                                            foodCartJSX(JSON.parse(item.parent.text).cart)}
+                                        </div>
+                                      )
+                                    : item.parent && shorten(250, item.parent.content)}
+                                  <div
+                                    style={{
+                                      display: 'flex',
+                                      justifyContent: 'space-between',
+                                      alignContent: 'center',
+                                      marginTop: 10,
+                                      marginBottom: -10,
+                                      textTransform: 'lowercase',
+                                      fontSize: 12,
+                                      zIndex: 200
+                                    }}
+                                  >
+                                    <strong>
+                                      {item.parent && item.parent.upVotes.length !== 0 ? (
+                                        <div style={{ color: 'green', display: 'inline' }}>
+                                          +{item.parent && item.parent.upVotes.length} upvotes
+                                        </div>
+                                      ) : (
+                                        '0 upvotes'
+                                      )}{' '}
+                                      ,{' '}
+                                      {item.parent && item.parent.downVotes.length !== 0 ? (
+                                        <div style={{ color: 'red', display: 'inline' }}>
+                                          -{item.parent && item.parent.downVotes.length} downvotes
+                                        </div>
+                                      ) : (
+                                        '0 downvotes'
+                                      )}
+                                    </strong>
                                     <div>
-                                      <div className="text-sm my-1 mt-4">
-                                        {item.parent && item.parent.address}
-                                      </div>
-                                      <div className="text-sm my-1 mt-4">
-                                        {item.parent && `Description: ${item.parent.description}`}
-                                      </div>
-                                      <div className="mt-4"></div>
-                                      {item.parent.text &&
-                                        JSON.parse(item.parent.text).type === 'food' &&
-                                        foodCartJSX(JSON.parse(item.parent.text).cart)}
+                                      <strong>
+                                        {item.parent && item.parent.comments.length} comments
+                                      </strong>
                                     </div>
-                                  )
-                                : item.parent && shorten(250, item.parent.content)}
-                              <div
-                                style={{
-                                  display: 'flex',
-                                  justifyContent: 'space-between',
-                                  alignContent: 'center',
-                                  marginTop: 10,
-                                  marginBottom: -10,
-                                  textTransform: 'lowercase',
-                                  fontSize: 12,
-                                  zIndex: 200
-                                }}
-                              >
-                                <strong>
-                                  {item.parent && item.parent.upVotes.length !== 0 ? (
-                                    <div style={{ color: 'green', display: 'inline' }}>
-                                      +{item.parent && item.parent.upVotes.length} upvotes
-                                    </div>
-                                  ) : (
-                                    '0 upvotes'
-                                  )}{' '}
-                                  ,{' '}
-                                  {item.parent && item.parent.downVotes.length !== 0 ? (
-                                    <div style={{ color: 'red', display: 'inline' }}>
-                                      -{item.parent && item.parent.downVotes.length} downvotes
-                                    </div>
-                                  ) : (
-                                    '0 downvotes'
-                                  )}
-                                </strong>
-                                <div>
-                                  <strong>
-                                    {item.parent && item.parent.comments.length} comments
-                                  </strong>
-                                </div>
+                                  </div>
+                                </Card>
                               </div>
-                            </Card>
-                          </div>
-                        )}
-                        {item.type === 'Comment' && (
-                          <div style={{ paddingTop: 20 }}>
-                            <Input
-                              overrides={{
-                                InputContainer: {
-                                  style: {
-                                    border: 0,
-                                    borderRadius: '5px'
-                                  }
-                                }
-                              }}
-                              clearable
-                              onClick={() => history.push('/submit')}
-                              size={SIZE.compact}
-                              onKeyPress={async event => {
-                                var code = event.keyCode || event.which;
-                                if (code === 13 && event.target.value !== '') {
-                                  // post comment if post parent, reply if comment parent
-                                  if (item.parent.type === 'Post') {
-                                    await addCommentDispatch({
-                                      env: process.env.NODE_ENV,
-                                      postId: item.parent._id,
-                                      newComment: event.target.value
-                                    });
-                                  } else if (item.parent.type === 'Comment') {
-                                    await addReplyDispatch({
-                                      env: process.env.NODE_ENV,
-                                      postId: item.postId,
-                                      commentId: item._id,
-                                      newReply: event.target.value
-                                    });
-                                  }
+                            )}
+                            {item.type === 'Comment' && (
+                              <div style={{ paddingTop: 20 }}>
+                                <Input
+                                  overrides={{
+                                    InputContainer: {
+                                      style: {
+                                        border: 0,
+                                        borderRadius: '5px'
+                                      }
+                                    }
+                                  }}
+                                  clearable
+                                  onClick={() => history.push('/submit')}
+                                  size={SIZE.compact}
+                                  onKeyPress={async event => {
+                                    var code = event.keyCode || event.which;
+                                    if (code === 13 && event.target.value !== '') {
+                                      // post comment if post parent, reply if comment parent
+                                      if (item.parent.type === 'Post') {
+                                        await addCommentDispatch({
+                                          env: process.env.NODE_ENV,
+                                          postId: item.parent._id,
+                                          newComment: event.target.value
+                                        });
+                                      } else if (item.parent.type === 'Comment') {
+                                        await addReplyDispatch({
+                                          env: process.env.NODE_ENV,
+                                          postId: item.postId,
+                                          commentId: item._id,
+                                          newReply: event.target.value
+                                        });
+                                      }
 
-                                  history.push(`/post/${item._id}`);
-                                }
-                              }}
-                              placeholder="add a comment..."
-                            />
+                                      history.push(`/post/${item._id}`);
+                                    }
+                                  }}
+                                  placeholder="add a comment..."
+                                />
+                              </div>
+                            )}
                           </div>
-                        )}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div
-                style={{
-                  display: 'flex',
-                  maxHeight: 'calc(0.2 * 550px)',
-                  justifyContent: 'space-between',
-                  alignContent: 'center',
-                  marginTop: 10
-                }}
-              >
-                <div />
-                <div style={{ display: 'flex', alignContent: 'center' }}>
-                  {confetti && <Confetti width={width} height={height} recycle={false} />}
-                  {item.type === 'Post' && !item.completed && props.match.url === '/home/discover' && (
-                    <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
-                      <Button
-                        style={{ outline: 'none', padding: 0 }}
-                        kind="minimal"
-                        size={SIZE.compact}
-                        onClick={() => {
-                          if (item.assignedUser) {
-                            alert(
-                              'someone is already helping on this task (in progress) - please look other requests'
-                            );
-                            return;
-                          }
+                  <div
+                    style={{
+                      display: 'flex',
+                      maxHeight: 'calc(0.2 * 550px)',
+                      justifyContent: 'space-between',
+                      alignContent: 'center',
+                      marginTop: 10
+                    }}
+                  >
+                    <div />
+                    <div style={{ display: 'flex', alignContent: 'center' }}>
+                      {confetti && <Confetti width={width} height={height} recycle={false} />}
+                      {item.type === 'Post' &&
+                        !item.completed &&
+                        props.match.url === '/home/discover' && (
+                          <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
+                            <Button
+                              style={{ outline: 'none', padding: 0 }}
+                              kind="minimal"
+                              size={SIZE.compact}
+                              onClick={() => {
+                                if (item.assignedUser) {
+                                  alert(
+                                    'someone is already helping on this task (in progress) - please look other requests'
+                                  );
+                                  return;
+                                }
 
-                          if (
-                            window.confirm(
-                              'Please confirm your commitment to helping this person - by saying yes, other people cannot claim this request.'
-                            )
-                          ) {
-                            claimTaskDispatch({
-                              env: process.env.NODE_ENV,
-                              postId: item._id
-                            });
+                                if (
+                                  window.confirm(
+                                    'Please confirm your committment to helping this person - by saying yes, other people cannot claim this request.'
+                                  )
+                                ) {
+                                  claimTaskDispatch({
+                                    env: process.env.NODE_ENV,
+                                    postId: item._id
+                                  });
 
-                            showConfetti(true);
-                          }
-                        }}
-                      >
-                        <img
-                          src="https://d1ppmvgsdgdlyy.cloudfront.net/help_color.svg"
-                          alt="help"
-                          style={{ height: 22, width: 'auto', display: 'block' }}
-                        />
-                        <div style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}>
-                          <strong>Help</strong>
+                                  removeDiscover(item._id);
+
+                                  showConfetti(false);
+                                  showConfetti(true);
+                                }
+                              }}
+                            >
+                              <img
+                                src="https://d1ppmvgsdgdlyy.cloudfront.net/help_color.svg"
+                                alt="help"
+                                style={{ height: 22, width: 'auto', display: 'block' }}
+                              />
+                              <div
+                                style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}
+                              >
+                                <strong>Help</strong>
+                              </div>
+                            </Button>
+                          </div>
+                        )}
+                      {props.match.url !== '/home/ongoing' && (
+                        <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
+                          <CopyToClipboard text={`${window.location.origin}/post/${item._id}`}>
+                            <StatefulPopover
+                              placement={PLACEMENT.bottomLeft}
+                              content={({ close }) => (
+                                <StatefulMenu
+                                  items={[
+                                    {
+                                      label: 'Copy Link'
+                                    }
+                                  ]}
+                                  onItemSelect={item => {
+                                    close();
+                                    switch (item.item.label) {
+                                      case 'Copy Link':
+                                        break;
+                                      default:
+                                        break;
+                                    }
+                                  }}
+                                  overrides={{
+                                    List: { style: { outline: 'none', padding: '0px' } }
+                                  }}
+                                />
+                              )}
+                            >
+                              <Button
+                                style={{ outline: 'none', padding: 0 }}
+                                kind="minimal"
+                                size={SIZE.compact}
+                              >
+                                <img
+                                  src="https://d1ppmvgsdgdlyy.cloudfront.net/share.svg"
+                                  alt="share"
+                                  style={{ height: 22, width: 'auto', display: 'block' }}
+                                />
+                                <div
+                                  style={{
+                                    marginLeft: 5,
+                                    textTransform: 'uppercase',
+                                    fontSize: 12
+                                  }}
+                                >
+                                  <strong>Share</strong>
+                                </div>
+                              </Button>
+                            </StatefulPopover>
+                          </CopyToClipboard>
                         </div>
-                      </Button>
-                    </div>
-                  )}
-                  {props.match.url !== '/home/ongoing' && (
-                    <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
-                      <CopyToClipboard text={`${window.location.origin}/post/${item._id}`}>
-                        <StatefulPopover
-                          placement={PLACEMENT.bottomLeft}
-                          content={({ close }) => (
-                            <StatefulMenu
-                              items={[
-                                {
-                                  label: 'Copy Link'
-                                }
-                              ]}
-                              onItemSelect={item => {
-                                close();
-                                switch (item.item.label) {
-                                  case 'Copy Link':
-                                    break;
-                                  default:
-                                    break;
-                                }
-                              }}
-                              overrides={{
-                                List: { style: { outline: 'none', padding: '0px' } }
-                              }}
-                            />
-                          )}
-                        >
+                      )}
+                      {props.match.url !== '/home/ongoing' && (
+                        <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
                           <Button
                             style={{ outline: 'none', padding: 0 }}
                             kind="minimal"
                             size={SIZE.compact}
+                            onClick={() => history.push(`/post/${item._id}`)}
                           >
                             <img
-                              src="https://d1ppmvgsdgdlyy.cloudfront.net/share.svg"
-                              alt="share"
+                              src="https://d1ppmvgsdgdlyy.cloudfront.net/comment.svg"
+                              alt="comment"
                               style={{ height: 22, width: 'auto', display: 'block' }}
                             />
                             <div
                               style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}
                             >
-                              <strong>Share</strong>
+                              <strong>{item.comments.length}&nbsp;&nbsp;Comments</strong>
                             </div>
                           </Button>
-                        </StatefulPopover>
-                      </CopyToClipboard>
-                    </div>
-                  )}
-                  {props.match.url !== '/home/ongoing' && (
-                    <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
-                      <Button
-                        style={{ outline: 'none', padding: 0 }}
-                        kind="minimal"
-                        size={SIZE.compact}
-                        onClick={() => history.push(`/post/${item._id}`)}
-                      >
-                        <img
-                          src="https://d1ppmvgsdgdlyy.cloudfront.net/comment.svg"
-                          alt="comment"
-                          style={{ height: 22, width: 'auto', display: 'block' }}
-                        />
-                        <div style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}>
-                          <strong>{item.comments.length}&nbsp;&nbsp;Comments</strong>
                         </div>
-                      </Button>
-                    </div>
-                  )}
-                  {props.match.url === '/home/ongoing' && (
-                    <div className="flex justify-between items-center" style={{ marginLeft: 15 }}>
-                      <Button
-                        style={{ outline: 'none', padding: 0, marginRight: 15 }}
-                        kind="minimal"
-                        size={SIZE.compact}
-                        onClick={() => {
-                          if (window.confirm('Are you sure you want cancel?')) {
-                            unclaimTaskDispatch({
-                              env: process.env.NODE_ENV,
-                              postId: item._id
-                            });
-
-                            // window.location = ('/home/ongoing'); // refresh
-                          }
-                        }}
-                      >
-                        <div style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}>
-                          cancel
-                        </div>
-                      </Button>
-                      <StatefulPopover
-                        placement={PLACEMENT.bottomLeft}
-                        content={({ close }) => (
-                          <StatefulMenu
-                            items={[
-                              {
-                                label: 'Manually Add Details',
-                                key: 'manual'
-                              },
-                              {
-                                label: (
-                                  <div className="flex justify-center">
-                                    <img
-                                      src="https://d1ppmvgsdgdlyy.cloudfront.net/postmates.svg"
-                                      alt="postmates"
-                                      style={{ height: 50 }}
-                                    />
-                                  </div>
-                                ),
-                                key: 'postmates'
-                              }
-                            ]}
-                            onItemSelect={i => {
-                              close();
-                              switch (i.item.key) {
-                                case 'manual':
-                                  setPostId(item._id);
-                                  setOpenFoodTracking(true);
-                                  break;
-                                case 'postmates':
-                                  alert('coming soon');
-                                  break;
-                                default:
-                                  break;
-                              }
-                            }}
-                            overrides={{
-                              List: { style: { outline: 'none', padding: '0px' } }
-                            }}
-                          />
-                        )}
-                      >
-                        <Button
-                          style={{ outline: 'none', padding: 0 }}
-                          kind="minimal"
-                          size={SIZE.compact}
+                      )}
+                      {props.match.url === '/home/ongoing' && (
+                        <div
+                          className="flex justify-between items-center"
+                          style={{ marginLeft: 15 }}
                         >
-                          <div style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}>
-                            <strong>Add Tracking Details</strong>
-                          </div>
-                        </Button>
-                      </StatefulPopover>
+                          <Button
+                            style={{ outline: 'none', padding: 0, marginRight: 15 }}
+                            kind="minimal"
+                            size={SIZE.compact}
+                            onClick={() => {
+                              if (window.confirm('Are you sure you want cancel?')) {
+                                unclaimTaskDispatch({
+                                  env: process.env.NODE_ENV,
+                                  postId: item._id
+                                });
+
+                                removeOngoing(item._id);
+                              }
+                            }}
+                          >
+                            <div
+                              style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}
+                            >
+                              cancel
+                            </div>
+                          </Button>
+                          <StatefulPopover
+                            placement={PLACEMENT.bottomLeft}
+                            content={({ close }) => (
+                              <StatefulMenu
+                                items={[
+                                  {
+                                    label: 'Manually Add Details',
+                                    key: 'manual'
+                                  },
+                                  {
+                                    label: (
+                                      <div className="flex justify-center">
+                                        <img
+                                          src="https://d1ppmvgsdgdlyy.cloudfront.net/postmates.svg"
+                                          alt="postmates"
+                                          style={{ height: 50 }}
+                                        />
+                                      </div>
+                                    ),
+                                    key: 'postmates'
+                                  }
+                                ]}
+                                onItemSelect={i => {
+                                  close();
+                                  switch (i.item.key) {
+                                    case 'manual':
+                                      setPostId(item._id);
+                                      setOpenFoodTracking(true);
+                                      break;
+                                    case 'postmates':
+                                      alert('coming soon');
+                                      break;
+                                    default:
+                                      break;
+                                  }
+                                }}
+                                overrides={{
+                                  List: { style: { outline: 'none', padding: '0px' } }
+                                }}
+                              />
+                            )}
+                          >
+                            <Button
+                              style={{ outline: 'none', padding: 0 }}
+                              kind="minimal"
+                              size={SIZE.compact}
+                            >
+                              <div
+                                style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}
+                              >
+                                <strong>Add Tracking Details</strong>
+                              </div>
+                            </Button>
+                          </StatefulPopover>
+                        </div>
+                      )}
                     </div>
-                  )}
+                  </div>
                 </div>
               </div>
-            </div>
-          </Card>
+            </Card>
+          </Expand>
         </div>
       );
     });
@@ -1270,6 +1334,37 @@ function Home(props) {
     }
   }
 
+  const getLeaderboardIcon = place => {
+    switch (place.toString()) {
+      case '1':
+        return (
+          <img
+            src="https://d1ppmvgsdgdlyy.cloudfront.net/1st.svg"
+            alt="1st"
+            style={{ height: 20 }}
+          />
+        );
+      case '2':
+        return (
+          <img
+            src="https://d1ppmvgsdgdlyy.cloudfront.net/2nd.svg"
+            alt="2nd"
+            style={{ height: 20 }}
+          />
+        );
+      case '3':
+        return (
+          <img
+            src="https://d1ppmvgsdgdlyy.cloudfront.net/3rd.svg"
+            alt="3rd"
+            style={{ height: 20 }}
+          />
+        );
+      default:
+        return place;
+    }
+  };
+
   return (
     <div
       style={{
@@ -1358,7 +1453,7 @@ function Home(props) {
                   >
                     <span />
                     <div
-                      className="flex items-center"
+                      className="flex items-center side-table-heading"
                       onClick={() => (window.location = '/home/discover')}
                     >
                       <img
@@ -1377,7 +1472,7 @@ function Home(props) {
                   >
                     <span />
                     <div
-                      className="flex items-center"
+                      className="flex items-center side-table-heading"
                       onClick={() => {
                         if (authenticated) {
                           window.location = '/home/ongoing';
@@ -1403,7 +1498,7 @@ function Home(props) {
                   >
                     <span />
                     <div
-                      className="flex items-center"
+                      className="flex items-center side-table-heading"
                       onClick={() => {
                         if (authenticated) {
                           window.location = '/home/completed';
@@ -1429,7 +1524,7 @@ function Home(props) {
                   >
                     <span />
                     <div
-                      className="flex items-center"
+                      className="flex items-center side-table-heading"
                       onClick={() => (window.location = '/home/global')}
                     >
                       <img
@@ -1446,7 +1541,7 @@ function Home(props) {
                   >
                     <span />
                     <div
-                      className="flex items-center"
+                      className="flex items-center side-table-heading"
                       onClick={() => {
                         if (authenticated) {
                           history.push('/submit');
@@ -1470,137 +1565,144 @@ function Home(props) {
                 >
                   <div style={{ paddingLeft: 24, paddingRight: 24, paddingTop: 30 }}>
                     {props.match.url === '/home/discover' && (
-                      <Card
-                        overrides={{
-                          Root: {
-                            style: {
-                              width: '100%',
-                              margin: '0 auto'
+                      <div>
+                        <Card
+                          elavation={0}
+                          overrides={{
+                            Root: {
+                              style: {
+                                width: '100%',
+                                margin: '0 auto',
+                                boxShadow: 'none'
+                              }
+                            },
+                            Body: {
+                              style: {
+                                margin: '-15px'
+                              }
                             }
-                          },
-                          Body: {
-                            style: {
-                              margin: '-15px'
-                            }
-                          }
-                        }}
-                      >
-                        <div
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignContent: 'center'
                           }}
                         >
-                          <StatefulPopover
-                            placement={PLACEMENT.bottomLeft}
-                            content={({ close }) => (
-                              <StatefulMenu
-                                items={[
-                                  // {
-                                  //   key: 'Home'
-                                  // },
-                                  // {
-                                  //   key: 'Popular'
-                                  // },
-                                  // {
-                                  //   key: 'Newest'
-                                  // },
-                                  {
-                                    label: 'Food',
-                                    key: 'Food'
-                                  },
-                                  {
-                                    label: 'Supplies',
-                                    key: 'Supplies'
-                                  }
-                                  // {
-                                  //   label: 'Transportation (coming soon)',
-                                  //   key: 'Transportation'
-                                  // },
-                                  // {
-                                  //   key: 'Completed Tasks'
-                                  // },
-                                  // {
-                                  //   key: 'Global Tasks'
-                                  // }
-                                ]}
-                                onItemSelect={item => {
-                                  close();
-                                  switch (item.item.key) {
-                                    case 'Home':
-                                      history.push('/');
-                                      break;
-                                    case 'Food':
-                                      selectMenuDispatch({ selectMenu: 'Food', title: newPost });
-                                      break;
-                                    case 'Supplies':
-                                      selectMenuDispatch({
-                                        selectMenu: 'Supplies',
-                                        title: newPost
-                                      });
-                                      break;
-                                    case 'Transportation':
-                                      alert('coming soon');
-                                      break;
-                                    case 'Custom Address':
-                                      setOpenCustomAddress(true);
-                                      break;
-                                    case 'Popular':
-                                      history.push('/home/popular');
-                                      break;
-                                    case 'Newest':
-                                      history.push('/home/newest');
-                                      break;
-                                    case 'Discover':
-                                      history.push('/home/discover');
-                                      break;
-                                    case 'Your Tasks':
-                                      history.push('/home/ongoing');
-                                      break;
-                                    case 'Completed Tasks':
-                                      history.push('/home/completed');
-                                      break;
-                                    case 'Global Tasks':
-                                      history.push('/home/global');
-                                      break;
-                                    default:
-                                      break;
-                                  }
-                                }}
-                                overrides={{
-                                  List: { style: { outline: 'none' } }
-                                }}
-                              />
-                            )}
-                          >
-                            <Button
-                              size={'compact'}
-                              kind={'secondary'}
-                              style={{ marginRight: 0, outline: 'none' }}
-                              endEnhancer={() => <ChevronDown size={24} />}
-                            >
-                              {selectMenu}
-                            </Button>
-                          </StatefulPopover>
-                          <Input
-                            value={newPost}
-                            onChange={event => {
-                              setNewPost(event.currentTarget.value);
-                              selectMenuDispatch({ selectMenu, title: event.currentTarget.value });
+                          <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignContent: 'center'
                             }}
-                            placeholder="Ask for help / assistance"
-                          />
-                          <Button
-                            onClick={() => history.push('/submit')}
-                            kind="secondary"
-                            style={{ marginLeft: 10, fontSize: 14 }}
-                            shape={SHAPE.square}
                           >
-                            Submit
-                          </Button>
-                        </div>
-                      </Card>
+                            <StatefulPopover
+                              placement={PLACEMENT.bottomLeft}
+                              content={({ close }) => (
+                                <StatefulMenu
+                                  items={[
+                                    // {
+                                    //   key: 'Home'
+                                    // },
+                                    // {
+                                    //   key: 'Popular'
+                                    // },
+                                    // {
+                                    //   key: 'Newest'
+                                    // },
+                                    {
+                                      label: 'Food',
+                                      key: 'Food'
+                                    },
+                                    {
+                                      label: 'Supplies',
+                                      key: 'Supplies'
+                                    }
+                                    // {
+                                    //   label: 'Transportation (coming soon)',
+                                    //   key: 'Transportation'
+                                    // },
+                                    // {
+                                    //   key: 'Completed Tasks'
+                                    // },
+                                    // {
+                                    //   key: 'Global Tasks'
+                                    // }
+                                  ]}
+                                  onItemSelect={item => {
+                                    close();
+                                    switch (item.item.key) {
+                                      case 'Home':
+                                        history.push('/home/discover');
+                                        break;
+                                      case 'Food':
+                                        selectMenuDispatch({ selectMenu: 'Food', title: newPost });
+                                        break;
+                                      case 'Supplies':
+                                        selectMenuDispatch({
+                                          selectMenu: 'Supplies',
+                                          title: newPost
+                                        });
+                                        break;
+                                      case 'Transportation':
+                                        alert('coming soon');
+                                        break;
+                                      case 'Custom Address':
+                                        setOpenCustomAddress(true);
+                                        break;
+                                      case 'Popular':
+                                        history.push('/home/popular');
+                                        break;
+                                      case 'Newest':
+                                        history.push('/home/newest');
+                                        break;
+                                      case 'Discover':
+                                        history.push('/home/discover');
+                                        break;
+                                      case 'Your Tasks':
+                                        history.push('/home/ongoing');
+                                        break;
+                                      case 'Completed Tasks':
+                                        history.push('/home/completed');
+                                        break;
+                                      case 'Global Tasks':
+                                        history.push('/home/global');
+                                        break;
+                                      default:
+                                        break;
+                                    }
+                                  }}
+                                  overrides={{
+                                    List: { style: { outline: 'none' } }
+                                  }}
+                                />
+                              )}
+                            >
+                              <Button
+                                size={'compact'}
+                                kind={'secondary'}
+                                style={{ marginRight: 0, outline: 'none' }}
+                                endEnhancer={() => <ChevronDown size={24} />}
+                              >
+                                {selectMenu}
+                              </Button>
+                            </StatefulPopover>
+                            <Input
+                              value={newPost}
+                              onChange={event => {
+                                setNewPost(event.currentTarget.value);
+                                selectMenuDispatch({
+                                  selectMenu,
+                                  title: event.currentTarget.value
+                                });
+                              }}
+                              placeholder="Ask for help / assistance"
+                            />
+                            <Button
+                              onClick={() => history.push('/submit')}
+                              kind="secondary"
+                              style={{ marginLeft: 10, fontSize: 14 }}
+                              shape={SHAPE.square}
+                            >
+                              Submit
+                            </Button>
+                          </div>
+                        </Card>
+                      </div>
                     )}
                     {openCustomAddress ? (
                       <div className="flex justify-between items-center mt-2">
@@ -1762,7 +1864,12 @@ function Home(props) {
                 </div>
               </th>
               <th className="px-4 py-2" style={{ width: '25%' }}>
-                <div style={{ paddingTop: 30 }}>
+                <div
+                  style={{
+                    paddingTop: 30,
+                    height: `calc(100vh - 70px + ${60 + items.length * 60}px)`
+                  }}
+                >
                   <div
                     style={{
                       width: '344px'
@@ -1796,13 +1903,17 @@ function Home(props) {
                           Most helpful people in your area
                         </div>
                       </div>
-                      <button class="bg-transparent hover:bg-gray-600 text-gray-700 font-semibold hover:text-white py-1 px-3 border border-gray-600 hover:border-transparent transition duration-150 rounded">
+                      <button
+                        className="bg-transparent hover:bg-gray-600 text-gray-700 font-semibold hover:text-white py-1 px-3 border border-gray-600 hover:border-transparent transition duration-150 rounded"
+                        style={{ outline: 'none' }}
+                        onClick={() => history.push('/leaderboard')}
+                      >
                         <span style={{ fontSize: 12 }}>See full list</span>
                       </button>
                     </div>
                     <div className="mt-4">{leaderboardJSX()}</div>
                     {Number(userRanking) >= 0 && (
-                      <div className="mt-4">
+                      <div className="mt-8">
                         <div
                           style={{
                             fontStyle: 'normal',
@@ -1811,7 +1922,7 @@ function Home(props) {
                             lineHeight: '14px',
                             color: '#545454'
                           }}
-                          className="text-left mb-6"
+                          className="text-left mb-4"
                         >
                           Your Ranking
                         </div>
@@ -1856,7 +1967,7 @@ function Home(props) {
                           <tbody>
                             <tr className={`bg-white`}>
                               <td
-                                className={`px-4 py-2`}
+                                className={`px-4 py-2 flex justify-center items-center`}
                                 style={{
                                   fontSize: '14px',
                                   lineHeight: '17px',
@@ -1864,16 +1975,25 @@ function Home(props) {
                                   fontWeight: 'normal'
                                 }}
                               >
-                                {Number(userRanking) + 1}
+                                {getLeaderboardIcon(Number(userRanking) + 1)}
                               </td>
                               <td
-                                className={`px-4 py-2 text-left`}
+                                className={`px-4 py-2 text-left hover:text-indigo-600 transition duration-150`}
                                 style={{
+                                  cursor: 'pointer',
                                   fontSize: '14px',
                                   lineHeight: '17px',
                                   fontStyle: 'normal',
                                   fontWeight: 'normal'
                                 }}
+                                onClick={() =>
+                                  history.push(
+                                    `/user/${Number(userRanking) >= 0 &&
+                                      leaderboard &&
+                                      leaderboard[Number(userRanking)] &&
+                                      leaderboard[Number(userRanking)].username}`
+                                  )
+                                }
                               >
                                 {Number(userRanking) >= 0 &&
                                   leaderboard &&
@@ -1897,22 +2017,65 @@ function Home(props) {
                             </tr>
                           </tbody>
                         </table>
-                        <div
-                          style={{
-                            fontStyle: 'normal',
-                            fontWeight: 'normal',
-                            fontSize: 12,
-                            lineHeight: '14px',
-                            color: '#545454',
-                            cursor: 'pointer'
+                        <StatefulPopover
+                          placement={PLACEMENT.bottomRight}
+                          overrides={{
+                            Arrow: {
+                              style: {
+                                borderRadius: '50px'
+                              }
+                            },
+                            Body: {
+                              style: {
+                                borderRadius: '50px'
+                              }
+                            },
+                            Root: {
+                              style: {
+                                borderRadius: '50px',
+                                boxShadow: `0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)`
+                              }
+                            }
                           }}
-                          className="text-left mt-4"
+                          content={({ close }) => (
+                            <div className="bg-white rounded-lg p-5 shadow-lg">
+                              <div className="tooltip-heading py-1 mb-1">
+                                How does Karma on Giving Tree work?
+                              </div>
+                              <div className="tooltip-text py-1">
+                                Your karma points accumulate when other users upvote your completed
+                                tasks.
+                              </div>
+                              <div className="tooltip-text py-1">
+                                Upvotes you receive from users with higher karma have a greater
+                                influence on your karma points.
+                              </div>
+                              <div className="tooltip-text py-1">
+                                Have thoughts about our karma system?{' '}
+                                <a className="tooltip-heading" href="mailto:givingtree@gmail.com">
+                                  Email Us
+                                </a>
+                              </div>
+                            </div>
+                          )}
                         >
-                          Want to improve your ranking?{' '}
-                          <span className="font-bold hover:text-indigo-600 transition duration-150">
-                            Find out how
-                          </span>
-                        </div>
+                          <div
+                            style={{
+                              fontStyle: 'normal',
+                              fontWeight: 'normal',
+                              fontSize: 12,
+                              lineHeight: '14px',
+                              color: '#545454',
+                              cursor: 'pointer'
+                            }}
+                            className="text-left mt-4"
+                          >
+                            Want to improve your ranking?{' '}
+                            <span className="font-bold hover:text-indigo-600 transition duration-150">
+                              Find out how
+                            </span>
+                          </div>
+                        </StatefulPopover>
                       </div>
                     )}
                   </div>
@@ -1924,8 +2087,8 @@ function Home(props) {
       ) : (
         <div
           style={{
-            background: 'url(https://d1ppmvgsdgdlyy.cloudfront.net/eat2.jpg)',
-            backgroundSize: '100%',
+            background: 'url(https://d1ppmvgsdgdlyy.cloudfront.net/eat2.jpg) center center',
+            backgroundSize: 'cover',
             paddingLeft: 24,
             paddingRight: 24,
             height: `calc(100vh - 70px)`
