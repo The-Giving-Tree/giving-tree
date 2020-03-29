@@ -98,22 +98,30 @@ function Login(props) {
           <NavigationList $align={ALIGN.center} />
           <NavigationList $align={ALIGN.right} />
         </HeaderNavigation>
-        <div style={{ paddingLeft: 24, paddingRight: 24, textAlign: 'center' }}>
-          <h2 className="my-4 font-bold text-2xl">Login</h2>
-          <Media
-            queries={{
-              small: '(max-width: 599px)',
-              medium: '(min-width: 600px) and (max-width: 1199px)',
-              large: '(min-width: 1200px)'
-            }}
-          >
-            {matches => (
+        <Media
+          queries={{
+            small: '(max-width: 599px)',
+            medium: '(min-width: 600px) and (max-width: 1199px)',
+            large: '(min-width: 1200px)'
+          }}
+        >
+          {matches => (
+            <div
+              style={{
+                paddingLeft: matches.small ? 0 : 24,
+                paddingRight: matches.small ? 0 : 24,
+                textAlign: 'center'
+              }}
+            >
+              <h2 className="my-4 font-bold text-2xl">Login</h2>
               <Card
                 overrides={{
                   Root: {
                     style: {
                       width: matches.medium || matches.large ? '512px' : '100%',
-                      margin: '0 auto'
+                      margin: '0 auto',
+                      border: 'none',
+                      boxShadow: 'none'
                     }
                   }
                 }}
@@ -212,15 +220,15 @@ function Login(props) {
                   </Button>
                 </StyledAction>
               </Card>
-            )}
-          </Media>
-          <p className="my-3 text-sm">
-            New to Giving Tree?{' '}
-            <a className="text-indigo-600 hover:text-indigo-800" href="/signup">
-              Sign Up
-            </a>
-          </p>
-        </div>
+              <p className="my-3 text-sm">
+                New to Giving Tree?{' '}
+                <a className="text-indigo-600 hover:text-indigo-800" href="/signup">
+                  Sign Up
+                </a>
+              </p>
+            </div>
+          )}
+        </Media>
       </div>
     );
   }

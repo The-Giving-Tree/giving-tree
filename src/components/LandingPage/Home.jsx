@@ -1859,7 +1859,9 @@ function Home(props) {
               }}
             >
               <Block>
-                <h1 style={{ fontSize: matches.small ? 40 : 100, color: 'white' }}>We're one big family</h1>
+                <h1 style={{ fontSize: matches.small ? 40 : 100, color: 'white' }}>
+                  We're one big family
+                </h1>
                 <h2 style={{ color: 'rgb(247, 242, 233)', fontSize: matches.small ? 20 : 40 }}>
                   We are waves of the same sea, leaves of the same tree, flowers of the same garden.
                 </h2>
