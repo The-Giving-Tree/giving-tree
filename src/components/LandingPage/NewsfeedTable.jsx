@@ -1,9 +1,6 @@
 /* eslint-disable */
 import * as React from 'react';
-import {
-  HeaderNavigation,
-  ALIGN,
-} from 'baseui/header-navigation';
+import { HeaderNavigation, ALIGN } from 'baseui/header-navigation';
 import { useStyletron } from 'baseui';
 import { Block } from 'baseui/block';
 import { Button, SHAPE } from 'baseui/button';
@@ -35,19 +32,6 @@ import { withImages, withRichText, Element, Leaf, MarkButton, BlockButton } from
 
 import { connect } from 'react-redux';
 
-import {
-  getCurrentUser,
-  loadNewsfeed,
-  claimTask,
-  unclaimTask,
-  completeTask,
-  upvote,
-  downvote,
-  addComment,
-  addReply,
-  selectMenu
-} from '../../store/actions/auth/auth-actions';
-
 function NewsfeedTable(props) {
   const {
     address,
@@ -55,12 +39,16 @@ function NewsfeedTable(props) {
     hasMoreItems,
     id,
     items,
+    selectMenu,
     match,
     newPost,
     newsfeedLoading,
     newsfeedSuccess,
     openCustomAddress,
-    setUpdateNews,
+    setOpenCustomAddress,
+    setAddress,
+    setLatLng,
+    setUpdateNews
   } = props;
 
   return (

@@ -6,6 +6,7 @@ module.exports = Object.freeze({
     SIGNUP: '/signup',
     SETTING: '/settings/:tab',
     SUBMIT: '/submit',
-    DRAFT: '/draft/:id'
+    DRAFT: '/draft/:id',
+    LEADERBOARD: '/leaderboard'
   }
 });

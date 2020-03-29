@@ -1,25 +1,12 @@
 import * as React from 'react';
-import {
-  HeaderNavigation,
-  ALIGN,
-  StyledNavigationItem as NavigationItem,
-  StyledNavigationList as NavigationList
-} from 'baseui/header-navigation';
-import { StyledLink as Link } from 'baseui/link';
-import { Button, SHAPE, SIZE } from 'baseui/button';
-import { StatefulSelect as Search, TYPE } from 'baseui/select';
+import { Button, SIZE } from 'baseui/button';
 import Navigation from './Navigation';
 import { Avatar } from 'baseui/avatar';
 import { useHistory } from 'react-router-dom';
-import { Card, StyledBody, StyledAction } from 'baseui/card';
+import { Card, StyledBody } from 'baseui/card';
 import { Block } from 'baseui/block';
-import { H1, H2, H3, H4, H5, H6 } from 'baseui/typography';
 import { Tabs, Tab } from 'baseui/tabs';
-import { Slate, Editable, ReactEditor, withReact, useSlate } from 'slate-react';
-import { Editor, Text, createEditor } from 'slate';
-import { withHistory } from 'slate-history';
 import moment from 'moment';
-import Upload from 'baseui/icon/upload';
 import Check from 'baseui/icon/check';
 import { Input } from 'baseui/input';
 import { StatefulTooltip } from 'baseui/tooltip';
@@ -46,7 +33,6 @@ import {
   unfollow,
   updateProfile
 } from '../store/actions/auth/auth-actions';
-import { findByLabelText } from '@testing-library/dom';
 
 // check to see if valid user or not
 // if valid, show
@@ -56,9 +42,6 @@ function User(props) {
   const {
     user,
     foundUser,
-    errorMessage,
-    foundUserUpdated,
-    getCurrentUserDispatch,
     followDispatch,
     unfollowDispatch,
     foundUserNull,
@@ -82,10 +65,6 @@ function User(props) {
   const [header, setHeader] = React.useState({ preview: '', raw: '' });
   const [newHeaderFileName, setNewHeaderFileName] = React.useState('');
   const [hoverPost, setHoverPost] = React.useState([]);
-  const [errorMessageFile, setErrorMessage] = React.useState('');
-
-  const renderElement = React.useCallback(props => <Element {...props} />, []);
-  const renderLeaf = React.useCallback(props => <Leaf {...props} />, []);
 
   // load on page load
   React.useEffect(() => {
@@ -108,11 +87,6 @@ function User(props) {
       username: id
     });
   }, [props.updatedProfile, id, loadUserDispatch]);
-
-  const slateEditor = React.useMemo(
-    () => withImages(withRichText(withHistory(withReact(createEditor())))),
-    []
-  );
 
   function mouseOut() {
     setFollowHover(false);
@@ -141,7 +115,7 @@ function User(props) {
   let followers = foundUser.followers ? foundUser.followers.length : '0';
   let following = foundUser.following ? foundUser.following.length : '0';
   let createdAt = foundUser.createdAt ? foundUser.createdAt : '';
-  let karma = foundUser.karma ? foundUser.karma : '';
+  let karma = Number(foundUser.karma) >= 0 ? foundUser.karma : '';
   let name = foundUser.name;
   let username = foundUser.username;
   let verified = foundUser.verified;
@@ -415,7 +389,7 @@ function User(props) {
       </a>
     </StyledBody>
   );
-  if (!isEmpty(user) && user.drafts.length > 0) {
+  if (!isEmpty(user) && user.drafts && user.drafts.length > 0) {
     draftElements = user.drafts.map(draft => (
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <div style={{ fontSize: '14px' }}>
@@ -686,20 +660,27 @@ function User(props) {
     downvoteFeed = <StyledBody>{foundUser.username} hasn't downvoted anything yet!</StyledBody>;
   }
 
+  function dayAge(date) {
+    var diff = new Date() - new Date(date);
+    return diff / 1000 / (60 * 60 * 24);
+  }
+
   return (
     <div style={{ width: '100%' }}>
       <Navigation searchBarPosition="center" />
       <div
-        style={{
-          // height: 'calc(100vh - 70px)',
-        }}
+        style={
+          {
+            // height: 'calc(100vh - 70px)',
+          }
+        }
       >
         <div
           style={{
             background: '#F5F5F5',
             paddingBottom: 30,
             paddingLeft: 24,
-            paddingRight: 24,
+            paddingRight: 24
           }}
         >
           {foundUserNull && isEmpty(foundUser) ? (
@@ -710,7 +691,7 @@ function User(props) {
             <div
               style={{
                 display: 'flex',
-                flexDirection: 'row',
+                flexDirection: 'row'
               }}
             >
               <Sidebar {...props} />
@@ -720,7 +701,7 @@ function User(props) {
                   paddingLeft: 40,
                   paddingRight: 40,
                   paddingTop: 30,
-                  width: '50%',
+                  width: '50%'
                 }}
               >
                 <Card
@@ -937,40 +918,58 @@ function User(props) {
                           alignContent: 'center'
                         }}
                       >
-                        <p className="my-2" style={{ textTransform: 'lowercase', margin: 'auto 0' }}>
+                        <p
+                          className="my-2"
+                          style={{ textTransform: 'lowercase', margin: 'auto 0' }}
+                        >
                           <strong>{username}</strong>
                         </p>
-                        <div>
-                          {userLeadsProfile && (
-                            <div style={{ marginRight: 20, display: 'inline' }}>Follows You</div>
-                          )}
-                          {!selfProfile && (
-                            <Button
-                              style={{
-                                outline: 'none',
-                                backgroundColor: userFollowsProfile
-                                  ? followHover
-                                    ? 'rgb(202, 32, 85)'
-                                    : 'rgb(0, 121, 211)'
-                                  : 'rgb(238, 238, 238)',
-                                color: userFollowsProfile ? 'white' : 'black',
-                                fontSize: '14px'
-                              }}
-                              onMouseEnter={() => mouseOver()}
-                              onMouseLeave={() => mouseOut()}
-                              onClick={() => handleClick()}
-                              size={SIZE.compact}
-                              shape={'pill'}
-                              kind={'secondary'}
-                            >
-                              {userFollowsProfile
+                        {verified && (
+                          <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <img
+                              src="https://d1ppmvgsdgdlyy.cloudfront.net/verified.svg"
+                              alt="verified"
+                              style={{ marginLeft: 14, height: 20 }}
+                            />
+                            <div style={{ marginLeft: 5, fontSize: 12 }}>
+                              <strong>verified</strong>
+                            </div>
+                          </div>
+                        )}
+                        {createdAt ? (
+                          dayAge(createdAt) < 5 ? (
+                            <img
+                              src="https://d1ppmvgsdgdlyy.cloudfront.net/new2.svg"
+                              alt="new"
+                              style={{ height: 20, marginLeft: 5 }}
+                            />
+                          ) : (
+                            <img
+                              src="https://d1ppmvgsdgdlyy.cloudfront.net/star.svg"
+                              alt="new"
+                              style={{ height: 20, marginLeft: 5 }}
+                            />
+                          )
+                        ) : (
+                          ''
+                        )}
+                      </div>
+                      <div>
+                        {userLeadsProfile && (
+                          <div style={{ marginRight: 20, display: 'inline' }}>Follows You</div>
+                        )}
+                        {!selfProfile && (
+                          <Button
+                            style={{
+                              outline: 'none',
+                              backgroundColor: userFollowsProfile
                                 ? followHover
                                   ? 'Unfollow'
                                   : 'Following'
-                                : 'Follow'}
-                            </Button>
-                          )}
-                        </div>
+                                : 'Follow'
+                            }}
+                          ></Button>
+                        )}
                       </div>
                     </Block>
                   ) : (
@@ -1107,7 +1106,7 @@ function User(props) {
                       style: {
                         margin: '0 auto',
                         marginBottom: '60px',
-                        marginTop: '30px',
+                        marginTop: '30px'
                       }
                     }
                   }}
@@ -1117,7 +1116,9 @@ function User(props) {
                       setActiveKey(activeKey);
                     }}
                     activeKey={activeKey}
-                    overrides={{ TabContent: { style: { paddingLeft: '0px', paddingRight: '0px' } } }}
+                    overrides={{
+                      TabContent: { style: { paddingLeft: '0px', paddingRight: '0px' } }
+                    }}
                   >
                     <Tab
                       overrides={{

@@ -9,14 +9,12 @@ import { StyledLink as Link } from 'baseui/link';
 import { Button, SHAPE, SIZE } from 'baseui/button';
 import { useHistory } from 'react-router-dom';
 import { useStyletron } from 'baseui';
-import { TYPE } from 'baseui/select';
 import { Spinner } from 'baseui/spinner';
 import Search from 'baseui/icon/search';
 import { Input } from 'baseui/input';
 import { Select } from 'baseui/select';
 import { StatefulMenu, OptionProfile } from 'baseui/menu';
 import { StatefulPopover, PLACEMENT } from 'baseui/popover';
-import Plus from 'baseui/icon/plus';
 import { RadioGroup, Radio } from 'baseui/radio';
 import ChevronDown from 'baseui/icon/chevron-down';
 import {
@@ -36,7 +34,6 @@ import { subscribeToNotifications } from '../utils/socket';
 import moment from 'moment';
 
 import { connect } from 'react-redux';
-
 function Before() {
   const [css, theme] = useStyletron();
   return (
@@ -58,10 +55,7 @@ function Navigation(props) {
     searchBarPosition,
     logoutDispatch,
     getCurrentUserDispatch,
-    userLoggedIn,
-    loggingOut,
     addToNotificationsDispatch,
-    updatedUser,
     searchResults,
     searchLoading,
     clearAllNotificationsDispatch,
@@ -71,6 +65,35 @@ function Navigation(props) {
   require('dotenv').config();
 
   const history = useHistory();
+
+  // Detects when mouse is clicked outside of search results
+  const [shouldCloseSearchResults, setShouldCloseSearchResults] = React.useState(false);
+  function useOutsideDetector(ref) {
+    React.useEffect(() => {
+      function handleClickOutside(event) {
+        if (ref.current && !ref.current.contains(event.target)) {
+          setShouldCloseSearchResults(true);
+        }
+      }
+
+      // Bind the event listener
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        // Unbind the event listener on clean up
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }, [ref]);
+  }
+
+  /**
+   * Wrapper around search results that detects when mouse clicks outside
+   */
+  function OutsideDetector(props) {
+    const wrapperRef = React.useRef(null);
+    useOutsideDetector(wrapperRef);
+
+    return <div ref={wrapperRef}>{props.children}</div>;
+  }
 
   function After() {
     const [css, theme] = useStyletron();
@@ -120,10 +143,10 @@ function Navigation(props) {
 
   console.log('searchBarPosition: ', searchBarPosition);
 
-  const options = {
-    placeholder: `${center ? 'Search Giving Tree' : 'Search'}`,
-    maxDropdownHeight: '300px'
-  };
+  // const options = {
+  //   placeholder: `${center ? 'Search Giving Tree' : 'Search'}`,
+  //   maxDropdownHeight: '300px'
+  // };
 
   const [isOpen, setIsOpen] = React.useState(false);
   function close() {
@@ -359,7 +382,7 @@ function Navigation(props) {
             <NavigationItem>
               <div
                 style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}
-                onClick={() => history.push('/home/discover')}
+                onClick={() => (window.location = '/home/discover')}
               >
                 <img
                   src="https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg"
@@ -374,15 +397,17 @@ function Navigation(props) {
           </NavigationList>
           {!center && <NavigationList $align={ALIGN.center} />}
           <NavigationList $align={center ? ALIGN.center : ALIGN.right}>
-            <NavigationItem style={{ width: `${center ? '576px' : '200px'}` }}>
+            <NavigationItem style={{ width: `${center ? '600px' : '200px'}` }}>
               <Input
                 overrides={{
                   Before,
                   After,
                   InputContainer: {
                     style: {
-                      borderBottomLeftRadius: searchResults.length !== 0 ? '0px' : '25px',
-                      borderBottomRightRadius: searchResults.length !== 0 ? '0px' : '25px',
+                      borderBottomLeftRadius:
+                        searchResults.length !== 0 && !shouldCloseSearchResults ? '0px' : '25px',
+                      borderBottomRightRadius:
+                        searchResults.length !== 0 && !shouldCloseSearchResults ? '0px' : '25px',
                       borderTopLeftRadius: '25px',
                       borderTopRightRadius: '25px',
                       border: '0',
@@ -394,63 +419,69 @@ function Navigation(props) {
                 onChange={e => {
                   console.log('e: ', e.target.value);
                   searchDispatch({ env: process.env.NODE_ENV, query: e.target.value });
+                  setShouldCloseSearchResults(false);
                 }}
               />
-              {searchResults.length !== 0 && (
-                <StatefulMenu
-                  overrides={{
-                    List: {
-                      style: {
-                        outline: 'none',
-                        padding: '0px',
-                        position: 'absolute',
-                        width: `${center ? '576px' : '200px'}`,
-                        maxHeight: '400px',
-                        borderBottomLeftRadius: '25px',
-                        borderBottomRightRadius: '25px',
-                        zIndex: 100
-                      }
-                    },
-                    ProfileImgContainer: { style: { height: '32px', width: '32px' } },
-                    ListItemProfile: { style: { display: 'flex', alignContent: 'center' } },
-                    ProfileLabelsContainer: { style: { display: 'flex', alignContent: 'center' } },
-                    Option: {
-                      component: OptionProfile,
-                      props: {
-                        getProfileItemLabels: ({ username, label, name, title, type }) => ({
-                          title: username,
-                          subtitle: (
-                            <div style={{ display: 'inline' }}>
-                              ...{sanitize(label.split('<em>')[0])}
-                              <div style={{ backgroundColor: '#FFFF00', display: 'inline' }}>
-                                {sanitize(label.split('<em>')[1].split('</em>')[0])}
+              {searchResults.length !== 0 && !shouldCloseSearchResults && (
+                <OutsideDetector>
+                  <StatefulMenu
+                    overrides={{
+                      List: {
+                        style: {
+                          outline: 'none',
+                          padding: '0px',
+                          position: 'absolute',
+                          width: `${center ? '576px' : '200px'}`,
+                          maxHeight: '400px',
+                          borderBottomLeftRadius: '25px',
+                          borderBottomRightRadius: '25px',
+                          zIndex: 100
+                        }
+                      },
+                      ProfileImgContainer: { style: { height: '32px', width: '32px' } },
+                      ListItemProfile: { style: { display: 'flex', alignContent: 'center' } },
+                      ProfileLabelsContainer: {
+                        style: { display: 'flex', alignContent: 'center' }
+                      },
+                      Option: {
+                        component: OptionProfile,
+                        props: {
+                          getProfileItemLabels: ({ username, label, name, title, type }) => ({
+                            title: username,
+                            subtitle: (
+                              <div style={{ display: 'inline' }}>
+                                ...{sanitize(label.split('<em>')[0])}
+                                <div style={{ backgroundColor: '#FFFF00', display: 'inline' }}>
+                                  {sanitize(label.split('<em>')[1].split('</em>')[0])}
+                                </div>
+                                {sanitize(label.split('</em>')[1])}...
                               </div>
-                              {sanitize(label.split('</em>')[1])}...
+                            ),
+                            body: type === 'post' ? title : name
+                          }),
+                          getProfileItemImg: item => item.image,
+                          getProfileItemImgText: item => (
+                            <div>
+                              {item.label.replace('<em>', '<strong>').replace('</em>', '</strong>')}
                             </div>
-                          ),
-                          body: type === 'post' ? title : name
-                        }),
-                        getProfileItemImg: item => item.image,
-                        getProfileItemImgText: item => (
-                          <div>
-                            {item.label.replace('<em>', '<strong>').replace('</em>', '</strong>')}
-                          </div>
-                        )
+                          )
+                        }
                       }
-                    }
-                  }}
-                  items={searchResults}
-                  noResultsMsg="No Results"
-                  onItemSelect={item => {
-                    history.push(
-                      item.item.type === 'post'
-                        ? `/post/${item.item._id}`
-                        : item.item.type === 'user'
-                        ? `/user/${item.item.username}`
-                        : ''
-                    );
-                  }}
-                />
+                    }}
+                    items={searchResults}
+                    noResultsMsg="No Results"
+                    onItemSelect={item => {
+                      setShouldCloseSearchResults(true);
+                      history.push(
+                        item.item.type === 'post'
+                          ? `/post/${item.item._id}`
+                          : item.item.type === 'user'
+                          ? `/user/${item.item.username}`
+                          : ''
+                      );
+                    }}
+                  />
+                </OutsideDetector>
               )}
             </NavigationItem>
           </NavigationList>
@@ -474,15 +505,24 @@ function Navigation(props) {
                   placement={PLACEMENT.bottomLeft}
                   content={({ close }) => notificationMenu(close)}
                 >
-                  <div style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}>
-                    {notifications.length > 0 && (
-                      <NotificationBadge count={notifications.length} effect={Effect.SCALE} />
-                    )}
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignContent: 'center',
+                      cursor: 'pointer',
+                      height: 40
+                    }}
+                  >
                     <img
                       src="https://d1ppmvgsdgdlyy.cloudfront.net/notification.svg"
                       alt="notification"
                       style={{ width: 25, marginRight: 25 }}
                     />
+                    {notifications.length > 0 && (
+                      <div style={{ marginLeft: -10, marginRight: 20 }}>
+                        <NotificationBadge count={notifications.length} effect={Effect.SCALE} />
+                      </div>
+                    )}
                   </div>
                 </StatefulPopover>
                 <StatefulPopover
@@ -582,7 +622,7 @@ function Navigation(props) {
             <NavigationItem>
               <div
                 style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}
-                onClick={() => history.push('/home/discover')}
+                onClick={() => (window.location = '/home/discover')}
               >
                 <img
                   src="https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg"

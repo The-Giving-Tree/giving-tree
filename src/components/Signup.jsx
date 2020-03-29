@@ -42,7 +42,7 @@ function Signup(props) {
   const [validPassword, setValidPassword] = React.useState(false);
   const authenticated = localStorage.getItem('giving_tree_jwt');
 
-  const { signupDispatch, errorMessage, registerLoading, registerSuccess, registerFailure } = props;
+  const { signupDispatch, errorMessage, registerLoading } = props;
 
   const history = useHistory();
 
@@ -97,7 +97,7 @@ function Signup(props) {
   };
 
   if (authenticated) {
-    return <Redirect to="/" />;
+    return <Redirect to="/home/discover" />; // better home page redirect experience
   } else {
     return (
       <div style={{ width: '100%' }}>
@@ -115,7 +115,7 @@ function Signup(props) {
             <NavigationItem>
               <div
                 style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}
-                onClick={() => history.push('/')}
+                onClick={() => history.push('/home/disccover')}
               >
                 <img
                   src="https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg"

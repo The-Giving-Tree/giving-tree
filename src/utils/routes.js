@@ -4,7 +4,7 @@ const ROUTES = {
     socket: 'https://api.givingtreeproject.org'
   },
   development: {
-    giving_tree: 'http://localhost:3001',
+    giving_tree: 'http://localhost:3000',
     socket: 'http://localhost:3000'
   },
   sandbox: {

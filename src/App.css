@@ -11,6 +11,45 @@
   color:    #03a87c;
 }
 
+.side-table-heading {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.tooltip-heading {
+  height: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #059305;
+}
+
+.leaderboard-heading {
+  font-size: 30px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #424242;
+}
+
+.tooltip-text {
+  width: 216px;
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #545454;
+}
+
 .profilePic {
   background-position: 50% 50% !important;
   background-size: cover !important;

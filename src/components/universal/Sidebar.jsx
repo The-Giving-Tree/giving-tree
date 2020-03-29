@@ -65,27 +65,28 @@ function Sidebar(props) {
       style={{
         alignItems: 'start',
         display: 'flex',
-        width: '25vw',
+        width: '25vw'
       }}
     >
       <div
         style={{
-          width: '100%',
+          width: '100%'
         }}
       >
         <div
           className="text-black transition duration-150 flex items-center justify-between"
           style={{
             paddingLeft: 24,
-            paddingTop: 30,
+            paddingTop: 30
           }}
         >
           <span />
           <div
-            className={`flex items-center hover:text-indigo-600 ${match.url === '/home/discover' && 'text-indigo-600'}`}
+            className={`flex items-center hover:text-indigo-600 ${match.url === '/home/discover' &&
+              'text-indigo-600'}`}
             onClick={() => (window.location = '/home/discover')}
             style={{
-              cursor: 'pointer',
+              cursor: 'pointer'
             }}
           >
             Discover Tasks
@@ -94,7 +95,7 @@ function Sidebar(props) {
               src="https://d1ppmvgsdgdlyy.cloudfront.net/search.svg"
               style={{
                 height: 20,
-                marginLeft: 10,
+                marginLeft: 10
               }}
             />
           </div>
@@ -103,12 +104,13 @@ function Sidebar(props) {
           className="text-black transition duration-150 flex items-center justify-between"
           style={{
             paddingLeft: 24,
-            paddingTop: 10,
+            paddingTop: 10
           }}
         >
           <span />
           <div
-            className={`flex items-center hover:text-indigo-600 ${match.url === '/home/ongoing' && 'text-indigo-600'}`}
+            className={`flex items-center hover:text-indigo-600 ${match.url === '/home/ongoing' &&
+              'text-indigo-600'}`}
             onClick={() => {
               if (authenticated) {
                 window.location = '/home/ongoing';
@@ -118,7 +120,7 @@ function Sidebar(props) {
               }
             }}
             style={{
-              cursor: 'pointer',
+              cursor: 'pointer'
             }}
           >
             Your Tasks
@@ -127,7 +129,7 @@ function Sidebar(props) {
               src="https://d1ppmvgsdgdlyy.cloudfront.net/care.svg"
               style={{
                 height: 20,
-                marginLeft: 10,
+                marginLeft: 10
               }}
             />
           </div>
@@ -136,12 +138,13 @@ function Sidebar(props) {
           className="text-black transition duration-150 flex items-center justify-between"
           style={{
             paddingLeft: 24,
-            paddingTop: 10,
+            paddingTop: 10
           }}
         >
           <span />
           <div
-            className={`flex items-center hover:text-indigo-600 ${match.url === '/home/completed' && 'text-indigo-600'}`}
+            className={`flex items-center hover:text-indigo-600 ${match.url === '/home/completed' &&
+              'text-indigo-600'}`}
             onClick={() => {
               if (authenticated) {
                 window.location = '/home/completed';
@@ -151,7 +154,7 @@ function Sidebar(props) {
               }
             }}
             style={{
-              cursor: 'pointer',
+              cursor: 'pointer'
             }}
           >
             Completed Tasks
@@ -160,7 +163,7 @@ function Sidebar(props) {
               src="https://d1ppmvgsdgdlyy.cloudfront.net/gift.svg"
               style={{
                 height: 20,
-                marginLeft: 10,
+                marginLeft: 10
               }}
             />
           </div>
@@ -169,15 +172,16 @@ function Sidebar(props) {
           className="text-black transition duration-150 flex items-center justify-between"
           style={{
             paddingLeft: 24,
-            paddingTop: 10,
+            paddingTop: 10
           }}
         >
           <span />
           <div
-            className={`flex items-center hover:text-indigo-600 ${match.url === '/home/global' && 'text-indigo-600'}`}
+            className={`flex items-center hover:text-indigo-600 ${match.url === '/home/global' &&
+              'text-indigo-600'}`}
             onClick={() => (window.location = '/home/global')}
             style={{
-              cursor: 'pointer',
+              cursor: 'pointer'
             }}
           >
             Global Tasks
@@ -186,7 +190,7 @@ function Sidebar(props) {
               src="https://d1ppmvgsdgdlyy.cloudfront.net/global.svg"
               style={{
                 height: 20,
-                marginLeft: 10,
+                marginLeft: 10
               }}
             />
           </div>
@@ -195,7 +199,7 @@ function Sidebar(props) {
           className="text-black transition duration-150 flex items-center justify-between"
           style={{
             paddingLeft: 24,
-            paddingTop: 10,
+            paddingTop: 10
           }}
         >
           <span />
@@ -210,7 +214,7 @@ function Sidebar(props) {
               }
             }}
             style={{
-              cursor: 'pointer',
+              cursor: 'pointer'
             }}
           >
             Ask for Help<span style={{ marginLeft: 10 }}>❤️</span>

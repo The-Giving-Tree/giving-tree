@@ -302,6 +302,27 @@ const isEmpty = obj => {
   return true;
 };
 
+const getLeaderboard = async (env, location = 'global', token) => {
+  try {
+    const headers = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+
+    let query = '';
+    if (location !== 'global') {
+      query += `lat=${location.lat}&lng=${location.lng}`;
+    }
+
+    let data = await Axios.get(`${ROUTES[env].giving_tree}/leaderboard?${query}`, headers);
+
+    return data;
+  } catch (e) {
+    const error = e.response.data ? e.response.data : e;
+    Sentry.captureException(new Error(JSON.stringify(error)));
+    throw error;
+  }
+};
+
 const loadNewsFeed = async (env, page, location = undefined, feed, token) => {
   try {
     const headers = {
@@ -361,7 +382,6 @@ const markSeen = async (env, postId, userId, token) => {
       postId,
       userId
     };
-
 
     const data = await Axios.post(`${ROUTES[env].giving_tree}/seen`, payload, headers);
     return data;
@@ -500,6 +520,7 @@ const Api = {
   unfollow,
   markSeen,
   downvote,
+  getLeaderboard,
   loadNewsFeed,
   loadPost,
   loadUser,

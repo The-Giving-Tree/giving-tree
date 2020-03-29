@@ -1,35 +1,9 @@
-import React, { useState, useMemo, useRef, useEffect } from 'react';
-import { Slate, Editable, ReactEditor, withReact, useSlate, useEditor } from 'slate-react';
-import { Editor, Text, createEditor } from 'slate';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import isHotkey from 'is-hotkey';
-import { Range } from 'slate';
-import { css, cx } from 'emotion';
-import { withHistory } from 'slate-history';
 import PlacesAutocomplete from 'react-places-autocomplete';
-import { geocodeByAddress, geocodeByPlaceId, getLatLng } from 'react-places-autocomplete';
-import isUrl from 'is-url';
-import {
-  HeaderNavigation,
-  ALIGN,
-  StyledNavigationItem as NavigationItem,
-  StyledNavigationList as NavigationList
-} from 'baseui/header-navigation';
-import moment from 'moment';
-import { withStyle } from 'baseui';
-import { StyledInputContainer } from 'baseui/input';
-import Dropzone from 'react-dropzone';
-import { StatefulTooltip } from 'baseui/tooltip';
-import { StyledLink as Link } from 'baseui/link';
-import { Button, SHAPE, KIND, SIZE } from 'baseui/button';
-import { StatefulSelect as Search, TYPE } from 'baseui/select';
-import { StatefulMenu } from 'baseui/menu';
+import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import Navigation from './Navigation';
-import { Avatar } from 'baseui/avatar';
-import { Redirect } from 'react-router-dom';
-import { Card, StyledBody, StyledAction } from 'baseui/card';
-import { Block } from 'baseui/block';
-import { H1, H2, H3, H4, H5, H6 } from 'baseui/typography';
+import { Card } from 'baseui/card';
 import { ArrowLeft } from 'baseui/icon';
 import { useStyletron } from 'baseui';
 import { Input, StyledInput } from 'baseui/input';
@@ -39,16 +13,6 @@ import Sidebar from './universal/Sidebar';
 // Import the Slate editor factory.
 
 import { connect } from 'react-redux';
-import {
-  ButtonEditor,
-  Icon,
-  Toolbar,
-  Element,
-  Leaf,
-  LIST_TYPES,
-  HOTKEYS,
-  insertImage
-} from './submitHelper';
 import { getCurrentUser, loadUser } from '../store/actions/auth/auth-actions';
 import {
   submitDraft,
@@ -57,33 +21,32 @@ import {
   handleSeenSubmit,
   uploadPhoto
 } from '../store/actions/user/user-actions';
-import { findByLabelText } from '@testing-library/dom';
 
-const InputReplacement = ({ tags, removeTag, ...restProps }) => {
-  const [css] = useStyletron();
-  return (
-    <div
-      className={css({
-        flex: '1 1 0%',
-        flexWrap: 'wrap',
-        display: 'flex',
-        alignItems: 'center'
-      })}
-    >
-      {tags.map((tag, index) => (
-        <Tag
-          variant={TAG_VARIANT.solid}
-          kind="positive"
-          onActionClick={() => removeTag(tag)}
-          key={index}
-        >
-          {tag}
-        </Tag>
-      ))}
-      <StyledInput {...restProps} />
-    </div>
-  );
-};
+// const InputReplacement = ({ tags, removeTag, ...restProps }) => {
+//   const [css] = useStyletron();
+//   return (
+//     <div
+//       className={css({
+//         flex: '1 1 0%',
+//         flexWrap: 'wrap',
+//         display: 'flex',
+//         alignItems: 'center'
+//       })}
+//     >
+//       {tags.map((tag, index) => (
+//         <Tag
+//           variant={TAG_VARIANT.solid}
+//           kind="positive"
+//           onActionClick={() => removeTag(tag)}
+//           key={index}
+//         >
+//           {tag}
+//         </Tag>
+//       ))}
+//       <StyledInput {...restProps} />
+//     </div>
+//   );
+// };
 
 // check to see if valid user or not
 // if valid, show
@@ -96,40 +59,24 @@ export const Portal = ({ children }) => {
 function Submit(props) {
   const {
     user,
-    foundUser,
-    errorMessage,
     selectMenu,
     titleStore,
-    submitDraftSuccess,
-    submitDraftLoading,
-    saveDraftLoading,
-    saveDraftSuccess,
     submitPostSuccess,
     submittedDraft,
     submittedPost,
     submitDraftDispatch,
-    saveDraftDispatch,
     publishPostDispatch,
-    loadUserDispatch,
     handleSeenSubmitDispatch,
-    getCurrentUserDispatch,
-    markSeenSubmitTutorial,
-    uploadPhotoDispatch,
-    uploadPhotoUrl,
-    uploadPhotoSuccess
+    getCurrentUserDispatch
   } = props;
 
   const [title, setTitle] = React.useState('');
   const [phoneNumber, setPhoneNumber] = React.useState('');
-  const [imagePreview, setPreview] = React.useState('');
-  const [text, setText] = React.useState('');
   const [address, setAddress] = useState('');
   const [latLng, setLatLng] = useState({});
   const [cart, setCart] = React.useState([]);
   const [selectedRequest, setRequest] = React.useState('');
-  const [value, setValue] = React.useState('');
   const [checkout, setCheckout] = React.useState(false);
-  const [tags, setTags] = React.useState([]);
   let [changedCart, setChangedCart] = useState(0);
   const [cartQuantity, setCartQuantity] = React.useState('');
   const [cartName, setCartName] = React.useState('');
@@ -180,7 +127,18 @@ function Submit(props) {
     }
 
     submitDraft();
-  }, [props.submitDraftSuccess]);
+  }, [
+    props.submitDraftSuccess,
+    address,
+    cart,
+    description,
+    latLng,
+    phoneNumber,
+    publishPostDispatch,
+    selectedRequest,
+    submittedDraft._id,
+    title
+  ]);
 
   useEffect(() => {}, [changedCart]);
 
@@ -273,9 +231,9 @@ function Submit(props) {
               if (area.length < 3) {
                 output = area;
               } else if (area.length === 3 && pre.length < 3) {
-                output = ' ' + area + ' ' + ' ' + pre;
+                output = `' '|${area}|' '|' '|${pre}`;
               } else if (area.length === 3 && pre.length === 3) {
-                output = '' + area + '' + ' ' + pre + ' ' + tel;
+                output = `''|${area}|''|' '|${pre}|' '|${tel}`;
               }
               setPhoneNumber(output);
             }}
@@ -440,7 +398,7 @@ function Submit(props) {
                   }
                 }}
                 style={{ outline: 'none' }}
-                class={`bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded`}
+                className={`bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded`}
               >
                 Submit
               </button>
@@ -460,15 +418,17 @@ function Submit(props) {
           display: 'flex',
           flexDirection: 'row',
           height: 'calc(100vh - 70px)',
-          width: '100%',
+          width: '100%'
         }}
       >
         <Sidebar {...props} />
-        <div style={{
-          paddingLeft: 24,
-          paddingTop: 30,
-          width: '46.5vw',
-        }}>
+        <div
+          style={{
+            paddingLeft: 24,
+            paddingTop: 30,
+            width: '46.5vw'
+          }}
+        >
           {!isEmpty(user) && !user.seenSubmitTutorial && (
             <Card
               overrides={{
@@ -509,8 +469,8 @@ function Submit(props) {
               <div style={{ marginTop: 15 }}>
                 Welcome to Giving Tree! You can submit a claim to the community and get help! You
                 can also message us at{' '}
-                <a className="text-indigo-600 hover:text-indigo-800" href="tel:+1507-533-5281">
-                  507-533-5281
+                <a className="text-indigo-600 hover:text-indigo-800" href="tel:+1415-964-4261">
+                  415-964-4261
                 </a>{' '}
                 to get help.
               </div>
@@ -528,7 +488,11 @@ function Submit(props) {
                 }
               }}
             >
-              Your post is now live! 🥳Check it out{' '}
+              Your post is now live!{' '}
+              <span role="img" aria-label="Smiley emoji with party hat">
+                🥳
+              </span>
+              Check it out{' '}
               <a
                 className="text-indigo-600 hover:text-indigo-800 transition duration-150"
                 style={{ textDecoration: 'none' }}
@@ -688,12 +652,12 @@ function Submit(props) {
   );
 }
 
-const initialValue = [
-  {
-    type: 'paragraph',
-    children: [{ text: '' }]
-  }
-];
+// const initialValue = [
+//   {
+//     type: 'paragraph',
+//     children: [{ text: '' }]
+//   }
+// ];
 
 const mapDispatchToProps = dispatch => ({
   getCurrentUserDispatch: payload => dispatch(getCurrentUser(payload)),

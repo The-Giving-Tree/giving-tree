@@ -6,11 +6,9 @@ import {
   StyledNavigationList as NavigationList
 } from 'baseui/header-navigation';
 import { Notification } from 'baseui/notification';
-import { Redirect } from 'react-router-dom';
 import lifecycle from 'react-pure-lifecycle';
 import { Card, StyledAction } from 'baseui/card';
 import { Input } from 'baseui/input';
-import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { Button, SHAPE } from 'baseui/button';
 import { useStyletron } from 'baseui';
@@ -18,7 +16,6 @@ import Alert from 'baseui/icon/alert';
 import Check from 'baseui/icon/check';
 import { connect } from 'react-redux';
 import Media from 'react-media';
-import { Modal, ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/modal';
 import { login, initiateReset, confirmPassword } from '../store/actions/auth/auth-actions';
 import passwordValidator from 'password-validator';
 var schema = new passwordValidator();
@@ -52,13 +49,7 @@ const methods = {
  * @returns {Element}
  */
 function ResetPassword(props) {
-  const {
-    errorMessage,
-    loginDispatch,
-    loginLoading,
-    confirmPasswordDispatch,
-    confirmPasswordSuccess
-  } = props;
+  const { errorMessage, loginLoading, confirmPasswordDispatch, confirmPasswordSuccess } = props;
   const [password, setPassword] = React.useState('');
   const [validPassword, setValidPassword] = React.useState(false);
 
@@ -129,7 +120,7 @@ function ResetPassword(props) {
           <NavigationItem>
             <div
               style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}
-              onClick={() => history.push('/')}
+              onClick={() => history.push('/home/discover')}
             >
               <img
                 src="https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg"

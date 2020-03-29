@@ -1,52 +1,19 @@
 import * as React from 'react';
-import {
-  HeaderNavigation,
-  ALIGN,
-  StyledNavigationItem as NavigationItem,
-  StyledNavigationList as NavigationList
-} from 'baseui/header-navigation';
-import { StyledLink as Link } from 'baseui/link';
-import { useStyletron } from 'baseui';
 import { Button, SHAPE } from 'baseui/button';
 import { Input, SIZE } from 'baseui/input';
-import { Tag, VARIANT, KIND } from 'baseui/tag';
+import { Tag, KIND } from 'baseui/tag';
 import { useHistory } from 'react-router-dom';
-import { StatefulMenu } from 'baseui/menu';
-import { withHistory } from 'slate-history';
 import queryString from 'query-string';
-import { StatefulSelect as Search, TYPE } from 'baseui/select';
-import { ContextMenu, hideMenu, ContextMenuTrigger } from 'react-contextmenu';
 import { StatefulTooltip } from 'baseui/tooltip';
 import Navigation from './Navigation';
-import { css } from 'emotion';
-import { Avatar } from 'baseui/avatar';
-import { Redirect } from 'react-router-dom';
-import { Card, StyledBody, StyledAction } from 'baseui/card';
+import { Card, StyledBody } from 'baseui/card';
 import { Block } from 'baseui/block';
-import { H1, H2, H3, H4, H5, H6 } from 'baseui/typography';
-import { Editable, withReact, useSlate, ReactEditor, Slate } from 'slate-react';
-import { Text, Transforms, Editor, createEditor, Range } from 'slate';
-import { Upload, ChevronUp, ChevronDown } from 'baseui/icon';
+import { ChevronUp, ChevronDown } from 'baseui/icon';
 import { Drawer } from 'baseui/drawer';
 import { Notification } from 'baseui/notification';
 import moment from 'moment';
-import axios from 'axios';
-import isHotkey from 'is-hotkey';
 import { Modal, ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/modal';
 import Sidebar from './universal/Sidebar';
-import ROUTES from '../utils/routes';
-import {
-  ButtonEditor,
-  Icon,
-  Toolbar,
-  LIST_TYPES,
-  HOTKEYS,
-  Portal,
-  Menu,
-  Element,
-  withImages,
-  withRichText
-} from './submitHelper';
 
 import { connect } from 'react-redux';
 
@@ -65,55 +32,55 @@ import {
 
 import { editPost } from '../store/actions/user/user-actions';
 
-const Leaf = ({ attributes, children, leaf }) => {
-  if (leaf.bold) {
-    children = <strong>{children}</strong>;
-  }
+// const Leaf = ({ attributes, children, leaf }) => {
+//   if (leaf.bold) {
+//     children = <strong>{children}</strong>;
+//   }
 
-  if (leaf.code) {
-    children = <code>{children}</code>;
-  }
+//   if (leaf.code) {
+//     children = <code>{children}</code>;
+//   }
 
-  if (leaf.italic) {
-    children = <em>{children}</em>;
-  }
+//   if (leaf.italic) {
+//     children = <em>{children}</em>;
+//   }
 
-  if (leaf.underline) {
-    children = <u>{children}</u>;
-  }
+//   if (leaf.underline) {
+//     children = <u>{children}</u>;
+//   }
 
-  if (leaf.annotated) {
-    children = (
-      <div style={{ backgroundColor: 'rgb(255, 225, 104)', opacity: '30%' }}>{children}</div>
-    );
-  }
+//   if (leaf.annotated) {
+//     children = (
+//       <div style={{ backgroundColor: 'rgb(255, 225, 104)', opacity: '30%' }}>{children}</div>
+//     );
+//   }
 
-  return (
-    <span
-      className={css`
-        font-weight: ${leaf.bold && 'bold'};
-        background-color: ${leaf.highlight && 'rgb(255, 225, 104)'};
-      `}
-      {...attributes}
-    >
-      {children}
-    </span>
-  );
-};
+//   return (
+//     <span
+//       className={css`
+//         font-weight: ${leaf.bold && 'bold'};
+//         background-color: ${leaf.highlight && 'rgb(255, 225, 104)'};
+//       `}
+//       {...attributes}
+//     >
+//       {children}
+//     </span>
+//   );
+// };
 
-const isBlockActive = (editor, format) => {
-  const [match] = Editor.nodes(editor, {
-    match: n => n.type === format,
-    mode: 'all'
-  });
+// const isBlockActive = (editor, format) => {
+//   const [match] = Editor.nodes(editor, {
+//     match: n => n.type === format,
+//     mode: 'all'
+//   });
 
-  return !!match;
-};
+//   return !!match;
+// };
 
-const isMarkActive = (editor, format) => {
-  const marks = Editor.marks(editor);
-  return marks ? marks[format] === true : false;
-};
+// const isMarkActive = (editor, format) => {
+//   const marks = Editor.marks(editor);
+//   return marks ? marks[format] === true : false;
+// };
 
 // check to see if valid user or not
 // if valid, show
@@ -122,15 +89,11 @@ const isMarkActive = (editor, format) => {
 function Post(props) {
   const {
     user,
-    foundUser,
     errorMessage,
     foundPost,
-    getCurrentUserDispatch,
     loadPostDispatch,
     downvoteDispatch,
     upvoteDispatch,
-    loadUserDispatch,
-    newsfeedUpdated,
     loadPostSuccess,
     loadPostFailure,
     editCommentDispatch,
@@ -142,26 +105,25 @@ function Post(props) {
     markSeenBool,
     markSeenFailure,
     editPostLoading,
-    editPostSuccess,
-    editPostFailure
+    editPostSuccess
   } = props;
   const id = props.match.params.id;
   let parsed = queryString.parse(window.location.href);
   parsed = Object.values(parsed)[0];
 
-  const renderElement = React.useCallback(props => <Element {...props} />, []);
-  const renderLeaf = React.useCallback(props => <Leaf {...props} />, []);
+  // const renderElement = React.useCallback(props => <Element {...props} />, []);
+  // const renderLeaf = React.useCallback(props => <Leaf {...props} />, []);
 
   const history = useHistory();
 
   const [title, setTitle] = React.useState('');
   const [updated, setUpdated] = React.useState(true);
-  const [upvoteIndex, setUpvoteIndex] = React.useState([]);
-  const [downvoteIndex, setDownvoteIndex] = React.useState([]);
+  // const [upvoteIndex, setUpvoteIndex] = React.useState([]);
+  // const [downvoteIndex, setDownvoteIndex] = React.useState([]);
   const [text, setText] = React.useState('');
   const [upvoteHover, setUpvoteHover] = React.useState([]);
   const [downvoteHover, setDownvoteHover] = React.useState([]);
-  const [hiddenElements, setHidden] = React.useState([]);
+  // const [hiddenElements, setHidden] = React.useState([]);
   const [replyArray, setReplyArray] = React.useState([]);
   const [editArray, setEditArray] = React.useState([]);
   const [editState, setEditState] = React.useState({});
@@ -173,19 +135,19 @@ function Post(props) {
   const [editor, setEditor] = React.useState(false);
 
   const [tags, setTags] = React.useState([]);
-  const initialValue = [
-    {
-      type: 'paragraph',
-      children: [{ text: 'Loading' }]
-    }
-  ];
-  const [slateValue, setSlateValue] = React.useState(initialValue);
-  const addTag = tag => {
-    setTags([...tags, tag]);
-  };
-  const removeTag = tag => {
-    setTags(tags.filter(t => t !== tag));
-  };
+  // const initialValue = [
+  //   {
+  //     type: 'paragraph',
+  //     children: [{ text: 'Loading' }]
+  //   }
+  // ];
+  // const [slateValue, setSlateValue] = React.useState(initialValue);
+  // const addTag = tag => {
+  //   setTags([...tags, tag]);
+  // };
+  // const removeTag = tag => {
+  //   setTags(tags.filter(t => t !== tag));
+  // };
 
   // not null
   if (parsed !== null && !markSeenBool && !markSeenFailure) {
@@ -698,7 +660,7 @@ function Post(props) {
   return (
     <div
       style={{
-        width: '100%',
+        width: '100%'
       }}
     >
       <Navigation searchBarPosition="center" />
@@ -714,7 +676,7 @@ function Post(props) {
                 color: 'white',
                 margin: '0 auto',
                 position: 'fixed',
-                textAlign: 'center',
+                textAlign: 'center'
               }
             }
           }}
@@ -726,7 +688,7 @@ function Post(props) {
         style={{
           background: '#F5F5F5',
           height: 'calc(100vh - 70px)',
-          width: '100%',
+          width: '100%'
         }}
       >
         {/* ELEMENT TO SHOW IF THERE IS AN ERROR MESSAGE */}
@@ -736,7 +698,7 @@ function Post(props) {
               color: 'rgb(204, 50, 63)',
               margin: '0 auto',
               paddingTop: 30,
-              textAlign: 'center',
+              textAlign: 'center'
             }}
           >
             {errorMessage}
@@ -747,7 +709,7 @@ function Post(props) {
           <div
             style={{
               display: 'flex',
-              flexDirection: 'row',
+              flexDirection: 'row'
             }}
           >
             <Drawer
@@ -757,14 +719,14 @@ function Post(props) {
               overrides={{
                 Backdrop: {
                   style: {
-                    opacity: 0,
-                  },
+                    opacity: 0
+                  }
                 },
                 Close: {
                   style: {
                     border: 0
-                  },
-                },
+                  }
+                }
               }}
               size="auto"
             >
@@ -775,7 +737,7 @@ function Post(props) {
               style={{
                 paddingLeft: 24,
                 paddingRight: 24,
-                paddingTop: 30,
+                paddingTop: 30
               }}
             >
               {!isEmpty(foundPost) && (
@@ -784,14 +746,14 @@ function Post(props) {
                     overrides={{
                       Root: {
                         style: {
-                          width: '45vw',
-                        },
+                          width: '45vw'
+                        }
                       },
                       Body: {
                         style: {
                           margin: '-10px'
-                        },
-                      },
+                        }
+                      }
                     }}
                   >
                     <div
@@ -799,7 +761,7 @@ function Post(props) {
                         alignContent: 'center',
                         display: 'flex',
                         justifyContent: 'space-between',
-                        paddingBottom: 15,
+                        paddingBottom: 15
                       }}
                     >
                       <div
@@ -808,7 +770,7 @@ function Post(props) {
                           display: 'flex',
                           fontSize: 12,
                           marginLeft: 5,
-                          textTransform: 'lowercase',
+                          textTransform: 'lowercase'
                         }}
                       >
                         <div
@@ -823,7 +785,7 @@ function Post(props) {
                             cursor: 'pointer',
                             height: 32,
                             marginRight: 10,
-                            width: 32,
+                            width: 32
                           }}
                         />
                         <div>
@@ -831,7 +793,7 @@ function Post(props) {
                             <a
                               style={{
                                 color: 'rgb(0, 121, 211)',
-                                textDecoration: 'none',
+                                textDecoration: 'none'
                               }}
                               href={`/user/${foundPost.username}`}
                             >
@@ -849,13 +811,13 @@ function Post(props) {
                       </div>
                       <div
                         style={{
-                          alignContent: 'flex-start',
+                          alignContent: 'flex-start'
                         }}
                       >
                         <div
                           style={{
                             alignContent: 'center',
-                            display: 'flex',
+                            display: 'flex'
                           }}
                         >
                           {foundPost.type === 'Post' &&
@@ -887,7 +849,7 @@ function Post(props) {
                                   style: {
                                     marginBottom: '0px',
                                     marginRight: '15px',
-                                    marginTop: '0px',
+                                    marginTop: '0px'
                                   }
                                 }
                               }}
@@ -925,7 +887,7 @@ function Post(props) {
                                   style={{
                                     fontSize: '12px',
                                     marginLeft: 10,
-                                    marginRight: 10,
+                                    marginRight: 10
                                   }}
                                 >
                                   Cancel
@@ -949,7 +911,7 @@ function Post(props) {
                                   style={{
                                     backgroundColor: '#03a87c',
                                     color: 'white',
-                                    fontSize: '12px',
+                                    fontSize: '12px'
                                   }}
                                 >
                                   {editPostLoading
@@ -970,7 +932,7 @@ function Post(props) {
                                   cursor: 'pointer',
                                   height: 'auto',
                                   marginLeft: 15,
-                                  width: 15,
+                                  width: 15
                                 }}
                               />
                             ))}

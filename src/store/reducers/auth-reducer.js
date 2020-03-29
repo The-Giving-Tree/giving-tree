@@ -52,7 +52,12 @@ const initialState = {
   completeTaskFailure: false,
 
   selectMenu: '',
-  title: ''
+  title: '',
+  leaderboard: [],
+  userRanking: 0,
+  loadLeaderboardLoading: false,
+  loadLeaderboardSuccess: false,
+  loadLeaderboardFailure: false
 };
 
 const auth = (state = initialState, action) => {
@@ -74,6 +79,27 @@ const auth = (state = initialState, action) => {
       return Object.assign({}, state, {
         updatedProfile: false,
         errorMessage: action.payload.message
+      });
+
+    case ACTION_TYPE.GET_LEADERBOARD_REQUESTED:
+      return Object.assign({}, state, {
+        claimTaskLoading: true,
+        claimTaskSuccess: false,
+        claimTaskFailure: false
+      });
+    case ACTION_TYPE.GET_LEADERBOARD_SUCCESS:
+      return Object.assign({}, state, {
+        claimTaskLoading: false,
+        claimTaskSuccess: true,
+        claimTaskFailure: false,
+        leaderboard: action.payload.leaderboard,
+        userRanking: action.payload.userRanking
+      });
+    case ACTION_TYPE.GET_LEADERBOARD_FAILURE:
+      return Object.assign({}, state, {
+        claimTaskLoading: false,
+        claimTaskSuccess: false,
+        claimTaskFailure: true
       });
 
     case ACTION_TYPE.SELECT_MENU_REQUESTED:
@@ -262,9 +288,9 @@ const auth = (state = initialState, action) => {
     case ACTION_TYPE.UPVOTE_SUCCESS:
     case ACTION_TYPE.DOWNVOTE_SUCCESS: {
       let newsfeed = state.newsfeed;
-      for (var i = 0; i < newsfeed.length; i++) {
-        if (newsfeed[i]._id.toString() === action.payload.newItem._id.toString()) {
-          newsfeed[i] = action.payload.newItem;
+      for (var j = 0; j < newsfeed.length; j++) {
+        if (newsfeed[j]._id.toString() === action.payload.newItem._id.toString()) {
+          newsfeed[j] = action.payload.newItem;
         }
       }
       return Object.assign({}, state, {

@@ -1,5 +1,4 @@
 import ACTION_TYPE from './action-types';
-import { ACCESSIBILITY_TYPE } from 'baseui/popover';
 
 /**
  * @function
@@ -103,6 +102,11 @@ export const loadNewsfeed = payload => ({
 
 export const selectMenu = payload => ({
   type: ACTION_TYPE.SELECT_MENU_REQUESTED,
+  payload
+});
+
+export const getLeaderboard = payload => ({
+  type: ACTION_TYPE.GET_LEADERBOARD_REQUESTED,
   payload
 });
 
