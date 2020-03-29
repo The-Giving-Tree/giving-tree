@@ -164,6 +164,7 @@ function Login(props) {
                         });
 
                         setResetModal(false);
+                        setResetEmail('');
                       }}
                     >
                       Reset
