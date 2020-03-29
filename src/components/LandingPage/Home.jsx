@@ -33,6 +33,8 @@ import { Upload, ChevronUp, ChevronDown } from 'baseui/icon';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Tag, VARIANT, KIND } from 'baseui/tag';
 import moment from 'moment';
+import Sidebar from '../universal/Sidebar';
+import NewsfeedTable from './NewsfeedTable';
 
 import { withImages, withRichText, Element, Leaf, MarkButton, BlockButton } from '../submitHelper';
 
@@ -710,27 +712,27 @@ function Home(props) {
                     <div
                       style={{
                         display: 'table-cell',
-                        verticalAlign: 'middle',
+                        maxHeight: 'calc(0.7 * 300px)',
                         tableLayout: 'fixed',
-                        width: '100%',
                         textAlign: 'left',
-                        maxHeight: 'calc(0.7 * 300px)'
+                        verticalAlign: 'middle',
+                        width: '100%'
                       }}
                     >
                       <div
                         style={{
-                          display: 'block',
                           alignContent: 'center',
+                          display: 'block',
                           marginBottom: 3,
                           marginLeft: 20
                         }}
                       >
                         <div
                           style={{
-                            textTransform: 'capitalize',
                             fontSize: 20,
                             fontWeight: 600,
-                            marginTop: 5
+                            marginTop: 5,
+                            textTransform: 'capitalize'
                           }}
                         >
                           {item.title}
@@ -986,7 +988,7 @@ function Home(props) {
 
                           if (
                             window.confirm(
-                              'Please confirm your committment to helping this person - by saying yes, other people cannot claim this request.'
+                              'Please confirm your commitment to helping this person - by saying yes, other people cannot claim this request.'
                             )
                           ) {
                             claimTaskDispatch({
@@ -1942,6 +1944,28 @@ function Home(props) {
           >
             see leaderboard
           </button>
+        </div>
+      )}
+      {props.match.url !== '/' && (
+        <div
+          className="sidebar-table-container"
+          style={{
+            backgroundColor: '#F5F5F5',
+            display: 'flex',
+            flexDirection: 'row'
+          }}
+        >
+          <Sidebar {...props} />
+          <NewsfeedTable
+            {...props}
+            address={address}
+            hasMoreItems={hasMoreItems}
+            id={id}
+            items={items}
+            newPost={newPost}
+            openCustomAddress={openCustomAddress}
+            setUpdateNews={setUpdateNews}
+          />
         </div>
       )}
     </div>
