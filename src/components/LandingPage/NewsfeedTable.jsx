@@ -42,10 +42,12 @@ function NewsfeedTable(props) {
     selectMenu,
     match,
     newPost,
+    latLng,
     newsfeedLoading,
     newsfeedSuccess,
     openCustomAddress,
     setOpenCustomAddress,
+    resetItems,
     setAddress,
     setLatLng,
     setUpdateNews
@@ -257,6 +259,7 @@ function NewsfeedTable(props) {
                           setLatLng({ lat, lng });
                           setOpenCustomAddress(false);
                           setAddress('');
+                          window.location = '/home/discover'
                         }}
                       >
                         Cancel
@@ -267,6 +270,7 @@ function NewsfeedTable(props) {
                         onClick={() => {
                           if (address) {
                             setOpenCustomAddress(false);
+                            resetItems();
                           } else {
                             alert('you must enter an address to save!');
                           }
@@ -279,9 +283,10 @@ function NewsfeedTable(props) {
                 ) : (
                   match.url === '/home/discover' && (
                     <div className={`text-left mt-2`} style={{ fontSize: 12 }}>
-                      {address ||
-                        `Your current location (${coords && coords.latitude}, ${coords &&
-                          coords.longitude})`}
+                      Your current location: {address ||
+                        `(${
+                          latLng.lat ? latLng.lat : coords && coords.latitude
+                        }, ${latLng.lng ? latLng.lng : coords && coords.longitude})`}
                       &nbsp;
                       <span
                         onClick={() => setOpenCustomAddress(true)}

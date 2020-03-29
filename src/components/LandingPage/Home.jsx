@@ -9,6 +9,7 @@ import {
 import { StyledLink as Link } from 'baseui/link';
 import { useStyletron } from 'baseui';
 import { Block } from 'baseui/block';
+import queryString from 'query-string';
 import Expand from 'react-expand-animated';
 import { Button, SHAPE } from 'baseui/button';
 import { useHistory } from 'react-router-dom';
@@ -23,7 +24,6 @@ import { RadioGroup, Radio } from 'baseui/radio';
 import Confetti from 'react-confetti';
 import Navigation from './../Navigation';
 import { geolocated } from 'react-geolocated';
-import InfiniteScroll from 'react-infinite-scroller';
 import { Card, StyledBody } from 'baseui/card';
 import { StatefulPopover, PLACEMENT } from 'baseui/popover';
 import { StatefulMenu } from 'baseui/menu';
@@ -81,7 +81,7 @@ function Home(props) {
 
   const history = useHistory();
 
-  let items = [];
+  const items = [];
   const [news, setNews] = React.useState([]);
   const [openCustomAddress, setOpenCustomAddress] = React.useState(false);
   const [distance, setDistance] = React.useState([1000]);
@@ -133,6 +133,7 @@ function Home(props) {
 
   // id dictates the type of feed
   let id = props.match.params.id ? props.match.params.id.toLowerCase() : '';
+  const parsed = queryString.parse(props.location.search);
 
   // if user is logged in
   // if (!isEmpty(user)) {
@@ -156,6 +157,7 @@ function Home(props) {
       case 'discover':
         if (newsfeedSort !== 'Discover') {
           setSort('Discover');
+          console.log('loading discover');
           loadNewsfeedDispatch({
             env: process.env.NODE_ENV,
             page: Number(currentPage),
@@ -1368,6 +1370,22 @@ function Home(props) {
   }, [updatedNews]);
 
   React.useEffect(() => {
+    setLatLng(parsed); // initialize
+
+    if (parsed.lat === '37.7749295' && parsed.lng === '-122.4194155') {
+      setAddress('San Francisco, CA');
+    } else if (parsed.lat === '34.0522342' && parsed.lng === '-118.2436849') {
+      setAddress('Los Angeles, CA');
+    } else if (parsed.lat === '43.653226' && parsed.lng === '-79.3831843') {
+      setAddress('Toronto, ON, Canada');
+    } else if (parsed.lat === '49.2827291' && parsed.lng === '-123.1207375') {
+      setAddress('Vancouver, BC, Canada');
+    } else if (parsed.lat === '40.7127753' && parsed.lng === '-74.0059728') {
+      setAddress('New York City, NY');
+    } else if (!parsed.lat && !parsed.lng) {
+      setAddress('Earth');
+    }
+
     selectMenuDispatch({ selectMenu: 'Food' });
     getLeaderboardDispatch({ env: process.env.NODE_ENV, location: 'global' });
   }, []);
@@ -1500,6 +1518,11 @@ function Home(props) {
     }
   };
 
+  // remove items
+  const resetItems = () => {
+    window.location = `/home/discover?lat=${latLng.lat}&lng=${latLng.lng}`; // explicit lat and lng coordinates
+  };
+
   return (
     <div
       style={{
@@ -1585,9 +1608,11 @@ function Home(props) {
             hasMoreItems={hasMoreItems}
             id={id}
             items={items}
+            resetItems={resetItems}
             setOpenCustomAddress={setOpenCustomAddress}
             setAddress={setAddress}
             setLatLng={setLatLng}
+            latLng={latLng}
             newPost={newPost}
             selectMenu={selectMenu}
             openCustomAddress={openCustomAddress}
