@@ -258,8 +258,12 @@ function NewsfeedTable(props) {
                           let lng = coords && coords.longitude;
                           setLatLng({ lat, lng });
                           setOpenCustomAddress(false);
+
+                          // only refresh if the user is coming from a different location
+                          if (address !== '') {
+                            window.location = '/home/discover'
+                          }
                           setAddress('');
-                          window.location = '/home/discover'
                         }}
                       >
                         Cancel
