@@ -307,7 +307,7 @@ function Leaderboard(props) {
                 ></Tab>
               </Tabs>
             </div>
-            <div className="mt-4" style={{ maxHeight: 700, overflow: 'auto' }}>
+            <div className="mt-4" style={{ maxHeight: 550, overflow: 'auto' }}>
               {leaderboardJSX()}
             </div>
           </div>
