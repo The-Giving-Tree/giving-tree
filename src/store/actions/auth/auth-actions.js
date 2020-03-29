@@ -130,6 +130,11 @@ export const loadPost = payload => ({
   payload
 });
 
+export const deletePost = payload => ({
+  type: ACTION_TYPE.DELETE_POST_REQUESTED,
+  payload
+});
+
 export const follow = payload => ({
   type: ACTION_TYPE.FOLLOW_REQUESTED,
   payload

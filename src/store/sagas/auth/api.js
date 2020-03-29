@@ -284,6 +284,20 @@ const loadPost = async (env, id, token) => {
   }
 };
 
+const deletePost = async (env, id, token) => {
+  try {
+    const headers = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const data = await Axios.delete(`${ROUTES[env].giving_tree}/v1/post/${id}`, headers);
+    return data;
+  } catch (e) {
+    const error = e.response.data ? e.response.data : e;
+    Sentry.captureException(new Error(JSON.stringify(error)));
+    throw error;
+  }
+};
+
 const loadUser = async (env, username) => {
   try {
     const data = await Axios.get(`${ROUTES[env].giving_tree}/v1/user/${username}`);
@@ -521,6 +535,7 @@ const Api = {
   markSeen,
   downvote,
   getLeaderboard,
+  deletePost,
   loadNewsFeed,
   loadPost,
   loadUser,

@@ -21,6 +21,7 @@ import {
   loadUser,
   editComment,
   deleteComment,
+  deletePost,
   addComment,
   loadPost,
   upvote,
@@ -43,6 +44,8 @@ function Post(props) {
     loadPostFailure,
     editCommentDispatch,
     deleteCommentDispatch,
+    deletePostDispatch,
+    deletePostSuccess,
     addCommentDispatch,
     addReplyDispatch,
     markSeenDispatch,
@@ -621,13 +624,21 @@ function Post(props) {
         {errorMessage && (
           <div
             style={{
-              color: 'rgb(204, 50, 63)',
-              margin: '0 auto',
-              paddingTop: 30,
-              textAlign: 'center'
+              display: 'flex',
+              flexDirection: 'row'
             }}
           >
-            {errorMessage}
+            <Sidebar {...props} />
+            <div
+              style={{
+                color: 'rgb(204, 50, 63)',
+                paddingTop: 30,
+                width: '50%',
+                textAlign: 'center'
+              }}
+            >
+              {errorMessage}
+            </div>
           </div>
         )}
         {/* SHOW THE ACTUAL POST IF THERE IS NO ERROR MESSAGE */}
@@ -803,9 +814,33 @@ function Post(props) {
                             </Tag>
                           )}
                           {!isEmpty(user) &&
-                            user._id.toString() === foundPost.authorId.toString() &&
+                            user._id.toString() === foundPost.authorId._id.toString() &&
+                            !foundPost.assignedUser &&
+                            !foundPost.completed &&
                             (editor ? (
-                              <div>
+                              <div className="flex items-center">
+                                <img
+                                  onClick={() => {
+                                    if (window.confirm('Are you sure you want to delete?')) {
+                                      deletePostDispatch({
+                                        env: process.env.NODE_ENV,
+                                        postId: foundPost._id
+                                      });
+
+                                      // alert('post deleted succcessfully');
+                                      // window.location = '/home/discover';
+                                    }
+                                  }}
+                                  style={{
+                                    objectFit: 'cover',
+                                    maxHeight: 15,
+                                    overflow: 'auto',
+                                    marginRight: 5,
+                                    cursor: 'pointer'
+                                  }}
+                                  src="https://d1ppmvgsdgdlyy.cloudfront.net/trash.svg"
+                                  alt="delete"
+                                ></img>
                                 <Button
                                   kind={'secondary'}
                                   onClick={() => setEditor(false)}
@@ -1027,6 +1062,7 @@ const mapDispatchToProps = dispatch => ({
   getCurrentUserDispatch: payload => dispatch(getCurrentUser(payload)),
   loadUserDispatch: payload => dispatch(loadUser(payload)),
   editCommentDispatch: payload => dispatch(editComment(payload)),
+  deletePostDispatch: payload => dispatch(deletePost(payload)),
   deleteCommentDispatch: payload => dispatch(deleteComment(payload)),
   markSeenDispatch: payload => dispatch(markSeen(payload)),
   editPostDispatch: payload => dispatch(editPost(payload)),
@@ -1043,6 +1079,7 @@ const mapStateToProps = state => ({
   foundPost: state.auth.foundPost,
   errorMessage: state.auth.errorMessage,
   newsfeedUpdated: state.auth.newsfeedUpdated,
+  deletePostSuccess: state.auth.deletePostSuccess,
   loadPostSuccess: state.auth.loadPostSuccess,
   loadPostFailure: state.auth.loadPostFailure,
   markSeenBool: state.auth.markSeen,

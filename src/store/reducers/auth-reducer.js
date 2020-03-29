@@ -51,6 +51,8 @@ const initialState = {
   completeTaskSuccess: false,
   completeTaskFailure: false,
 
+  deletePostSuccess: false,
+
   selectMenu: '',
   title: '',
   leaderboard: [],
@@ -356,6 +358,16 @@ const auth = (state = initialState, action) => {
       return Object.assign({}, state, {
         loadPostSuccess: true,
         foundPost: action.payload.post,
+        errorMessage: ''
+      });
+    case ACTION_TYPE.DELETE_POST_REQUESTED:
+      return Object.assign({}, state, {
+        deletePostSuccess: false,
+        errorMessage: ''
+      });
+    case ACTION_TYPE.DELETE_POST_SUCCESS:
+      return Object.assign({}, state, {
+        deletePostSuccess: true,
         errorMessage: ''
       });
     case ACTION_TYPE.LOAD_USER_SUCCESS:

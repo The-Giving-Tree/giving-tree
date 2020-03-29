@@ -288,6 +288,8 @@ function Navigation(props) {
     );
   };
 
+  console.log('user: ', user);
+
   if (authenticated) {
     return (
       <div style={{ width: '100%', zIndex: 800, background: 'white' }}>

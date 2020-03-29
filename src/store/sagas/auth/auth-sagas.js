@@ -395,6 +395,23 @@ export function* loadPost(action) {
   }
 }
 
+export function* deletePost(action) {
+  try {
+    const token = localStorage.getItem('giving_tree_jwt');
+    yield call(Api.deletePost, action.payload.env, action.payload.postId, token);
+
+    yield put({
+      type: ACTION_TYPE.DELETE_POST_SUCCESS
+    });
+  } catch (error) {
+    yield put({ type: ACTION_TYPE.DELETE_POST_FAILURE, payload: error });
+    if (error.code === 401) {
+      localStorage.removeItem('giving_tree_jwt');
+      window.location = '/';
+    }
+  }
+}
+
 export function* loadUser(action) {
   try {
     const data = yield call(Api.loadUser, action.payload.env, action.payload.username);
@@ -651,6 +668,7 @@ export default function* watchAuthSagas() {
   yield takeLatest(ACTION_TYPE.LOAD_NEWSFEED_REQUESTED, loadNewsfeed);
   yield takeLatest(ACTION_TYPE.GET_CURRENT_USER_REQUESTED, getCurrentUser);
   yield takeLatest(ACTION_TYPE.LOAD_POST_REQUESTED, loadPost);
+  yield takeLatest(ACTION_TYPE.DELETE_POST_REQUESTED, deletePost);
   yield takeLatest(ACTION_TYPE.LOAD_USER_REQUESTED, loadUser);
   yield takeLatest(ACTION_TYPE.LOGOUT_REQUESTED, logout);
   yield takeLatest(ACTION_TYPE.LOGOUT_ALL_REQUESTED, logoutAll);

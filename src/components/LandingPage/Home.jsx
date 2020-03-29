@@ -331,9 +331,7 @@ function Home(props) {
                     fontWeight: 'normal'
                   }}
                 >
-                  <div className="flex items-center">
-                    {item.username}
-                  </div>
+                  <div className="flex items-center">{item.username}</div>
                 </td>
                 <td
                   className={`px-4 py-2`}
