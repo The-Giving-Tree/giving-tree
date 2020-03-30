@@ -1777,7 +1777,7 @@ function Home(props) {
   const detailJSX = matches => {
     return (
       <div>
-        <div className={`landing-title py-4`}>Request or help or lend a hand</div>
+        <div className={`landing-title py-4`}>Request for help or lend a hand</div>
         <div className={`landing-text py-4`}>
           The Giving Tree was created in response to COVID 19. We give people with time and
           resources the opportunity to help anyone who needs it.
