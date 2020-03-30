@@ -12,6 +12,7 @@
     "baseui": "^9.27.0",
     "dotenv": "^8.2.0",
     "emotion": "^10.0.23",
+    "geolib": "^3.2.1",
     "history": "^4.10.1",
     "image-exists": "^1.1.0",
     "image-extensions": "^1.1.0",

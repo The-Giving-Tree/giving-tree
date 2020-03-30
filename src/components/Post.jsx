@@ -6,8 +6,10 @@ import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 import { StatefulTooltip } from 'baseui/tooltip';
 import Navigation from './Navigation';
+import { geolocated } from 'react-geolocated';
 import { Card, StyledBody } from 'baseui/card';
 import { Block } from 'baseui/block';
+import { getDistance } from 'geolib';
 import { ChevronUp, ChevronDown } from 'baseui/icon';
 import { Drawer } from 'baseui/drawer';
 import { Notification } from 'baseui/notification';
@@ -47,6 +49,7 @@ function Post(props) {
     deletePostDispatch,
     deletePostSuccess,
     addCommentDispatch,
+    coords,
     addReplyDispatch,
     markSeenDispatch,
     editPostDispatch,
@@ -545,6 +548,28 @@ function Post(props) {
     setDownvoteHover(downvoteHover.concat(i));
   }
 
+  function calculateDistance(requestLocation) {
+    if (requestLocation.lat && requestLocation.lng && coords) {
+      var request = {
+        latitude: requestLocation.lat,
+        longitude: requestLocation.lng
+      };
+
+      var user = {
+        latitude: coords.latitude,
+        longitude: coords.longitude
+      };
+
+      let distance = getDistance(request, user); // meters
+      let km = distance / 1000;
+      let mi = km * 0.621371;
+
+      return mi ? mi.toFixed(2) : '-';
+    } else {
+      return '-';
+    }
+  }
+
   function recursiveCommentGenerator(comments, leftIndent) {
     let returnDOM = [];
     if (comments && comments.length > 0) {
@@ -1015,10 +1040,30 @@ function Post(props) {
                               {foundPost.type === 'Post' ? (
                                 <div style={{ marginTop: 20 }}>
                                   <div>
-                                    <div className="text-sm my-1 mt-4">{text && text.address}</div>
+                                    {text && (
+                                      <div className="text-sm my-1 mt-4">
+                                        {calculateDistance(text.location)} miles from you{' '}
+                                        {text.postal && `(${text.postal.split('-')[0]})`}
+                                      </div>
+                                    )}
                                     <div className="text-sm my-1 mt-4">
                                       {text && `Description: ${text.description}`}
                                     </div>
+                                    <div className="text-sm my-1 mt-4">
+                                      {text &&
+                                        `Due Date: ${moment(new Date(text.dueDate)).fromNow()} (${
+                                          text.dueDate
+                                        })`}
+                                    </div>
+                                    {text && (
+                                      <div className="text-sm my-1 mt-4">
+                                        Phone Number:{' '}
+                                        {text.phoneNumber &&
+                                          `***-***-${text.phoneNumber.substring(
+                                            text.phoneNumber.length - 4
+                                          )}`}
+                                      </div>
+                                    )}
                                     <div className="mt-4"></div>
                                     {cartJSX()}
                                   </div>
@@ -1117,4 +1162,4 @@ Post.defaultProps = {};
 
 Post.propTypes = {};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Post);
+export default connect(mapStateToProps, mapDispatchToProps)(geolocated()(Post));

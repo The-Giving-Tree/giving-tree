@@ -41,6 +41,7 @@ function Submit(props) {
   const [phoneNumber, setPhoneNumber] = React.useState('');
   const [address, setAddress] = useState('');
   const [latLng, setLatLng] = useState({});
+  const [postal, setPostal] = useState('');
   const [cart, setCart] = React.useState([]);
   const [selectedRequest, setRequest] = React.useState('');
   const [checkout, setCheckout] = React.useState(false);
@@ -48,6 +49,7 @@ function Submit(props) {
   const [cartQuantity, setCartQuantity] = React.useState('');
   const [cartName, setCartName] = React.useState('');
   const [description, setDescription] = useState('');
+  const [dueDate, setDueDate] = useState('');
 
   // initialize state
   React.useEffect(() => {
@@ -72,15 +74,17 @@ function Submit(props) {
     updateUser();
   }, [props.submitDraftSuccess, props.markSeenSubmitTutorial, getCurrentUserDispatch]);
 
+  /* eslint-disable */
   React.useEffect(() => {
-    console.log('submitted draft');
     async function submitDraft() {
       let foodString = {
         address,
         type: selectedRequest,
         description,
         cart,
+        dueDate,
         location: latLng,
+        postal,
         phoneNumber
       };
 
@@ -94,18 +98,7 @@ function Submit(props) {
     }
 
     submitDraft();
-  }, [
-    props.submitDraftSuccess,
-    address,
-    cart,
-    description,
-    latLng,
-    phoneNumber,
-    publishPostDispatch,
-    selectedRequest,
-    submittedDraft._id,
-    title
-  ]);
+  }, [props.submitDraftSuccess, publishPostDispatch, submittedDraft._id]);
 
   useEffect(() => {}, [changedCart]);
 
@@ -218,13 +211,28 @@ function Submit(props) {
           onChange={address => setAddress(address)}
           onSelect={address => {
             setAddress(address);
+            let postal = '';
+            geocodeByAddress(address)
+              .then(results => {
+                for (var i = 0; i < results[0].address_components.length; i++) {
+                  let x = results[0].address_components[i];
+                  if (x.types[0] === 'postal_code') {
+                    postal += x.long_name;
+                  } else if (x.types[0] === 'postal_code_suffix') {
+                    postal += `-${x.long_name}`;
+                  }
+                }
+                setPostal(postal);
+              })
+              .catch(error => console.error('Error 1', error));
+
             geocodeByAddress(address)
               .then(results => getLatLng(results[0]))
               .then(latLng => {
                 console.log('Success', latLng);
                 setLatLng(latLng);
               })
-              .catch(error => console.error('Error', error));
+              .catch(error => console.error('Error 2', error));
           }}
         >
           {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
@@ -274,6 +282,15 @@ function Submit(props) {
           value={description}
           type="text"
           placeholder="tell us a little more about your request..."
+        />
+        <div className="font-bold text-base text-left my-1 mt-4">Due Date</div>
+        <input
+          style={{ height: '32px' }}
+          onChange={e => {
+            setDueDate(e.target.value); // YYYY-MM-DD
+          }}
+          class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          type="date"
         />
         <div className="mt-4"></div>
         {cartJSX()}
@@ -340,12 +357,22 @@ function Submit(props) {
             {selectedRequest !== '' && (
               <button
                 onClick={() => {
-                  if (title && address && description && cart.length > 0) {
+                  if (
+                    title &&
+                    latLng.lat &&
+                    latLng.lng &&
+                    address &&
+                    description &&
+                    dueDate &&
+                    cart.length > 0
+                  ) {
                     let foodString = {
                       address,
                       type: selectedRequest,
                       description,
                       cart,
+                      postal,
+                      dueDate,
                       location: latLng,
                       phoneNumber
                     };

@@ -20,7 +20,8 @@ import {
   loadUser,
   follow,
   unfollow,
-  updateProfile
+  updateProfile,
+  selectMenu
 } from '../store/actions/auth/auth-actions';
 
 function User(props) {
@@ -32,6 +33,7 @@ function User(props) {
     foundUserNull,
     loadUserDispatch,
     updateProfileDispatch,
+    selectMenuDispatch,
     updatedProfile
   } = props;
   const id = props.match.params.id.toLowerCase();
@@ -674,7 +676,7 @@ function User(props) {
 
   return (
     <div style={{ width: '100%' }}>
-      <Navigation searchBarPosition="center" />
+      <Navigation selectMenuDispatch={selectMenuDispatch} searchBarPosition="center" />
       <div
         style={
           {
@@ -803,20 +805,27 @@ function User(props) {
                                   />
                                   <Avatar
                                     overrides={{
-                                      Avatar: { style: { opacity: hoverAvatar ? '90%' : '60%', background: stringToHslColor(
-                                        username,
-                                        80,
-                                        45
-                                      ) } },
+                                      Avatar: {
+                                        style: {
+                                          opacity: hoverAvatar ? '90%' : '60%',
+                                          background: stringToHslColor(username, 80, 45)
+                                        }
+                                      },
                                       Initials: { style: { backgroundColor: 'white' } },
                                       Root: {
                                         style: {
-                                          marginTop: '-94px',
+                                          marginTop: '-94px'
                                         }
                                       }
                                     }}
                                     name={username}
-                                    src={image.preview || foundUser.profilePictureUrl === 'https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg' ? `https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${username[0].toUpperCase()}.svg` : foundUser.profilePictureUrl}
+                                    src={
+                                      image.preview ||
+                                      foundUser.profilePictureUrl ===
+                                        'https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg'
+                                        ? `https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${username[0].toUpperCase()}.svg`
+                                        : foundUser.profilePictureUrl
+                                    }
                                     size={'140px'}
                                     key={'140px'}
                                   />
@@ -849,18 +858,17 @@ function User(props) {
                             Root: {
                               style: {
                                 marginTop: '-94px',
-                                background: stringToHslColor(
-                                  username,
-                                  80,
-                                  45
-                                )
+                                background: stringToHslColor(username, 80, 45)
                               }
                             }
                           }}
                           src={
                             updatedProfile && image.preview
                               ? image.preview
-                              : foundUser.profilePictureUrl === 'https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg' ? `https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${username[0].toUpperCase()}.svg` : foundUser.profilePictureUrl
+                              : foundUser.profilePictureUrl ===
+                                'https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg'
+                              ? `https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${username[0].toUpperCase()}.svg`
+                              : foundUser.profilePictureUrl
                           }
                           size={'140px'}
                           key={'140px'}
@@ -1134,7 +1142,8 @@ const mapDispatchToProps = dispatch => ({
   loadUserDispatch: payload => dispatch(loadUser(payload)),
   followDispatch: payload => dispatch(follow(payload)),
   unfollowDispatch: payload => dispatch(unfollow(payload)),
-  updateProfileDispatch: payload => dispatch(updateProfile(payload))
+  updateProfileDispatch: payload => dispatch(updateProfile(payload)),
+  selectMenuDispatch: payload => dispatch(selectMenu(payload))
 });
 
 const mapStateToProps = state => ({

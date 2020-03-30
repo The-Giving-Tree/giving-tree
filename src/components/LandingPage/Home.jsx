@@ -13,6 +13,7 @@ import { Redirect } from 'react-router-dom';
 import Alert from 'baseui/icon/alert';
 import { Block } from 'baseui/block';
 import Media from 'react-media';
+import { getDistance } from 'geolib';
 import queryString from 'query-string';
 import Expand from 'react-expand-animated';
 import { Button, SHAPE } from 'baseui/button';
@@ -90,6 +91,7 @@ function Home(props) {
     leaderboard,
     currentPage,
     pages,
+    coords,
     numOfResults,
     selectMenu,
     addCommentDispatch,
@@ -549,6 +551,28 @@ function Home(props) {
     return 'hsl(' + h + ', ' + s + '%, ' + l + '%)';
   }
 
+  function calculateDistance(requestLocation) {
+    if (requestLocation.lat && requestLocation.lng) {
+      var request = {
+        latitude: requestLocation.lat,
+        longitude: requestLocation.lng
+      };
+
+      var user = {
+        latitude: coords && coords.latitude,
+        longitude: coords && coords.longitude
+      };
+
+      let distance = getDistance(request, user); // meters
+      let km = distance / 1000;
+      let mi = km * 0.621371;
+
+      return mi.toFixed(2);
+    } else {
+      return '-';
+    }
+  }
+
   const render = () => {
     news.map((item, i) => {
       if (
@@ -846,17 +870,39 @@ function Home(props) {
                             {item.type === 'Post' ? (
                               <div style={{ marginTop: 20 }}>
                                 <div>
+                                  {props.match.url === '/home/ongoing' ? (
+                                    <div className="text-sm my-1 mt-4">
+                                      {item && `Address: ${JSON.parse(item.text).address}`}
+                                    </div>
+                                  ) : (
+                                    <div className="text-sm my-1 mt-4">
+                                      {calculateDistance(JSON.parse(item.text).location)} miles from
+                                      you{' '}
+                                      {JSON.parse(item.text).postal &&
+                                        `(${JSON.parse(item.text).postal.split('-')[0]})`}
+                                    </div>
+                                  )}
                                   <div className="text-sm my-1 mt-4">
-                                    {item.text && `Address: ${JSON.parse(item.text).address}`}
+                                    {item &&
+                                      JSON.parse(item.text).dueDate &&
+                                      `Due Date: ${moment(
+                                        new Date(JSON.parse(item.text).dueDate)
+                                      ).fromNow()} (${JSON.parse(item.text).dueDate})`}
                                   </div>
                                   <div className="text-sm my-1 mt-4">
                                     {item && `Description: ${JSON.parse(item.text).description}`}
                                   </div>
                                   {item &&
-                                    props.match.url === '/home/ongoing' &&
-                                    JSON.parse(item.text).phoneNumber && (
+                                    JSON.parse(item.text).phoneNumber &&
+                                    (props.match.url === '/home/discover' ||
+                                      props.match.url === '/home/ongoing') && (
                                       <div className="text-sm my-1 mt-4">
-                                        Phone Number: {JSON.parse(item.text).phoneNumber}
+                                        Phone Number:{' '}
+                                        {props.match.url === '/home/ongoing'
+                                          ? JSON.parse(item.text).phoneNumber
+                                          : `***-***-${JSON.parse(item.text).phoneNumber.substring(
+                                              JSON.parse(item.text).phoneNumber.length - 4
+                                            )}`}
                                       </div>
                                     )}
                                   <div className="mt-4"></div>
@@ -1084,7 +1130,8 @@ function Home(props) {
                     {confetti && <Confetti width={width} height={height} recycle={false} />}
                     {item.type === 'Post' &&
                       !item.completed &&
-                      props.match.url === '/home/discover' && !item.assignedUser && (
+                      props.match.url === '/home/discover' &&
+                      !item.assignedUser && (
                         <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
                           <Button
                             style={{ outline: 'none', padding: 0 }}
@@ -1543,7 +1590,7 @@ function Home(props) {
                     margin: '0 auto',
                     boxShadow: 'none'
                   }
-                },
+                }
               }}
             >
               {errorMessage && (
@@ -1668,7 +1715,7 @@ function Home(props) {
                     margin: '0 auto',
                     boxShadow: 'none'
                   }
-                },
+                }
               }}
             >
               {errorMessage && (
@@ -1802,7 +1849,7 @@ function Home(props) {
         <table
           class="table-auto"
           style={{
-            width: '100%',
+            width: '100%'
           }}
         >
           <tbody>
