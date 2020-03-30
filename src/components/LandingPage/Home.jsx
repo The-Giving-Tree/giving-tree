@@ -53,7 +53,9 @@ import {
   register,
   addReply,
   selectMenu,
-  getLeaderboard
+  getLeaderboard,
+  initiateReset,
+  login
 } from '../../store/actions/auth/auth-actions';
 
 function Home(props) {
@@ -62,6 +64,8 @@ function Home(props) {
     getCurrentUserDispatch,
     loadNewsfeedDispatch,
     getLeaderboardDispatch,
+    loginDispatch,
+    initiateResetDispatch,
     claimTaskDispatch,
     unclaimTaskDispatch,
     completeTaskDispatch,
@@ -76,6 +80,11 @@ function Home(props) {
     registerLoading,
     registerSuccess,
     registerFailure,
+    isRegistered,
+    loginLoading,
+    loginSuccess,
+    loginFailure,
+    initiateResetSuccess,
     leaderboard,
     currentPage,
     pages,
@@ -97,6 +106,10 @@ function Home(props) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [validPassword, setValidPassword] = React.useState(false);
+
+  // login
+  const [resetEmail, setResetEmail] = React.useState('');
+  const [resetModal, setResetModal] = React.useState(false);
 
   const [activeKey, setActiveKey] = React.useState('0');
   const [news, setNews] = React.useState([]);
@@ -130,6 +143,27 @@ function Home(props) {
       ...prevDiscover,
       [id]: !prevDiscover[id]
     }));
+  };
+
+  const enterPressed = async event => {
+    var code = event.keyCode || event.which;
+    if (code === 13) {
+      //13 is the enter keycode
+      if (Number(activeKey) === 0) {
+        handleSignup();
+      } else {
+        handleLogin();
+      }
+    }
+  };
+
+  const handleLogin = async () => {
+    await loginDispatch({
+      env: process.env.NODE_ENV,
+      username,
+      password,
+      rememberMe: true // by default
+    });
   };
 
   const removeOngoing = id => {
@@ -1587,14 +1621,6 @@ function Home(props) {
     );
   }
 
-  const enterPressed = async event => {
-    var code = event.keyCode || event.which;
-    if (code === 13) {
-      //13 is the enter keycode
-      handleSignup();
-    }
-  };
-
   const handleSignup = async () => {
     await signupDispatch({
       env: process.env.NODE_ENV,
@@ -1936,7 +1962,7 @@ function Home(props) {
               </div>
             </div>
           ) : (
-            <table class="table-auto" style={{ width: '100%', height: `calc(100vh - 60px)` }}>
+            <table class="table-auto" style={{ width: '100%', height: `calc(100vh - 60px)`, maxHeight: `calc(100vh - 60px)` }}>
               <tbody>
                 <tr>
                   <td
@@ -2030,7 +2056,7 @@ function Home(props) {
                                         marginRight: '-24px',
                                         boxShadow: 'none'
                                       }
-                                    },
+                                    }
                                   }}
                                 >
                                   {errorMessage && (
@@ -2119,9 +2145,15 @@ function Home(props) {
                                     </Button>
                                   </StyledAction>
                                 </Card>
-                                <p className="my-3 text-sm">
-                                  Already have an account? <span style={{ cursor: 'pointer' }} className={`hover:text-green-800`} onClick={() => setActiveKey(1)}>Login</span>
-                                </p>
+                                <Button
+                                      onClick={() => history.push('/home/discover')}
+                                      shape={SHAPE.pill}
+                                      overrides={{
+                                        BaseButton: { style: { width: '100%' } }
+                                      }}
+                                    >
+                                      Sign Up Later
+                                    </Button>
                               </div>
                             )}
                           </Media>
@@ -2143,134 +2175,147 @@ function Home(props) {
                           title="Login"
                         >
                           <Media
-          queries={{
-            small: '(max-width: 599px)',
-            medium: '(min-width: 600px) and (max-width: 1199px)',
-            large: '(min-width: 1200px)'
-          }}
-        >
-          {matches => (
-            <div
-              style={{
-                paddingLeft: matches.small ? 0 : 24,
-                paddingRight: matches.small ? 0 : 24,
-                textAlign: 'center'
-              }}
-            >
-              <h2 className="my-4 font-bold text-2xl">Login</h2>
-              <Card
-                overrides={{
-                  Root: {
-                    style: {
-                      width: matches.medium || matches.large ? '512px' : '100%',
-                      margin: '0 auto',
-                      border: 'none',
-                      boxShadow: 'none'
-                    }
-                  }
-                }}
-              >
-                {errorMessage && (
-                  <p className="my-3 text-sm" style={{ color: 'rgb(204, 50, 63)' }}>
-                    {errorMessage}
-                  </p>
-                )}
-                <Input
-                  value={username}
-                  onChange={event => setUsername(event.currentTarget.value)}
-                  placeholder="Username"
-                />
-                <br />
-                <Input
-                  value={password}
-                  type="password"
-                  onChange={event => setPassword(event.currentTarget.value)}
-                  placeholder="Password"
-                  onKeyPress={event => enterPressed(event)}
-                />
-                <br />
-                <Modal onClose={() => setResetModal(false)} isOpen={resetModal}>
-                  <ModalHeader>Reset Your Password</ModalHeader>
-                  <ModalBody>
-                    Please enter your email
-                    <Input
-                      value={resetEmail}
-                      onChange={e => setResetEmail(e.target.value)}
-                      placeholder="Email"
-                    />
-                  </ModalBody>
-                  <ModalFooter>
-                    <ModalButton
-                      size={'compact'}
-                      kind={'minimal'}
-                      onClick={() => setResetModal(false)}
-                    >
-                      Cancel
-                    </ModalButton>
-                    <ModalButton
-                      size={'compact'}
-                      onClick={() => {
-                        initiateResetDispatch({
-                          env: process.env.NODE_ENV,
-                          email: resetEmail
-                        });
+                            queries={{
+                              small: '(max-width: 599px)',
+                              medium: '(min-width: 600px) and (max-width: 1199px)',
+                              large: '(min-width: 1200px)'
+                            }}
+                          >
+                            {matches => (
+                              <div
+                                style={{
+                                  paddingLeft: 0,
+                                  paddingRight: 0,
+                                  textAlign: 'center'
+                                }}
+                              >
+                                <Card
+                                  overrides={{
+                                    Root: {
+                                      style: {
+                                        width: matches.medium || matches.large ? '400px' : '100%',
+                                        marginLeft: '-24px',
+                                        marginRight: '-24px',
+                                        border: 'none',
+                                        boxShadow: 'none'
+                                      }
+                                    }
+                                  }}
+                                >
+                                  {errorMessage && (
+                                    <p
+                                      className="my-3 text-sm"
+                                      style={{ color: 'rgb(204, 50, 63)' }}
+                                    >
+                                      {errorMessage}
+                                    </p>
+                                  )}
+                                  <Input
+                                    value={username}
+                                    onChange={event => setUsername(event.currentTarget.value)}
+                                    placeholder="Username"
+                                  />
+                                  <br />
+                                  <Input
+                                    value={password}
+                                    type="password"
+                                    onChange={event => setPassword(event.currentTarget.value)}
+                                    placeholder="Password"
+                                    onKeyPress={event => enterPressed(event)}
+                                  />
+                                  <br />
+                                  <Modal onClose={() => setResetModal(false)} isOpen={resetModal}>
+                                    <ModalHeader>Reset Your Password</ModalHeader>
+                                    <ModalBody>
+                                      Please enter your email
+                                      <Input
+                                        value={resetEmail}
+                                        onChange={e => setResetEmail(e.target.value)}
+                                        placeholder="Email"
+                                      />
+                                    </ModalBody>
+                                    <ModalFooter>
+                                      <ModalButton
+                                        size={'compact'}
+                                        kind={'minimal'}
+                                        onClick={() => setResetModal(false)}
+                                      >
+                                        Cancel
+                                      </ModalButton>
+                                      <ModalButton
+                                        size={'compact'}
+                                        onClick={() => {
+                                          initiateResetDispatch({
+                                            env: process.env.NODE_ENV,
+                                            email: resetEmail
+                                          });
 
-                        setResetModal(false);
-                        setResetEmail('');
-                      }}
-                    >
-                      Reset
-                    </ModalButton>
-                  </ModalFooter>
-                </Modal>
-                {initiateResetSuccess && (
-                  <Notification
-                    autoHideDuration={3000}
-                    overrides={{
-                      Body: {
-                        style: {
-                          position: 'fixed',
-                          left: 0,
-                          bottom: 0,
-                          textAlign: 'center',
-                          backgroundColor: 'rgb(54, 135, 89)',
-                          color: 'white'
-                        }
-                      }
-                    }}
-                    kind={'positive'}
-                  >
-                    Reset Instructions Sent!
-                  </Notification>
-                )}
-                <div
-                  style={{ textAlign: 'right', cursor: 'pointer', color: 'rgb(0, 121, 211)' }}
-                  onClick={() => setResetModal(true)}
-                >
-                  Forgot password?
-                </div>
-                <br />
-                <StyledAction>
-                  <Button
-                    onClick={handleLogin}
-                    disabled={!username || !password || loginLoading}
-                    shape={SHAPE.pill}
-                    overrides={{
-                      BaseButton: { style: { width: '100%' } }
-                    }}
-                    isLoading={loginLoading}
-                  >
-                    Login
-                  </Button>
-                </StyledAction>
-              </Card>
-              <p className="my-3 text-sm">
-                New to Giving Tree?{' '}
-                <span style={{ cursor: 'pointer' }} className={`hover:text-green-800`} onClick={() => setActiveKey(0)}>Sign Up</span>
-              </p>
-            </div>
-          )}
-        </Media>
+                                          setResetModal(false);
+                                          setResetEmail('');
+                                        }}
+                                      >
+                                        Reset
+                                      </ModalButton>
+                                    </ModalFooter>
+                                  </Modal>
+                                  {initiateResetSuccess && (
+                                    <Notification
+                                      autoHideDuration={3000}
+                                      overrides={{
+                                        Body: {
+                                          style: {
+                                            position: 'fixed',
+                                            left: 0,
+                                            bottom: 0,
+                                            textAlign: 'center',
+                                            backgroundColor: 'rgb(54, 135, 89)',
+                                            color: 'white'
+                                          }
+                                        }
+                                      }}
+                                      kind={'positive'}
+                                    >
+                                      Reset Instructions Sent!
+                                    </Notification>
+                                  )}
+                                  <div
+                                    style={{
+                                      textAlign: 'right',
+                                      cursor: 'pointer',
+                                      color: 'rgb(0, 121, 211)'
+                                    }}
+                                    onClick={() => setResetModal(true)}
+                                  >
+                                    Forgot password?
+                                  </div>
+                                  <br />
+                                  <StyledAction>
+                                    <Button
+                                      onClick={handleLogin}
+                                      disabled={!username || !password || loginLoading}
+                                      shape={SHAPE.pill}
+                                      overrides={{
+                                        BaseButton: { style: { width: '100%' } }
+                                      }}
+                                      isLoading={loginLoading}
+                                    >
+                                      Login
+                                    </Button>
+                                  </StyledAction>
+                                </Card>
+                                <p className="my-3 text-sm">
+                                  New to Giving Tree?{' '}
+                                  <span
+                                    style={{ cursor: 'pointer' }}
+                                    className={`hover:text-green-800`}
+                                    onClick={() => setActiveKey(0)}
+                                  >
+                                    Sign Up
+                                  </span>
+                                </p>
+                              </div>
+                            )}
+                          </Media>
                         </Tab>
                       </Tabs>
                     </div>
@@ -2278,14 +2323,6 @@ function Home(props) {
                 </tr>
               </tbody>
             </table>
-            //   <button
-            //     style={{ outline: 'none' }}
-            //     className="mt-5 bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
-            //     onClick={() => history.push('/home/discover')}
-            //   >
-            //     see leaderboard
-            //   </button>
-            // </div>
           )}
         </div>
       )}
@@ -2305,7 +2342,9 @@ const mapDispatchToProps = dispatch => ({
   addCommentDispatch: payload => dispatch(addComment(payload)),
   addReplyDispatch: payload => dispatch(addReply(payload)),
   selectMenuDispatch: payload => dispatch(selectMenu(payload)),
-  getLeaderboardDispatch: payload => dispatch(getLeaderboard(payload))
+  getLeaderboardDispatch: payload => dispatch(getLeaderboard(payload)),
+  loginDispatch: payload => dispatch(login(payload)),
+  initiateResetDispatch: payload => dispatch(initiateReset(payload))
 });
 
 const mapStateToProps = state => ({
@@ -2323,7 +2362,12 @@ const mapStateToProps = state => ({
   errorMessage: state.auth.errorMessage,
   registerLoading: state.auth.registerLoading,
   registerSuccess: state.auth.registerSuccess,
-  registerFailure: state.auth.registerFailure
+  registerFailure: state.auth.registerFailure,
+  isRegistered: state.auth.isRegistered,
+  loginLoading: state.auth.loginLoading,
+  loginSuccess: state.auth.loginSuccess,
+  loginFailure: state.auth.loginFailure,
+  initiateResetSuccess: state.auth.initiateResetSuccess
 });
 
 Home.defaultProps = {};
