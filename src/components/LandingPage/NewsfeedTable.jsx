@@ -53,6 +53,8 @@ function NewsfeedTable(props) {
     setUpdateNews
   } = props;
 
+  const history = useHistory();
+
   return (
     <table className="table-auto" style={{ width: '50%' }}>
       <thead>

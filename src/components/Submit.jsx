@@ -9,44 +9,14 @@ import { Tag } from 'baseui/tag';
 import Sidebar from './universal/Sidebar';
 
 import { connect } from 'react-redux';
-import { getCurrentUser, loadUser } from '../store/actions/auth/auth-actions';
+import { getCurrentUser, loadUser, selectMenu } from '../store/actions/auth/auth-actions';
 import {
   submitDraft,
   saveDraft,
   publishPost,
   handleSeenSubmit,
-  uploadPhoto
+  uploadPhoto,
 } from '../store/actions/user/user-actions';
-
-// const InputReplacement = ({ tags, removeTag, ...restProps }) => {
-//   const [css] = useStyletron();
-//   return (
-//     <div
-//       className={css({
-//         flex: '1 1 0%',
-//         flexWrap: 'wrap',
-//         display: 'flex',
-//         alignItems: 'center'
-//       })}
-//     >
-//       {tags.map((tag, index) => (
-//         <Tag
-//           variant={TAG_VARIANT.solid}
-//           kind="positive"
-//           onActionClick={() => removeTag(tag)}
-//           key={index}
-//         >
-//           {tag}
-//         </Tag>
-//       ))}
-//       <StyledInput {...restProps} />
-//     </div>
-//   );
-// };
-
-// check to see if valid user or not
-// if valid, show
-// if invalid, redirect to error page
 
 export const Portal = ({ children }) => {
   return ReactDOM.createPortal(children, document.body);
@@ -57,6 +27,7 @@ function Submit(props) {
     user,
     selectMenu,
     titleStore,
+    selectMenuDispatch,
     submitPostSuccess,
     submittedDraft,
     submittedPost,
@@ -407,7 +378,7 @@ function Submit(props) {
 
   return (
     <div style={{ width: '100%' }}>
-      <Navigation searchBarPosition="center" />
+      <Navigation selectMenuDispatch={selectMenuDispatch} searchBarPosition="center" />
       <div
         style={{
           background: '#F5F5F5',
@@ -655,7 +626,8 @@ const mapDispatchToProps = dispatch => ({
   saveDraftDispatch: payload => dispatch(saveDraft(payload)),
   publishPostDispatch: payload => dispatch(publishPost(payload)),
   handleSeenSubmitDispatch: payload => dispatch(handleSeenSubmit(payload)),
-  uploadPhotoDispatch: payload => dispatch(uploadPhoto(payload))
+  uploadPhotoDispatch: payload => dispatch(uploadPhoto(payload)),
+  selectMenuDispatch: payload => dispatch(selectMenu(payload)),
 });
 
 const mapStateToProps = state => ({

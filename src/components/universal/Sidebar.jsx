@@ -57,7 +57,7 @@ import {
 function Sidebar(props) {
   const authenticated = localStorage.getItem('giving_tree_jwt');
   const history = useHistory();
-  const { match } = props;
+  const { match, selectMenuDispatch } = props;
 
   return (
     <th
@@ -207,6 +207,7 @@ function Sidebar(props) {
             className="flex items-center hover:text-indigo-600"
             onClick={() => {
               if (authenticated) {
+                selectMenuDispatch({ selectMenu: '' });
                 history.push('/submit');
               } else {
                 alert('please login/signup before you can ask for help');

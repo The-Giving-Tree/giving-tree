@@ -1540,7 +1540,7 @@ function Home(props) {
             backgroundSize: 'cover'
           }}
         >
-          <Navigation searchBarPosition="center" />
+          <Navigation selectMenuDispatch={selectMenuDispatch} searchBarPosition="center" />
           <Modal
             overrides={{ Dialog: { style: { borderRadius: '7px' } } }}
             onClose={() => setOpenFoodTracking(false)}

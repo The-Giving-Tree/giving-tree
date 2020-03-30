@@ -57,6 +57,7 @@ function Navigation(props) {
     getCurrentUserDispatch,
     addToNotificationsDispatch,
     searchResults,
+    selectMenuDispatch,
     searchLoading,
     clearAllNotificationsDispatch,
     searchDispatch
@@ -140,13 +141,6 @@ function Navigation(props) {
   let notifications = user.notifications || [];
 
   const center = searchBarPosition === 'center';
-
-  console.log('searchBarPosition: ', searchBarPosition);
-
-  // const options = {
-  //   placeholder: `${center ? 'Search Giving Tree' : 'Search'}`,
-  //   maxDropdownHeight: '300px'
-  // };
 
   const [isOpen, setIsOpen] = React.useState(false);
   function close() {
@@ -287,8 +281,6 @@ function Navigation(props) {
       />
     );
   };
-
-  console.log('user: ', user);
 
   if (authenticated) {
     return (
@@ -441,7 +433,6 @@ function Navigation(props) {
                         }}
                         placeholder={center ? 'Search Giving Tree' : 'Search'}
                         onChange={e => {
-                          console.log('e: ', e.target.value);
                           searchDispatch({ env: process.env.NODE_ENV, query: e.target.value });
                           setShouldCloseSearchResults(false);
                         }}
@@ -528,7 +519,10 @@ function Navigation(props) {
                       {(matches.medium || matches.large) && (
                         <React.Fragment>
                           <Button
-                            onClick={() => history.push('/submit')}
+                            onClick={() => {
+                              selectMenuDispatch({ selectMenu: '' });
+                              history.push('/submit')}
+                            }
                             size={'compact'}
                             shape={'pill'}
                             style={{ outline: 'none', marginRight: 25 }}
