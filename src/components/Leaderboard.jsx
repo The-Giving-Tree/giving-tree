@@ -49,6 +49,16 @@ function Leaderboard(props) {
     return url;
   }
 
+  function stringToHslColor(str, s, l) {
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    var h = hash % 360;
+    return 'hsl(' + h + ', ' + s + '%, ' + l + '%)';
+  }
+
   const leaderboardJSX = () => {
     return leaderboard.length === 0 ? (
       <div className="text-center">no items in leaderboard</div>
@@ -124,11 +134,13 @@ function Leaderboard(props) {
                       background: `url(${generateHash(
                         item.username,
                         item.profileVersion
-                      )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
-                      backgroundPosition: '50% 50%',
+                      )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${item.username[0].toUpperCase()}.svg), ${stringToHslColor(item.username, 80, 45)}`,
+                      backgroundPosition: 'center',
                       backgroundSize: 'cover',
                       borderRadius: '50%',
-                      marginRight: 10
+                      marginRight: 10,
+                      cursor: 'pointer',
+                      backgroundRepeat: 'no-repeat'
                     }}
                   />
                   {item.username}

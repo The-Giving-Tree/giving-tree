@@ -282,6 +282,16 @@ function Navigation(props) {
     );
   };
 
+  function stringToHslColor(str, s, l) {
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    var h = hash % 360;
+    return 'hsl(' + h + ', ' + s + '%, ' + l + '%)';
+  }
+
   if (authenticated) {
     return (
       <Media
@@ -521,8 +531,8 @@ function Navigation(props) {
                           <Button
                             onClick={() => {
                               selectMenuDispatch({ selectMenu: '' });
-                              history.push('/submit')}
-                            }
+                              history.push('/submit');
+                            }}
                             size={'compact'}
                             shape={'pill'}
                             style={{ outline: 'none', marginRight: 25 }}
@@ -628,11 +638,13 @@ function Navigation(props) {
                                 background: `url(${generateHash(
                                   user.username,
                                   user.profileVersion
-                                )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
-                                backgroundPosition: '50% 50% !important',
-                                backgroundSize: 'cover !important',
+                                )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${user.username && user.username[0].toUpperCase()}.svg), ${stringToHslColor(user.username ? user.username : 'giving', 80, 45)}`,
+                                backgroundPosition: 'center',
+                                backgroundSize: 'cover',
                                 borderRadius: '50%',
-                                marginRight: 10
+                                marginRight: 10,
+                                cursor: 'pointer',
+                                backgroundRepeat: 'no-repeat'
                               }}
                             />
                           )}

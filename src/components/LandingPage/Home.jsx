@@ -485,6 +485,16 @@ function Home(props) {
       : true;
   }
 
+  function stringToHslColor(str, s, l) {
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    var h = hash % 360;
+    return 'hsl(' + h + ', ' + s + '%, ' + l + '%)';
+  }
+
   const render = () => {
     news.map((item, i) => {
       if (
@@ -552,6 +562,7 @@ function Home(props) {
                       }}
                     >
                       <div
+                        className={`flex items-center justify-center`}
                         onClick={() => history.push(`/user/${item.username}`)}
                         style={{
                           width: 32,
@@ -559,12 +570,13 @@ function Home(props) {
                           background: `url(${generateHash(
                             item.username,
                             item.authorId.profileVersion
-                          )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
-                          backgroundPosition: '50% 50%',
+                          )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${item.username[0].toUpperCase()}.svg), ${stringToHslColor(item.username, 80, 45)}`,
+                          backgroundPosition: 'center',
                           backgroundSize: 'cover',
                           borderRadius: '50%',
                           marginRight: 10,
-                          cursor: 'pointer'
+                          cursor: 'pointer',
+                          backgroundRepeat: 'no-repeat'
                         }}
                       />
                       <div>
@@ -844,12 +856,13 @@ function Home(props) {
                                         height: 32,
                                         background: `url(${generateHash(
                                           item.parent.username
-                                        )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
-                                        backgroundPosition: '50% 50%',
+                                        )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${item.parent.username[0].toUpperCase()}.svg), ${stringToHslColor(item.parent.username, 80, 45)}`,
+                                        backgroundPosition: 'center',
                                         backgroundSize: 'cover',
                                         borderRadius: '50%',
                                         marginRight: 10,
-                                        cursor: 'pointer'
+                                        cursor: 'pointer',
+                                        backgroundRepeat: 'no-repeat'
                                       }}
                                     />
                                     <strong>

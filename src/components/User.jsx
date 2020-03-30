@@ -149,6 +149,16 @@ function User(props) {
     }
   };
 
+  function stringToHslColor(str, s, l) {
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    var h = hash % 360;
+    return 'hsl(' + h + ', ' + s + '%, ' + l + '%)';
+  }
+
   const onDrop = files => {
     if (files.length > 1) {
       alert('only 1 picture is allowed at a time');
@@ -433,12 +443,13 @@ function User(props) {
                   height: 32,
                   background: `url(${generateHash(
                     comment.username
-                  )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
-                  backgroundPosition: '50% 50%',
+                  )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${comment.username[0].toUpperCase()}.svg), ${stringToHslColor(comment.username, 80, 45)}`,
+                  backgroundPosition: 'center',
                   backgroundSize: 'cover',
                   borderRadius: '50%',
                   marginRight: 10,
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  backgroundRepeat: 'no-repeat',
                 }}
               />
               <strong>
@@ -537,12 +548,13 @@ function User(props) {
                   height: 32,
                   background: `url(${generateHash(
                     vote.username
-                  )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
-                  backgroundPosition: '50% 50%',
+                  )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${vote.username[0].toUpperCase()}.svg), ${stringToHslColor(vote.username, 80, 45)}`,
+                  backgroundPosition: 'center',
                   backgroundSize: 'cover',
                   borderRadius: '50%',
                   marginRight: 10,
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  backgroundRepeat: 'no-repeat'
                 }}
               />
               <strong>

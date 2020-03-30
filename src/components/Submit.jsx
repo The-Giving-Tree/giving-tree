@@ -15,7 +15,7 @@ import {
   saveDraft,
   publishPost,
   handleSeenSubmit,
-  uploadPhoto,
+  uploadPhoto
 } from '../store/actions/user/user-actions';
 
 export const Portal = ({ children }) => {
@@ -627,7 +627,7 @@ const mapDispatchToProps = dispatch => ({
   publishPostDispatch: payload => dispatch(publishPost(payload)),
   handleSeenSubmitDispatch: payload => dispatch(handleSeenSubmit(payload)),
   uploadPhotoDispatch: payload => dispatch(uploadPhoto(payload)),
-  selectMenuDispatch: payload => dispatch(selectMenu(payload)),
+  selectMenuDispatch: payload => dispatch(selectMenu(payload))
 });
 
 const mapStateToProps = state => ({

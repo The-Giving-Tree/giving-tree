@@ -169,6 +169,16 @@ function Post(props) {
     }
   }
 
+  function stringToHslColor(str, s, l) {
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    var h = hash % 360;
+    return 'hsl(' + h + ', ' + s + '%, ' + l + '%)';
+  }
+
   function mouseOutUp(i) {
     setUpvoteHover(upvoteHover.filter(item => item !== i));
   }
@@ -300,12 +310,13 @@ function Post(props) {
                           style={{
                             width: 32,
                             height: 32,
-                            background: `url(${generateHash(childComment.username)})`,
-                            backgroundPosition: '50% 50%',
+                            background: `url(${generateHash(childComment.username)}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${childComment.username[0].toUpperCase()}.svg), ${stringToHslColor(childComment.username, 80, 45)}`,
+                            backgroundPosition: 'center',
                             backgroundSize: 'cover',
                             borderRadius: '50%',
                             marginRight: 10,
-                            cursor: 'pointer'
+                            cursor: 'pointer',
+                            backgroundRepeat: 'no-repeat'
                           }}
                         />
                         <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -716,13 +727,14 @@ function Post(props) {
                             background: `url(${generateHash(
                               foundPost.username,
                               foundPost.authorId.profileVersion
-                            )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
-                            backgroundPosition: '50% 50%',
+                            )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${foundPost.username[0].toUpperCase()}.svg), ${stringToHslColor(foundPost.username, 80, 45)}`,
+                            backgroundPosition: 'center',
                             backgroundSize: 'cover',
                             borderRadius: '50%',
-                            cursor: 'pointer',
-                            height: 32,
                             marginRight: 10,
+                            cursor: 'pointer',
+                            backgroundRepeat: 'no-repeat',
+                            height: 32,
                             width: 32
                           }}
                         />
