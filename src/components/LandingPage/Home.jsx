@@ -1083,7 +1083,7 @@ function Home(props) {
                     {confetti && <Confetti width={width} height={height} recycle={false} />}
                     {item.type === 'Post' &&
                       !item.completed &&
-                      props.match.url === '/home/discover' && (
+                      props.match.url === '/home/discover' && !item.assignedUser && (
                         <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
                           <Button
                             style={{ outline: 'none', padding: 0 }}
