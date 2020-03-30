@@ -345,6 +345,7 @@ export function* getLeaderboard(action) {
 export function* loadNewsfeed(action) {
   try {
     const token = localStorage.getItem('giving_tree_jwt');
+    console.log('start loading: ', action);
     const data = yield call(
       Api.loadNewsFeed,
       action.payload.env,

@@ -344,7 +344,7 @@ const loadNewsFeed = async (env, page, location = undefined, feed, token) => {
     };
 
     let query = '';
-    if (location.lat && location.lng) {
+    if (location && location.lat && location.lng) {
       query += `lat=${location.lat}&lng=${location.lng}`;
     }
 
