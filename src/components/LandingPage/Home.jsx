@@ -10,6 +10,7 @@ import { StyledLink as Link } from 'baseui/link';
 import { Tabs, Tab } from 'baseui/tabs';
 import { useStyletron } from 'baseui';
 import { Redirect } from 'react-router-dom';
+import Alert from 'baseui/icon/alert';
 import { Block } from 'baseui/block';
 import Media from 'react-media';
 import queryString from 'query-string';
