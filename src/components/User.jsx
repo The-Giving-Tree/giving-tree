@@ -803,16 +803,20 @@ function User(props) {
                                   />
                                   <Avatar
                                     overrides={{
-                                      Avatar: { style: { opacity: hoverAvatar ? '90%' : '60%' } },
+                                      Avatar: { style: { opacity: hoverAvatar ? '90%' : '60%', background: stringToHslColor(
+                                        username,
+                                        80,
+                                        45
+                                      ) } },
                                       Initials: { style: { backgroundColor: 'white' } },
                                       Root: {
                                         style: {
-                                          marginTop: '-94px'
+                                          marginTop: '-94px',
                                         }
                                       }
                                     }}
                                     name={username}
-                                    src={image.preview || foundUser.profilePictureUrl}
+                                    src={image.preview || foundUser.profilePictureUrl === 'https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg' ? `https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${username[0].toUpperCase()}.svg` : foundUser.profilePictureUrl}
                                     size={'140px'}
                                     key={'140px'}
                                   />
@@ -844,14 +848,19 @@ function User(props) {
                           overrides={{
                             Root: {
                               style: {
-                                marginTop: '-94px'
+                                marginTop: '-94px',
+                                background: stringToHslColor(
+                                  username,
+                                  80,
+                                  45
+                                )
                               }
                             }
                           }}
                           src={
                             updatedProfile && image.preview
                               ? image.preview
-                              : foundUser.profilePictureUrl
+                              : foundUser.profilePictureUrl === 'https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg' ? `https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${username[0].toUpperCase()}.svg` : foundUser.profilePictureUrl
                           }
                           size={'140px'}
                           key={'140px'}
