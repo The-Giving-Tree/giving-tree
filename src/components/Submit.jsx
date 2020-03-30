@@ -381,7 +381,7 @@ function Submit(props) {
       <Navigation selectMenuDispatch={selectMenuDispatch} searchBarPosition="center" />
       <div
         style={{
-          background: '#F5F5F5',
+          background: '#fff',
           display: 'flex',
           flexDirection: 'row',
           height: 'calc(100vh - 70px)',

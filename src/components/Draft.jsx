@@ -164,7 +164,7 @@ function Draft(props) {
   return (
     <div style={{ width: '100%' }}>
       <Navigation searchBarPosition="center" />
-      <div style={{ width: '100%', background: '#F5F5F5', height: 'calc(100vh - 70px)' }}>
+      <div style={{ width: '100%', background: '#fff', height: 'calc(100vh - 70px)' }}>
         <div style={{ paddingLeft: 24, paddingRight: 24, paddingTop: 50 }}>
           {!isEmpty(user) && !user.seenSubmitTutorial && !getDraftFailure && (
             <Card

@@ -632,7 +632,7 @@ function Post(props) {
       )}
       <div
         style={{
-          background: '#F5F5F5',
+          background: '#fff',
           height: 'calc(100vh - 70px)',
           width: '100%'
         }}

@@ -684,7 +684,7 @@ function User(props) {
       >
         <div
           style={{
-            background: '#F5F5F5',
+            background: '#fff',
             paddingBottom: 30,
             paddingLeft: 24,
             paddingRight: 24

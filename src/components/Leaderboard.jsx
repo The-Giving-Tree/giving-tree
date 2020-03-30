@@ -209,7 +209,7 @@ function Leaderboard(props) {
         width: '100%',
         backgroundPosition: '50% 50%',
         backgroundSize: 'cover',
-        backgroundColor: '#f5f5f5'
+        backgroundColor: '#fff'
       }}
     >
       <Navigation searchBarPosition="center" />

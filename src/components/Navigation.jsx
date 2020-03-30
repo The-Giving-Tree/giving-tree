@@ -416,8 +416,8 @@ function Navigation(props) {
                     </div>
                   </NavigationItem>
                 </NavigationList>
-                {!center && <NavigationList $align={ALIGN.center} />}
-                {(matches.medium || matches.large) && (
+                {(!center || matches.medium) && <NavigationList $align={ALIGN.center} />}
+                {matches.large && (
                   <NavigationList $align={center ? ALIGN.center : ALIGN.right}>
                     <NavigationItem style={{ width: `${center ? '600px' : '200px'}` }}>
                       <Input
@@ -441,7 +441,7 @@ function Navigation(props) {
                             }
                           }
                         }}
-                        placeholder={center ? 'Search Giving Tree' : 'Search'}
+                        placeholder={'Search...'}
                         onChange={e => {
                           searchDispatch({ env: process.env.NODE_ENV, query: e.target.value });
                           setShouldCloseSearchResults(false);
@@ -707,8 +707,7 @@ function Navigation(props) {
                   </NavigationItem>
                 </NavigationList>
                 <NavigationList $align={ALIGN.center} />
-
-                {(matches.medium || matches.large) && (
+                {matches.large && (
                   <NavigationList $align={ALIGN.right}>
                     <NavigationItem style={{ width: '200px' }}>
                       <Input

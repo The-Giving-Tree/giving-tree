@@ -227,7 +227,7 @@ function NewsfeedTable(props) {
                             type="text"
                           />
                           <div className="autocomplete-dropdown-container">
-                            {loading && <div>Loading...</div>}
+                            {loading && <div className="loading-spinner"></div>}
                             {suggestions.map(suggestion => {
                               const className = suggestion.active
                                 ? 'suggestion-item--active'
@@ -315,7 +315,7 @@ function NewsfeedTable(props) {
                       style={{ textAlign: 'center', padding: 10, marginTop: 20 }}
                       key={0}
                     >
-                      Loading...
+                      <div className="loading-spinner"></div>
                     </StyledBody>
                   }
                 >
