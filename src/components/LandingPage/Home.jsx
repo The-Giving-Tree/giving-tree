@@ -9,6 +9,7 @@ import {
 import { StyledLink as Link } from 'baseui/link';
 import { Tabs, Tab } from 'baseui/tabs';
 import { useStyletron } from 'baseui';
+import { Redirect } from 'react-router-dom';
 import { Block } from 'baseui/block';
 import Media from 'react-media';
 import queryString from 'query-string';
@@ -164,6 +165,8 @@ function Home(props) {
       password,
       rememberMe: true // by default
     });
+
+    history.push('/home/discover');
   };
 
   const removeOngoing = id => {
@@ -1473,6 +1476,356 @@ function Home(props) {
     }
   }, [latLng, address, !openCustomAddress]);
 
+  const tabDetailJSX = matches => {
+    return (
+      <Tabs
+        overrides={{
+          Tab: {
+            style: {
+              outline: 'none'
+            }
+          },
+          Root: {
+            style: {
+              outline: 'none',
+              width: '100%',
+              margin: '0 auto'
+            }
+          },
+          TabBar: {
+            style: {
+              outline: 'none',
+              backgroundColor: 'white'
+            }
+          },
+          TabContent: {
+            style: {
+              outline: 'none',
+              color: '#059305'
+            }
+          }
+        }}
+        onChange={({ activeKey }) => {
+          setActiveKey(activeKey);
+        }}
+        activeKey={activeKey}
+      >
+        <Tab
+          overrides={{
+            Tab: {
+              style: {
+                outline: 'none',
+                fontSize: 16,
+                fontWeight: 'bold',
+                textAlign: 'center',
+                width: '50%',
+                color: `${activeKey === '0' && '#059305'}`,
+                borderColor: `${activeKey === '0' && '#059305'}`
+              }
+            }
+          }}
+          title="Sign Up"
+        >
+          <div
+            style={{
+              paddingLeft: 0,
+              paddingRight: 0,
+              textAlign: 'center'
+            }}
+          >
+            <Card
+              overrides={{
+                Root: {
+                  style: {
+                    width: matches.medium || matches.large ? '400px' : '100%',
+                    border: 'none',
+                    margin: '0 auto',
+                    boxShadow: 'none'
+                  }
+                },
+              }}
+            >
+              {errorMessage && (
+                <p className="my-3 text-sm" style={{ color: 'rgb(204, 50, 63)' }}>
+                  {errorMessage}
+                </p>
+              )}
+              <Input
+                value={name}
+                onChange={event => setName(event.currentTarget.value)}
+                placeholder="Name"
+              />
+              <br />
+              <Input
+                value={username}
+                onChange={event => setUsername(event.currentTarget.value)}
+                placeholder="Username"
+              />
+              <br />
+              <Input
+                value={email}
+                onChange={event => setEmail(event.currentTarget.value)}
+                placeholder="Email"
+              />
+              <br />
+              <Input
+                value={password}
+                error={password && !validPassword}
+                positive={password && validPassword}
+                overrides={{
+                  After:
+                    password && !validPassword
+                      ? Negative
+                      : password && validPassword
+                      ? Positive
+                      : ''
+                }}
+                type="password"
+                onChange={event => {
+                  setPassword(event.currentTarget.value);
+
+                  if (schema.validate(event.currentTarget.value)) {
+                    setValidPassword(true);
+                  } else {
+                    setValidPassword(false);
+                  }
+                }}
+                placeholder="Password"
+                onKeyPress={event => enterPressed(event)}
+              />
+              {password && !validPassword && (
+                <div style={{ fontSize: 10, textAlign: 'left' }}>
+                  Password must be 8+ characters, at least 1 of lowercase [a-z], uppercase [A-Z],
+                  special character '!._*,#'), number [0-9]
+                </div>
+              )}
+              {/* <br />
+            <p className="my-3 text-sm" style={{ textAlign: 'center' }}>
+              By signing up, you agree to Giving Tree's{' '}
+              <a href="/signup">Terms of Use</a>,{' '}
+              <a href="/signup">Privacy Policy</a> and{' '}
+              <a href="/signup">Cookie Policy</a>.
+            </p> */}
+              <br />
+              <StyledAction>
+                <Button
+                  onClick={handleSignup}
+                  shape={SHAPE.pill}
+                  disabled={
+                    !name || !email || !username || !password || registerLoading || !validPassword
+                  }
+                  isLoading={registerLoading}
+                  overrides={{
+                    BaseButton: { style: { width: '100%' } }
+                  }}
+                >
+                  Sign Up
+                </Button>
+              </StyledAction>
+              <br />
+              <Button
+                onClick={() => history.push('/home/discover')}
+                shape={SHAPE.pill}
+                overrides={{
+                  BaseButton: { style: { width: '100%' } }
+                }}
+              >
+                Sign Up Later
+              </Button>
+            </Card>
+          </div>
+        </Tab>
+        <Tab
+          overrides={{
+            Tab: {
+              style: {
+                outline: 'none',
+                fontSize: 16,
+                width: '50%',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                color: `${activeKey === '1' && '#059305'}`,
+                borderColor: `${activeKey === '1' && '#059305'}`
+              }
+            }
+          }}
+          title="Login"
+        >
+          <div
+            style={{
+              paddingLeft: 0,
+              paddingRight: 0,
+              textAlign: 'center',
+              height: 420
+            }}
+          >
+            <Card
+              overrides={{
+                Root: {
+                  style: {
+                    width: matches.medium || matches.large ? '400px' : '100%',
+                    margin: '0 auto',
+                    boxShadow: 'none'
+                  }
+                },
+              }}
+            >
+              {errorMessage && (
+                <p className="my-3 text-sm" style={{ color: 'rgb(204, 50, 63)' }}>
+                  {errorMessage}
+                </p>
+              )}
+              <Input
+                value={username}
+                onChange={event => setUsername(event.currentTarget.value)}
+                placeholder="Username"
+              />
+              <br />
+              <Input
+                value={password}
+                type="password"
+                onChange={event => setPassword(event.currentTarget.value)}
+                placeholder="Password"
+                onKeyPress={event => enterPressed(event)}
+              />
+              <br />
+              <Modal onClose={() => setResetModal(false)} isOpen={resetModal}>
+                <ModalHeader>Reset Your Password</ModalHeader>
+                <ModalBody>
+                  Please enter your email
+                  <Input
+                    value={resetEmail}
+                    onChange={e => setResetEmail(e.target.value)}
+                    placeholder="Email"
+                  />
+                </ModalBody>
+                <ModalFooter>
+                  <ModalButton
+                    size={'compact'}
+                    kind={'minimal'}
+                    onClick={() => setResetModal(false)}
+                  >
+                    Cancel
+                  </ModalButton>
+                  <ModalButton
+                    size={'compact'}
+                    onClick={() => {
+                      initiateResetDispatch({
+                        env: process.env.NODE_ENV,
+                        email: resetEmail
+                      });
+
+                      setResetModal(false);
+                      setResetEmail('');
+                    }}
+                  >
+                    Reset
+                  </ModalButton>
+                </ModalFooter>
+              </Modal>
+              {initiateResetSuccess && (
+                <Notification
+                  autoHideDuration={3000}
+                  overrides={{
+                    Body: {
+                      style: {
+                        position: 'fixed',
+                        left: 0,
+                        bottom: 0,
+                        textAlign: 'center',
+                        backgroundColor: 'rgb(54, 135, 89)',
+                        color: 'white'
+                      }
+                    }
+                  }}
+                  kind={'positive'}
+                >
+                  Reset Instructions Sent!
+                </Notification>
+              )}
+              <div
+                style={{
+                  textAlign: 'right',
+                  cursor: 'pointer',
+                  color: 'rgb(0, 121, 211)'
+                }}
+                onClick={() => setResetModal(true)}
+              >
+                Forgot password?
+              </div>
+              <br />
+              <StyledAction>
+                <Button
+                  onClick={handleLogin}
+                  disabled={!username || !password || loginLoading}
+                  shape={SHAPE.pill}
+                  overrides={{
+                    BaseButton: { style: { width: '100%' } }
+                  }}
+                  isLoading={loginLoading}
+                >
+                  Login
+                </Button>
+              </StyledAction>
+            </Card>
+          </div>
+        </Tab>
+      </Tabs>
+    );
+  };
+
+  const detailJSX = matches => {
+    return (
+      <div>
+        <div className={`landing-title py-4`}>Request or help or lend a hand</div>
+        <div className={`landing-text py-4`}>
+          The Giving Tree was created in response to COVID 19. We give people with time and
+          resources the opportunity to help anyone who needs it.
+        </div>
+      </div>
+    );
+  };
+
+  const tabJSX = matches => {
+    return (
+      <div className={'p-6'}>
+        {detailJSX(matches)}
+        {tabDetailJSX(matches)}
+      </div>
+    );
+  };
+
+  const homeJSX = matches => {
+    return matches.medium ? (
+      <div>
+        <table
+          class="table-auto"
+          style={{
+            width: '100%',
+          }}
+        >
+          <tbody>
+            <tr>
+              <td
+                style={{
+                  width: '50%'
+                }}
+                class="px-4 py-2"
+              >
+                {detailJSX(matches)}
+              </td>
+              <td style={{ width: '50%' }} class="px-4 py-2">
+                {tabDetailJSX(matches)}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    ) : (
+      tabJSX(matches)
+    );
+  };
+
   async function loadNewsfeedHelper() {
     if (pages === '') {
     } else if (Number(currentPage) < Number(pages)) {
@@ -1630,6 +1983,8 @@ function Home(props) {
       password,
       rememberMe: true // by default
     });
+
+    history.push('/home/discover');
   };
 
   // remove items
@@ -1722,7 +2077,7 @@ function Home(props) {
             <div
               className="sidebar-table-container"
               style={{
-                backgroundColor: '#F5F5F5',
+                backgroundColor: '#fff',
                 display: 'flex',
                 flexDirection: 'row'
               }}
@@ -1962,367 +2317,60 @@ function Home(props) {
               </div>
             </div>
           ) : (
-            <table class="table-auto" style={{ width: '100%', height: `calc(100vh - 60px)`, maxHeight: `calc(100vh - 60px)` }}>
-              <tbody>
-                <tr>
-                  <td
+            <Media
+              queries={{
+                small: '(max-width: 599px)',
+                medium: '(min-width: 600px) and (max-width: 1199px)',
+                large: '(min-width: 1200px)'
+              }}
+            >
+              {matches =>
+                matches.small || matches.medium ? (
+                  <div>
+                    <div
+                      style={{
+                        width: '100%',
+                        height: 342,
+                        background:
+                          'url(https://d1ppmvgsdgdlyy.cloudfront.net/landing.png) center center',
+                        backgroundSize: 'cover',
+                        paddingLeft: 24,
+                        paddingRight: 24
+                      }}
+                    ></div>
+                    {homeJSX(matches)}
+                  </div>
+                ) : (
+                  <table
+                    class="table-auto"
                     style={{
-                      width: '70%',
-                      background:
-                        'url(https://d1ppmvgsdgdlyy.cloudfront.net/landing.png) center center',
-                      backgroundSize: 'cover',
-                      paddingLeft: 24,
-                      paddingRight: 24
+                      width: '100%',
+                      height: `calc(100vh - 60px)`,
+                      maxHeight: `calc(100vh - 60px)`
                     }}
-                    class="px-4 py-2"
-                  ></td>
-                  <td style={{ width: '30%' }} class="px-4 py-2">
-                    <div className={'p-8'}>
-                      <div className={`landing-title py-4`}>Request or help or lend a hand</div>
-                      <div className={`landing-text py-4`}>
-                        The Giving Tree was created in response to COVID 19. We give people with
-                        time and resources the opportunity to help anyone who needs it.
-                      </div>
-                      <Tabs
-                        overrides={{
-                          Tab: {
-                            style: {
-                              outline: 'none'
-                            }
-                          },
-                          Root: {
-                            style: {
-                              outline: 'none',
-                              width: '100%',
-                              margin: '0 auto'
-                            }
-                          },
-                          TabBar: {
-                            style: {
-                              outline: 'none',
-                              backgroundColor: 'white'
-                            }
-                          },
-                          TabContent: {
-                            style: {
-                              outline: 'none',
-                              color: '#059305'
-                            }
-                          }
-                        }}
-                        onChange={({ activeKey }) => {
-                          setActiveKey(activeKey);
-                        }}
-                        activeKey={activeKey}
-                      >
-                        <Tab
-                          overrides={{
-                            Tab: {
-                              style: {
-                                outline: 'none',
-                                fontSize: 16,
-                                fontWeight: 'bold',
-                                textAlign: 'center',
-                                width: '50%',
-                                color: `${activeKey === '0' && '#059305'}`,
-                                borderColor: `${activeKey === '0' && '#059305'}`
-                              }
-                            }
+                  >
+                    <tbody>
+                      <tr>
+                        <td
+                          style={{
+                            width: '70%',
+                            background:
+                              'url(https://d1ppmvgsdgdlyy.cloudfront.net/landing.png) center center',
+                            backgroundSize: 'cover',
+                            paddingLeft: 24,
+                            paddingRight: 24
                           }}
-                          title="Sign Up"
-                        >
-                          <Media
-                            queries={{
-                              small: '(max-width: 599px)',
-                              medium: '(min-width: 600px) and (max-width: 1199px)',
-                              large: '(min-width: 1200px)'
-                            }}
-                          >
-                            {matches => (
-                              <div
-                                style={{
-                                  paddingLeft: 0,
-                                  paddingRight: 0,
-                                  textAlign: 'center'
-                                }}
-                              >
-                                <Card
-                                  overrides={{
-                                    Root: {
-                                      style: {
-                                        width: matches.medium || matches.large ? '400px' : '100%',
-                                        border: 'none',
-                                        marginLeft: '-24px',
-                                        marginRight: '-24px',
-                                        boxShadow: 'none'
-                                      }
-                                    }
-                                  }}
-                                >
-                                  {errorMessage && (
-                                    <p
-                                      className="my-3 text-sm"
-                                      style={{ color: 'rgb(204, 50, 63)' }}
-                                    >
-                                      {errorMessage}
-                                    </p>
-                                  )}
-                                  <Input
-                                    value={name}
-                                    onChange={event => setName(event.currentTarget.value)}
-                                    placeholder="Name"
-                                  />
-                                  <br />
-                                  <Input
-                                    value={username}
-                                    onChange={event => setUsername(event.currentTarget.value)}
-                                    placeholder="Username"
-                                  />
-                                  <br />
-                                  <Input
-                                    value={email}
-                                    onChange={event => setEmail(event.currentTarget.value)}
-                                    placeholder="Email"
-                                  />
-                                  <br />
-                                  <Input
-                                    value={password}
-                                    error={password && !validPassword}
-                                    positive={password && validPassword}
-                                    overrides={{
-                                      After:
-                                        password && !validPassword
-                                          ? Negative
-                                          : password && validPassword
-                                          ? Positive
-                                          : ''
-                                    }}
-                                    type="password"
-                                    onChange={event => {
-                                      setPassword(event.currentTarget.value);
-
-                                      if (schema.validate(event.currentTarget.value)) {
-                                        setValidPassword(true);
-                                      } else {
-                                        setValidPassword(false);
-                                      }
-                                    }}
-                                    placeholder="Password"
-                                    onKeyPress={event => enterPressed(event)}
-                                  />
-                                  {password && !validPassword && (
-                                    <div style={{ fontSize: 10, textAlign: 'left' }}>
-                                      Password must be 8+ characters, at least 1 of lowercase [a-z],
-                                      uppercase [A-Z], special character '!._*,#'), number [0-9]
-                                    </div>
-                                  )}
-                                  <br />
-                                  <p className="my-3 text-sm" style={{ textAlign: 'center' }}>
-                                    By signing up, you agree to Giving Tree's{' '}
-                                    <a href="/signup">Terms of Use</a>,{' '}
-                                    <a href="/signup">Privacy Policy</a> and{' '}
-                                    <a href="/signup">Cookie Policy</a>.
-                                  </p>
-                                  <br />
-                                  <StyledAction>
-                                    <Button
-                                      onClick={handleSignup}
-                                      shape={SHAPE.pill}
-                                      disabled={
-                                        !name ||
-                                        !email ||
-                                        !username ||
-                                        !password ||
-                                        registerLoading ||
-                                        !validPassword
-                                      }
-                                      isLoading={registerLoading}
-                                      overrides={{
-                                        BaseButton: { style: { width: '100%' } }
-                                      }}
-                                    >
-                                      Sign Up
-                                    </Button>
-                                  </StyledAction>
-                                </Card>
-                                <Button
-                                      onClick={() => history.push('/home/discover')}
-                                      shape={SHAPE.pill}
-                                      overrides={{
-                                        BaseButton: { style: { width: '100%' } }
-                                      }}
-                                    >
-                                      Sign Up Later
-                                    </Button>
-                              </div>
-                            )}
-                          </Media>
-                        </Tab>
-                        <Tab
-                          overrides={{
-                            Tab: {
-                              style: {
-                                outline: 'none',
-                                fontSize: 16,
-                                width: '50%',
-                                fontWeight: 'bold',
-                                textAlign: 'center',
-                                color: `${activeKey === '1' && '#059305'}`,
-                                borderColor: `${activeKey === '1' && '#059305'}`
-                              }
-                            }
-                          }}
-                          title="Login"
-                        >
-                          <Media
-                            queries={{
-                              small: '(max-width: 599px)',
-                              medium: '(min-width: 600px) and (max-width: 1199px)',
-                              large: '(min-width: 1200px)'
-                            }}
-                          >
-                            {matches => (
-                              <div
-                                style={{
-                                  paddingLeft: 0,
-                                  paddingRight: 0,
-                                  textAlign: 'center'
-                                }}
-                              >
-                                <Card
-                                  overrides={{
-                                    Root: {
-                                      style: {
-                                        width: matches.medium || matches.large ? '400px' : '100%',
-                                        marginLeft: '-24px',
-                                        marginRight: '-24px',
-                                        border: 'none',
-                                        boxShadow: 'none'
-                                      }
-                                    }
-                                  }}
-                                >
-                                  {errorMessage && (
-                                    <p
-                                      className="my-3 text-sm"
-                                      style={{ color: 'rgb(204, 50, 63)' }}
-                                    >
-                                      {errorMessage}
-                                    </p>
-                                  )}
-                                  <Input
-                                    value={username}
-                                    onChange={event => setUsername(event.currentTarget.value)}
-                                    placeholder="Username"
-                                  />
-                                  <br />
-                                  <Input
-                                    value={password}
-                                    type="password"
-                                    onChange={event => setPassword(event.currentTarget.value)}
-                                    placeholder="Password"
-                                    onKeyPress={event => enterPressed(event)}
-                                  />
-                                  <br />
-                                  <Modal onClose={() => setResetModal(false)} isOpen={resetModal}>
-                                    <ModalHeader>Reset Your Password</ModalHeader>
-                                    <ModalBody>
-                                      Please enter your email
-                                      <Input
-                                        value={resetEmail}
-                                        onChange={e => setResetEmail(e.target.value)}
-                                        placeholder="Email"
-                                      />
-                                    </ModalBody>
-                                    <ModalFooter>
-                                      <ModalButton
-                                        size={'compact'}
-                                        kind={'minimal'}
-                                        onClick={() => setResetModal(false)}
-                                      >
-                                        Cancel
-                                      </ModalButton>
-                                      <ModalButton
-                                        size={'compact'}
-                                        onClick={() => {
-                                          initiateResetDispatch({
-                                            env: process.env.NODE_ENV,
-                                            email: resetEmail
-                                          });
-
-                                          setResetModal(false);
-                                          setResetEmail('');
-                                        }}
-                                      >
-                                        Reset
-                                      </ModalButton>
-                                    </ModalFooter>
-                                  </Modal>
-                                  {initiateResetSuccess && (
-                                    <Notification
-                                      autoHideDuration={3000}
-                                      overrides={{
-                                        Body: {
-                                          style: {
-                                            position: 'fixed',
-                                            left: 0,
-                                            bottom: 0,
-                                            textAlign: 'center',
-                                            backgroundColor: 'rgb(54, 135, 89)',
-                                            color: 'white'
-                                          }
-                                        }
-                                      }}
-                                      kind={'positive'}
-                                    >
-                                      Reset Instructions Sent!
-                                    </Notification>
-                                  )}
-                                  <div
-                                    style={{
-                                      textAlign: 'right',
-                                      cursor: 'pointer',
-                                      color: 'rgb(0, 121, 211)'
-                                    }}
-                                    onClick={() => setResetModal(true)}
-                                  >
-                                    Forgot password?
-                                  </div>
-                                  <br />
-                                  <StyledAction>
-                                    <Button
-                                      onClick={handleLogin}
-                                      disabled={!username || !password || loginLoading}
-                                      shape={SHAPE.pill}
-                                      overrides={{
-                                        BaseButton: { style: { width: '100%' } }
-                                      }}
-                                      isLoading={loginLoading}
-                                    >
-                                      Login
-                                    </Button>
-                                  </StyledAction>
-                                </Card>
-                                <p className="my-3 text-sm">
-                                  New to Giving Tree?{' '}
-                                  <span
-                                    style={{ cursor: 'pointer' }}
-                                    className={`hover:text-green-800`}
-                                    onClick={() => setActiveKey(0)}
-                                  >
-                                    Sign Up
-                                  </span>
-                                </p>
-                              </div>
-                            )}
-                          </Media>
-                        </Tab>
-                      </Tabs>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                          class="px-4 py-2"
+                        ></td>
+                        <td style={{ width: '30%' }} class="px-4 py-2">
+                          {homeJSX(matches)}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                )
+              }
+            </Media>
           )}
         </div>
       )}
