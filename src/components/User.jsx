@@ -927,7 +927,7 @@ function User(props) {
                             style={{ textTransform: 'capitalize', margin: 'auto 0', fontSize: 20 }}
                           >
                             <strong>{username}</strong>
-                            {name && ` (${name})`}
+                            {name && ` - ${name}`}
                           </p>
                           {verified && (
                             <div style={{ display: 'flex', alignItems: 'center' }}>
