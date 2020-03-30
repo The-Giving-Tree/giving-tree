@@ -282,7 +282,7 @@ function Navigation(props) {
     );
   };
 
-  function stringToHslColor(str, s, l) {
+  function stringToHslColor(str = 'a', s, l) {
     var hash = 0;
     for (var i = 0; i < str.length; i++) {
       hash = str.charCodeAt(i) + ((hash << 5) - hash);
@@ -638,7 +638,12 @@ function Navigation(props) {
                                 background: `url(${generateHash(
                                   user.username,
                                   user.profileVersion
-                                )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${user.username && user.username[0].toUpperCase()}.svg), ${stringToHslColor(user.username ? user.username : 'giving', 80, 45)}`,
+                                )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${user.username &&
+                                  user.username[0].toUpperCase()}.svg), ${stringToHslColor(
+                                  user.username,
+                                  80,
+                                  45
+                                )}`,
                                 backgroundPosition: 'center',
                                 backgroundSize: 'cover',
                                 borderRadius: '50%',

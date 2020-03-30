@@ -134,7 +134,11 @@ function Leaderboard(props) {
                       background: `url(${generateHash(
                         item.username,
                         item.profileVersion
-                      )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${item.username[0].toUpperCase()}.svg), ${stringToHslColor(item.username, 80, 45)}`,
+                      )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${item.username[0].toUpperCase()}.svg), ${stringToHslColor(
+                        item.username,
+                        80,
+                        45
+                      )}`,
                       backgroundPosition: 'center',
                       backgroundSize: 'cover',
                       borderRadius: '50%',

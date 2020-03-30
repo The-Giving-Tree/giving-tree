@@ -310,7 +310,13 @@ function Post(props) {
                           style={{
                             width: 32,
                             height: 32,
-                            background: `url(${generateHash(childComment.username)}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${childComment.username[0].toUpperCase()}.svg), ${stringToHslColor(childComment.username, 80, 45)}`,
+                            background: `url(${generateHash(
+                              childComment.username
+                            )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${childComment.username[0].toUpperCase()}.svg), ${stringToHslColor(
+                              childComment.username,
+                              80,
+                              45
+                            )}`,
                             backgroundPosition: 'center',
                             backgroundSize: 'cover',
                             borderRadius: '50%',
@@ -727,7 +733,11 @@ function Post(props) {
                             background: `url(${generateHash(
                               foundPost.username,
                               foundPost.authorId.profileVersion
-                            )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${foundPost.username[0].toUpperCase()}.svg), ${stringToHslColor(foundPost.username, 80, 45)}`,
+                            )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${foundPost.username[0].toUpperCase()}.svg), ${stringToHslColor(
+                              foundPost.username,
+                              80,
+                              45
+                            )}`,
                             backgroundPosition: 'center',
                             backgroundSize: 'cover',
                             borderRadius: '50%',

@@ -7,6 +7,7 @@ import {
   StyledNavigationList as NavigationList
 } from 'baseui/header-navigation';
 import { StyledLink as Link } from 'baseui/link';
+import { Tabs, Tab } from 'baseui/tabs';
 import { useStyletron } from 'baseui';
 import { Block } from 'baseui/block';
 import Media from 'react-media';
@@ -25,7 +26,7 @@ import { RadioGroup, Radio } from 'baseui/radio';
 import Confetti from 'react-confetti';
 import Navigation from './../Navigation';
 import { geolocated } from 'react-geolocated';
-import { Card, StyledBody } from 'baseui/card';
+import { Card, StyledBody, StyledAction } from 'baseui/card';
 import { StatefulPopover, PLACEMENT } from 'baseui/popover';
 import { StatefulMenu } from 'baseui/menu';
 import { withReact } from 'slate-react';
@@ -49,6 +50,7 @@ import {
   upvote,
   downvote,
   addComment,
+  register,
   addReply,
   selectMenu,
   getLeaderboard
@@ -68,7 +70,12 @@ function Home(props) {
     downvoteDispatch,
     newsfeedSuccess,
     newsfeedLoading,
+    signupDispatch,
     userRanking,
+    errorMessage,
+    registerLoading,
+    registerSuccess,
+    registerFailure,
     leaderboard,
     currentPage,
     pages,
@@ -83,6 +90,15 @@ function Home(props) {
   const history = useHistory();
 
   const items = [];
+
+  // signup
+  const [name, setName] = React.useState('');
+  const [username, setUsername] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [validPassword, setValidPassword] = React.useState(false);
+
+  const [activeKey, setActiveKey] = React.useState('0');
   const [news, setNews] = React.useState([]);
   const [openCustomAddress, setOpenCustomAddress] = React.useState(false);
   const [distance, setDistance] = React.useState([1000]);
@@ -570,7 +586,11 @@ function Home(props) {
                           background: `url(${generateHash(
                             item.username,
                             item.authorId.profileVersion
-                          )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${item.username[0].toUpperCase()}.svg), ${stringToHslColor(item.username, 80, 45)}`,
+                          )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${item.username[0].toUpperCase()}.svg), ${stringToHslColor(
+                            item.username,
+                            80,
+                            45
+                          )}`,
                           backgroundPosition: 'center',
                           backgroundSize: 'cover',
                           borderRadius: '50%',
@@ -856,7 +876,11 @@ function Home(props) {
                                         height: 32,
                                         background: `url(${generateHash(
                                           item.parent.username
-                                        )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${item.parent.username[0].toUpperCase()}.svg), ${stringToHslColor(item.parent.username, 80, 45)}`,
+                                        )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${item.parent.username[0].toUpperCase()}.svg), ${stringToHslColor(
+                                          item.parent.username,
+                                          80,
+                                          45
+                                        )}`,
                                         backgroundPosition: 'center',
                                         backgroundSize: 'cover',
                                         borderRadius: '50%',
@@ -1532,6 +1556,56 @@ function Home(props) {
     }
   };
 
+  function Negative() {
+    const [css, theme] = useStyletron();
+    return (
+      <div
+        className={css({
+          display: 'flex',
+          alignItems: 'center',
+          paddingRight: theme.sizing.scale500,
+          color: theme.colors.negative400
+        })}
+      >
+        <Alert size="18px" />
+      </div>
+    );
+  }
+  function Positive() {
+    const [css, theme] = useStyletron();
+    return (
+      <div
+        className={css({
+          display: 'flex',
+          alignItems: 'center',
+          paddingRight: theme.sizing.scale500,
+          color: theme.colors.positive400
+        })}
+      >
+        <Check size="18px" />
+      </div>
+    );
+  }
+
+  const enterPressed = async event => {
+    var code = event.keyCode || event.which;
+    if (code === 13) {
+      //13 is the enter keycode
+      handleSignup();
+    }
+  };
+
+  const handleSignup = async () => {
+    await signupDispatch({
+      env: process.env.NODE_ENV,
+      name,
+      email,
+      username,
+      password,
+      rememberMe: true // by default
+    });
+  };
+
   // remove items
   const resetItems = () => {
     window.location = `/home/discover?lat=${latLng.lat}&lng=${latLng.lng}`; // explicit lat and lng coordinates
@@ -1862,31 +1936,226 @@ function Home(props) {
               </div>
             </div>
           ) : (
-            <div
-              style={{
-                background: 'url(https://d1ppmvgsdgdlyy.cloudfront.net/eat2.jpg) center center',
-                backgroundSize: 'cover',
-                paddingLeft: 24,
-                paddingRight: 24,
-                height: `calc(100vh - 60px)`
-              }}
-            >
-              <Block>
-                <h1 style={{ fontSize: matches.small ? 40 : 100, color: 'white' }}>
-                  We're one big family
-                </h1>
-                <h2 style={{ color: 'rgb(247, 242, 233)', fontSize: matches.small ? 20 : 40 }}>
-                  We are waves of the same sea, leaves of the same tree, flowers of the same garden.
-                </h2>
-              </Block>
-              <button
-                style={{ outline: 'none' }}
-                className="mt-5 bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
-                onClick={() => history.push('/home/discover')}
-              >
-                see leaderboard
-              </button>
-            </div>
+            <table class="table-auto" style={{ width: '100%', height: `calc(100vh - 60px)` }}>
+              <tbody>
+                <tr>
+                  <td
+                    style={{
+                      width: '70%',
+                      background:
+                        'url(https://d1ppmvgsdgdlyy.cloudfront.net/landing.png) center center',
+                      backgroundSize: 'cover',
+                      paddingLeft: 24,
+                      paddingRight: 24
+                    }}
+                    class="px-4 py-2"
+                  ></td>
+                  <td style={{ width: '30%' }} class="px-4 py-2">
+                    <div className={'p-8'}>
+                      <div className={`landing-title py-4`}>Request or help or lend a hand</div>
+                      <div className={`landing-text py-4`}>
+                        The Giving Tree was created in response to COVID 19. We give people with
+                        time and resources the opportunity to help anyone who needs it.
+                      </div>
+                      <Tabs
+                        overrides={{
+                          Tab: {
+                            style: {
+                              outline: 'none'
+                            }
+                          },
+                          Root: {
+                            style: {
+                              outline: 'none',
+                              width: '100%',
+                              margin: '0 auto'
+                            }
+                          },
+                          TabBar: {
+                            style: {
+                              outline: 'none',
+                              backgroundColor: 'white'
+                            }
+                          },
+                          TabContent: {
+                            style: {
+                              outline: 'none',
+                              color: '#059305'
+                            }
+                          }
+                        }}
+                        onChange={({ activeKey }) => {
+                          setActiveKey(activeKey);
+                        }}
+                        activeKey={activeKey}
+                      >
+                        <Tab
+                          overrides={{
+                            Tab: {
+                              style: {
+                                outline: 'none',
+                                fontSize: 16,
+                                fontWeight: 'bold',
+                                textAlign: 'center',
+                                width: '50%',
+                                color: `${activeKey === '0' && '#059305'}`,
+                                borderColor: `${activeKey === '0' && '#059305'}`
+                              }
+                            }
+                          }}
+                          title="Sign Up"
+                        >
+                          <Media
+                            queries={{
+                              small: '(max-width: 599px)',
+                              medium: '(min-width: 600px) and (max-width: 1199px)',
+                              large: '(min-width: 1200px)'
+                            }}
+                          >
+                            {matches => (
+                              <div
+                                style={{
+                                  paddingLeft: 0,
+                                  paddingRight: 0,
+                                  textAlign: 'center'
+                                }}
+                              >
+                                <Card
+                                  overrides={{
+                                    Root: {
+                                      style: {
+                                        width: matches.medium || matches.large ? '400px' : '100%',
+                                        border: 'none',
+                                        marginLeft: '-24px',
+                                        marginRight: '-24px',
+                                        boxShadow: 'none'
+                                      }
+                                    },
+                                  }}
+                                >
+                                  {errorMessage && (
+                                    <p
+                                      className="my-3 text-sm"
+                                      style={{ color: 'rgb(204, 50, 63)' }}
+                                    >
+                                      {errorMessage}
+                                    </p>
+                                  )}
+                                  <Input
+                                    value={name}
+                                    onChange={event => setName(event.currentTarget.value)}
+                                    placeholder="Name"
+                                  />
+                                  <br />
+                                  <Input
+                                    value={username}
+                                    onChange={event => setUsername(event.currentTarget.value)}
+                                    placeholder="Username"
+                                  />
+                                  <br />
+                                  <Input
+                                    value={email}
+                                    onChange={event => setEmail(event.currentTarget.value)}
+                                    placeholder="Email"
+                                  />
+                                  <br />
+                                  <Input
+                                    value={password}
+                                    error={password && !validPassword}
+                                    positive={password && validPassword}
+                                    overrides={{
+                                      After:
+                                        password && !validPassword
+                                          ? Negative
+                                          : password && validPassword
+                                          ? Positive
+                                          : ''
+                                    }}
+                                    type="password"
+                                    onChange={event => {
+                                      setPassword(event.currentTarget.value);
+
+                                      if (schema.validate(event.currentTarget.value)) {
+                                        setValidPassword(true);
+                                      } else {
+                                        setValidPassword(false);
+                                      }
+                                    }}
+                                    placeholder="Password"
+                                    onKeyPress={event => enterPressed(event)}
+                                  />
+                                  {password && !validPassword && (
+                                    <div style={{ fontSize: 10, textAlign: 'left' }}>
+                                      Password must be 8+ characters, at least 1 of lowercase [a-z],
+                                      uppercase [A-Z], special character '!._*,#'), number [0-9]
+                                    </div>
+                                  )}
+                                  <br />
+                                  <p className="my-3 text-sm" style={{ textAlign: 'center' }}>
+                                    By signing up, you agree to Giving Tree's{' '}
+                                    <a href="/signup">Terms of Use</a>,{' '}
+                                    <a href="/signup">Privacy Policy</a> and{' '}
+                                    <a href="/signup">Cookie Policy</a>.
+                                  </p>
+                                  <br />
+                                  <StyledAction>
+                                    <Button
+                                      onClick={handleSignup}
+                                      shape={SHAPE.pill}
+                                      disabled={
+                                        !name ||
+                                        !email ||
+                                        !username ||
+                                        !password ||
+                                        registerLoading ||
+                                        !validPassword
+                                      }
+                                      isLoading={registerLoading}
+                                      overrides={{
+                                        BaseButton: { style: { width: '100%' } }
+                                      }}
+                                    >
+                                      Sign Up
+                                    </Button>
+                                  </StyledAction>
+                                </Card>
+                                <p className="my-3 text-sm">
+                                  Already have an account? <span onClicck={() => setActiveKey('1')}>Login</span>
+                                </p>
+                              </div>
+                            )}
+                          </Media>
+                        </Tab>
+                        <Tab
+                          overrides={{
+                            Tab: {
+                              style: {
+                                outline: 'none',
+                                fontSize: 16,
+                                width: '50%',
+                                fontWeight: 'bold',
+                                textAlign: 'center',
+                                color: `${activeKey === '1' && '#059305'}`,
+                                borderColor: `${activeKey === '1' && '#059305'}`
+                              }
+                            }
+                          }}
+                          title="Login"
+                        ></Tab>
+                      </Tabs>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            //   <button
+            //     style={{ outline: 'none' }}
+            //     className="mt-5 bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
+            //     onClick={() => history.push('/home/discover')}
+            //   >
+            //     see leaderboard
+            //   </button>
+            // </div>
           )}
         </div>
       )}
@@ -1902,6 +2171,7 @@ const mapDispatchToProps = dispatch => ({
   completeTaskDispatch: payload => dispatch(completeTask(payload)),
   upvoteDispatch: payload => dispatch(upvote(payload)),
   downvoteDispatch: payload => dispatch(downvote(payload)),
+  signupDispatch: payload => dispatch(register(payload)),
   addCommentDispatch: payload => dispatch(addComment(payload)),
   addReplyDispatch: payload => dispatch(addReply(payload)),
   selectMenuDispatch: payload => dispatch(selectMenu(payload)),
@@ -1919,7 +2189,11 @@ const mapStateToProps = state => ({
   newsfeedUpdated: state.auth.newsfeedUpdated,
   newsfeedLoading: state.auth.newsfeedLoading,
   userRanking: state.auth.userRanking,
-  leaderboard: state.auth.leaderboard
+  leaderboard: state.auth.leaderboard,
+  errorMessage: state.auth.errorMessage,
+  registerLoading: state.auth.registerLoading,
+  registerSuccess: state.auth.registerSuccess,
+  registerFailure: state.auth.registerFailure
 });
 
 Home.defaultProps = {};

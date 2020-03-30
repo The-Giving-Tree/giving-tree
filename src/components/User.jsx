@@ -443,13 +443,17 @@ function User(props) {
                   height: 32,
                   background: `url(${generateHash(
                     comment.username
-                  )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${comment.username[0].toUpperCase()}.svg), ${stringToHslColor(comment.username, 80, 45)}`,
+                  )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${comment.username[0].toUpperCase()}.svg), ${stringToHslColor(
+                    comment.username,
+                    80,
+                    45
+                  )}`,
                   backgroundPosition: 'center',
                   backgroundSize: 'cover',
                   borderRadius: '50%',
                   marginRight: 10,
                   cursor: 'pointer',
-                  backgroundRepeat: 'no-repeat',
+                  backgroundRepeat: 'no-repeat'
                 }}
               />
               <strong>
@@ -548,7 +552,11 @@ function User(props) {
                   height: 32,
                   background: `url(${generateHash(
                     vote.username
-                  )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${vote.username[0].toUpperCase()}.svg), ${stringToHslColor(vote.username, 80, 45)}`,
+                  )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${vote.username[0].toUpperCase()}.svg), ${stringToHslColor(
+                    vote.username,
+                    80,
+                    45
+                  )}`,
                   backgroundPosition: 'center',
                   backgroundSize: 'cover',
                   borderRadius: '50%',
