@@ -552,15 +552,15 @@ function Home(props) {
   }
 
   function calculateDistance(requestLocation) {
-    if (requestLocation.lat && requestLocation.lng) {
+    if (requestLocation.lat && requestLocation.lng && coords) {
       var request = {
         latitude: requestLocation.lat,
         longitude: requestLocation.lng
       };
 
       var user = {
-        latitude: coords && coords.latitude,
-        longitude: coords && coords.longitude
+        latitude: coords.latitude,
+        longitude: coords.longitude
       };
 
       let distance = getDistance(request, user); // meters
@@ -1252,7 +1252,9 @@ function Home(props) {
                           kind="minimal"
                           size={SIZE.compact}
                           onClick={() => {
-                            let cancelReason = window.prompt('Why are you cancelling? Too many cancelled tasks will flag your account');
+                            let cancelReason = window.prompt(
+                              'Why are you cancelling? Too many cancelled tasks will flag your account'
+                            );
 
                             if (cancelReason) {
                               unclaimTaskDispatch({
@@ -1277,7 +1279,7 @@ function Home(props) {
                                 {
                                   label: 'Manually Add Details',
                                   key: 'manual'
-                                },
+                                }
                                 // {
                                 //   label: (
                                 //     <div

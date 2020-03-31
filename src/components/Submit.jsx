@@ -323,6 +323,7 @@ function Submit(props) {
             }
             type="number"
             placeholder="quantity"
+            min="1"
           />
           <button
             className={`bg-indigo-500 ${validCart &&

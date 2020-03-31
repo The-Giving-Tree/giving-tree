@@ -175,6 +175,8 @@ function Navigation(props) {
         setUserType('');
         setPersonalBenefit('');
         setSuggestion('');
+
+        alert('Thank You! 🌳');
       })
       .catch(err => {
         console.log('error while submitting feedback: ', err);
