@@ -5,6 +5,7 @@ import { Tag, KIND } from 'baseui/tag';
 import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 import { StatefulTooltip } from 'baseui/tooltip';
+import { StatefulPopover, PLACEMENT } from 'baseui/popover';
 import Navigation from './Navigation';
 import { geolocated } from 'react-geolocated';
 import { Card, StyledBody } from 'baseui/card';
@@ -29,7 +30,8 @@ import {
   upvote,
   downvote,
   addReply,
-  markSeen
+  markSeen,
+  getLeaderboard
 } from '../store/actions/auth/auth-actions';
 
 import { editPost } from '../store/actions/user/user-actions';
@@ -47,7 +49,10 @@ function Post(props) {
     editCommentDispatch,
     deleteCommentDispatch,
     deletePostDispatch,
+    getLeaderboardDispatch,
     deletePostSuccess,
+    userRanking,
+    leaderboard,
     addCommentDispatch,
     coords,
     addReplyDispatch,
@@ -103,6 +108,11 @@ function Post(props) {
     }
   }, [foundPost, loadPostSuccess]);
 
+  React.useEffect(() => {
+    getLeaderboardDispatch({ env: process.env.NODE_ENV, location: 'global' });
+  }, []);
+
+
   const cart = text ? text.cart : [];
 
   const isEmpty = obj => {
@@ -110,6 +120,37 @@ function Post(props) {
       if (obj.hasOwnProperty(key)) return false;
     }
     return true;
+  };
+
+  const getLeaderboardIcon = place => {
+    switch (place.toString()) {
+      case '1':
+        return (
+          <img
+            src="https://d1ppmvgsdgdlyy.cloudfront.net/1st.svg"
+            alt="1st"
+            style={{ height: 20 }}
+          />
+        );
+      case '2':
+        return (
+          <img
+            src="https://d1ppmvgsdgdlyy.cloudfront.net/2nd.svg"
+            alt="2nd"
+            style={{ height: 20 }}
+          />
+        );
+      case '3':
+        return (
+          <img
+            src="https://d1ppmvgsdgdlyy.cloudfront.net/3rd.svg"
+            alt="3rd"
+            style={{ height: 20 }}
+          />
+        );
+      default:
+        return place;
+    }
   };
 
   const handlePostLoad = async id => {
@@ -605,6 +646,95 @@ function Post(props) {
 
   createCommentFeed();
 
+  const leaderboardJSX = () => {
+    return leaderboard.length === 0 ? (
+      <div className="text-center">no items in leaderboard</div>
+    ) : (
+      <table className="table-auto border-transparent" style={{ width: '99%' }}>
+        <thead>
+          <tr>
+            <th
+              className="px-4 py-2"
+              style={{
+                fontStyle: 'normal',
+                fontWeight: 'bold',
+                fontSize: '12px',
+                lineHeight: '15px'
+              }}
+            >
+              Rank
+            </th>
+            <th
+              className="px-4 py-2 text-left"
+              style={{
+                fontStyle: 'normal',
+                fontWeight: 'bold',
+                fontSize: '12px',
+                lineHeight: '15px'
+              }}
+            >
+              Helper
+            </th>
+            <th
+              className="px-4 py-2"
+              style={{
+                fontStyle: 'normal',
+                fontWeight: 'bold',
+                fontSize: '12px',
+                lineHeight: '15px'
+              }}
+            >
+              Karma
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {leaderboard
+            .filter((item, i) => Number(i) < 10)
+            .map((item, i) => (
+              <tr className={i % 2 === 0 && `bg-white`}>
+                <td
+                  className={`px-4 py-2 flex justify-center items-center`}
+                  style={{
+                    fontSize: '14px',
+                    lineHeight: '17px',
+                    fontStyle: 'normal',
+                    fontWeight: 'normal'
+                  }}
+                >
+                  {getLeaderboardIcon(Number(i) + 1)}
+                </td>
+                <td
+                  onClick={() => history.push(`/user/${item.username}`)}
+                  className={`px-4 py-2 text-left hover:text-indigo-600 transition duration-150`}
+                  style={{
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                    lineHeight: '17px',
+                    fontStyle: 'normal',
+                    fontWeight: 'normal'
+                  }}
+                >
+                  <div className="flex items-center">{item.username}</div>
+                </td>
+                <td
+                  className={`px-4 py-2`}
+                  style={{
+                    fontSize: '14px',
+                    lineHeight: '17px',
+                    fontStyle: 'normal',
+                    fontWeight: 'normal'
+                  }}
+                >
+                  {item.karma}
+                </td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
+    );
+  };
+
   const cartJSX = () => {
     return cart.length === 0 ? (
       <div className="text-center">no items in cart</div>
@@ -725,7 +855,8 @@ function Post(props) {
                     overrides={{
                       Root: {
                         style: {
-                          width: '45vw'
+                          width: '45vw',
+                          boxShadow: 'none'
                         }
                       },
                       Body: {
@@ -1120,6 +1251,222 @@ function Post(props) {
                 </React.Fragment>
               )}
             </div>
+            <div
+              style={{
+                paddingTop: 30,
+                height: `calc(100vh - 70px + ${60 + 1 * 60}px)`
+              }}
+            >
+              <div
+                style={{
+                  width: '344px'
+                }}
+                className="bg-white rounded-lg p-6 shadow-lg"
+              >
+                <div className="flex justify-between items-center">
+                  <div className="text-left" style={{ fontWeight: 300 }}>
+                    <div
+                      style={{
+                        fontStyle: 'normal',
+                        fontWeight: 500,
+                        fontSize: 16,
+                        lineHeight: '20px',
+                        color: '#545454',
+                        paddingTop: '0px'
+                      }}
+                      className={`mb-4`}
+                    >
+                      Leaderboard
+                    </div>
+                    <div
+                      style={{
+                        fontStyle: 'normal',
+                        fontWeight: 'normal',
+                        fontSize: 12,
+                        lineHeight: '14px',
+                        color: '#545454'
+                      }}
+                    >
+                      Most helpful people in your area
+                    </div>
+                  </div>
+                  <button
+                    className="bg-transparent hover:bg-gray-600 text-gray-700 font-semibold hover:text-white py-1 px-3 border border-gray-600 hover:border-transparent transition duration-150 rounded"
+                    style={{ outline: 'none' }}
+                    onClick={() => history.push('/leaderboard')}
+                  >
+                    <span style={{ fontSize: 12 }}>See full list</span>
+                  </button>
+                </div>
+                <div className="mt-4">{leaderboardJSX()}</div>
+                {Number(userRanking) >= 0 && (
+                  <div className="mt-8">
+                    <div
+                      style={{
+                        fontStyle: 'normal',
+                        fontWeight: 'normal',
+                        fontSize: 12,
+                        lineHeight: '14px',
+                        color: '#545454'
+                      }}
+                      className="text-left mb-4"
+                    >
+                      Your Ranking
+                    </div>
+                    <table className="table-auto border-transparent" style={{ width: '99%' }}>
+                      <thead>
+                        <tr>
+                          <th
+                            className="px-4 py-2"
+                            style={{
+                              fontStyle: 'normal',
+                              fontWeight: 'bold',
+                              fontSize: '12px',
+                              lineHeight: '15px'
+                            }}
+                          >
+                            Rank
+                          </th>
+                          <th
+                            className="px-4 py-2 text-left"
+                            style={{
+                              fontStyle: 'normal',
+                              fontWeight: 'bold',
+                              fontSize: '12px',
+                              lineHeight: '15px'
+                            }}
+                          >
+                            Helper
+                          </th>
+                          <th
+                            className="px-4 py-2"
+                            style={{
+                              fontStyle: 'normal',
+                              fontWeight: 'bold',
+                              fontSize: '12px',
+                              lineHeight: '15px'
+                            }}
+                          >
+                            Karma
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className={`bg-white`}>
+                          <td
+                            className={`px-4 py-2 flex justify-center items-center`}
+                            style={{
+                              fontSize: '14px',
+                              lineHeight: '17px',
+                              fontStyle: 'normal',
+                              fontWeight: 'normal'
+                            }}
+                          >
+                            {getLeaderboardIcon(Number(userRanking) + 1)}
+                          </td>
+                          <td
+                            className={`px-4 py-2 text-left hover:text-indigo-600 transition duration-150`}
+                            style={{
+                              cursor: 'pointer',
+                              fontSize: '14px',
+                              lineHeight: '17px',
+                              fontStyle: 'normal',
+                              fontWeight: 'normal'
+                            }}
+                            onClick={() =>
+                              history.push(
+                                `/user/${Number(userRanking) >= 0 &&
+                                  leaderboard &&
+                                  leaderboard[Number(userRanking)] &&
+                                  leaderboard[Number(userRanking)].username}`
+                              )
+                            }
+                          >
+                            {Number(userRanking) >= 0 &&
+                              leaderboard &&
+                              leaderboard[Number(userRanking)] &&
+                              leaderboard[Number(userRanking)].username}
+                          </td>
+                          <td
+                            className={`px-4 py-2`}
+                            style={{
+                              fontSize: '14px',
+                              lineHeight: '17px',
+                              fontStyle: 'normal',
+                              fontWeight: 'normal'
+                            }}
+                          >
+                            {Number(userRanking) >= 0 &&
+                              leaderboard &&
+                              leaderboard[Number(userRanking)] &&
+                              leaderboard[Number(userRanking)].karma}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <StatefulPopover
+                      placement={PLACEMENT.bottomRight}
+                      overrides={{
+                        Arrow: {
+                          style: {
+                            borderRadius: '50px'
+                          }
+                        },
+                        Body: {
+                          style: {
+                            borderRadius: '50px'
+                          }
+                        },
+                        Root: {
+                          style: {
+                            borderRadius: '50px',
+                            boxShadow: `0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)`
+                          }
+                        }
+                      }}
+                      content={({ close }) => (
+                        <div className="bg-white rounded-lg p-5 shadow-lg">
+                          <div className="tooltip-heading py-1 mb-1">
+                            How does Karma on Giving Tree work?
+                          </div>
+                          <div className="tooltip-text py-1">
+                            Your karma points accumulate when other users upvote your completed
+                            tasks.
+                          </div>
+                          <div className="tooltip-text py-1">
+                            Upvotes you receive from users with higher karma have a greater
+                            influence on your karma points.
+                          </div>
+                          <div className="tooltip-text py-1">
+                            Have thoughts about our karma system?{' '}
+                            <a className="tooltip-heading" href="mailto:givingtree@gmail.com">
+                              Email Us
+                            </a>
+                          </div>
+                        </div>
+                      )}
+                    >
+                      <div
+                        style={{
+                          fontStyle: 'normal',
+                          fontWeight: 'normal',
+                          fontSize: 12,
+                          lineHeight: '14px',
+                          color: '#545454',
+                          cursor: 'pointer'
+                        }}
+                        className="text-left mt-4"
+                      >
+                        Want to improve your ranking?{' '}
+                        <span className="font-bold hover:text-indigo-600 transition duration-150">
+                          Find out how
+                        </span>
+                      </div>
+                    </StatefulPopover>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         )}
       </div>
@@ -1135,6 +1482,7 @@ const mapDispatchToProps = dispatch => ({
   deleteCommentDispatch: payload => dispatch(deleteComment(payload)),
   markSeenDispatch: payload => dispatch(markSeen(payload)),
   editPostDispatch: payload => dispatch(editPost(payload)),
+  getLeaderboardDispatch: payload => dispatch(getLeaderboard(payload)),
   addReplyDispatch: payload => dispatch(addReply(payload)),
   loadPostDispatch: payload => dispatch(loadPost(payload)),
   upvoteDispatch: payload => dispatch(upvote(payload)),
@@ -1147,6 +1495,8 @@ const mapStateToProps = state => ({
   foundUser: state.auth.foundUser,
   foundPost: state.auth.foundPost,
   errorMessage: state.auth.errorMessage,
+  userRanking: state.auth.userRanking,
+  leaderboard: state.auth.leaderboard,
   newsfeedUpdated: state.auth.newsfeedUpdated,
   deletePostSuccess: state.auth.deletePostSuccess,
   loadPostSuccess: state.auth.loadPostSuccess,

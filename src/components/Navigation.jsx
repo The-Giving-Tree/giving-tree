@@ -413,7 +413,7 @@ function Navigation(props) {
                     </div>
                   </NavigationItem>
                 </NavigationList>
-                {<NavigationList $align={ALIGN.center} />}
+                {!matches.large && <NavigationList $align={ALIGN.center} />}
                 {matches.large && (
                   <NavigationList $align={center ? ALIGN.center : ALIGN.right}>
                     <NavigationItem style={{ width: `${center ? '600px' : '200px'}` }}>
@@ -522,7 +522,7 @@ function Navigation(props) {
                 )}
                 <NavigationList $align={ALIGN.right}>
                   <NavigationItem>
-                    <div className='flex items-center'>
+                    <div className="flex items-center">
                       {(matches.medium || matches.large) && (
                         <React.Fragment>
                           <Button
@@ -728,7 +728,7 @@ function Navigation(props) {
                     </div>
                   </NavigationItem>
                 </NavigationList>
-                <NavigationList $align={ALIGN.center} />
+                {!matches.large && <NavigationList $align={ALIGN.center} />}
                 {matches.large && (
                   <NavigationList $align={ALIGN.right}>
                     <NavigationItem style={{ width: '200px' }}>
