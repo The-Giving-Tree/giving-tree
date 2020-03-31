@@ -943,7 +943,7 @@ function Post(props) {
                                   cursor: 'pointer',
                                   height: 25,
                                   marginLeft: 15,
-                                  width: 15,
+                                  width: 15
                                 }}
                               />
                             ))}

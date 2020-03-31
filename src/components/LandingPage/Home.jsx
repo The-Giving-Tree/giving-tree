@@ -630,7 +630,7 @@ function Home(props) {
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
-                  justifyContent: 'space-between',
+                  justifyContent: 'space-between'
                 }}
               >
                 <div>
@@ -639,7 +639,7 @@ function Home(props) {
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignContent: 'center',
-                      paddingBottom: 15,
+                      paddingBottom: 15
                     }}
                   >
                     <div
@@ -2390,7 +2390,27 @@ function Home(props) {
               }}
             >
               {matches =>
-                matches.small || matches.medium ? (
+                authenticated ? (
+                  <React.Fragment>
+                    <div
+                      className="flex items-center justify-center text-center font-bold"
+                      style={{
+                        width: '100%',
+                        height: `calc(100vh - 70px)`,
+                        background:
+                          'url(https://d1ppmvgsdgdlyy.cloudfront.net/landing.png) center center',
+                        backgroundSize: 'cover',
+                        color: 'white',
+                        fontSize: matches.small || matches.medium ? 25 : 40
+                      }}
+                    >
+                      <div style={{ width: matches.small || matches.medium ? '80%' : '35%' }}>
+                        We are waves of the same sea, leaves of the same tree, flowers of the same
+                        garden
+                      </div>
+                    </div>
+                  </React.Fragment>
+                ) : matches.small || matches.medium ? (
                   <div>
                     <div
                       style={{

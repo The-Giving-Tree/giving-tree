@@ -400,7 +400,7 @@ function Navigation(props) {
                   </ModalFooter>
                 </Modal>
                 <NavigationList $align={ALIGN.left}>
-                  <NavigationItem>
+                  <NavigationItem style={{ paddingLeft: 0 }}>
                     <div
                       style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}
                       onClick={() => (window.location = '/home/discover')}
@@ -408,17 +408,12 @@ function Navigation(props) {
                       <img
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
                         alt="Giving Tree"
-                        style={{ height: 30, marginRight: 12 }}
+                        style={{ height: 30, marginRight: matches.large ? 12 : 0 }}
                       />
-                      {/* {(matches.medium || matches.large) && (
-                        <strong>
-                          <div style={{ textDecoration: 'none', color: 'black' }}>Giving Tree</div>
-                        </strong>
-                      )} */}
                     </div>
                   </NavigationItem>
                 </NavigationList>
-                {(!center || matches.medium) && <NavigationList $align={ALIGN.center} />}
+                {<NavigationList $align={ALIGN.center} />}
                 {matches.large && (
                   <NavigationList $align={center ? ALIGN.center : ALIGN.right}>
                     <NavigationItem style={{ width: `${center ? '600px' : '200px'}` }}>
@@ -527,7 +522,7 @@ function Navigation(props) {
                 )}
                 <NavigationList $align={ALIGN.right}>
                   <NavigationItem>
-                    <div style={{ display: 'flex', alignContent: 'center' }}>
+                    <div className='flex items-center'>
                       {(matches.medium || matches.large) && (
                         <React.Fragment>
                           <Button
@@ -618,46 +613,71 @@ function Navigation(props) {
                           />
                         )}
                       >
-                        <Button
-                          overrides={{
-                            BaseButton: {
-                              style: {
-                                marginRight: '24px'
+                        {matches.small || matches.medium ? (
+                          <div
+                            className="profilePic flex items-center"
+                            style={{
+                              width: 32,
+                              height: 32,
+                              background: `url(${generateHash(
+                                user.username,
+                                user.profileVersion
+                              )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${user.username &&
+                                user.username[0].toUpperCase()}.svg), ${stringToHslColor(
+                                user.username,
+                                80,
+                                45
+                              )}`,
+                              backgroundPosition: 'center',
+                              backgroundSize: 'cover',
+                              borderRadius: '50%',
+                              marginRight: 24,
+                              cursor: 'pointer',
+                              backgroundRepeat: 'no-repeat'
+                            }}
+                          />
+                        ) : (
+                          <Button
+                            overrides={{
+                              BaseButton: {
+                                style: {
+                                  marginRight: '24px'
+                                }
                               }
-                            }
-                          }}
-                          style={{ outline: 'none', fontSize: '14px' }}
-                          size={SIZE.compact}
-                          shape={SHAPE.pill}
-                          kind={'secondary'}
-                          endEnhancer={() => <ChevronDown size={24} />}
-                          startEnhancer={() => (
-                            <div
-                              className="profilePic"
-                              style={{
-                                width: 32,
-                                height: 32,
-                                background: `url(${generateHash(
-                                  user.username,
-                                  user.profileVersion
-                                )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${user.username &&
-                                  user.username[0].toUpperCase()}.svg), ${stringToHslColor(
-                                  user.username,
-                                  80,
-                                  45
-                                )}`,
-                                backgroundPosition: 'center',
-                                backgroundSize: 'cover',
-                                borderRadius: '50%',
-                                marginRight: 10,
-                                cursor: 'pointer',
-                                backgroundRepeat: 'no-repeat'
-                              }}
-                            />
-                          )}
-                        >
-                          {user.username && user.username.length < 12 ? user.username : 'Profile'}
-                        </Button>
+                            }}
+                            style={{ outline: 'none', fontSize: '14px' }}
+                            size={SIZE.compact}
+                            shape={SHAPE.pill}
+                            kind={'secondary'}
+                            endEnhancer={() => <ChevronDown size={24} />}
+                            startEnhancer={() => (
+                              <div
+                                className="profilePic"
+                                style={{
+                                  width: 32,
+                                  height: 32,
+                                  background: `url(${generateHash(
+                                    user.username,
+                                    user.profileVersion
+                                  )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${user.username &&
+                                    user.username[0].toUpperCase()}.svg), ${stringToHslColor(
+                                    user.username,
+                                    80,
+                                    45
+                                  )}`,
+                                  backgroundPosition: 'center',
+                                  backgroundSize: 'cover',
+                                  borderRadius: '50%',
+                                  marginRight: 10,
+                                  cursor: 'pointer',
+                                  backgroundRepeat: 'no-repeat'
+                                }}
+                              />
+                            )}
+                          >
+                            {user.username && user.username.length < 12 ? user.username : 'Profile'}
+                          </Button>
+                        )}
                       </StatefulPopover>
                     </div>
                   </NavigationItem>
@@ -749,7 +769,9 @@ function Navigation(props) {
                   </NavigationList>
                 )}
                 <NavigationList $align={ALIGN.right}>
-                  <NavigationItem>
+                  <NavigationItem
+                    style={{ paddingLeft: matches.small || matches.medium ? 0 : '24px' }}
+                  >
                     <Button
                       overrides={{
                         BaseButton: {
