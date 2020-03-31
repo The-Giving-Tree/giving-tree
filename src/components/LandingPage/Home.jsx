@@ -11,6 +11,7 @@ import { Tabs, Tab } from 'baseui/tabs';
 import { useStyletron } from 'baseui';
 import { Redirect } from 'react-router-dom';
 import Alert from 'baseui/icon/alert';
+import Check from 'baseui/icon/check';
 import { Block } from 'baseui/block';
 import Media from 'react-media';
 import { getDistance } from 'geolib';
@@ -60,6 +61,25 @@ import {
   initiateReset,
   login
 } from '../../store/actions/auth/auth-actions';
+
+import passwordValidator from 'password-validator';
+var schema = new passwordValidator();
+schema
+  .is()
+  .min(8)
+  .is()
+  .max(100)
+  .has()
+  .uppercase()
+  .has()
+  .lowercase()
+  .has()
+  .has()
+  .digits()
+  .symbols()
+  .has()
+  .not()
+  .spaces();
 
 function Home(props) {
   const {
