@@ -318,7 +318,7 @@ function Navigation(props) {
               >
                 <Button
                   size={'compact'}
-                  style={{ position: 'fixed', bottom: 0, right: 0, zIndex: 999 }}
+                  style={{ position: 'fixed', backgroundColor: '#8ec755', bottom: 0, right: 0, zIndex: 999 }}
                   onClick={() => setIsOpen(true)}
                 >
                   Give Feedback!

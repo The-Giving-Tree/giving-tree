@@ -1431,7 +1431,7 @@ function Post(props) {
                           </div>
                           <div className="tooltip-text py-1">
                             Your karma points accumulate when other users upvote your completed
-                            tasks.
+                            requests.
                           </div>
                           <div className="tooltip-text py-1">
                             Upvotes you receive from users with higher karma have a greater

@@ -1842,7 +1842,7 @@ function Home(props) {
   const detailJSX = matches => {
     return (
       <div>
-        <div className={`landing-title py-4`}>Request for help or lend a hand</div>
+        <div className={`landing-title py-4`}>Request help or lend a hand</div>
         <div className={`landing-text py-4`}>
           The Giving Tree was created in response to COVID 19. We give people with time and
           resources the opportunity to help anyone who needs it.
@@ -2403,12 +2403,17 @@ function Home(props) {
                           'url(https://d1ppmvgsdgdlyy.cloudfront.net/landing.png) center center',
                         backgroundSize: 'cover',
                         color: 'white',
-                        fontSize: matches.small || matches.medium ? 25 : 40
+                        fontWeight: 500,
+                        fontSize: matches.small || matches.medium ? 25 : 36
                       }}
                     >
-                      <div style={{ width: matches.small || matches.medium ? '80%' : '35%' }}>
-                        We are waves of the same sea, leaves of the same tree, flowers of the same
-                        garden
+                      <div style={{ fontSize: 10, position: 'absolute', bottom: 0, left: 0 }}>Dribbbled by @tubik_arts</div>
+                      <div style={{ width: matches.small || matches.medium ? '80%' : '35%', textShadow: '0px 0px 3px #000' }}>
+                        We are waves of the same sea,
+                        <br/>
+                        leaves of the same tree,
+                        <br/>
+                        flowers of the same garden
                       </div>
                     </div>
                   </React.Fragment>
