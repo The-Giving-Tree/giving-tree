@@ -1181,7 +1181,7 @@ function Post(props) {
                                       {text && `Description: ${text.description}`}
                                     </div>
                                     <div className="text-sm my-1 mt-4">
-                                      {text &&
+                                      {text && text.dueDate &&
                                         `Due Date: ${moment(new Date(text.dueDate)).fromNow()} (${
                                           text.dueDate
                                         })`}
