@@ -406,15 +406,15 @@ function Navigation(props) {
                       onClick={() => (window.location = '/home/discover')}
                     >
                       <img
-                        src="https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg"
+                        src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
                         alt="Giving Tree"
                         style={{ height: 30, marginRight: 12 }}
                       />
-                      {(matches.medium || matches.large) && (
+                      {/* {(matches.medium || matches.large) && (
                         <strong>
                           <div style={{ textDecoration: 'none', color: 'black' }}>Giving Tree</div>
                         </strong>
-                      )}
+                      )} */}
                     </div>
                   </NavigationItem>
                 </NavigationList>
@@ -696,15 +696,15 @@ function Navigation(props) {
                       onClick={() => (window.location = '/home/discover')}
                     >
                       <img
-                        src="https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg"
+                        src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
                         alt="Giving Tree"
                         style={{ height: 30, marginRight: 12 }}
                       />
-                      {(matches.medium || matches.large) && (
+                      {/* {(matches.medium || matches.large) && (
                         <strong>
                           <div style={{ textDecoration: 'none', color: 'black' }}>Giving Tree</div>
                         </strong>
-                      )}
+                      )} */}
                     </div>
                   </NavigationItem>
                 </NavigationList>
