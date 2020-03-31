@@ -638,7 +638,7 @@ function Home(props) {
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
-                  justifyContent: 'space-between'
+                  justifyContent: 'space-between',
                 }}
               >
                 <div>
@@ -647,7 +647,7 @@ function Home(props) {
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignContent: 'center',
-                      paddingBottom: 15
+                      paddingBottom: 15,
                     }}
                   >
                     <div
@@ -758,7 +758,7 @@ function Home(props) {
                           onClick={() => history.push(`/post/${item._id}`)}
                           src="https://d1ppmvgsdgdlyy.cloudfront.net/more.svg"
                           alt="more"
-                          style={{ width: 15, height: 'auto', cursor: 'pointer' }}
+                          style={{ width: 15, height: 25, cursor: 'pointer' }}
                         />
                       </div>
                     </div>

@@ -941,9 +941,9 @@ function Post(props) {
                                 src="https://d1ppmvgsdgdlyy.cloudfront.net/edit.svg"
                                 style={{
                                   cursor: 'pointer',
-                                  height: 'auto',
+                                  height: 25,
                                   marginLeft: 15,
-                                  width: 15
+                                  width: 15,
                                 }}
                               />
                             ))}
