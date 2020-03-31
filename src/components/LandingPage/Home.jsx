@@ -1265,7 +1265,7 @@ function Home(props) {
                           size={SIZE.compact}
                           onClick={() => {
                             let cancelReason = window.prompt(
-                              'Why are you cancelling? Too many cancelled tasks will flag your account'
+                              'Why are you cancelling? Too many cancelled requests will flag your account'
                             );
 
                             if (cancelReason) {
@@ -2346,7 +2346,7 @@ function Home(props) {
                             </div>
                             <div className="tooltip-text py-1">
                               Your karma points accumulate when other users upvote your completed
-                              tasks.
+                              requests.
                             </div>
                             <div className="tooltip-text py-1">
                               Upvotes you receive from users with higher karma have a greater

@@ -118,10 +118,10 @@ function NewsfeedTable(props) {
                               //   key: 'Transportation'
                               // },
                               // {
-                              //   key: 'Completed Tasks'
+                              //   key: 'Completed Requests'
                               // },
                               // {
-                              //   key: 'Global Tasks'
+                              //   key: 'Global Requests'
                               // }
                             ]}
                             onItemSelect={item => {
@@ -154,13 +154,13 @@ function NewsfeedTable(props) {
                                 case 'Discover':
                                   history.push('/home/discover');
                                   break;
-                                case 'Your Tasks':
+                                case 'Your Requests':
                                   history.push('/home/ongoing');
                                   break;
-                                case 'Completed Tasks':
+                                case 'Completed Requests':
                                   history.push('/home/completed');
                                   break;
-                                case 'Global Tasks':
+                                case 'Global Requests':
                                   history.push('/home/global');
                                   break;
                                 default:
@@ -342,10 +342,10 @@ function NewsfeedTable(props) {
                       </div>
                     )}
                     {id === 'ongoing' && (
-                      <div className="mb-2">You don't have any ongoing tasks yet</div>
+                      <div className="mb-2">You don't have any ongoing requests yet</div>
                     )}
                     {id === 'completed' && (
-                      <div className="mb-2">You haven't completed any tasks yet</div>
+                      <div className="mb-2">You haven't completed any requests yet</div>
                     )}
                     {id === 'global' && (
                       <div className="mb-2">

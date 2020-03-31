@@ -89,7 +89,7 @@ function Sidebar(props) {
               cursor: 'pointer'
             }}
           >
-            Discover Tasks
+            Discover Requests
             <img
               alt="search"
               src="https://d1ppmvgsdgdlyy.cloudfront.net/search.svg"
@@ -115,7 +115,7 @@ function Sidebar(props) {
               if (authenticated) {
                 window.location = '/home/ongoing';
               } else {
-                alert('please login/signup before you can view your tasks');
+                alert('please login/signup before you can view your requests');
                 history.push('/signup');
               }
             }}
@@ -123,7 +123,7 @@ function Sidebar(props) {
               cursor: 'pointer'
             }}
           >
-            Your Tasks
+            Your Requests
             <img
               alt="care"
               src="https://d1ppmvgsdgdlyy.cloudfront.net/care.svg"
@@ -149,7 +149,7 @@ function Sidebar(props) {
               if (authenticated) {
                 window.location = '/home/completed';
               } else {
-                alert('please login/signup before you can view your completed tasks');
+                alert('please login/signup before you can view your completed requests');
                 history.push('/signup');
               }
             }}
@@ -157,7 +157,7 @@ function Sidebar(props) {
               cursor: 'pointer'
             }}
           >
-            Completed Tasks
+            Completed Requests
             <img
               alt="gift"
               src="https://d1ppmvgsdgdlyy.cloudfront.net/gift.svg"
@@ -184,7 +184,7 @@ function Sidebar(props) {
               cursor: 'pointer'
             }}
           >
-            Global Tasks
+            Global Requests
             <img
               alt="global"
               src="https://d1ppmvgsdgdlyy.cloudfront.net/global.svg"

@@ -39,17 +39,17 @@ const initialState = {
 
   updatedProfile: false,
 
-  claimTaskLoading: false,
-  claimTaskSuccess: false,
-  claimTaskFailure: false,
+  claimRequestLoading: false,
+  claimRequestSuccess: false,
+  claimRequestFailure: false,
 
-  unclaimTaskLoading: false,
-  unclaimTaskSuccess: false,
-  unclaimTaskFailure: false,
+  unclaimRequestLoading: false,
+  unclaimRequestSuccess: false,
+  unclaimRequestFailure: false,
 
-  completeTaskLoading: false,
-  completeTaskSuccess: false,
-  completeTaskFailure: false,
+  completeRequestLoading: false,
+  completeRequestSuccess: false,
+  completeRequestFailure: false,
 
   deletePostSuccess: false,
 
@@ -85,23 +85,23 @@ const auth = (state = initialState, action) => {
 
     case ACTION_TYPE.GET_LEADERBOARD_REQUESTED:
       return Object.assign({}, state, {
-        claimTaskLoading: true,
-        claimTaskSuccess: false,
-        claimTaskFailure: false
+        claimRequestLoading: true,
+        claimRequestSuccess: false,
+        claimRequestFailure: false
       });
     case ACTION_TYPE.GET_LEADERBOARD_SUCCESS:
       return Object.assign({}, state, {
-        claimTaskLoading: false,
-        claimTaskSuccess: true,
-        claimTaskFailure: false,
+        claimRequestLoading: false,
+        claimRequestSuccess: true,
+        claimRequestFailure: false,
         leaderboard: action.payload.leaderboard,
         userRanking: action.payload.userRanking
       });
     case ACTION_TYPE.GET_LEADERBOARD_FAILURE:
       return Object.assign({}, state, {
-        claimTaskLoading: false,
-        claimTaskSuccess: false,
-        claimTaskFailure: true
+        claimRequestLoading: false,
+        claimRequestSuccess: false,
+        claimRequestFailure: true
       });
 
     case ACTION_TYPE.SELECT_MENU_REQUESTED:
@@ -110,61 +110,61 @@ const auth = (state = initialState, action) => {
         title: action.payload.title
       });
 
-    case ACTION_TYPE.CLAIM_TASK_REQUESTED:
+    case ACTION_TYPE.CLAIM_REQUEST_REQUESTED:
       return Object.assign({}, state, {
-        claimTaskLoading: true,
-        claimTaskSuccess: false,
-        claimTaskFailure: false
+        claimRequestLoading: true,
+        claimRequestSuccess: false,
+        claimRequestFailure: false
       });
-    case ACTION_TYPE.CLAIM_TASK_SUCCESS:
+    case ACTION_TYPE.CLAIM_REQUEST_SUCCESS:
       return Object.assign({}, state, {
-        claimTaskLoading: false,
-        claimTaskSuccess: true,
-        claimTaskFailure: false
+        claimRequestLoading: false,
+        claimRequestSuccess: true,
+        claimRequestFailure: false
       });
-    case ACTION_TYPE.CLAIM_TASK_FAILURE:
+    case ACTION_TYPE.CLAIM_REQUEST_FAILURE:
       return Object.assign({}, state, {
-        claimTaskLoading: false,
-        claimTaskSuccess: false,
-        claimTaskFailure: true
-      });
-
-    case ACTION_TYPE.UNCLAIM_TASK_REQUESTED:
-      return Object.assign({}, state, {
-        unclaimTaskLoading: true,
-        unclaimTaskSuccess: false,
-        unclaimTaskFailure: false
-      });
-    case ACTION_TYPE.UNCLAIM_TASK_SUCCESS:
-      return Object.assign({}, state, {
-        unclaimTaskLoading: false,
-        unclaimTaskSuccess: true,
-        unclaimTaskFailure: false
-      });
-    case ACTION_TYPE.UNCLAIM_TASK_FAILURE:
-      return Object.assign({}, state, {
-        unclaimTaskLoading: false,
-        unclaimTaskSuccess: false,
-        unclaimTaskFailure: true
+        claimRequestLoading: false,
+        claimRequestSuccess: false,
+        claimRequestFailure: true
       });
 
-    case ACTION_TYPE.COMPLETE_TASK_REQUESTED:
+    case ACTION_TYPE.UNCLAIM_REQUEST_REQUESTED:
       return Object.assign({}, state, {
-        completeTaskLoading: true,
-        completeTaskSuccess: false,
-        completeTaskFailure: false
+        unclaimRequestLoading: true,
+        unclaimRequestSuccess: false,
+        unclaimRequestFailure: false
       });
-    case ACTION_TYPE.COMPLETE_TASK_SUCCESS:
+    case ACTION_TYPE.UNCLAIM_REQUEST_SUCCESS:
       return Object.assign({}, state, {
-        completeTaskLoading: false,
-        completeTaskSuccess: true,
-        completeTaskFailure: false
+        unclaimRequestLoading: false,
+        unclaimRequestSuccess: true,
+        unclaimRequestFailure: false
       });
-    case ACTION_TYPE.COMPLETE_TASK_FAILURE:
+    case ACTION_TYPE.UNCLAIM_REQUEST_FAILURE:
       return Object.assign({}, state, {
-        completeTaskLoading: false,
-        completeTaskSuccess: false,
-        completeTaskFailure: true
+        unclaimRequestLoading: false,
+        unclaimRequestSuccess: false,
+        unclaimRequestFailure: true
+      });
+
+    case ACTION_TYPE.COMPLETE_REQUEST_REQUESTED:
+      return Object.assign({}, state, {
+        completeRequestLoading: true,
+        completeRequestSuccess: false,
+        completeRequestFailure: false
+      });
+    case ACTION_TYPE.COMPLETE_REQUEST_SUCCESS:
+      return Object.assign({}, state, {
+        completeRequestLoading: false,
+        completeRequestSuccess: true,
+        completeRequestFailure: false
+      });
+    case ACTION_TYPE.COMPLETE_REQUEST_FAILURE:
+      return Object.assign({}, state, {
+        completeRequestLoading: false,
+        completeRequestSuccess: false,
+        completeRequestFailure: true
       });
 
     case ACTION_TYPE.CONFIRM_PASSWORD_REQUESTED:
