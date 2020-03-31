@@ -118,13 +118,13 @@ function Signup(props) {
                 onClick={() => history.push('/home/discover')}
               >
                 <img
-                  src="https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg"
+                  src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
                   alt="Giving Tree"
                   style={{ height: 30, marginRight: 12 }}
                 />
-                <strong>
+                {/* <strong>
                   <div style={{ textDecoration: 'none', color: 'black' }}>Giving Tree</div>
-                </strong>
+                </strong> */}
               </div>
             </NavigationItem>
           </NavigationList>

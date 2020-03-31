@@ -1,18 +1,10 @@
 /* eslint-disable */
 import * as React from 'react';
-import {
-  HeaderNavigation,
-  ALIGN,
-  StyledNavigationItem as NavigationItem,
-  StyledNavigationList as NavigationList
-} from 'baseui/header-navigation';
-import { StyledLink as Link } from 'baseui/link';
 import { Tabs, Tab } from 'baseui/tabs';
 import { useStyletron } from 'baseui';
-import { Redirect } from 'react-router-dom';
 import Alert from 'baseui/icon/alert';
 import Check from 'baseui/icon/check';
-import { Block } from 'baseui/block';
+import { Notification } from 'baseui/notification';
 import Media from 'react-media';
 import { getDistance } from 'geolib';
 import queryString from 'query-string';
