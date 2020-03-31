@@ -1,5 +1,6 @@
 import React from 'react';
 import { Client as Styletron } from 'styletron-engine-atomic';
+import ReactGA from 'react-ga';
 import { Provider as StyletronProvider } from 'styletron-react';
 import { LightTheme, BaseProvider, styled } from 'baseui';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
@@ -24,6 +25,13 @@ const Centered = styled('div', {
   alignItems: 'center',
   height: '100%'
 });
+
+function initializeReactGA() {
+  ReactGA.initialize('UA-162280414-1');
+  ReactGA.pageview('/');
+}
+
+initializeReactGA();
 
 function App() {
   return (
