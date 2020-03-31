@@ -186,7 +186,13 @@ export function* claimTask(action) {
 export function* unclaimTask(action) {
   try {
     const token = localStorage.getItem('giving_tree_jwt');
-    yield call(Api.unclaimTask, action.payload.env, action.payload.postId, token);
+    yield call(
+      Api.unclaimTask,
+      action.payload.env,
+      action.payload.postId,
+      action.payload.cancelReason,
+      token
+    );
 
     yield put({
       type: ACTION_TYPE.UNCLAIM_TASK_SUCCESS

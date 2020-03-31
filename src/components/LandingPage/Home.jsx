@@ -1252,10 +1252,13 @@ function Home(props) {
                           kind="minimal"
                           size={SIZE.compact}
                           onClick={() => {
-                            if (window.confirm('Are you sure you want cancel?')) {
+                            let cancelReason = window.prompt('Why are you cancelling? Too many cancelled tasks will flag your account');
+
+                            if (cancelReason) {
                               unclaimTaskDispatch({
                                 env: process.env.NODE_ENV,
-                                postId: item._id
+                                postId: item._id,
+                                cancelReason
                               });
 
                               removeOngoing(item._id);
@@ -1275,141 +1278,141 @@ function Home(props) {
                                   label: 'Manually Add Details',
                                   key: 'manual'
                                 },
-                                {
-                                  label: (
-                                    <div
-                                      className="flex justify-center items-center"
-                                      style={{ height: 40 }}
-                                    >
-                                      <img
-                                        src="https://d1ppmvgsdgdlyy.cloudfront.net/postmates.svg"
-                                        alt="postmates"
-                                        style={{ height: 70 }}
-                                      />
-                                    </div>
-                                  ),
-                                  key: 'postmates'
-                                },
-                                {
-                                  label: (
-                                    <div
-                                      className="flex justify-center items-center"
-                                      style={{ height: 40 }}
-                                    >
-                                      <img
-                                        src="https://d1ppmvgsdgdlyy.cloudfront.net/ubereats.svg"
-                                        alt="ubereats"
-                                        style={{ height: 18 }}
-                                      />
-                                    </div>
-                                  ),
-                                  key: 'ubereats'
-                                },
-                                {
-                                  label: (
-                                    <div
-                                      className="flex justify-center items-center"
-                                      style={{ height: 40 }}
-                                    >
-                                      <img
-                                        src="https://d1ppmvgsdgdlyy.cloudfront.net/amazonfresh.svg"
-                                        alt="amazonfresh"
-                                        style={{ height: 30 }}
-                                      />
-                                    </div>
-                                  ),
-                                  key: 'amazonfresh'
-                                },
-                                {
-                                  label: (
-                                    <div
-                                      className="flex justify-center items-center"
-                                      style={{ height: 40 }}
-                                    >
-                                      <img
-                                        src="https://d1ppmvgsdgdlyy.cloudfront.net/walmart.svg"
-                                        alt="walmart"
-                                        style={{ height: 30 }}
-                                      />
-                                    </div>
-                                  ),
-                                  key: 'walmart'
-                                },
-                                {
-                                  label: (
-                                    <div
-                                      className="flex justify-center items-center"
-                                      style={{ height: 40 }}
-                                    >
-                                      <img
-                                        src="https://d1ppmvgsdgdlyy.cloudfront.net/costco.svg"
-                                        alt="costco"
-                                        style={{ height: 30 }}
-                                      />
-                                    </div>
-                                  ),
-                                  key: 'costco'
-                                },
-                                {
-                                  label: (
-                                    <div
-                                      className="flex justify-center items-center"
-                                      style={{ height: 40 }}
-                                    >
-                                      <img
-                                        src="https://d1ppmvgsdgdlyy.cloudfront.net/grubhub.svg"
-                                        alt="grubhub"
-                                        style={{ height: 18 }}
-                                      />
-                                    </div>
-                                  ),
-                                  key: 'grubhub'
-                                },
-                                {
-                                  label: (
-                                    <div
-                                      className="flex justify-center items-center"
-                                      style={{ height: 40 }}
-                                    >
-                                      <img
-                                        src="https://d1ppmvgsdgdlyy.cloudfront.net/seamless.svg"
-                                        alt="seamless"
-                                        style={{ height: 30 }}
-                                      />
-                                    </div>
-                                  ),
-                                  key: 'seamless'
-                                },
-                                {
-                                  label: (
-                                    <div
-                                      className="flex justify-center items-center"
-                                      style={{ height: 40 }}
-                                    >
-                                      <img
-                                        src="https://d1ppmvgsdgdlyy.cloudfront.net/doordash.svg"
-                                        alt="doordash"
-                                        style={{ height: 110 }}
-                                      />
-                                    </div>
-                                  ),
-                                  key: 'doordash'
-                                },
-                                {
-                                  label: (
-                                    <div
-                                      className="flex justify-center items-center"
-                                      style={{ height: 40 }}
-                                    >
-                                      <img
-                                        src="https://d1ppmvgsdgdlyy.cloudfront.net/instacart.svg"
-                                        alt="instacart"
-                                        style={{ height: 110 }}
-                                      />
-                                    </div>
-                                  ),
-                                  key: 'instacart'
-                                }
+                                // {
+                                //   label: (
+                                //     <div
+                                //       className="flex justify-center items-center"
+                                //       style={{ height: 40 }}
+                                //     >
+                                //       <img
+                                //         src="https://d1ppmvgsdgdlyy.cloudfront.net/postmates.svg"
+                                //         alt="postmates"
+                                //         style={{ height: 70 }}
+                                //       />
+                                //     </div>
+                                //   ),
+                                //   key: 'postmates'
+                                // },
+                                // {
+                                //   label: (
+                                //     <div
+                                //       className="flex justify-center items-center"
+                                //       style={{ height: 40 }}
+                                //     >
+                                //       <img
+                                //         src="https://d1ppmvgsdgdlyy.cloudfront.net/ubereats.svg"
+                                //         alt="ubereats"
+                                //         style={{ height: 18 }}
+                                //       />
+                                //     </div>
+                                //   ),
+                                //   key: 'ubereats'
+                                // },
+                                // {
+                                //   label: (
+                                //     <div
+                                //       className="flex justify-center items-center"
+                                //       style={{ height: 40 }}
+                                //     >
+                                //       <img
+                                //         src="https://d1ppmvgsdgdlyy.cloudfront.net/amazonfresh.svg"
+                                //         alt="amazonfresh"
+                                //         style={{ height: 30 }}
+                                //       />
+                                //     </div>
+                                //   ),
+                                //   key: 'amazonfresh'
+                                // },
+                                // {
+                                //   label: (
+                                //     <div
+                                //       className="flex justify-center items-center"
+                                //       style={{ height: 40 }}
+                                //     >
+                                //       <img
+                                //         src="https://d1ppmvgsdgdlyy.cloudfront.net/walmart.svg"
+                                //         alt="walmart"
+                                //         style={{ height: 30 }}
+                                //       />
+                                //     </div>
+                                //   ),
+                                //   key: 'walmart'
+                                // },
+                                // {
+                                //   label: (
+                                //     <div
+                                //       className="flex justify-center items-center"
+                                //       style={{ height: 40 }}
+                                //     >
+                                //       <img
+                                //         src="https://d1ppmvgsdgdlyy.cloudfront.net/costco.svg"
+                                //         alt="costco"
+                                //         style={{ height: 30 }}
+                                //       />
+                                //     </div>
+                                //   ),
+                                //   key: 'costco'
+                                // },
+                                // {
+                                //   label: (
+                                //     <div
+                                //       className="flex justify-center items-center"
+                                //       style={{ height: 40 }}
+                                //     >
+                                //       <img
+                                //         src="https://d1ppmvgsdgdlyy.cloudfront.net/grubhub.svg"
+                                //         alt="grubhub"
+                                //         style={{ height: 18 }}
+                                //       />
+                                //     </div>
+                                //   ),
+                                //   key: 'grubhub'
+                                // },
+                                // {
+                                //   label: (
+                                //     <div
+                                //       className="flex justify-center items-center"
+                                //       style={{ height: 40 }}
+                                //     >
+                                //       <img
+                                //         src="https://d1ppmvgsdgdlyy.cloudfront.net/seamless.svg"
+                                //         alt="seamless"
+                                //         style={{ height: 30 }}
+                                //       />
+                                //     </div>
+                                //   ),
+                                //   key: 'seamless'
+                                // },
+                                // {
+                                //   label: (
+                                //     <div
+                                //       className="flex justify-center items-center"
+                                //       style={{ height: 40 }}
+                                //     >
+                                //       <img
+                                //         src="https://d1ppmvgsdgdlyy.cloudfront.net/doordash.svg"
+                                //         alt="doordash"
+                                //         style={{ height: 110 }}
+                                //       />
+                                //     </div>
+                                //   ),
+                                //   key: 'doordash'
+                                // },
+                                // {
+                                //   label: (
+                                //     <div
+                                //       className="flex justify-center items-center"
+                                //       style={{ height: 40 }}
+                                //     >
+                                //       <img
+                                //         src="https://d1ppmvgsdgdlyy.cloudfront.net/instacart.svg"
+                                //         alt="instacart"
+                                //         style={{ height: 110 }}
+                                //       />
+                                //     </div>
+                                //   ),
+                                //   key: 'instacart'
+                                // }
                               ]}
                               onItemSelect={i => {
                                 close();

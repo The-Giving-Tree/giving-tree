@@ -178,7 +178,7 @@ const claimTask = async (env, postId, token) => {
   }
 };
 
-const unclaimTask = async (env, postId, token) => {
+const unclaimTask = async (env, postId, cancelReason, token) => {
   try {
     const headers = {
       headers: { Authorization: `Bearer ${token}` }
@@ -186,7 +186,7 @@ const unclaimTask = async (env, postId, token) => {
 
     const data = await Axios.put(
       `${ROUTES[env].giving_tree}/v1/post/${postId}/unclaim`,
-      {},
+      { reason: cancelReason },
       headers
     );
     return data;
