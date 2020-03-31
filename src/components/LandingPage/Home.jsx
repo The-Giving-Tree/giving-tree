@@ -2151,6 +2151,7 @@ function Home(props) {
               <NewsfeedTable
                 {...props}
                 address={address}
+                setNewPost={setNewPost}
                 hasMoreItems={hasMoreItems}
                 id={id}
                 items={items}
