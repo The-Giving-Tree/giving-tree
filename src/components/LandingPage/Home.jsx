@@ -2153,6 +2153,7 @@ function Home(props) {
                 address={address}
                 setNewPost={setNewPost}
                 hasMoreItems={hasMoreItems}
+                selectMenuDispatch={selectMenuDispatch}
                 id={id}
                 items={items}
                 resetItems={resetItems}

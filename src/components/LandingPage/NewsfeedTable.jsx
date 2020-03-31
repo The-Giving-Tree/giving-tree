@@ -43,6 +43,7 @@ function NewsfeedTable(props) {
     match,
     newPost,
     setNewPost,
+    selectMenuDispatch,
     latLng,
     newsfeedLoading,
     newsfeedSuccess,
