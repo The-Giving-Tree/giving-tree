@@ -134,6 +134,13 @@ function About(props) {
               <div id={'who-we-are'} className="about-heading">
                 Who We Are
               </div>
+              <div>
+              <img
+                style={{ height: 400 }}
+                className="rounded-lg"
+                src="https://d1ppmvgsdgdlyy.cloudfront.net/whoweare.jpg"
+              />
+            </div>
               <div className="about-text" style={{ width: 576, paddingTop: 20 }}>
                 We are a group of passionate, self-motivated, international
                 strangers-turned-teammates, united by a common goal: to help ease our neighbors’
@@ -143,13 +150,6 @@ function About(props) {
                 people deserve to have their basic needs met -- during this global pandemic, and
                 always -- regardless of age, race, ability, or socioeconomic status.
               </div>
-            </div>
-            <div>
-              <img
-                style={{ height: 400 }}
-                className="rounded-lg"
-                src="https://d1ppmvgsdgdlyy.cloudfront.net/whoweare.jpg"
-              />
             </div>
           </div>
           <div className="about-section flex justify-between items-center">
@@ -180,6 +180,13 @@ function About(props) {
             className="about-section flex justify-between items-center"
             style={{ backgroundColor: '#F2F2F2' }}
           >
+              <div>
+              <img
+                className="rounded-lg"
+                style={{ height: 300 }}
+                src="https://d1ppmvgsdgdlyy.cloudfront.net/contactus.jpg"
+              />
+            </div>
             <div>
               <div id={'contact-us'} className="about-heading">
                 Contact Us
@@ -204,13 +211,6 @@ function About(props) {
                 </a>
                 .
               </div>
-            </div>
-            <div>
-              <img
-                className="rounded-lg"
-                style={{ height: 300 }}
-                src="https://d1ppmvgsdgdlyy.cloudfront.net/contactus.jpg"
-              />
             </div>
           </div>
           <div className="about-section flex justify-between items-center">
