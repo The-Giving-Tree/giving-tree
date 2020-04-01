@@ -130,13 +130,13 @@ function About(props) {
             className="about-section flex justify-between items-center"
             style={{ backgroundColor: '#F2F2F2' }}
           >
-              <div>
-                <img
-                  style={{ height: 400 }}
-                  className="rounded-lg"
-                  src="https://d1ppmvgsdgdlyy.cloudfront.net/whoweare.jpg"
-                />
-              </div>
+            <div>
+              <img
+                style={{ height: 400 }}
+                className="rounded-lg"
+                src="https://d1ppmvgsdgdlyy.cloudfront.net/whoweare.jpg"
+              />
+            </div>
             <div>
               <div id={'who-we-are'} className="about-heading">
                 Who We Are
