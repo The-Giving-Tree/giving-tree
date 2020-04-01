@@ -99,106 +99,12 @@ function Guidelines(props) {
         >
           <div className="about-section">
             <div id={'about-us'} className="about-heading">
-              About Giving Tree
-            </div>
-            <div className="about-text" style={{ width: 576, paddingTop: 20 }}>
-              “The best way to not feel hopeless is to get up and do something.” - Barack Obama
-              <br />
-              <br />
-              We are a community of doers whose aim is to provide immediate, peer-to-peer assistance
-              to our communities in the midst of COVID-19. We envision a safe, positive, and
-              effective platform where anyone who feels they need help can receive it, and where
-              anyone interested in supporting their community can do so quickly, and at their own
-              pace. By gamifying our volunteering platform, we hope to encourage and entice our
-              users to continue lifting up those around them through social good.
-            </div>
-          </div>
-          <div className="about-section">
-            <div id={'who-we-are'} className="about-heading">
-              Who We Are
-            </div>
-            <div className="about-text" style={{ width: 576, paddingTop: 20 }}>
-              We are a group of passionate, self-motivated, international
-              strangers-turned-teammates, united by a common goal: to help ease our neighbors’
-              suffering as a result of COVID-19, and the current social distancing regulations. We
-              believe the solution lies in coming together as a community, and in empowering
-              ordinary citizens to act on their altruistic inclinations. We believe that all people
-              deserve to have their basic needs met -- during this global pandemic, and always --
-              regardless of age, race, ability, or socioeconomic status.
-            </div>
-          </div>
-          <div className="about-section">
-            <div id={'get-involved'} className="about-heading">
-              Get Involved
-            </div>
-            <div className="about-text" style={{ width: 576, paddingTop: 20 }}>
-              Interested in contributing to our efforts? The best way to help out is by spreading
-              the word to your friends/family/network about our platform, and by signing up to be a
-              helper if you are able.
-              <br />
-              <br />
-              You can also get in touch with us by email if you like what we are doing, or have
-              ideas on how we can improve. If you would like to provide in-depth feedback on our
-              site’s usability and features, make sure your email has the term “USER INTERVIEW” in
-              the subject line so we know you’re interested in participating!
-            </div>
-          </div>
-          <div className="about-section">
-            <div id={'contact-us'} className="about-heading">
-              Contact Us
-            </div>
-            <div className="about-text" style={{ width: 576, paddingTop: 20 }}>
-              Reach out to us anytime at{' '}
-              <a
-                className="text-green-600 hover:text-green-800 transition duration-150"
-                href="mailto:team.givingtree@gmail.com"
-              >
-                team.givingtree@gmail.com
-              </a>
-              .
-              <br />
-              <br />
-              If you need our team to create a request on your behalf, call or text our hotline at{' '}
-              <a
-                className="text-green-600 hover:text-green-800 transition duration-150"
-                href="tel:+1415-964-4261"
-              >
-                415-964-4261
-              </a>
-              .
-            </div>
-          </div>
-          <div className="about-section">
-            <div id={'get-help'} className="about-heading">
-              Get Help
-            </div>
-            <div className="about-text" style={{ width: 576, paddingTop: 20 }}>
-              Need immediate assistance with a request and can’t find a helper? Please{' '}
-              <a
-                className="text-green-600 hover:text-green-800 transition duration-150"
-                href="mailto:team.givingtree@gmail.com"
-              >
-                email us
-              </a>{' '}
-              with the word “URGENT” in the subject line.
-              <br />
-              <br />
-              Need to report an incident, and/or the malicious or inappropriate behavior of another
-              user? Please{' '}
-              <a
-                className="text-green-600 hover:text-green-800 transition duration-150"
-                href="mailto:team.givingtree@gmail.com"
-              >
-                email us
-              </a>{' '}
-              with the word “REPORT” in the subject line.
-            </div>
-          </div>
-          <div className="about-section">
-            <div id={'privacy-policy'} className="about-privacy">
-              Privacy Policy
+            Health and Safety Guidelines
             </div>
             <div className="privacy-text mt-4">
+              <b>Follow Local Regulations</b>
+              <br/>
+              Regulations in various cities, regions, and countries are shifting constantly as our circumstances evolve, and our knowledge about COVID-19 increases. We recommend that all users stay informed of the local regulations for their community/city, and do not violate local, state, provincial, or federal regulations in order to complete a request. Remember that everyone’s health and safety is of utmost priority, and be sure to respect your boundaries and those of others when using The Giving Tree’s platform.
               The Giving Tree and its website will not sell your data nor use any of the information
               except for improving facilitation and communication between volunteers (“helpers”) and
               those in need (“requesters”). There is one and only one purpose to the site, which is
@@ -209,7 +115,37 @@ function Guidelines(props) {
               associated with www.givingtreeproject.org harmless.
               <br />
               <br />
-              <i>Last updated: March 31, 2020</i>
+
+              <b>General Health &amp; Safety Protocol</b>
+              <br/>
+              <li>Keep at least 6 feet of distance between yourself and others in public places, and when delivering/receiving items through The Giving Tree.</li>
+              <li>Wash your hands thoroughly (for at least twenty seconds) or use a hand sanitizer with at least 60% alcohol after you have been in a public place, or after blowing your nose, coughing, or sneezing.</li>
+              <li>Avoid touching your face, eyes, nose, and mouth with unwashed hands.</li>
+              <li>Do not pick up requests if you or anyone you live with is feeling sick or experiencing any COVID-19 symptoms.</li>
+              <li>Cover your cough or sneeze with a tissue, then throw the tissue in the trash.</li>
+              <li>Clean AND disinfect frequently touched surfaces daily. This includes: tables, doorknobs, light switches, countertops, handles, desks, phones, keyboards, toilets, faucets, and sinks.</li>
+              <li>Try not to directly touch any public door handles, buttons, or other machinery. Instead, use a tissue as a barrier for your hands, or wear gloves.</li>
+
+              <br />
+              <br />
+
+              <b>Safety Guidelines for Helpers</b>
+              <br/>
+              <li>Avoid touching handrails, public furniture, or any other public surfaces as much as possible.</li>
+<li>Wear gloves if possible. Be mindful of cross-contamination while wearing gloves, and do not use your same gloved hands to touch store items and your face and/or your phone.</li>
+<li>Do not greet anyone in public with physical contact (handshakes, kisses, or hugs).</li>
+<li>Don’t take public transit to complete a request.</li>
+<li>Don’t encroach on a social distance of 6 feet with anyone, including (and especially) the person you’re delivering goods to.</li>
+<li>When coughing and sneezing, cover your nose and mouth in the crook of your elbow </li>
+<li>Do not touch your face (or eyes, nose and mouth) unless you have first thoroughly washed your hands.</li>
+<li>If possible, sanitize any packages you’ve picked up before delivering them to the requester.</li>
+<li>After delivering the goods to the requester, disinfect or wash your hands thoroughly with soap and water.</li>
+<li>It is extremely important that there is no physical contact between helpers and request requesters, as those requesting help are likely in a high-risk group, and extra care is essential.</li>
+
+
+              <br />
+              <br />
+
             </div>
           </div>
         </div>
