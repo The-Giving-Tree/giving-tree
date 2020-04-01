@@ -18,6 +18,87 @@
   line-height: 20px;
 }
 
+.footer {
+  height: 400px;
+  width: 100%;
+  background-color: #545454;
+  color: white;
+  text-align: center;
+}
+
+.footer-heading {
+  font-style: normal;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 29px;
+  display: flex;
+  align-items: center;
+  height: 56px;
+}
+
+.about-text {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 24px;
+  line-height: 29px;
+}
+
+.about-section {
+  padding-bottom: 82px;
+}
+
+.back-to-top {
+  cursor: pointer;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  height: 24px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 19px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.about-privacy {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 29px;
+}
+
+.privacy-text {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 19px;
+}
+
+.about-heading {
+  height: 80px;
+  text-transform: uppercase;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 56px;
+  line-height: 68px;
+  display: flex;
+  align-items: center;
+}
+
+.footer-text {
+  cursor: pointer;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 21px;
+  display: flex;
+  align-items: center;
+  color: #FFFFFF;
+  height: 40px;
+}
+
 .loading-spinner {
   width: 20px;
   height: 20px;

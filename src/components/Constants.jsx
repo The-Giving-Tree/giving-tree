@@ -7,6 +7,7 @@ module.exports = Object.freeze({
     SETTING: '/settings/:tab',
     SUBMIT: '/submit',
     DRAFT: '/draft/:id',
-    LEADERBOARD: '/leaderboard'
+    LEADERBOARD: '/leaderboard',
+    ABOUT: '/about'
   }
 });

@@ -22,6 +22,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/
 import { RadioGroup, Radio } from 'baseui/radio';
 import Confetti from 'react-confetti';
 import Navigation from './../Navigation';
+import Footer from './../Footer';
 import { geolocated } from 'react-geolocated';
 import { Card, StyledBody, StyledAction } from 'baseui/card';
 import { StatefulPopover, PLACEMENT } from 'baseui/popover';
@@ -2481,6 +2482,7 @@ function Home(props) {
               }
             </Media>
           )}
+          <Footer />
         </div>
       )}
     </Media>
