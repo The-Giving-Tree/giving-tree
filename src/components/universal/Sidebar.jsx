@@ -210,7 +210,7 @@ function Sidebar(props) {
                 selectMenuDispatch({ selectMenu: '' });
                 history.push('/submit');
               } else {
-                alert('please login/signup before you can ask for help');
+                alert('please login/signup before you can make a request');
                 history.push('/signup');
               }
             }}
@@ -218,7 +218,7 @@ function Sidebar(props) {
               cursor: 'pointer'
             }}
           >
-            Ask for Help<span style={{ marginLeft: 10 }}>❤️</span>
+            Make a Request<span style={{ marginLeft: 10 }}>❤️</span>
           </div>
         </div>
       </div>
