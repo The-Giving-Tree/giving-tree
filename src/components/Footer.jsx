@@ -37,9 +37,11 @@ function Footer(props) {
                     Privacy Policy
                   </div>
                 </Link>
-                  <div className="footer-text hover:text-green-600 transition duration-150">
-                    Help Hotline (call or text): +1 415-964-4261
-                  </div>
+                <Link to="#">
+                <div className="footer-text hover:text-green-600 transition duration-150">
+                  Hotline: +1 415-964-4261
+                </div>
+                </Link>
               </div>
               <div>
                 <Link to="/how-it-works#how-to-help">
