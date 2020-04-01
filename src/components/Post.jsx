@@ -850,7 +850,33 @@ function Post(props) {
                 paddingTop: 30
               }}
             >
-              {!isEmpty(foundPost) && (
+              {isEmpty(foundPost) ? (
+                <Card
+                  overrides={{
+                    Root: {
+                      style: {
+                        width: '45vw',
+                        boxShadow: 'none'
+                      }
+                    },
+                    Body: {
+                      style: {
+                        margin: '-10px'
+                      }
+                    }
+                  }}
+                >
+                  <div
+                    style={{
+                      alignContent: 'center',
+                      display: 'flex',
+                      justifyContent: 'center'
+                    }}
+                  >
+                    <div className="loading-spinner"></div>
+                  </div>
+                </Card>
+              ) : (
                 <React.Fragment>
                   <Card
                     overrides={{

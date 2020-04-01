@@ -38,9 +38,9 @@ function Footer(props) {
                   </div>
                 </Link>
                 <Link to="#">
-                <div className="footer-text hover:text-green-600 transition duration-150">
-                  Hotline: +1 415-964-4261
-                </div>
+                  <div className="footer-text hover:text-green-600 transition duration-150">
+                    Hotline: +1 415-964-4261
+                  </div>
                 </Link>
               </div>
               <div>
