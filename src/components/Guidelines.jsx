@@ -96,6 +96,12 @@ function Guidelines(props) {
             margin: '0 auto'
           }}
         >
+          <div
+            className="about-heading justify-center"
+            style={{ fontSize: 44, textTransform: 'uppercase' }}
+          >
+            Guidelines
+          </div>
           <div className="about-section">
             <div id={'health-and-safety'} className="about-heading">
               Health and Safety Guidelines

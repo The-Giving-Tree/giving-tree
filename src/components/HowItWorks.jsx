@@ -96,6 +96,12 @@ function HowItWorks(props) {
             margin: '0 auto'
           }}
         >
+          <div
+            className="about-heading justify-center"
+            style={{ fontSize: 44, textTransform: 'uppercase' }}
+          >
+            How It Works
+          </div>
           <div className="about-section">
             <div id={'how-to-help'} className="about-heading">
               How To Provide Help

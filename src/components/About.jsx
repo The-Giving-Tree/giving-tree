@@ -96,10 +96,16 @@ function About(props) {
             margin: '0 auto'
           }}
         >
+          <div
+            className="about-heading justify-center"
+            style={{ fontSize: 44, textTransform: 'uppercase' }}
+          >
+            About
+          </div>
           <div className="about-section flex justify-between items-center">
             <div>
               <div id={'about-us'} className="about-heading">
-                About Giving Tree
+                About The Giving Tree
               </div>
               <div className="about-text" style={{ width: 576, paddingTop: 20 }}>
                 “The best way to not feel hopeless is to get up and do something.” - Barack Obama
