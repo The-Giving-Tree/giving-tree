@@ -114,10 +114,10 @@ function About(props) {
               </div>
             </div>
             <div>
-              {/* <img
-                style={{ height: 200 }}
-                src="https://d1ppmvgsdgdlyy.cloudfront.net/color-logo.svg"
-              /> */}
+              <img
+                style={{ height: 200, marginRight: 150 }}
+                src="https://giving-tree.s3.amazonaws.com/givingtree.svg"
+              />
             </div>
           </div>
           <div
