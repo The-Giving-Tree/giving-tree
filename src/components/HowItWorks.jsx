@@ -98,7 +98,7 @@ function HowItWorks(props) {
           }}
         >
           <div className="about-section">
-            <div id={'about-us'} className="about-heading">
+            <div id={'how-to-help'} className="about-heading">
               How To Provide Help
             </div>
             <div className="about-text" style={{ width: 576, paddingTop: 20 }}>
@@ -192,7 +192,7 @@ function HowItWorks(props) {
             </div>
           </div>
           <div className="about-section">
-            <div id={'about-us'} className="about-heading">
+            <div id={'how-to-get-help'} className="about-heading">
               How to Request Help
             </div>
             <div className="about-text" style={{ width: 576, paddingTop: 20 }}>
