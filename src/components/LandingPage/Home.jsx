@@ -180,7 +180,6 @@ function Home(props) {
       password,
       rememberMe: true // by default
     });
-  
   };
 
   const removeOngoing = id => {
@@ -2418,9 +2417,9 @@ function Home(props) {
                         leaves of the same tree,
                         <br />
                         flowers of the same garden
-                        <br/>
+                        <br />
                         <button
-                          onClick={() => window.location = ('/home/discover')}
+                          onClick={() => (window.location = '/home/discover')}
                           style={{ outline: 'none', fontSize: 26, backgroundColor: '#8ec755' }}
                           className="mt-10 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
                         >

@@ -2,6 +2,7 @@ import React from 'react';
 import { Client as Styletron } from 'styletron-engine-atomic';
 import ReactGA from 'react-ga';
 import { Provider as StyletronProvider } from 'styletron-react';
+import { Helmet } from 'react-helmet';
 import { LightTheme, BaseProvider, styled } from 'baseui';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Constants from './components/Constants';
@@ -38,6 +39,26 @@ function App() {
     <StyletronProvider value={engine}>
       <BaseProvider theme={LightTheme}>
         <Centered>
+          <Helmet>
+            <script async src="https://www.googletagmanager.com/gtag/js?id=UA-162280414-1"></script>
+            <script>
+              {`window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-162280414-1');`}
+            </script>
+            <script>
+              {`(function(h,o,t,j,a,r){
+            h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+            h._hjSettings={hjid:1751072,hjsv:6};
+            a=o.getElementsByTagName('head')[0];
+            r=o.createElement('script');r.async=1;
+            r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+            a.appendChild(r);
+        })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');`}
+            </script>
+          </Helmet>
           <BrowserRouter>
             <Switch>
               <Route exact path={Constants.PATHS.HOME} component={Home} />
