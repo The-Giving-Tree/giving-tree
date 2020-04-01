@@ -37,11 +37,9 @@ function Footer(props) {
                     Privacy Policy
                   </div>
                 </Link>
-                {/* <Link to="/about#terms-of-use">
                   <div className="footer-text hover:text-green-600 transition duration-150">
-                    Terms of Use
+                    Help Hotline (call or text): +1 415-964-4261
                   </div>
-                </Link> */}
               </div>
               <div>
                 <Link to="/how-it-works#how-to-help">
@@ -90,7 +88,7 @@ function Footer(props) {
                   </button>
                 </div>
                 <br />
-                <div className="footer-heading mt-8">Follow Us On</div>
+                {/* <div className="footer-heading mt-8">Follow Us On</div> */}
               </div>
               <div>
                 <img
