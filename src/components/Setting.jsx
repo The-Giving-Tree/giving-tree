@@ -25,8 +25,8 @@ function Setting(props) {
   }
 
   React.useEffect(() => {
-  hotjar.initialize('1751072', 6);
-}, []);
+    hotjar.initialize('1751072', 6);
+  }, []);
 
   return (
     <div style={{ width: '100%' }}>

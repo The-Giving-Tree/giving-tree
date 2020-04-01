@@ -1174,8 +1174,11 @@ function Post(props) {
                                   <div>
                                     {text && (
                                       <div className="text-sm my-1 mt-4">
-                                        {calculateDistance(text.location)} miles from you{' '}
-                                        {text.postal && `(${text.postal.split('-')[0]})`}
+                                        {coords
+                                          ? `${calculateDistance(text.location)} miles from
+                                      you ${text.postal && `(${text.postal.split('-')[0]})`}`
+                                          : `Zip Code: ${text.postal &&
+                                              `${text.postal.split('-')[0]}`}`}
                                       </div>
                                     )}
                                     <div className="text-sm my-1 mt-4">
