@@ -6,6 +6,7 @@ import Navigation from './Navigation';
 import { geolocated } from 'react-geolocated';
 import { StatefulPopover, PLACEMENT } from 'baseui/popover';
 import { connect } from 'react-redux';
+import { hotjar } from 'react-hotjar';
 
 import {
   getCurrentUser,
@@ -36,6 +37,10 @@ function Leaderboard(props) {
       });
     }
   };
+
+  React.useEffect(() => {
+    hotjar.initialize('1751072', 6);
+  }, []);
 
   function generateHash(username = '', version) {
     const secret = 'givingtree';

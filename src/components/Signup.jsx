@@ -16,6 +16,8 @@ import Check from 'baseui/icon/check';
 import { register } from '../store/actions/auth/auth-actions';
 import Media from 'react-media';
 import passwordValidator from 'password-validator';
+import { hotjar } from 'react-hotjar';
+
 var schema = new passwordValidator();
 schema
   .is()
@@ -45,6 +47,10 @@ function Signup(props) {
   const { signupDispatch, errorMessage, registerLoading } = props;
 
   const history = useHistory();
+
+  React.useEffect(() => {
+    hotjar.initialize('1751072', 6);
+  }, []);
 
   function Negative() {
     const [css, theme] = useStyletron();

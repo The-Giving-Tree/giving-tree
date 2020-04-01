@@ -1,32 +1,19 @@
 /* eslint-disable */
 import * as React from 'react';
-import { HeaderNavigation, ALIGN } from 'baseui/header-navigation';
-import { useStyletron } from 'baseui';
-import { Block } from 'baseui/block';
 import { Button, SHAPE } from 'baseui/button';
 import { useHistory } from 'react-router-dom';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import { geocodeByAddress, geocodeByPlaceId, getLatLng } from 'react-places-autocomplete';
-import { StatefulSelect as Search, TYPE } from 'baseui/select';
-import { withHistory } from 'slate-history';
-import useWindowSize from 'react-use/lib/useWindowSize';
-import { Slider } from 'baseui/slider';
-import { Modal, ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/modal';
-import { RadioGroup, Radio } from 'baseui/radio';
-import Confetti from 'react-confetti';
-import Navigation from './../Navigation';
-import { geolocated } from 'react-geolocated';
 import InfiniteScroll from 'react-infinite-scroller';
 import { Card, StyledBody, StyledAction } from 'baseui/card';
 import { StatefulPopover, PLACEMENT } from 'baseui/popover';
 import { StatefulMenu } from 'baseui/menu';
-import { Slate, Editable, ReactEditor, withReact, useSlate } from 'slate-react';
-import { Editor, Text, createEditor } from 'slate';
 import { Input, SIZE } from 'baseui/input';
 import { Upload, ChevronUp, ChevronDown } from 'baseui/icon';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Tag, VARIANT, KIND } from 'baseui/tag';
 import moment from 'moment';
+import { hotjar } from 'react-hotjar';
 
 import { withImages, withRichText, Element, Leaf, MarkButton, BlockButton } from '../submitHelper';
 
@@ -56,6 +43,10 @@ function NewsfeedTable(props) {
   } = props;
 
   const history = useHistory();
+
+  React.useEffect(() => {
+    hotjar.initialize('1751072', 6);
+  }, []);
 
   return (
     <table className="table-auto" style={{ width: '50%' }}>

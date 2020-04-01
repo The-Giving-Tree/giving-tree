@@ -5,6 +5,7 @@ import { Avatar } from 'baseui/avatar';
 import { useHistory } from 'react-router-dom';
 import { Card, StyledBody } from 'baseui/card';
 import { Block } from 'baseui/block';
+import { hotjar } from 'react-hotjar';
 import { Tabs, Tab } from 'baseui/tabs';
 import moment from 'moment';
 import Check from 'baseui/icon/check';
@@ -74,6 +75,10 @@ function User(props) {
       username: id
     });
   }, [props.updatedProfile, id, loadUserDispatch]);
+
+  React.useEffect(() => {
+    hotjar.initialize('1751072', 6);
+  }, []);
 
   function mouseOut() {
     setFollowHover(false);

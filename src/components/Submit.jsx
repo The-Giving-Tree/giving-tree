@@ -7,6 +7,7 @@ import { Card } from 'baseui/card';
 import { ArrowLeft } from 'baseui/icon';
 import { Tag } from 'baseui/tag';
 import Sidebar from './universal/Sidebar';
+import { hotjar } from 'react-hotjar';
 
 import { connect } from 'react-redux';
 import { getCurrentUser, loadUser, selectMenu } from '../store/actions/auth/auth-actions';
@@ -101,6 +102,10 @@ function Submit(props) {
   }, [props.submitDraftSuccess, publishPostDispatch, submittedDraft._id]);
 
   useEffect(() => {}, [changedCart]);
+
+  React.useEffect(() => {
+    hotjar.initialize('1751072', 6);
+  }, []);
 
   const isEmpty = obj => {
     for (var key in obj) {

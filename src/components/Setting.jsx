@@ -9,6 +9,8 @@ import { Button } from 'baseui/button';
 import Navigation from './Navigation';
 import { Block } from 'baseui/block';
 import { connect } from 'react-redux';
+import { hotjar } from 'react-hotjar';
+
 import { getCurrentUser, loadUser, logoutAll } from '../store/actions/auth/auth-actions';
 
 // check to see if valid user or not
@@ -18,10 +20,13 @@ import { getCurrentUser, loadUser, logoutAll } from '../store/actions/auth/auth-
 function Setting(props) {
   const { logoutAllDispatch } = props;
   const tab = props.match.params.tab;
-  console.log('tab: ', tab);
   if (tab === undefined) {
     console.log(tab === undefined);
   }
+
+  React.useEffect(() => {
+  hotjar.initialize('1751072', 6);
+}, []);
 
   return (
     <div style={{ width: '100%' }}>

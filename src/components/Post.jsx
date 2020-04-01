@@ -18,6 +18,7 @@ import moment from 'moment';
 import { Modal, ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/modal';
 import Sidebar from './universal/Sidebar';
 import { connect } from 'react-redux';
+import { hotjar } from 'react-hotjar';
 
 import {
   getCurrentUser,
@@ -109,6 +110,7 @@ function Post(props) {
   }, [foundPost, loadPostSuccess]);
 
   React.useEffect(() => {
+    hotjar.initialize('1751072', 6);
     getLeaderboardDispatch({ env: process.env.NODE_ENV, location: 'global' });
   }, []);
 

@@ -5,6 +5,7 @@ import { useStyletron } from 'baseui';
 import Alert from 'baseui/icon/alert';
 import Check from 'baseui/icon/check';
 import { Notification } from 'baseui/notification';
+import { hotjar } from 'react-hotjar';
 import Media from 'react-media';
 import { getDistance } from 'geolib';
 import queryString from 'query-string';
@@ -1509,6 +1510,7 @@ function Home(props) {
 
   React.useEffect(() => {
     setLatLng(parsed); // initialize
+    hotjar.initialize('1751072', 6);
 
     if (parsed.lat === '37.7749295' && parsed.lng === '-122.4194155') {
       setAddress('San Francisco, CA');
