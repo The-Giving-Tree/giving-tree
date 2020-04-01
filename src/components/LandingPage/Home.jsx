@@ -2482,7 +2482,7 @@ function Home(props) {
                   )
                 }
               </Media>
-              <Footer />
+              {!matches.small && <Footer />}
             </React.Fragment>
           )}
         </div>
