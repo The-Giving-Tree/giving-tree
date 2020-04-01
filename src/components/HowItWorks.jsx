@@ -122,18 +122,19 @@ function HowItWorks(props) {
               <br />
               <br />
               <ul class="list-disc">
-              <li>Exchanging contact information so that you can call/text/email one another</li>
-              <li>
-                Asking questions where necessary, so that you know exactly what the requester needs
-              </li>
-              <li>
-                Agreeing on a reimbursement method beforehand for any purchases you’ll need to make
-                on the requester’s behalf
-              </li>
-              <li>
-                Aim for a contactless exchange of money, like Paypal, Venmo, or another e-transfer
-                method.
-              </li>
+                <li>Exchanging contact information so that you can call/text/email one another</li>
+                <li>
+                  Asking questions where necessary, so that you know exactly what the requester
+                  needs
+                </li>
+                <li>
+                  Agreeing on a reimbursement method beforehand for any purchases you’ll need to
+                  make on the requester’s behalf
+                </li>
+                <li>
+                  Aim for a contactless exchange of money, like Paypal, Venmo, or another e-transfer
+                  method.
+                </li>
               </ul>
               <br />
               <br />
@@ -145,9 +146,9 @@ function HowItWorks(props) {
               <br />
               <br />
               <ul class="list-disc">
-              <li>Agreeing on how/where you will deliver items and/or provide services</li>
-              <li>Keeping the requester updated on your progress and location</li>
-              <li>Review and follow our Health &amp; Safety guidelines</li>
+                <li>Agreeing on how/where you will deliver items and/or provide services</li>
+                <li>Keeping the requester updated on your progress and location</li>
+                <li>Review and follow our Health &amp; Safety guidelines</li>
               </ul>
               <br />
               <br />
@@ -157,43 +158,43 @@ function HowItWorks(props) {
               <br />
               <br />
               <ul class="list-disc">
-              <li>
-                Avoid touching handrails, public furniture, or any other public surfaces as much as
-                possible.
-              </li>
-              <li>
-                Wear gloves if possible. Be mindful of cross-contamination while wearing gloves, and
-                do not use your same gloved hands to touch store items and your face and/or your
-                phone.
-              </li>
-              <li>
-                Do not greet anyone in public with physical contact (handshakes, kisses, or hugs).
-              </li>
-              <li>Don’t take public transit to complete a request.</li>
-              <li>
-                Don’t encroach on a social distance of 6 feet with anyone, including (and
-                especially) the person you’re delivering goods to.
-              </li>
-              <li>
-                When coughing and sneezing, cover your nose and mouth in the crook of your elbow{' '}
-              </li>
-              <li>
-                Do not touch your face (or eyes, nose and mouth) unless you have first thoroughly
-                washed your hands.
-              </li>
-              <li>
-                If possible, sanitize any packages you’ve picked up before delivering them to the
-                requester.
-              </li>
-              <li>
-                After delivering the goods to the requester, disinfect or wash your hands thoroughly
-                with soap and water.
-              </li>
-              <li>
-                It is extremely important that there is no physical contact between helpers and
-                request requesters, as those requesting help are likely in a high-risk group, and
-                extra care is essential.
-              </li>
+                <li>
+                  Avoid touching handrails, public furniture, or any other public surfaces as much
+                  as possible.
+                </li>
+                <li>
+                  Wear gloves if possible. Be mindful of cross-contamination while wearing gloves,
+                  and do not use your same gloved hands to touch store items and your face and/or
+                  your phone.
+                </li>
+                <li>
+                  Do not greet anyone in public with physical contact (handshakes, kisses, or hugs).
+                </li>
+                <li>Don’t take public transit to complete a request.</li>
+                <li>
+                  Don’t encroach on a social distance of 6 feet with anyone, including (and
+                  especially) the person you’re delivering goods to.
+                </li>
+                <li>
+                  When coughing and sneezing, cover your nose and mouth in the crook of your elbow{' '}
+                </li>
+                <li>
+                  Do not touch your face (or eyes, nose and mouth) unless you have first thoroughly
+                  washed your hands.
+                </li>
+                <li>
+                  If possible, sanitize any packages you’ve picked up before delivering them to the
+                  requester.
+                </li>
+                <li>
+                  After delivering the goods to the requester, disinfect or wash your hands
+                  thoroughly with soap and water.
+                </li>
+                <li>
+                  It is extremely important that there is no physical contact between helpers and
+                  request requesters, as those requesting help are likely in a high-risk group, and
+                  extra care is essential.
+                </li>
               </ul>
             </div>
           </div>
@@ -219,12 +220,14 @@ function HowItWorks(props) {
               <br />
               <br />
               <ul class="list-disc">
-              <li>Exchanging contact information so that you can call/text/email one another</li>
-              <li>Answering questions clearly so that your helper knows exactly how to help you</li>
-              <li>
-                Agreeing on a reimbursement method beforehand for any purchases you’ll need to make
-                on the requester’s behalf
-              </li>
+                <li>Exchanging contact information so that you can call/text/email one another</li>
+                <li>
+                  Answering questions clearly so that your helper knows exactly how to help you
+                </li>
+                <li>
+                  Agreeing on a reimbursement method beforehand for any purchases you’ll need to
+                  make on the requester’s behalf
+                </li>
               </ul>
               <br />
               Aim for a contactless exchange of money, like Paypal, Venmo, or another e-transfer
@@ -241,50 +244,50 @@ function HowItWorks(props) {
               <b>How to make a new request</b>
               <br />
               <ul class="list-disc">
-              <li>Select the type of assistance you need, and click “Next”.</li>
-              <li>
-                Fill out the following form. Please be specific about your needs so your helper can
-                quickly and easily understand how to fulfill your request.
-              </li>
-              <li>
-                Be sure to provide your contact information, like your email address and/or phone
-                number, so your helper can coordinate with you directly.
-              </li>
-              <li>
-                Try to be as flexible with your due date/time as possible. The longer you give
-                helpers to claim and fulfill your request, the better your chances are of having
-                your request fulfilled.
-              </li>
-              <li>
-                Click “Submit”. A good samaritan in your area will claim your request and reach out
-                to you soon!
-              </li>
+                <li>Select the type of assistance you need, and click “Next”.</li>
+                <li>
+                  Fill out the following form. Please be specific about your needs so your helper
+                  can quickly and easily understand how to fulfill your request.
+                </li>
+                <li>
+                  Be sure to provide your contact information, like your email address and/or phone
+                  number, so your helper can coordinate with you directly.
+                </li>
+                <li>
+                  Try to be as flexible with your due date/time as possible. The longer you give
+                  helpers to claim and fulfill your request, the better your chances are of having
+                  your request fulfilled.
+                </li>
+                <li>
+                  Click “Submit”. A good samaritan in your area will claim your request and reach
+                  out to you soon!
+                </li>
               </ul>
               <br />
               <br />
               <b>Helpful Tips</b>
               <br />
               <ul class="list-disc">
-              <li>
-                Be specific about your needs so that your helper can fulfill your request as quickly
-                and easily as possible
-              </li>
-              <li>
-                If you are requesting very specific items, we recommend suggesting acceptable
-                alternatives, in case the items/brands you want are out of stock
-              </li>
-              <li>
-                Under special instructions, we recommend including any information that would assist
-                your helper in better understanding your unique circumstances and/or needs. Here are
-                some examples:{' '}
-                <i>
-                  I am hard of hearing and request a phone call when my helper arrives (vs.
-                  text/knocking on the door) I will need my helper to come up to my apartment and
-                  cannot meet in the lobby I am wheelchair bound I’d prefer only same-gender helpers
-                  for safety reasons There is a dog at my household who will bark but is not
-                  violent/dangerous
-                </i>
-              </li>
+                <li>
+                  Be specific about your needs so that your helper can fulfill your request as
+                  quickly and easily as possible
+                </li>
+                <li>
+                  If you are requesting very specific items, we recommend suggesting acceptable
+                  alternatives, in case the items/brands you want are out of stock
+                </li>
+                <li>
+                  Under special instructions, we recommend including any information that would
+                  assist your helper in better understanding your unique circumstances and/or needs.
+                  Here are some examples:{' '}
+                  <i>
+                    I am hard of hearing and request a phone call when my helper arrives (vs.
+                    text/knocking on the door) I will need my helper to come up to my apartment and
+                    cannot meet in the lobby I am wheelchair bound I’d prefer only same-gender
+                    helpers for safety reasons There is a dog at my household who will bark but is
+                    not violent/dangerous
+                  </i>
+                </li>
               </ul>
               <br />
               <br />
@@ -294,21 +297,24 @@ function HowItWorks(props) {
               <br />
               <br />
               <ul class="list-disc">
-              <li>
-                Keep in mind that the virus can come from public places/surfaces into your home.
-              </li>
-              <li>
-                Stay at least 1 meter away from the person making the delivery; do not greet your
-                helper with any physical contact (e.g. handshakes or hugs).
-              </li>
-              <li>
-                Upon receiving items, sanitize their packaging with disinfectant wipes if possible.
-              </li>
-              <li>
-                While you are sanitizing and storing items, be sure not to touch your face, your
-                phone, or any of your other belongings.
-              </li>
-              <li>After putting away the items, wash your hands thoroughly with soap and water.</li>
+                <li>
+                  Keep in mind that the virus can come from public places/surfaces into your home.
+                </li>
+                <li>
+                  Stay at least 1 meter away from the person making the delivery; do not greet your
+                  helper with any physical contact (e.g. handshakes or hugs).
+                </li>
+                <li>
+                  Upon receiving items, sanitize their packaging with disinfectant wipes if
+                  possible.
+                </li>
+                <li>
+                  While you are sanitizing and storing items, be sure not to touch your face, your
+                  phone, or any of your other belongings.
+                </li>
+                <li>
+                  After putting away the items, wash your hands thoroughly with soap and water.
+                </li>
               </ul>
             </div>
           </div>
