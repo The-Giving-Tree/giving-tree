@@ -1869,7 +1869,7 @@ function Home(props) {
     return matches.medium ? (
       <div>
         <table
-          class="table-auto"
+          className="table-auto"
           style={{
             width: '100%'
           }}
@@ -2069,13 +2069,7 @@ function Home(props) {
       }}
     >
       {matches => (
-        <div
-          style={{
-            width: '100%',
-            backgroundPosition: '50% 50%',
-            backgroundSize: 'cover'
-          }}
-        >
+        <div>
           <Navigation selectMenuDispatch={selectMenuDispatch} searchBarPosition="center" />
           <Modal
             overrides={{ Dialog: { style: { borderRadius: '7px' } } }}
