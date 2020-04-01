@@ -112,7 +112,6 @@ function Post(props) {
     getLeaderboardDispatch({ env: process.env.NODE_ENV, location: 'global' });
   }, []);
 
-
   const cart = text ? text.cart : [];
 
   const isEmpty = obj => {
@@ -1181,7 +1180,8 @@ function Post(props) {
                                       {text && `Description: ${text.description}`}
                                     </div>
                                     <div className="text-sm my-1 mt-4">
-                                      {text && text.dueDate &&
+                                      {text &&
+                                        text.dueDate &&
                                         `Due Date: ${moment(new Date(text.dueDate)).fromNow()} (${
                                           text.dueDate
                                         })`}

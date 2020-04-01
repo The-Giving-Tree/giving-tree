@@ -318,7 +318,13 @@ function Navigation(props) {
               >
                 <Button
                   size={'compact'}
-                  style={{ position: 'fixed', backgroundColor: '#8ec755', bottom: 0, right: 0, zIndex: 999 }}
+                  style={{
+                    position: 'fixed',
+                    backgroundColor: '#8ec755',
+                    bottom: 0,
+                    right: 0,
+                    zIndex: 999
+                  }}
                   onClick={() => setIsOpen(true)}
                 >
                   Give Feedback!
@@ -728,7 +734,7 @@ function Navigation(props) {
                     </div>
                   </NavigationItem>
                 </NavigationList>
-                {!matches.large && <NavigationList $align={ALIGN.center} />}
+                {<NavigationList $align={ALIGN.center} />}
                 {matches.large && (
                   <NavigationList $align={ALIGN.right}>
                     <NavigationItem style={{ width: '200px' }}>

@@ -174,14 +174,13 @@ function Home(props) {
   };
 
   const handleLogin = async () => {
-    await loginDispatch({
+    loginDispatch({
       env: process.env.NODE_ENV,
       username,
       password,
       rememberMe: true // by default
     });
-
-    history.push('/home/discover');
+  
   };
 
   const removeOngoing = id => {
@@ -1844,8 +1843,8 @@ function Home(props) {
       <div>
         <div className={`landing-title py-4`}>Request help or lend a hand</div>
         <div className={`landing-text py-4`}>
-          The Giving Tree was created in response to COVID 19. We give people with time and
-          resources the opportunity to help anyone who needs it.
+          The Giving Tree was created in response to COVID-19. Our platform connects people who need
+          assistance with people who are interested in helping.
         </div>
       </div>
     );
@@ -2040,7 +2039,7 @@ function Home(props) {
   }
 
   const handleSignup = async () => {
-    await signupDispatch({
+    signupDispatch({
       env: process.env.NODE_ENV,
       name,
       email,
@@ -2048,8 +2047,6 @@ function Home(props) {
       password,
       rememberMe: true // by default
     });
-
-    history.push('/home/discover');
   };
 
   // remove items
@@ -2407,13 +2404,28 @@ function Home(props) {
                         fontSize: matches.small || matches.medium ? 25 : 36
                       }}
                     >
-                      <div style={{ fontSize: 10, position: 'absolute', bottom: 0, left: 0 }}>Dribbbled by @tubik_arts</div>
-                      <div style={{ width: matches.small || matches.medium ? '80%' : '35%', textShadow: '0px 0px 3px #000' }}>
+                      <div style={{ fontSize: 10, position: 'absolute', bottom: 0, left: 0 }}>
+                        Dribbbled by @tubik_arts
+                      </div>
+                      <div
+                        style={{
+                          width: matches.small || matches.medium ? '80%' : '35%',
+                          textShadow: '0px 0px 3px #000'
+                        }}
+                      >
                         We are waves of the same sea,
-                        <br/>
+                        <br />
                         leaves of the same tree,
-                        <br/>
+                        <br />
                         flowers of the same garden
+                        <br/>
+                        <button
+                          onClick={() => window.location = ('/home/discover')}
+                          style={{ outline: 'none', fontSize: 26, backgroundColor: '#8ec755' }}
+                          className="mt-10 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                        >
+                          Get Started
+                        </button>
                       </div>
                     </div>
                   </React.Fragment>
