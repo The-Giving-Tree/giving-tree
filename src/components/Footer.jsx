@@ -19,7 +19,9 @@ function Footer(props) {
           <div style={{ position: 'relative' }} className="footer">
             <div class="grid grid-cols-5 gap-4" style={{ paddingTop: 58, paddingLeft: 112 }}>
               <div>
-                <div className="footer-heading">The Giving Tree</div>
+                <Link to="/about">
+                  <div className="footer-heading">The Giving Tree</div>
+                </Link>
                 <Link to="/about#about-us">
                   <div className="footer-text hover:text-green-600 transition duration-150">
                     About Us
@@ -35,21 +37,31 @@ function Footer(props) {
                     Privacy Policy
                   </div>
                 </Link>
-                <Link to="/about#terms-of-use">
+                {/* <Link to="/about#terms-of-use">
                   <div className="footer-text hover:text-green-600 transition duration-150">
                     Terms of Use
                   </div>
-                </Link>
+                </Link> */}
               </div>
               <div>
-                <div className="footer-heading">How It Works</div>
-                <div className="footer-text hover:text-green-600 transition duration-150">FAQs</div>
-                <div className="footer-text hover:text-green-600 transition duration-150">
-                  How to Help
-                </div>
-                <div className="footer-text hover:text-green-600 transition duration-150">
-                  How to Get Help
-                </div>
+                <Link to="/how-it-works">
+                  <div className="footer-heading">How It Works</div>
+                </Link>
+                <Link to="/how-it-works#faqs">
+                  <div className="footer-text hover:text-green-600 transition duration-150">
+                    FAQs
+                  </div>
+                </Link>
+                <Link to="/how-it-works#how-to-help">
+                  <div className="footer-text hover:text-green-600 transition duration-150">
+                    How to Help
+                  </div>
+                </Link>
+                <Link to="/how-it-works#how-to-get-help">
+                  <div className="footer-text hover:text-green-600 transition duration-150">
+                    How to Get Help
+                  </div>
+                </Link>
               </div>
               <div>
                 <div className="footer-heading">Guidelines</div>

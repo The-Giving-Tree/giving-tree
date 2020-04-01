@@ -13,6 +13,8 @@ import Signup from './components/Signup';
 import User from './components/User';
 import Leaderboard from './components/Leaderboard';
 import About from './components/About';
+import HowItWorks from './components/HowItWorks';
+import Guidelines from './components/Guidelines';
 import Setting from './components/Setting';
 import Submit from './components/Submit';
 import Post from './components/Post';
@@ -65,6 +67,8 @@ function App() {
               <Route exact path={Constants.PATHS.HOME} component={Home} />
               <Route exact path={Constants.PATHS.LEADERBOARD} component={Leaderboard} />
               <Route exact path={Constants.PATHS.ABOUT} component={About} />
+              <Route exact path={Constants.PATHS.HOWITWORKS} component={HowItWorks} />
+              <Route exact path={Constants.PATHS.GUIDELINES} component={Guidelines} />
               <Route exact path="/home/:id" component={Home} />
               <Route exact path={Constants.PATHS.LOGIN} component={Login} />
               <Route exact path={Constants.PATHS.SIGNUP} component={Signup} />

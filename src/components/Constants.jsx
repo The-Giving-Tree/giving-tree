@@ -8,6 +8,8 @@ module.exports = Object.freeze({
     SUBMIT: '/submit',
     DRAFT: '/draft/:id',
     LEADERBOARD: '/leaderboard',
-    ABOUT: '/about'
+    ABOUT: '/about',
+    HOWITWORKS: '/how-it-works',
+    GUIDELINES: '/guidelines'
   }
 });
