@@ -450,7 +450,7 @@ function Submit(props) {
                     variant={'variant'}
                     kind="accent"
                   >
-                    Tutorial
+                    How It Works
                   </Tag>
                 </div>
                 <div
