@@ -467,12 +467,16 @@ function Submit(props) {
                 </div>
               </div>
               <div style={{ marginTop: 15 }}>
-                Welcome to Giving Tree! You can submit a claim to the community and get help! You
-                can also message us at{' '}
+                Welcome to The Giving Tree!
+                <br />
+                <br />
+                To receive help, either make a request or call/text us at{' '}
                 <a className="text-indigo-600 hover:text-indigo-800" href="tel:+1415-964-4261">
                   415-964-4261
                 </a>{' '}
-                to get help.
+                to have us make one on your behalf. <br />
+                <br />
+                Here to help? Explore the feed to find new, unclaimed requests near you.
               </div>
             </Card>
           )}
