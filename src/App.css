@@ -37,15 +37,26 @@
   height: 56px;
 }
 
+.section-text {
+  font-size: 20px;
+}
+
+b {
+  font-size: 24px;
+}
+
 .about-text {
   font-style: normal;
   font-weight: normal;
-  font-size: 24px;
+  font-size: 20px;
   line-height: 29px;
 }
 
 .about-section {
-  padding-bottom: 82px;
+  padding-bottom: 41px;
+  padding-top: 41px;
+  padding-Right: 10%;
+  padding-Left: 10%;
 }
 
 .back-to-top {

@@ -548,11 +548,11 @@ function Navigation(props) {
                             />
                           </Button>
                           <img
-                        onClick={() => history.push('/guidelines')}
-                        src="https://d1ppmvgsdgdlyy.cloudfront.net/first-aid.svg"
-                        alt="guidelines"
-                        style={{ width: 25, marginRight: 25, cursor: 'pointer' }}
-                      />
+                            onClick={() => history.push('/guidelines')}
+                            src="https://d1ppmvgsdgdlyy.cloudfront.net/first-aid.svg"
+                            alt="guidelines"
+                            style={{ width: 25, marginRight: 25, cursor: 'pointer' }}
+                          />
                           <StatefulPopover
                             placement={PLACEMENT.bottomLeft}
                             content={({ close }) => notificationMenu(close)}
@@ -773,7 +773,7 @@ function Navigation(props) {
                       )}
                     </NavigationItem>
                     <NavigationItem>
-                    <img
+                      <img
                         onClick={() => history.push('/guidelines')}
                         src="https://d1ppmvgsdgdlyy.cloudfront.net/first-aid.svg"
                         alt="guidelines"

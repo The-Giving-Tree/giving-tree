@@ -88,12 +88,11 @@ function About(props) {
       <Navigation searchBarPosition="center" />
       <div
         style={{
-          paddingTop: 122
+          paddingTop: 40
         }}
       >
         <div
           style={{
-            width: '80%',
             margin: '0 auto'
           }}
         >
@@ -113,7 +112,7 @@ function About(props) {
               users to continue lifting up those around them through social good.
             </div>
           </div>
-          <div className="about-section">
+          <div className="about-section" style={{ backgroundColor: '#F2F2F2'}}>
             <div id={'who-we-are'} className="about-heading">
               Who We Are
             </div>
@@ -143,7 +142,7 @@ function About(props) {
               the subject line so we know you’re interested in participating!
             </div>
           </div>
-          <div className="about-section">
+          <div className="about-section" style={{ backgroundColor: '#F2F2F2'}}>
             <div id={'contact-us'} className="about-heading">
               Contact Us
             </div>

@@ -88,13 +88,12 @@ function HowItWorks(props) {
       <Navigation searchBarPosition="center" />
       <div
         style={{
-          paddingTop: 122
+          paddingTop: 40
         }}
       >
         <div
           style={{
-            width: '80%',
-            margin: '0 auto'
+            margin: '0 auto',
           }}
         >
           <div className="about-section">
@@ -103,223 +102,233 @@ function HowItWorks(props) {
             </div>
             <div className="about-text" style={{ width: 576, paddingTop: 20 }}>
               <b>Helper Guidelines</b>
-              <br />
-              Explore the Discover Requests feed to find new, unclaimed requests near you
-              <br />
-              <br />
-              Review the request’s details thoroughly to ensure you’ll be able to fulfill all
-              requirements (including the due date/time). Use the Comments section to ask the
-              requester any clarifying questions to better understand the scope of the request if
-              unclear.
-              <br />
-              <br />
-              Know that once you claim a request, you are committing to completing it. Should you
-              decide to release a request because you cannot complete it, please note that you will
-              need to provide an explanation and may lose Karma points.
-              <br />
-              <br />
-              Communicate directly with the requester! We recommend:
-              <br />
-              <br />
-              <ul class="list-disc">
-                <li>Exchanging contact information so that you can call/text/email one another</li>
-                <li>
-                  Asking questions where necessary, so that you know exactly what the requester
-                  needs
-                </li>
-                <li>
-                  Agreeing on a reimbursement method beforehand for any purchases you’ll need to
-                  make on the requester’s behalf
-                </li>
-                <li>
-                  Aim for a contactless exchange of money, like Paypal, Venmo, or another e-transfer
-                  method.
-                </li>
-              </ul>
-              <br />
-              <br />
-              If your requester can only reimburse you with cash, make sure that the cash exchange
-              complies with social distancing regulations. Discuss whether you will need to supply
-              exact change, or whether the remaining amount will be gifted to you as a tip. Please
-              understand that any tips are entirely voluntary, and up to the requester’s discretion
-              and ability.
-              <br />
-              <br />
-              <ul class="list-disc">
-                <li>Agreeing on how/where you will deliver items and/or provide services</li>
-                <li>Keeping the requester updated on your progress and location</li>
-                <li>Review and follow our Health &amp; Safety guidelines</li>
-              </ul>
-              <br />
-              <br />
-              <b>Safety Guidelines for Helpers</b>
-              <br />
-              When completing grocery and supply runs, or other errands:
-              <br />
-              <br />
-              <ul class="list-disc">
-                <li>
-                  Avoid touching handrails, public furniture, or any other public surfaces as much
-                  as possible.
-                </li>
-                <li>
-                  Wear gloves if possible. Be mindful of cross-contamination while wearing gloves,
-                  and do not use your same gloved hands to touch store items and your face and/or
-                  your phone.
-                </li>
-                <li>
-                  Do not greet anyone in public with physical contact (handshakes, kisses, or hugs).
-                </li>
-                <li>Don’t take public transit to complete a request.</li>
-                <li>
-                  Don’t encroach on a social distance of 6 feet with anyone, including (and
-                  especially) the person you’re delivering goods to.
-                </li>
-                <li>
-                  When coughing and sneezing, cover your nose and mouth in the crook of your elbow{' '}
-                </li>
-                <li>
-                  Do not touch your face (or eyes, nose and mouth) unless you have first thoroughly
-                  washed your hands.
-                </li>
-                <li>
-                  If possible, sanitize any packages you’ve picked up before delivering them to the
-                  requester.
-                </li>
-                <li>
-                  After delivering the goods to the requester, disinfect or wash your hands
-                  thoroughly with soap and water.
-                </li>
-                <li>
-                  It is extremely important that there is no physical contact between helpers and
-                  request requesters, as those requesting help are likely in a high-risk group, and
-                  extra care is essential.
-                </li>
-              </ul>
+              <div className="section-text">
+                <br />
+                Explore the Discover Requests feed to find new, unclaimed requests near you
+                <br />
+                <br />
+                Review the request’s details thoroughly to ensure you’ll be able to fulfill all
+                requirements (including the due date/time). Use the Comments section to ask the
+                requester any clarifying questions to better understand the scope of the request if
+                unclear.
+                <br />
+                <br />
+                Know that once you claim a request, you are committing to completing it. Should you
+                decide to release a request because you cannot complete it, please note that you
+                will need to provide an explanation and may lose Karma points.
+                <br />
+                <br />
+                Communicate directly with the requester! We recommend:
+                <br />
+                <br />
+                <ul class="list-disc">
+                  <li>
+                    Exchanging contact information so that you can call/text/email one another
+                  </li>
+                  <li>
+                    Asking questions where necessary, so that you know exactly what the requester
+                    needs
+                  </li>
+                  <li>
+                    Agreeing on a reimbursement method beforehand for any purchases you’ll need to
+                    make on the requester’s behalf
+                  </li>
+                  <li>
+                    Aim for a contactless exchange of money, like Paypal, Venmo, or another
+                    e-transfer method.
+                  </li>
+                </ul>
+                <br />
+                <br />
+                If your requester can only reimburse you with cash, make sure that the cash exchange
+                complies with social distancing regulations. Discuss whether you will need to supply
+                exact change, or whether the remaining amount will be gifted to you as a tip. Please
+                understand that any tips are entirely voluntary, and up to the requester’s
+                discretion and ability.
+                <br />
+                <br />
+                <ul class="list-disc">
+                  <li>Agreeing on how/where you will deliver items and/or provide services</li>
+                  <li>Keeping the requester updated on your progress and location</li>
+                  <li>Review and follow our Health &amp; Safety guidelines</li>
+                </ul>
+                <br />
+                <br />
+                <b>Safety Guidelines for Helpers</b>
+                <br />
+                When completing grocery and supply runs, or other errands:
+                <br />
+                <br />
+                <ul class="list-disc">
+                  <li>
+                    Avoid touching handrails, public furniture, or any other public surfaces as much
+                    as possible.
+                  </li>
+                  <li>
+                    Wear gloves if possible. Be mindful of cross-contamination while wearing gloves,
+                    and do not use your same gloved hands to touch store items and your face and/or
+                    your phone.
+                  </li>
+                  <li>
+                    Do not greet anyone in public with physical contact (handshakes, kisses, or
+                    hugs).
+                  </li>
+                  <li>Don’t take public transit to complete a request.</li>
+                  <li>
+                    Don’t encroach on a social distance of 6 feet with anyone, including (and
+                    especially) the person you’re delivering goods to.
+                  </li>
+                  <li>
+                    When coughing and sneezing, cover your nose and mouth in the crook of your elbow{' '}
+                  </li>
+                  <li>
+                    Do not touch your face (or eyes, nose and mouth) unless you have first
+                    thoroughly washed your hands.
+                  </li>
+                  <li>
+                    If possible, sanitize any packages you’ve picked up before delivering them to
+                    the requester.
+                  </li>
+                  <li>
+                    After delivering the goods to the requester, disinfect or wash your hands
+                    thoroughly with soap and water.
+                  </li>
+                  <li>
+                    It is extremely important that there is no physical contact between helpers and
+                    request requesters, as those requesting help are likely in a high-risk group,
+                    and extra care is essential.
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
-          <div className="about-section">
+          <div className="about-section" style={{ backgroundColor: '#F2F2F2'}}>
             <div id={'how-to-get-help'} className="about-heading">
               How to Request Help
             </div>
             <div className="about-text" style={{ width: 576, paddingTop: 20 }}>
               <b>Requester Guidelines</b>
               <br />
-              Remember that ordinary citizens are braving COVID-19 on your behalf, and try to create
-              as few requests as possible so that you’re not sending multiple people out to multiple
-              stores on your behalf. Instead, consolidate your asks into one request, and try to
-              think of ways your helper could procure your needs from a single destination (e.g.
-              Fred Meyer, Safeway).
-              <br />
-              <br />
-              Help your helpers feel safe. Please don’t ask them to breach social distancing to
-              hand-deliver your goods, or to exchange cash or other items.
-              <br />
-              <br />
-              Communicate directly with your helper! We recommend:
-              <br />
-              <br />
-              <ul class="list-disc">
-                <li>Exchanging contact information so that you can call/text/email one another</li>
-                <li>
-                  Answering questions clearly so that your helper knows exactly how to help you
-                </li>
-                <li>
-                  Agreeing on a reimbursement method beforehand for any purchases you’ll need to
-                  make on the requester’s behalf
-                </li>
-              </ul>
-              <br />
-              Aim for a contactless exchange of money, like Paypal, Venmo, or another e-transfer
-              method. If you can only pay your helper in cash: Either coordinate with your helper to
-              ensure they bring the correct change, or understand that the remaining amount can be
-              gifted to your helper as a tip.
-              <br />
-              <br />
-              Make sure that the cash exchange complies with social distancing regulations Agreeing
-              on how/where your helper will deliver items and/or provide services, so that your
-              helper knows what to expect Review and follow our Health &amp; Safety guidelines
-              <br />
-              <br />
-              <b>How to make a new request</b>
-              <br />
-              <ul class="list-disc">
-                <li>Select the type of assistance you need, and click “Next”.</li>
-                <li>
-                  Fill out the following form. Please be specific about your needs so your helper
-                  can quickly and easily understand how to fulfill your request.
-                </li>
-                <li>
-                  Be sure to provide your contact information, like your email address and/or phone
-                  number, so your helper can coordinate with you directly.
-                </li>
-                <li>
-                  Try to be as flexible with your due date/time as possible. The longer you give
-                  helpers to claim and fulfill your request, the better your chances are of having
-                  your request fulfilled.
-                </li>
-                <li>
-                  Click “Submit”. A good samaritan in your area will claim your request and reach
-                  out to you soon!
-                </li>
-              </ul>
-              <br />
-              <br />
-              <b>Helpful Tips</b>
-              <br />
-              <ul class="list-disc">
-                <li>
-                  Be specific about your needs so that your helper can fulfill your request as
-                  quickly and easily as possible
-                </li>
-                <li>
-                  If you are requesting very specific items, we recommend suggesting acceptable
-                  alternatives, in case the items/brands you want are out of stock
-                </li>
-                <li>
-                  Under special instructions, we recommend including any information that would
-                  assist your helper in better understanding your unique circumstances and/or needs.
-                  Here are some examples:{' '}
-                  <i>
-                    I am hard of hearing and request a phone call when my helper arrives (vs.
-                    text/knocking on the door) I will need my helper to come up to my apartment and
-                    cannot meet in the lobby I am wheelchair bound I’d prefer only same-gender
-                    helpers for safety reasons There is a dog at my household who will bark but is
-                    not violent/dangerous
-                  </i>
-                </li>
-              </ul>
-              <br />
-              <br />
-              <b>Safety Guidelines for Requesters</b>
-              <br />
-              When receiving goods from a helper:
-              <br />
-              <br />
-              <ul class="list-disc">
-                <li>
-                  Keep in mind that the virus can come from public places/surfaces into your home.
-                </li>
-                <li>
-                  Stay at least 1 meter away from the person making the delivery; do not greet your
-                  helper with any physical contact (e.g. handshakes or hugs).
-                </li>
-                <li>
-                  Upon receiving items, sanitize their packaging with disinfectant wipes if
-                  possible.
-                </li>
-                <li>
-                  While you are sanitizing and storing items, be sure not to touch your face, your
-                  phone, or any of your other belongings.
-                </li>
-                <li>
-                  After putting away the items, wash your hands thoroughly with soap and water.
-                </li>
-              </ul>
+              <div className="section-text">
+                Remember that ordinary citizens are braving COVID-19 on your behalf, and try to
+                create as few requests as possible so that you’re not sending multiple people out to
+                multiple stores on your behalf. Instead, consolidate your asks into one request, and
+                try to think of ways your helper could procure your needs from a single destination
+                (e.g. Fred Meyer, Safeway).
+                <br />
+                <br />
+                Help your helpers feel safe. Please don’t ask them to breach social distancing to
+                hand-deliver your goods, or to exchange cash or other items.
+                <br />
+                <br />
+                Communicate directly with your helper! We recommend:
+                <br />
+                <br />
+                <ul class="list-disc">
+                  <li>
+                    Exchanging contact information so that you can call/text/email one another
+                  </li>
+                  <li>
+                    Answering questions clearly so that your helper knows exactly how to help you
+                  </li>
+                  <li>
+                    Agreeing on a reimbursement method beforehand for any purchases you’ll need to
+                    make on the requester’s behalf
+                  </li>
+                </ul>
+                <br />
+                Aim for a contactless exchange of money, like Paypal, Venmo, or another e-transfer
+                method. If you can only pay your helper in cash: Either coordinate with your helper
+                to ensure they bring the correct change, or understand that the remaining amount can
+                be gifted to your helper as a tip.
+                <br />
+                <br />
+                Make sure that the cash exchange complies with social distancing regulations
+                Agreeing on how/where your helper will deliver items and/or provide services, so
+                that your helper knows what to expect Review and follow our Health &amp; Safety
+                guidelines
+                <br />
+                <br />
+                <b>How to make a new request</b>
+                <br />
+                <ul class="list-disc">
+                  <li>Select the type of assistance you need, and click “Next”.</li>
+                  <li>
+                    Fill out the following form. Please be specific about your needs so your helper
+                    can quickly and easily understand how to fulfill your request.
+                  </li>
+                  <li>
+                    Be sure to provide your contact information, like your email address and/or
+                    phone number, so your helper can coordinate with you directly.
+                  </li>
+                  <li>
+                    Try to be as flexible with your due date/time as possible. The longer you give
+                    helpers to claim and fulfill your request, the better your chances are of having
+                    your request fulfilled.
+                  </li>
+                  <li>
+                    Click “Submit”. A good samaritan in your area will claim your request and reach
+                    out to you soon!
+                  </li>
+                </ul>
+                <br />
+                <br />
+                <b>Helpful Tips</b>
+                <br />
+                <ul class="list-disc">
+                  <li>
+                    Be specific about your needs so that your helper can fulfill your request as
+                    quickly and easily as possible
+                  </li>
+                  <li>
+                    If you are requesting very specific items, we recommend suggesting acceptable
+                    alternatives, in case the items/brands you want are out of stock
+                  </li>
+                  <li>
+                    Under special instructions, we recommend including any information that would
+                    assist your helper in better understanding your unique circumstances and/or
+                    needs. Here are some examples:{' '}
+                    <i>
+                      I am hard of hearing and request a phone call when my helper arrives (vs.
+                      text/knocking on the door) I will need my helper to come up to my apartment
+                      and cannot meet in the lobby I am wheelchair bound I’d prefer only same-gender
+                      helpers for safety reasons There is a dog at my household who will bark but is
+                      not violent/dangerous
+                    </i>
+                  </li>
+                </ul>
+                <br />
+                <br />
+                <b>Safety Guidelines for Requesters</b>
+                <br />
+                When receiving goods from a helper:
+                <br />
+                <br />
+                <ul class="list-disc">
+                  <li>
+                    Keep in mind that the virus can come from public places/surfaces into your home.
+                  </li>
+                  <li>
+                    Stay at least 1 meter away from the person making the delivery; do not greet
+                    your helper with any physical contact (e.g. handshakes or hugs).
+                  </li>
+                  <li>
+                    Upon receiving items, sanitize their packaging with disinfectant wipes if
+                    possible.
+                  </li>
+                  <li>
+                    While you are sanitizing and storing items, be sure not to touch your face, your
+                    phone, or any of your other belongings.
+                  </li>
+                  <li>
+                    After putting away the items, wash your hands thoroughly with soap and water.
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
           <div className="about-section">
-            <div id={'faqs'} className="about-heading">
+            <div id={'faqs'} className="about-heading" style={{ fontSize: 36 }}>
               FAQs
             </div>
             <div className="privacy-text mt-4">

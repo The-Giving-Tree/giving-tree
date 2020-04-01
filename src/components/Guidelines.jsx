@@ -88,12 +88,11 @@ function Guidelines(props) {
       <Navigation searchBarPosition="center" />
       <div
         style={{
-          paddingTop: 122
+          paddingTop: 40
         }}
       >
         <div
           style={{
-            width: '80%',
             margin: '0 auto'
           }}
         >
