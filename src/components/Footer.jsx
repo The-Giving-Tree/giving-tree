@@ -64,18 +64,18 @@ function Footer(props) {
                 </Link>
               </div>
               <div>
-              <Link to="/guidelines#intro">
-                <div className="footer-heading">Guidelines</div>
-                </Link>
-                <Link to="/guidelines#community">
-                <div className="footer-text hover:text-green-600 transition duration-150">
-                  Community
-                </div>
+                <Link to="/guidelines#health-and-safety">
+                  <div className="footer-heading">Guidelines</div>
                 </Link>
                 <Link to="/guidelines#health-and-safety">
-                <div className="footer-text hover:text-green-600 transition duration-150">
-                  Health and Safety
-                </div>
+                  <div className="footer-text hover:text-green-600 transition duration-150">
+                    Health and Safety
+                  </div>
+                </Link>
+                <Link to="/guidelines#community">
+                  <div className="footer-text hover:text-green-600 transition duration-150">
+                    Community
+                  </div>
                 </Link>
               </div>
               <div>
