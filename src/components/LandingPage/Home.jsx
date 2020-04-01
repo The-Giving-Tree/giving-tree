@@ -2161,6 +2161,7 @@ function Home(props) {
               <Sidebar {...props} />
               <NewsfeedTable
                 {...props}
+                authenticated={authenticated}
                 address={address}
                 setNewPost={setNewPost}
                 hasMoreItems={hasMoreItems}
