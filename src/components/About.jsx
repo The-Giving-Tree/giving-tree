@@ -6,6 +6,7 @@ import Footer from './Footer';
 import { geolocated } from 'react-geolocated';
 import { connect } from 'react-redux';
 import { hotjar } from 'react-hotjar';
+import { Link, DirectLink, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 
 import {
   getCurrentUser,
@@ -89,7 +90,7 @@ function About(props) {
           }}
         >
           <div className="about-section">
-            <div className="about-heading">About Giving Tree</div>
+          <Link activeClass="active" className="test1" to="test1" spy={true} smooth={true} duration={500} ><div className="about-heading">About Giving Tree</div></Link>
             <div className="about-text" style={{ width: 576, paddingTop: 20 }}>
               “The best way to not feel hopeless is to get up and do something.” - Barack Obama
               <br />

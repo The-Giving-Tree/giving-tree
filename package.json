@@ -46,6 +46,7 @@
     "react-router-dom": "^5.1.2",
     "react-router-redux": "^4.0.8",
     "react-scripts": "3.4.1",
+    "react-scroll": "^1.7.16",
     "react-use": "^13.27.0",
     "redux": "^4.0.4",
     "redux-logger": "^3.0.6",
