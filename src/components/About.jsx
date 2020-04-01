@@ -6,7 +6,15 @@ import Footer from './Footer';
 import { geolocated } from 'react-geolocated';
 import { connect } from 'react-redux';
 import { hotjar } from 'react-hotjar';
-import { Link, DirectLink, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
+import {
+  Link,
+  DirectLink,
+  Element,
+  Events,
+  animateScroll as scroll,
+  scrollSpy,
+  scroller
+} from 'react-scroll';
 
 import {
   getCurrentUser,
@@ -90,7 +98,9 @@ function About(props) {
           }}
         >
           <div className="about-section">
-          <Link activeClass="active" className="test1" to="test1" spy={true} smooth={true} duration={500} ><div className="about-heading">About Giving Tree</div></Link>
+            <div id={'about-us'} className="about-heading">
+              About Giving Tree
+            </div>
             <div className="about-text" style={{ width: 576, paddingTop: 20 }}>
               “The best way to not feel hopeless is to get up and do something.” - Barack Obama
               <br />
@@ -104,7 +114,9 @@ function About(props) {
             </div>
           </div>
           <div className="about-section">
-            <div className="about-heading">Who We Are</div>
+            <div id={'who-we-are'} className="about-heading">
+              Who We Are
+            </div>
             <div className="about-text" style={{ width: 576, paddingTop: 20 }}>
               We are a group of passionate, self-motivated, international
               strangers-turned-teammates, united by a common goal: to help ease our neighbors’
@@ -116,7 +128,9 @@ function About(props) {
             </div>
           </div>
           <div className="about-section">
-            <div className="about-heading">Get Involved</div>
+            <div id={'get-involved'} className="about-heading">
+              Get Involved
+            </div>
             <div className="about-text" style={{ width: 576, paddingTop: 20 }}>
               Interested in contributing to our efforts? The best way to help out is by spreading
               the word to your friends/family/network about our platform, and by signing up to be a
@@ -130,7 +144,9 @@ function About(props) {
             </div>
           </div>
           <div className="about-section">
-            <div className="about-heading">Contact Us</div>
+            <div id={'contact-us'} className="about-heading">
+              Contact Us
+            </div>
             <div className="about-text" style={{ width: 576, paddingTop: 20 }}>
               Reach out to us anytime at{' '}
               <a
@@ -153,7 +169,9 @@ function About(props) {
             </div>
           </div>
           <div className="about-section">
-            <div className="about-heading">Get Help</div>
+            <div id={'get-help'} className="about-heading">
+              Get Help
+            </div>
             <div className="about-text" style={{ width: 576, paddingTop: 20 }}>
               Need immediate assistance with a request and can’t find a helper? Please{' '}
               <a
@@ -177,7 +195,9 @@ function About(props) {
             </div>
           </div>
           <div className="about-section">
-            <div className="about-privacy">Privacy Policy</div>
+            <div id={'privacy-policy'} className="about-privacy">
+              Privacy Policy
+            </div>
             <div className="privacy-text mt-4">
               The Giving Tree and its website will not sell your data nor use any of the information
               except for improving facilitation and communication between volunteers (“helpers”) and

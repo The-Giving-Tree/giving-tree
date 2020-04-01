@@ -1,12 +1,10 @@
 import * as React from 'react';
 import Media from 'react-media';
-import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { HashLink as Link } from 'react-router-hash-link';
 
 function Footer(props) {
   require('dotenv').config();
-
-  const history = useHistory();
 
   return (
     <Media
@@ -22,21 +20,26 @@ function Footer(props) {
             <div class="grid grid-cols-5 gap-4" style={{ paddingTop: 58, paddingLeft: 112 }}>
               <div>
                 <div className="footer-heading">The Giving Tree</div>
-                <div
-                  onClick={() => history.push('/about')}
-                  className="footer-text hover:text-green-600 transition duration-150"
-                >
-                  About Us
-                </div>
-                <div className="footer-text hover:text-green-600 transition duration-150">
-                  Contact Us
-                </div>
-                <div className="footer-text hover:text-green-600 transition duration-150">
-                  Privacy Policy
-                </div>
-                <div className="footer-text hover:text-green-600 transition duration-150">
-                  Terms of Use
-                </div>
+                <Link to="/about#about-us">
+                  <div className="footer-text hover:text-green-600 transition duration-150">
+                    About Us
+                  </div>
+                </Link>
+                <Link to="/about#contact-us">
+                  <div className="footer-text hover:text-green-600 transition duration-150">
+                    Contact Us
+                  </div>
+                </Link>
+                <Link to="/about#privacy-policy">
+                  <div className="footer-text hover:text-green-600 transition duration-150">
+                    Privacy Policy
+                  </div>
+                </Link>
+                <Link to="/about#terms-of-use">
+                  <div className="footer-text hover:text-green-600 transition duration-150">
+                    Terms of Use
+                  </div>
+                </Link>
               </div>
               <div>
                 <div className="footer-heading">How It Works</div>

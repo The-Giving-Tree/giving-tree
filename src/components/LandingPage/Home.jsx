@@ -2387,102 +2387,104 @@ function Home(props) {
               </div>
             </div>
           ) : (
-            <Media
-              queries={{
-                small: '(max-width: 599px)',
-                medium: '(min-width: 600px) and (max-width: 1199px)',
-                large: '(min-width: 1200px)'
-              }}
-            >
-              {matches =>
-                authenticated ? (
-                  <React.Fragment>
-                    <div
-                      className="flex items-center justify-center text-center font-bold"
-                      style={{
-                        width: '100%',
-                        height: `calc(100vh - 70px)`,
-                        background:
-                          'url(https://d1ppmvgsdgdlyy.cloudfront.net/landing.png) center center',
-                        backgroundSize: 'cover',
-                        color: 'white',
-                        fontWeight: 500,
-                        fontSize: matches.small || matches.medium ? 25 : 36
-                      }}
-                    >
-                      <div style={{ fontSize: 10, position: 'absolute', bottom: 0, left: 0 }}>
-                        Dribbbled by @tubik_arts
-                      </div>
+            <React.Fragment>
+              <Media
+                queries={{
+                  small: '(max-width: 599px)',
+                  medium: '(min-width: 600px) and (max-width: 1199px)',
+                  large: '(min-width: 1200px)'
+                }}
+              >
+                {matches =>
+                  authenticated ? (
+                    <React.Fragment>
                       <div
+                        className="flex items-center justify-center text-center font-bold"
                         style={{
-                          width: matches.small || matches.medium ? '80%' : '35%',
-                          textShadow: '0px 0px 3px #000'
+                          width: '100%',
+                          height: `calc(100vh - 70px)`,
+                          background:
+                            'url(https://d1ppmvgsdgdlyy.cloudfront.net/landing.png) center center',
+                          backgroundSize: 'cover',
+                          color: 'white',
+                          fontWeight: 500,
+                          fontSize: matches.small || matches.medium ? 25 : 36
                         }}
                       >
-                        We are waves of the same sea,
-                        <br />
-                        leaves of the same tree,
-                        <br />
-                        flowers of the same garden
-                        <br />
-                        <button
-                          onClick={() => (window.location = '/home/discover')}
-                          style={{ outline: 'none', fontSize: 26, backgroundColor: '#8ec755' }}
-                          className="mt-10 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                        <div style={{ fontSize: 10, position: 'absolute', bottom: 0, left: 0 }}>
+                          Dribbbled by @tubik_arts
+                        </div>
+                        <div
+                          style={{
+                            width: matches.small || matches.medium ? '80%' : '35%',
+                            textShadow: '0px 0px 3px #000'
+                          }}
                         >
-                          Get Started
-                        </button>
+                          We are waves of the same sea,
+                          <br />
+                          leaves of the same tree,
+                          <br />
+                          flowers of the same garden
+                          <br />
+                          <button
+                            onClick={() => (window.location = '/home/discover')}
+                            style={{ outline: 'none', fontSize: 26, backgroundColor: '#8ec755' }}
+                            className="mt-10 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                          >
+                            Get Started
+                          </button>
+                        </div>
                       </div>
+                    </React.Fragment>
+                  ) : matches.small || matches.medium ? (
+                    <div>
+                      <div
+                        style={{
+                          width: '100%',
+                          height: 342,
+                          background:
+                            'url(https://d1ppmvgsdgdlyy.cloudfront.net/landing.png) center center',
+                          backgroundSize: 'cover',
+                          paddingLeft: 24,
+                          paddingRight: 24
+                        }}
+                      ></div>
+                      {homeJSX(matches)}
                     </div>
-                  </React.Fragment>
-                ) : matches.small || matches.medium ? (
-                  <div>
-                    <div
+                  ) : (
+                    <table
+                      class="table-auto"
                       style={{
                         width: '100%',
-                        height: 342,
-                        background:
-                          'url(https://d1ppmvgsdgdlyy.cloudfront.net/landing.png) center center',
-                        backgroundSize: 'cover',
-                        paddingLeft: 24,
-                        paddingRight: 24
+                        height: `calc(100vh - 60px)`,
+                        maxHeight: `calc(100vh - 60px)`
                       }}
-                    ></div>
-                    {homeJSX(matches)}
-                  </div>
-                ) : (
-                  <table
-                    class="table-auto"
-                    style={{
-                      width: '100%',
-                      height: `calc(100vh - 60px)`,
-                      maxHeight: `calc(100vh - 60px)`
-                    }}
-                  >
-                    <tbody>
-                      <tr>
-                        <td
-                          style={{
-                            width: '70%',
-                            background:
-                              'url(https://d1ppmvgsdgdlyy.cloudfront.net/landing.png) center center',
-                            backgroundSize: 'cover',
-                            paddingLeft: 24,
-                            paddingRight: 24
-                          }}
-                          class="px-4 py-2"
-                        ></td>
-                        <td style={{ width: '30%' }} class="px-4 py-2">
-                          {homeJSX(matches)}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                )
-              }
-            </Media>
+                    >
+                      <tbody>
+                        <tr>
+                          <td
+                            style={{
+                              width: '70%',
+                              background:
+                                'url(https://d1ppmvgsdgdlyy.cloudfront.net/landing.png) center center',
+                              backgroundSize: 'cover',
+                              paddingLeft: 24,
+                              paddingRight: 24
+                            }}
+                            class="px-4 py-2"
+                          ></td>
+                          <td style={{ width: '30%' }} class="px-4 py-2">
+                            {homeJSX(matches)}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  )
+                }
+              </Media>
+              <Footer />
+            </React.Fragment>
           )}
-          <Footer />
         </div>
       )}
     </Media>
