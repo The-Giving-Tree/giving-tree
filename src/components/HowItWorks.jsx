@@ -121,6 +121,7 @@ function HowItWorks(props) {
               Communicate directly with the requester! We recommend:
               <br />
               <br />
+              <ul class="list-disc">
               <li>Exchanging contact information so that you can call/text/email one another</li>
               <li>
                 Asking questions where necessary, so that you know exactly what the requester needs
@@ -133,6 +134,7 @@ function HowItWorks(props) {
                 Aim for a contactless exchange of money, like Paypal, Venmo, or another e-transfer
                 method.
               </li>
+              </ul>
               <br />
               <br />
               If your requester can only reimburse you with cash, make sure that the cash exchange
@@ -142,9 +144,11 @@ function HowItWorks(props) {
               and ability.
               <br />
               <br />
+              <ul class="list-disc">
               <li>Agreeing on how/where you will deliver items and/or provide services</li>
               <li>Keeping the requester updated on your progress and location</li>
               <li>Review and follow our Health &amp; Safety guidelines</li>
+              </ul>
               <br />
               <br />
               <b>Safety Guidelines for Helpers</b>
@@ -152,6 +156,7 @@ function HowItWorks(props) {
               When completing grocery and supply runs, or other errands:
               <br />
               <br />
+              <ul class="list-disc">
               <li>
                 Avoid touching handrails, public furniture, or any other public surfaces as much as
                 possible.
@@ -189,6 +194,7 @@ function HowItWorks(props) {
                 request requesters, as those requesting help are likely in a high-risk group, and
                 extra care is essential.
               </li>
+              </ul>
             </div>
           </div>
           <div className="about-section">
@@ -212,12 +218,14 @@ function HowItWorks(props) {
               Communicate directly with your helper! We recommend:
               <br />
               <br />
+              <ul class="list-disc">
               <li>Exchanging contact information so that you can call/text/email one another</li>
               <li>Answering questions clearly so that your helper knows exactly how to help you</li>
               <li>
                 Agreeing on a reimbursement method beforehand for any purchases you’ll need to make
                 on the requester’s behalf
               </li>
+              </ul>
               <br />
               Aim for a contactless exchange of money, like Paypal, Venmo, or another e-transfer
               method. If you can only pay your helper in cash: Either coordinate with your helper to
@@ -232,6 +240,7 @@ function HowItWorks(props) {
               <br />
               <b>How to make a new request</b>
               <br />
+              <ul class="list-disc">
               <li>Select the type of assistance you need, and click “Next”.</li>
               <li>
                 Fill out the following form. Please be specific about your needs so your helper can
@@ -250,10 +259,12 @@ function HowItWorks(props) {
                 Click “Submit”. A good samaritan in your area will claim your request and reach out
                 to you soon!
               </li>
+              </ul>
               <br />
               <br />
               <b>Helpful Tips</b>
               <br />
+              <ul class="list-disc">
               <li>
                 Be specific about your needs so that your helper can fulfill your request as quickly
                 and easily as possible
@@ -274,6 +285,7 @@ function HowItWorks(props) {
                   violent/dangerous
                 </i>
               </li>
+              </ul>
               <br />
               <br />
               <b>Safety Guidelines for Requesters</b>
@@ -281,6 +293,7 @@ function HowItWorks(props) {
               When receiving goods from a helper:
               <br />
               <br />
+              <ul class="list-disc">
               <li>
                 Keep in mind that the virus can come from public places/surfaces into your home.
               </li>
@@ -296,6 +309,7 @@ function HowItWorks(props) {
                 phone, or any of your other belongings.
               </li>
               <li>After putting away the items, wash your hands thoroughly with soap and water.</li>
+              </ul>
             </div>
           </div>
           <div className="about-section">
