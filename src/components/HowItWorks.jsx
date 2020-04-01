@@ -93,7 +93,7 @@ function HowItWorks(props) {
       >
         <div
           style={{
-            margin: '0 auto',
+            margin: '0 auto'
           }}
         >
           <div className="about-section">
@@ -202,7 +202,7 @@ function HowItWorks(props) {
               </div>
             </div>
           </div>
-          <div className="about-section" style={{ backgroundColor: '#F2F2F2'}}>
+          <div className="about-section" style={{ backgroundColor: '#F2F2F2' }}>
             <div id={'how-to-get-help'} className="about-heading">
               How to Request Help
             </div>
