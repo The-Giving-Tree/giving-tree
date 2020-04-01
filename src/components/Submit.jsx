@@ -520,7 +520,7 @@ function Submit(props) {
                 {!checkout ? (
                   <React.Fragment>
                     <div className="font-bold text-xl text-left">I need:</div>
-                    <div>
+                    {/* <div>
                       {selectedRequest !== '' && (
                         <button
                           onClick={() => setCheckout(true)}
@@ -530,7 +530,7 @@ function Submit(props) {
                           Next
                         </button>
                       )}
-                    </div>
+                    </div> */}
                   </React.Fragment>
                 ) : (
                   <React.Fragment>
@@ -555,6 +555,7 @@ function Submit(props) {
                         setRequest('');
                       } else {
                         setRequest('food');
+                        setCheckout(true);
                       }
                     }}
                     className={`max-w-sm rounded overflow-hidden shadow-lg border ${selectedRequest ===
@@ -582,6 +583,7 @@ function Submit(props) {
                         setRequest('');
                       } else {
                         setRequest('supplies');
+                        setCheckout(true);
                       }
                     }}
                     className={`max-w-sm rounded  hover:border-indigo-600 overflow-hidden shadow-lg border ${selectedRequest ===
@@ -613,6 +615,7 @@ function Submit(props) {
                         setRequest('');
                       } else {
                         // setRequest('transportation');
+                        // setCheckout(true);
                       }
                     }}
                     className={`max-w-sm rounded overflow-hidden shadow-lg border ${selectedRequest ===
