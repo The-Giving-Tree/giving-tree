@@ -93,14 +93,20 @@ function HowItWorks(props) {
       >
         <div
           style={{
-            margin: '0 auto',
+            margin: '0 auto'
           }}
         >
+          <div
+            className="about-heading justify-center"
+            style={{ fontSize: 44, textTransform: 'uppercase' }}
+          >
+            How It Works
+          </div>
           <div className="about-section">
             <div id={'how-to-help'} className="about-heading">
               How To Provide Help
             </div>
-            <div className="about-text" style={{ width: 576, paddingTop: 20 }}>
+            <div className="about-text" style={{ width: '100%', paddingTop: 20 }}>
               <b>Helper Guidelines</b>
               <div className="section-text">
                 <br />
@@ -202,11 +208,11 @@ function HowItWorks(props) {
               </div>
             </div>
           </div>
-          <div className="about-section" style={{ backgroundColor: '#F2F2F2'}}>
+          <div className="about-section" style={{ backgroundColor: '#F2F2F2' }}>
             <div id={'how-to-get-help'} className="about-heading">
               How to Request Help
             </div>
-            <div className="about-text" style={{ width: 576, paddingTop: 20 }}>
+            <div className="about-text" style={{ width: '100%', paddingTop: 20 }}>
               <b>Requester Guidelines</b>
               <br />
               <div className="section-text">

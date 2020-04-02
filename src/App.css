@@ -89,10 +89,10 @@ b {
 
 .about-heading {
   height: 80px;
-  text-transform: uppercase;
+  text-transform: capitalize;
   font-style: normal;
   font-weight: bold;
-  font-size: 56px;
+  font-size: 36px;
   line-height: 68px;
   display: flex;
   align-items: center;

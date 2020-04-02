@@ -13,7 +13,8 @@ import {
   logout,
   getCurrentUser,
   addToNotifications,
-  clearAllNotifications
+  clearAllNotifications,
+  selectMenu
 } from '../store/actions/auth/auth-actions';
 import { search } from '../store/actions/global/global-actions';
 import NotificationBadge from 'react-notification-badge';
@@ -626,7 +627,8 @@ const mapDispatchToProps = dispatch => ({
   getCurrentUserDispatch: payload => dispatch(getCurrentUser(payload)),
   addToNotificationsDispatch: payload => dispatch(addToNotifications(payload)),
   clearAllNotificationsDispatch: payload => dispatch(clearAllNotifications(payload)),
-  searchDispatch: payload => dispatch(search(payload))
+  searchDispatch: payload => dispatch(search(payload)),
+  selectMenuDispatch: payload => dispatch(selectMenu(payload)),
 });
 
 const mapStateToProps = state => ({

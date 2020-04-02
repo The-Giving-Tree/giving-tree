@@ -8,7 +8,9 @@ import { Block } from 'baseui/block';
 import { hotjar } from 'react-hotjar';
 import { Tabs, Tab } from 'baseui/tabs';
 import moment from 'moment';
+import { getDistance } from 'geolib';
 import Check from 'baseui/icon/check';
+import { geolocated } from 'react-geolocated';
 import { Input } from 'baseui/input';
 import { StatefulTooltip } from 'baseui/tooltip';
 import Dropzone from 'react-dropzone';
@@ -31,6 +33,7 @@ function User(props) {
     foundUser,
     followDispatch,
     unfollowDispatch,
+    coords,
     foundUserNull,
     loadUserDispatch,
     updateProfileDispatch,
@@ -102,6 +105,28 @@ function User(props) {
 
   function mouseOutAvatar() {
     setHoverAvatar(false);
+  }
+
+  function calculateDistance(requestLocation) {
+    if (requestLocation.lat && requestLocation.lng && coords) {
+      var request = {
+        latitude: requestLocation.lat,
+        longitude: requestLocation.lng
+      };
+
+      var user = {
+        latitude: coords.latitude,
+        longitude: coords.longitude
+      };
+
+      let distance = getDistance(request, user); // meters
+      let km = distance / 1000;
+      let mi = km * 0.621371;
+
+      return mi ? mi.toFixed(2) : '-';
+    } else {
+      return '-';
+    }
   }
 
   let followers = foundUser.followers ? foundUser.followers.length : '0';
@@ -342,7 +367,20 @@ function User(props) {
               <div style={{ margin: 7 }}>
                 <div>
                   <div className="font-bold text-base text-left my-1 mt-4">
-                    {post.text && JSON.parse(post.text).address}
+                    {post.text && coords
+                      ? `${calculateDistance(JSON.parse(post.text).location)} miles from
+                                      you ${
+                                        JSON.parse(post.text).postal
+                                          ? `(${JSON.parse(post.text).postal.split('-')[0] ||
+                                              JSON.parse(post.text).postal})`
+                                          : ''
+                                      }`
+                      : `Zip Code: ${
+                          JSON.parse(post.text).postal
+                            ? `${JSON.parse(post.text).postal.split('-')[0] ||
+                                JSON.parse(post.text).postal}`
+                            : ''
+                        }`}
                   </div>
                   <div className="font-bold text-base text-left my-1 mt-4">
                     {post && `Description: ${JSON.parse(post.text).description}`}
@@ -1164,4 +1202,4 @@ User.defaultProps = {};
 
 User.propTypes = {};
 
-export default connect(mapStateToProps, mapDispatchToProps)(User);
+export default connect(mapStateToProps, mapDispatchToProps)(geolocated()(User));

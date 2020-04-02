@@ -31,6 +31,7 @@ function NewsfeedTable(props) {
     newPost,
     setNewPost,
     selectMenuDispatch,
+    authenticated,
     latLng,
     newsfeedLoading,
     newsfeedSuccess,
@@ -177,12 +178,21 @@ function NewsfeedTable(props) {
                         value={newPost}
                         onChange={event => {
                           setNewPost(event.currentTarget.value);
-                          selectMenuDispatch({ selectMenu, title: event.currentTarget.value });
+                          if (authenticated) {
+                            selectMenuDispatch({ selectMenu, title: event.currentTarget.value });
+                          }
                         }}
                         placeholder="Ask for help / assistance"
                       />
                       <Button
-                        onClick={() => history.push('/submit')}
+                        onClick={() => {
+                          if (authenticated) {
+                            history.push('/submit');
+                          } else {
+                            alert('please signup first');
+                            history.push('/signup');
+                          }
+                        }}
                         kind="secondary"
                         style={{ marginLeft: 10, fontSize: 14 }}
                         shape={SHAPE.square}
