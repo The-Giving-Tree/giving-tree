@@ -1554,10 +1554,9 @@ function Home(props) {
     }
   }, [latLng, address, !openCustomAddress]);
 
-  const tabDetailJSX = matches => {
+  const tabDetailJSX = () => {
     return (
-      <Tabs
-        overrides={{
+      <Tabs overrides={{
           Tab: {
             style: {
               outline: 'none'
@@ -1567,17 +1566,22 @@ function Home(props) {
             style: {
               outline: 'none',
               width: '100%',
-              margin: '0 auto'
+              margin: '0 auto',
             }
           },
           TabBar: {
             style: {
               outline: 'none',
-              backgroundColor: 'white'
+              backgroundColor: 'white',
+              padding: 0
             }
           },
           TabContent: {
             style: {
+              paddingLeft: 0,
+              paddingRight: 0,
+              paddingTop: 0,
+              paddingBottom: 0,
               outline: 'none',
               color: '#059305'
             }
@@ -1592,6 +1596,8 @@ function Home(props) {
           overrides={{
             Tab: {
               style: {
+                marginLeft: 0,
+                marginRight: 0,
                 outline: 'none',
                 fontSize: 16,
                 fontWeight: 'bold',
@@ -1602,27 +1608,9 @@ function Home(props) {
               }
             }
           }}
-          title="Sign Up"
-        >
-          <div
-            style={{
-              paddingLeft: 0,
-              paddingRight: 0,
-              textAlign: 'center'
-            }}
-          >
-            <Card
-              overrides={{
-                Root: {
-                  style: {
-                    width: matches.medium || matches.large ? '400px' : '100%',
-                    border: 'none',
-                    margin: '0 auto',
-                    boxShadow: 'none'
-                  }
-                }
-              }}
-            >
+          title="Sign Up">
+
+            <div className="pt-12">
               {errorMessage && (
                 <p className="my-3 text-sm" style={{ color: 'rgb(204, 50, 63)' }}>
                   {errorMessage}
@@ -1677,13 +1665,7 @@ function Home(props) {
                   special character '!._*,#'), number [0-9]
                 </div>
               )}
-              {/* <br />
-            <p className="my-3 text-sm" style={{ textAlign: 'center' }}>
-              By signing up, you agree to Giving Tree's{' '}
-              <a href="/signup">Terms of Use</a>,{' '}
-              <a href="/signup">Privacy Policy</a> and{' '}
-              <a href="/signup">Cookie Policy</a>.
-            </p> */}
+
               <br />
               <StyledAction>
                 <Button
@@ -1710,13 +1692,15 @@ function Home(props) {
               >
                 Sign Up Later
               </Button>
-            </Card>
-          </div>
+            </div>
+          
         </Tab>
         <Tab
           overrides={{
             Tab: {
               style: {
+                marginLeft: 0,
+                marginRight: 0,
                 outline: 'none',
                 fontSize: 16,
                 width: '50%',
@@ -1729,27 +1713,11 @@ function Home(props) {
           }}
           title="Login"
         >
-          <div
-            style={{
-              paddingLeft: 0,
-              paddingRight: 0,
-              textAlign: 'center',
-              height: 420
-            }}
-          >
-            <Card
-              overrides={{
-                Root: {
-                  style: {
-                    width: matches.medium || matches.large ? '400px' : '100%',
-                    margin: '0 auto',
-                    boxShadow: 'none'
-                  }
-                }
-              }}
-            >
+            <div class="pt-12">
               {errorMessage && (
-                <p className="my-3 text-sm" style={{ color: 'rgb(204, 50, 63)' }}>
+                <p className="my-3 text-sm" style={{
+                  color: 'rgb(204, 50, 63)'
+                }}>
                   {errorMessage}
                 </p>
               )}
@@ -1845,18 +1813,19 @@ function Home(props) {
                   Login
                 </Button>
               </StyledAction>
-            </Card>
-          </div>
+            </div>
         </Tab>
       </Tabs>
     );
   };
 
-  const detailJSX = matches => {
+  const detailJSX = () => {
     return (
-      <div>
-        <div className={`landing-title py-4`}>Request help or lend a hand</div>
-        <div className={`landing-text py-4`}>
+      <div class="">
+        <h1 className={`landing-title mb-4 text-center md:text-left`}>
+          Request help or lend a hand
+        </h1>
+        <div className={`landing-text py-4 text-center md:text-left`}>
           The Giving Tree was created in response to COVID-19. Our platform connects people who need
           assistance with people who are interested in helping.
         </div>
@@ -1864,43 +1833,18 @@ function Home(props) {
     );
   };
 
-  const tabJSX = matches => {
+  const homeJSX = () => {
     return (
-      <div className={'p-6'}>
-        {detailJSX(matches)}
-        {tabDetailJSX(matches)}
+      <div className="container mx-auto max-w-xs sm:max-w-md md:max-w-screen-md">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 py-10">
+          <div className="px-6 md:pl-12 md:pr-10 lg:px-16">
+            {detailJSX()}
+          </div>
+          <div className="px-6 md:pl-10 md:pr-12 lg:px-16">
+            {tabDetailJSX()}
+          </div>
+        </div>
       </div>
-    );
-  };
-
-  const homeJSX = matches => {
-    return matches.medium ? (
-      <div>
-        <table
-          className="table-auto"
-          style={{
-            width: '100%'
-          }}
-        >
-          <tbody>
-            <tr>
-              <td
-                style={{
-                  width: '50%'
-                }}
-                class="px-4 py-2"
-              >
-                {detailJSX(matches)}
-              </td>
-              <td style={{ width: '50%' }} class="px-4 py-2">
-                {tabDetailJSX(matches)}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    ) : (
-      tabJSX(matches)
     );
   };
 
@@ -2393,11 +2337,12 @@ function Home(props) {
             <React.Fragment>
               <Media
                 queries={{
-                  small: '(max-width: 599px)',
-                  medium: '(min-width: 600px) and (max-width: 1199px)',
-                  large: '(min-width: 1200px)'
-                }}
-              >
+                  xs: '(max-width: 639px)',
+                  small: '(min-width: 640px)',
+                  medium: '(min-width: 768px)',
+                  large: '(min-width: 1024px)',
+                  xl: '(min-width: 1280px)'
+                }}>
                 {matches =>
                   authenticated ? (
                     <React.Fragment>
@@ -2411,18 +2356,23 @@ function Home(props) {
                           backgroundSize: 'cover',
                           color: 'white',
                           fontWeight: 500,
+                          position: 'relative',
                           fontSize: matches.small || matches.medium ? 25 : 36
                         }}
                       >
-                        <div style={{ fontSize: 10, position: 'absolute', bottom: 0, left: 0 }}>
+                        <div style={{ 
+                          fontSize: 10, 
+                          position: 'absolute', 
+                          bottom: 0, 
+                          left: 0 
+                        }}>
                           Dribbbled by @tubik_arts
                         </div>
                         <div
                           style={{
                             width: matches.small || matches.medium ? '80%' : '35%',
                             textShadow: '0px 0px 3px #000'
-                          }}
-                        >
+                          }}>
                           We are waves of the same sea,
                           <br />
                           leaves of the same tree,
@@ -2431,57 +2381,31 @@ function Home(props) {
                           <br />
                           <button
                             onClick={() => (window.location = '/home/discover')}
-                            style={{ outline: 'none', fontSize: 26, backgroundColor: '#8ec755' }}
-                            className="mt-10 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                          >
+                            style={{ 
+                              outline: 'none', 
+                              fontSize: 26, 
+                              backgroundColor: '#8ec755' 
+                            }}
+                            className="mt-10 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
                             Get Started
                           </button>
                         </div>
                       </div>
                     </React.Fragment>
-                  ) : matches.small || matches.medium ? (
-                    <div>
-                      <div
+                  ) : (
+                    <div class="grid grid-cols-1 lg:grid-cols-3">
+                      <div className="col-span-2 px-6 flex"
                         style={{
-                          width: '100%',
-                          height: 342,
+                          height: (!matches.large && !matches.xl) ? 340 : '100%',
                           background:
                             'url(https://d1ppmvgsdgdlyy.cloudfront.net/landing.png) center center',
                           backgroundSize: 'cover',
-                          paddingLeft: 24,
-                          paddingRight: 24
-                        }}
-                      ></div>
-                      {homeJSX(matches)}
+                        }}>
+                      </div>
+                      <div className="col-span-1">
+                        {homeJSX()}
+                      </div>
                     </div>
-                  ) : (
-                    <table
-                      class="table-auto"
-                      style={{
-                        width: '100%',
-                        height: `calc(100vh - 60px)`,
-                        maxHeight: `calc(100vh - 60px)`
-                      }}
-                    >
-                      <tbody>
-                        <tr>
-                          <td
-                            style={{
-                              width: '70%',
-                              background:
-                                'url(https://d1ppmvgsdgdlyy.cloudfront.net/landing.png) center center',
-                              backgroundSize: 'cover',
-                              paddingLeft: 24,
-                              paddingRight: 24
-                            }}
-                            class="px-4 py-2"
-                          ></td>
-                          <td style={{ width: '30%' }} class="px-4 py-2">
-                            {homeJSX(matches)}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
                   )
                 }
               </Media>

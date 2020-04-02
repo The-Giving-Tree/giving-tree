@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Constants from './Constants';
-import { Button, SHAPE, SIZE } from 'baseui/button';
 import { useHistory, Link } from 'react-router-dom';
 import { useStyletron } from 'baseui';
 import { Spinner } from 'baseui/spinner';
@@ -26,6 +25,7 @@ import { subscribeToNotifications } from '../utils/socket';
 import moment from 'moment';
 
 import { connect } from 'react-redux';
+import Logo from './Logo/Logo';
 function Before() {
   const [css, theme] = useStyletron();
   return (
@@ -301,7 +301,7 @@ function Navigation(props) {
         </Link>
 
         {/* Search bar */}
-        <div className="hidden md:block ml-auto md:mx-auto w-auto lg:w-50">
+        <div className="hidden md:block mr-auto px-6">
           <Input
             overrides={{
               Before,
@@ -554,6 +554,7 @@ function Navigation(props) {
   } else { // If the user is NOT logged in, display this nav...
     return (
       <div className="flex items-center justify-start px-6 py-3 bg-white">
+        
         {/* Main logo */}
         <Link to="/home/discover" className="mr-auto">
           <img
@@ -564,7 +565,7 @@ function Navigation(props) {
         </Link>
 
         {/* Search bar */}
-        <div className="hidden md:block ml-auto md:mx-auto">
+        <div className="hidden md:block mr-auto px-6">
           <Input
           overrides={{
             Before,
@@ -593,30 +594,32 @@ function Navigation(props) {
             />
           )}
         </div>
-        
-        {/* Guidelines button */}
-        <Link className="hidden md:block mr-4"
-        to={Constants.PATHS.GUIDELINES}
-        onClick={() => history.push(Constants.PATHS.GUIDELINES)}>
-          <img
-            src="https://d1ppmvgsdgdlyy.cloudfront.net/first-aid.svg"
-            alt="guidelines"
-            style={{ width: 25, cursor: 'pointer' }}
-          />
-        </Link>
-        
-        {/* Login link */}
-        <Link className="hidden md:inline mr-4"
-        style={{ textDecoration: 'none' }} to={Constants.PATHS.LOGIN}>
-          Login
-        </Link>
+        <div className="ml-auto flex items-center justify-end">
+          {/* Guidelines button */}
+          <Link className="hidden md:block mr-4"
+          to={Constants.PATHS.GUIDELINES}
+          onClick={() => history.push(Constants.PATHS.GUIDELINES)}>
+            <img
+              src="https://d1ppmvgsdgdlyy.cloudfront.net/first-aid.svg"
+              alt="guidelines"
+              style={{ width: 25, cursor: 'pointer' }}
+            />
+          </Link>
 
-        {/* Get started button */}
-        <Link className="py-2 px-4 rounded-full text-white bg-black"
-        onClick={() => history.push(Constants.PATHS.SIGNUP)}
-        to={Constants.PATHS.SIGNUP}>
-          Get started
-        </Link>
+          {/* Login link */}
+          <Link className="hidden md:inline mr-4"
+          style={{ textDecoration: 'none' }} to={Constants.PATHS.LOGIN}>
+            Login
+          </Link>
+
+          {/* Get started button */}
+          <Link className="py-2 px-4 rounded-full text-white bg-black"
+          onClick={() => history.push(Constants.PATHS.SIGNUP)}
+          to={Constants.PATHS.SIGNUP}>
+            Get started
+          </Link>
+        </div>
+        
       </div>
     );
   }
