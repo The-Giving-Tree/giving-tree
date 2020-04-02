@@ -1,22 +1,15 @@
 import * as React from 'react';
-import {
-  HeaderNavigation,
-  ALIGN,
-  StyledNavigationItem as NavigationItem,
-  StyledNavigationList as NavigationList
-} from 'baseui/header-navigation';
-import { StyledLink as Link } from 'baseui/link';
-import { Button, SHAPE, SIZE } from 'baseui/button';
-import { useHistory } from 'react-router-dom';
+import Constants from './Constants';
+import { useHistory, Link } from 'react-router-dom';
 import { useStyletron } from 'baseui';
 import { Spinner } from 'baseui/spinner';
 import Search from 'baseui/icon/search';
 import { Input } from 'baseui/input';
-import { Select } from 'baseui/select';
 import { StatefulMenu, OptionProfile } from 'baseui/menu';
 import { StatefulPopover, PLACEMENT } from 'baseui/popover';
 import { RadioGroup, Radio } from 'baseui/radio';
-import ChevronDown from 'baseui/icon/chevron-down';
+import { Select } from 'baseui/select';
+import { ALIGN } from 'baseui/header-navigation';
 import {
   logout,
   getCurrentUser,
@@ -28,7 +21,6 @@ import { search } from '../store/actions/global/global-actions';
 import NotificationBadge from 'react-notification-badge';
 import { Modal, ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/modal';
 import { Effect } from 'react-notification-badge';
-import Media from 'react-media';
 import axios from 'axios';
 import ROUTES from '../utils/routes';
 import { subscribeToNotifications } from '../utils/socket';
@@ -295,524 +287,431 @@ function Navigation(props) {
     return 'hsl(' + h + ', ' + s + '%, ' + l + '%)';
   }
 
+  // If the user IS logged in, display this nav...
   if (authenticated) {
     return (
-      <Media
-        queries={{
-          small: '(max-width: 599px)',
-          medium: '(min-width: 600px) and (max-width: 1199px)',
-          large: '(min-width: 1200px)'
-        }}
-      >
-        {matches => (
-          <React.Fragment>
-            <div style={{ width: '100%', zIndex: 800, background: 'white' }}>
-              <HeaderNavigation
+      
+      <div
+      className="flex items-center justify-start px-6 py-3 bg-white">
+        <button className="rounded-full bg-green text-white px-4 py-2"
+          style={{
+            position: 'fixed',
+            backgroundColor: '#8ec755',
+            bottom: '1rem',
+            right: '1rem',
+            zIndex: 999,
+            boxShadow: `1px 1px 6px grey`
+          }}
+          onClick={() => setIsOpen(true)}
+        >
+          Give Feedback!
+        </button>
+        <Modal
+          overrides={{ Dialog: { style: { borderRadius: '7px' } } }}
+          onClose={close}
+          isOpen={isOpen}
+        >
+          <ModalHeader>Feedback for Giving Tree</ModalHeader>
+          <ModalBody>
+            How would you feel if you could no longer use Giving Tree?
+            <RadioGroup
+              value={pmf}
+              onChange={e => setPmf(e.target.value)}
+              align={ALIGN.vertical}
+            >
+              <Radio overrides={{ Label: { style: { fontSize: 14 } } }} value="1">
+                Not disappointed
+              </Radio>
+              <Radio overrides={{ Label: { style: { fontSize: 14 } } }} value="2">
+                Somewhat disappointed
+              </Radio>
+              <Radio overrides={{ Label: { style: { fontSize: 14 } } }} value="3">
+                Very disappointed
+              </Radio>
+            </RadioGroup>
+            <br />
+            What type of people do you think would most benefit from Giving Tree?
+            <Input
+              value={benefit}
+              onChange={e => setBenefit(e.target.value)}
+              placeholder="Type your response"
+            />
+            <br />
+            What best describes your role?
+            <Select
+              options={[
+                { id: 'Post Doc', value: 'Post Doc' },
+                { id: 'Student', value: 'Student' },
+                { id: 'Health Provider', value: 'Health Provider' },
+                { id: 'Venture Capitalist', value: 'Venture Capitalist' },
+                { id: 'Researcher', value: 'Researcher' },
+                { id: 'Lab Director', value: 'Lab Director' },
+                { id: 'Medical Doctor', value: 'Medical Doctor' },
+                { id: 'Patient', value: 'Patient' },
+                { id: 'Engineer', value: 'Engineer' },
+                { id: 'Other', value: 'Other' }
+              ]}
+              labelKey="id"
+              valueKey="value"
+              maxDropdownHeight="250px"
+              placeholder="Select role"
+              onChange={({ value }) => setUserType(value)}
+              value={userType}
+            />
+            <br />
+            What is the main benefit <strong>you</strong> receive from Giving Tree?
+            <Input
+              value={personalBenefit}
+              onChange={e => setPersonalBenefit(e.target.value)}
+              placeholder="Type your response"
+            />
+            <br />
+            How can we improve Giving Tree for you?
+            <Input
+              value={suggestion}
+              onChange={e => setSuggestion(e.target.value)}
+              placeholder="Type your response"
+            />
+          </ModalBody>
+          <ModalFooter>
+            <ModalButton size={'compact'} kind={'minimal'} onClick={close}>
+              Cancel
+            </ModalButton>
+            <ModalButton size={'compact'} onClick={() => handleFeedback()}>
+              Submit
+            </ModalButton>
+          </ModalFooter>
+        </Modal>
+        {/* Main logo */}
+        <Link to="/home/discover" className="mr-auto">
+          <img
+          src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
+          alt="Giving Tree"
+          style={{ height: 30}}
+          />
+        </Link>
+
+        {/* Search bar */}
+        <div className="hidden md:block mr-auto px-6">
+          <Input
+            overrides={{
+              Before,
+              After,
+              InputContainer: {
+                style: {
+                  height: '100%',
+                  borderBottomLeftRadius:
+                    searchResults.length !== 0 && !shouldCloseSearchResults
+                      ? '0px'
+                      : '25px',
+                  borderBottomRightRadius:
+                    searchResults.length !== 0 && !shouldCloseSearchResults
+                      ? '0px'
+                      : '25px',
+                  borderTopLeftRadius: '25px',
+                  borderTopRightRadius: '25px',
+                  border: '0',
+                  outlineOffset: '2px'
+                }
+              },
+              Input: {
+                style: {
+                  maxHeight: '100%'
+                }
+              }
+            }}
+            placeholder={'Search...'}
+            onChange={e => {
+              searchDispatch({ env: process.env.NODE_ENV, query: e.target.value });
+              setShouldCloseSearchResults(false);
+            }}
+          />
+          {searchResults.length !== 0 && !shouldCloseSearchResults && (
+            <OutsideDetector>
+              <StatefulMenu
                 overrides={{
-                  Root: {
+                  List: {
                     style: {
-                      width: '100%',
-                      zIndex: 555
+                      outline: 'none',
+                      padding: '0px',
+                      position: 'absolute',
+                      width: `${center ? '576px' : '200px'}`,
+                      maxHeight: '400px',
+                      borderBottomLeftRadius: '25px',
+                      borderBottomRightRadius: '25px',
+                      zIndex: 100
                     }
-                  }
-                }}
-              >
-                <Button
-                  size={'compact'}
-                  style={{
-                    position: 'fixed',
-                    backgroundColor: '#8ec755',
-                    bottom: 0,
-                    right: 0,
-                    zIndex: 999
-                  }}
-                  onClick={() => setIsOpen(true)}
-                >
-                  Give Feedback!
-                </Button>
-                <Modal
-                  overrides={{ Dialog: { style: { borderRadius: '7px' } } }}
-                  onClose={close}
-                  isOpen={isOpen}
-                >
-                  <ModalHeader>Feedback for Giving Tree</ModalHeader>
-                  <ModalBody>
-                    How would you feel if you could no longer use Giving Tree?
-                    <RadioGroup
-                      value={pmf}
-                      onChange={e => setPmf(e.target.value)}
-                      align={ALIGN.vertical}
-                    >
-                      <Radio overrides={{ Label: { style: { fontSize: 14 } } }} value="1">
-                        Not disappointed
-                      </Radio>
-                      <Radio overrides={{ Label: { style: { fontSize: 14 } } }} value="2">
-                        Somewhat disappointed
-                      </Radio>
-                      <Radio overrides={{ Label: { style: { fontSize: 14 } } }} value="3">
-                        Very disappointed
-                      </Radio>
-                    </RadioGroup>
-                    <br />
-                    What type of people do you think would most benefit from Giving Tree?
-                    <Input
-                      value={benefit}
-                      onChange={e => setBenefit(e.target.value)}
-                      placeholder="Type your response"
-                    />
-                    <br />
-                    What best describes your role?
-                    <Select
-                      options={[
-                        { id: 'Post Doc', value: 'Post Doc' },
-                        { id: 'Student', value: 'Student' },
-                        { id: 'Health Provider', value: 'Health Provider' },
-                        { id: 'Venture Capitalist', value: 'Venture Capitalist' },
-                        { id: 'Researcher', value: 'Researcher' },
-                        { id: 'Lab Director', value: 'Lab Director' },
-                        { id: 'Medical Doctor', value: 'Medical Doctor' },
-                        { id: 'Patient', value: 'Patient' },
-                        { id: 'Engineer', value: 'Engineer' },
-                        { id: 'Other', value: 'Other' }
-                      ]}
-                      labelKey="id"
-                      valueKey="value"
-                      maxDropdownHeight="250px"
-                      placeholder="Select role"
-                      onChange={({ value }) => setUserType(value)}
-                      value={userType}
-                    />
-                    <br />
-                    What is the main benefit <strong>you</strong> receive from Giving Tree?
-                    <Input
-                      value={personalBenefit}
-                      onChange={e => setPersonalBenefit(e.target.value)}
-                      placeholder="Type your response"
-                    />
-                    <br />
-                    How can we improve Giving Tree for you?
-                    <Input
-                      value={suggestion}
-                      onChange={e => setSuggestion(e.target.value)}
-                      placeholder="Type your response"
-                    />
-                  </ModalBody>
-                  <ModalFooter>
-                    <ModalButton size={'compact'} kind={'minimal'} onClick={close}>
-                      Cancel
-                    </ModalButton>
-                    <ModalButton size={'compact'} onClick={() => handleFeedback()}>
-                      Submit
-                    </ModalButton>
-                  </ModalFooter>
-                </Modal>
-                <NavigationList $align={ALIGN.left}>
-                  <NavigationItem style={{ paddingLeft: 0 }}>
-                    <div
-                      style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}
-                      onClick={() => (window.location = '/home/discover')}
-                    >
-                      <img
-                        src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
-                        alt="Giving Tree"
-                        style={{ height: 30, marginRight: matches.large ? 12 : 0 }}
-                      />
-                    </div>
-                  </NavigationItem>
-                </NavigationList>
-                {!matches.large && <NavigationList $align={ALIGN.center} />}
-                {matches.large && (
-                  <NavigationList $align={center ? ALIGN.center : ALIGN.right}>
-                    <NavigationItem style={{ width: `${center ? '600px' : '200px'}` }}>
-                      <Input
-                        overrides={{
-                          Before,
-                          After,
-                          InputContainer: {
-                            style: {
-                              borderBottomLeftRadius:
-                                searchResults.length !== 0 && !shouldCloseSearchResults
-                                  ? '0px'
-                                  : '25px',
-                              borderBottomRightRadius:
-                                searchResults.length !== 0 && !shouldCloseSearchResults
-                                  ? '0px'
-                                  : '25px',
-                              borderTopLeftRadius: '25px',
-                              borderTopRightRadius: '25px',
-                              border: '0',
-                              outlineOffset: '2px'
-                            }
-                          }
-                        }}
-                        placeholder={'Search...'}
-                        onChange={e => {
-                          searchDispatch({ env: process.env.NODE_ENV, query: e.target.value });
-                          setShouldCloseSearchResults(false);
-                        }}
-                      />
-                      {searchResults.length !== 0 && !shouldCloseSearchResults && (
-                        <OutsideDetector>
-                          <StatefulMenu
-                            overrides={{
-                              List: {
-                                style: {
-                                  outline: 'none',
-                                  padding: '0px',
-                                  position: 'absolute',
-                                  width: `${center ? '576px' : '200px'}`,
-                                  maxHeight: '400px',
-                                  borderBottomLeftRadius: '25px',
-                                  borderBottomRightRadius: '25px',
-                                  zIndex: 100
-                                }
-                              },
-                              ProfileImgContainer: { style: { height: '32px', width: '32px' } },
-                              ListItemProfile: {
-                                style: { display: 'flex', alignContent: 'center' }
-                              },
-                              ProfileLabelsContainer: {
-                                style: { display: 'flex', alignContent: 'center' }
-                              },
-                              Option: {
-                                component: OptionProfile,
-                                props: {
-                                  getProfileItemLabels: ({
-                                    username,
-                                    label,
-                                    name,
-                                    title,
-                                    type
-                                  }) => ({
-                                    title: username,
-                                    subtitle: (
-                                      <div style={{ display: 'inline' }}>
-                                        ...{sanitize(label.split('<em>')[0])}
-                                        <div
-                                          style={{ backgroundColor: '#FFFF00', display: 'inline' }}
-                                        >
-                                          {sanitize(label.split('<em>')[1].split('</em>')[0])}
-                                        </div>
-                                        {sanitize(label.split('</em>')[1])}...
-                                      </div>
-                                    ),
-                                    body: type === 'post' ? title : name
-                                  }),
-                                  getProfileItemImg: item => item.image,
-                                  getProfileItemImgText: item => (
-                                    <div>
-                                      {item.label
-                                        .replace('<em>', '<strong>')
-                                        .replace('</em>', '</strong>')}
-                                    </div>
-                                  )
-                                }
-                              }
-                            }}
-                            items={searchResults}
-                            noResultsMsg="No Results"
-                            onItemSelect={item => {
-                              setShouldCloseSearchResults(true);
-                              history.push(
-                                item.item.type === 'post'
-                                  ? `/post/${item.item._id}`
-                                  : item.item.type === 'user'
-                                  ? `/user/${item.item.username}`
-                                  : ''
-                              );
-                            }}
-                          />
-                        </OutsideDetector>
-                      )}
-                    </NavigationItem>
-                  </NavigationList>
-                )}
-                <NavigationList $align={ALIGN.right}>
-                  <NavigationItem>
-                    <div className="flex items-center">
-                      {(matches.medium || matches.large) && (
-                        <React.Fragment>
-                          <Button
-                            onClick={() => {
-                              selectMenuDispatch({ selectMenu: '' });
-                              history.push('/submit');
-                            }}
-                            size={'compact'}
-                            shape={'pill'}
-                            style={{ outline: 'none', marginRight: 25 }}
-                            kind={'secondary'}
-                          >
-                            <img
-                              src="https://d1ppmvgsdgdlyy.cloudfront.net/submit.svg"
-                              alt="document"
-                              style={{ height: 26, marginLeft: '3px' }}
-                            />
-                          </Button>
-                          <img
-                            onClick={() => history.push('/guidelines')}
-                            src="https://d1ppmvgsdgdlyy.cloudfront.net/first-aid.svg"
-                            alt="guidelines"
-                            style={{ width: 25, marginRight: 25, cursor: 'pointer' }}
-                          />
-                          <StatefulPopover
-                            placement={PLACEMENT.bottomLeft}
-                            content={({ close }) => notificationMenu(close)}
-                          >
+                  },
+                  ProfileImgContainer: { style: { height: '32px', width: '32px' } },
+                  ListItemProfile: {
+                    style: { display: 'flex', alignContent: 'center' }
+                  },
+                  ProfileLabelsContainer: {
+                    style: { display: 'flex', alignContent: 'center' }
+                  },
+                  Option: {
+                    component: OptionProfile,
+                    props: {
+                      getProfileItemLabels: ({
+                        username,
+                        label,
+                        name,
+                        title,
+                        type
+                      }) => ({
+                        title: username,
+                        subtitle: (
+                          <div style={{ display: 'inline' }}>
+                            ...{sanitize(label.split('<em>')[0])}
                             <div
-                              style={{
-                                display: 'flex',
-                                alignContent: 'center',
-                                cursor: 'pointer',
-                                height: 40
-                              }}
+                              style={{ backgroundColor: '#FFFF00', display: 'inline' }}
                             >
-                              <img
-                                src="https://d1ppmvgsdgdlyy.cloudfront.net/notification.svg"
-                                alt="notification"
-                                style={{ width: 25, marginRight: 25 }}
-                              />
-                              {notifications.length > 0 && (
-                                <div style={{ marginLeft: -10, marginRight: 20 }}>
-                                  <NotificationBadge
-                                    count={notifications.length}
-                                    effect={Effect.SCALE}
-                                  />
-                                </div>
-                              )}
+                              {sanitize(label.split('<em>')[1].split('</em>')[0])}
                             </div>
-                          </StatefulPopover>
-                        </React.Fragment>
-                      )}
-                      <StatefulPopover
-                        placement={PLACEMENT.bottomLeft}
-                        content={({ close }) => (
-                          <StatefulMenu
-                            items={[
-                              {
-                                label: 'My Profile',
-                                icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/user.svg'
-                              },
-                              {
-                                label: 'Settings',
-                                icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/setting.svg'
-                              },
-                              {
-                                label: 'Log Out',
-                                icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/logout.svg'
-                              }
-                            ]}
-                            onItemSelect={item => {
-                              close();
-                              switch (item.item.label) {
-                                case 'My Profile':
-                                  history.push(`/user/${user.username}`);
-                                  break;
-                                case 'Settings':
-                                  history.push(`/settings`);
-                                  break;
-                                case 'Log Out':
-                                  logoutDispatch({
-                                    env: process.env.NODE_ENV
-                                  });
-                                  break;
-                                default:
-                                  break;
-                              }
-                            }}
-                            overrides={{
-                              List: { style: { width: '213px', outline: 'none' } }
-                            }}
-                          />
-                        )}
-                      >
-                        {matches.small || matches.medium ? (
-                          <div
-                            className="profilePic flex items-center"
-                            style={{
-                              width: 32,
-                              height: 32,
-                              background: `url(${generateHash(
-                                user.username,
-                                user.profileVersion
-                              )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${user.username &&
-                                user.username[0].toUpperCase()}.svg), ${stringToHslColor(
-                                user.username,
-                                80,
-                                45
-                              )}`,
-                              backgroundPosition: 'center',
-                              backgroundSize: 'cover',
-                              borderRadius: '50%',
-                              marginRight: 24,
-                              cursor: 'pointer',
-                              backgroundRepeat: 'no-repeat'
-                            }}
-                          />
-                        ) : (
-                          <Button
-                            overrides={{
-                              BaseButton: {
-                                style: {
-                                  marginRight: '24px'
-                                }
-                              }
-                            }}
-                            style={{ outline: 'none', fontSize: '14px' }}
-                            size={SIZE.compact}
-                            shape={SHAPE.pill}
-                            kind={'secondary'}
-                            endEnhancer={() => <ChevronDown size={24} />}
-                            startEnhancer={() => (
-                              <div
-                                className="profilePic"
-                                style={{
-                                  width: 32,
-                                  height: 32,
-                                  background: `url(${generateHash(
-                                    user.username,
-                                    user.profileVersion
-                                  )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${user.username &&
-                                    user.username[0].toUpperCase()}.svg), ${stringToHslColor(
-                                    user.username,
-                                    80,
-                                    45
-                                  )}`,
-                                  backgroundPosition: 'center',
-                                  backgroundSize: 'cover',
-                                  borderRadius: '50%',
-                                  marginRight: 10,
-                                  cursor: 'pointer',
-                                  backgroundRepeat: 'no-repeat'
-                                }}
-                              />
-                            )}
-                          >
-                            {user.username && user.username.length < 12 ? user.username : 'Profile'}
-                          </Button>
-                        )}
-                      </StatefulPopover>
-                    </div>
-                  </NavigationItem>
-                </NavigationList>
-              </HeaderNavigation>
-            </div>
-          </React.Fragment>
-        )}
-      </Media>
-    );
-  } else {
-    return (
-      <Media
-        queries={{
-          small: '(max-width: 599px)',
-          medium: '(min-width: 600px) and (max-width: 1199px)',
-          large: '(min-width: 1200px)'
-        }}
-      >
-        {matches => (
-          <React.Fragment>
-            <div style={{ width: '100%', zIndex: 800, background: 'white' }}>
-              <HeaderNavigation
-                overrides={{
-                  Root: {
-                    style: {
-                      width: '100%'
+                            {sanitize(label.split('</em>')[1])}...
+                          </div>
+                        ),
+                        body: type === 'post' ? title : name
+                      }),
+                      getProfileItemImg: item => item.image,
+                      getProfileItemImgText: item => (
+                        <div>
+                          {item.label
+                            .replace('<em>', '<strong>')
+                            .replace('</em>', '</strong>')}
+                        </div>
+                      )
                     }
                   }
                 }}
-              >
-                <NavigationList $align={ALIGN.left}>
-                  <NavigationItem>
-                    <div
-                      style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}
-                      onClick={() => (window.location = '/home/discover')}
-                    >
-                      <img
-                        src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
-                        alt="Giving Tree"
-                        style={{ height: 30, marginRight: 12 }}
-                      />
-                      {/* {(matches.medium || matches.large) && (
-                        <strong>
-                          <div style={{ textDecoration: 'none', color: 'black' }}>Giving Tree</div>
-                        </strong>
-                      )} */}
-                    </div>
-                  </NavigationItem>
-                </NavigationList>
-                {<NavigationList $align={ALIGN.center} />}
-                {matches.large && (
-                  <NavigationList $align={ALIGN.right}>
-                    <NavigationItem style={{ width: '200px' }}>
-                      <Input
-                        overrides={{
-                          Before,
-                          InputContainer: {
-                            style: { borderRadius: '50px', border: '0', outlineOffset: '2px' }
-                          }
-                        }}
-                        placeholder={center ? 'Search' : 'Search'}
-                        onChange={e => {
-                          console.log('e: ', e.target.value);
-                          searchDispatch({ env: process.env.NODE_ENV, query: e.target.value });
-                        }}
-                      />
-                      {searchResults.length !== 0 && (
-                        <StatefulMenu
-                          overrides={{
-                            List: {
-                              style: {
-                                outline: 'none',
-                                padding: '0px',
-                                position: 'absolute',
-                                width: `${center ? '600px' : '200px'}`
-                              }
-                            }
-                          }}
-                          items={searchResults}
-                        />
-                      )}
-                    </NavigationItem>
-                    <NavigationItem>
-                      <img
-                        onClick={() => history.push('/guidelines')}
-                        src="https://d1ppmvgsdgdlyy.cloudfront.net/first-aid.svg"
-                        alt="guidelines"
-                        style={{ width: 25, cursor: 'pointer' }}
-                      />
-                    </NavigationItem>
-                    <NavigationItem>
-                      <Link style={{ textDecoration: 'none' }} href="/login">
-                        Login
-                      </Link>
-                    </NavigationItem>
-                  </NavigationList>
-                )}
-                <NavigationList $align={ALIGN.right}>
-                  <NavigationItem
-                    style={{ paddingLeft: matches.small || matches.medium ? 0 : '24px' }}
-                  >
-                    <Button
-                      overrides={{
-                        BaseButton: {
-                          style: {
-                            marginRight: '24px'
-                          }
-                        }
-                      }}
-                      size={SIZE.compact}
-                      shape={SHAPE.pill}
-                      onClick={() => history.push('/signup')}
-                    >
-                      Get started
-                    </Button>
-                  </NavigationItem>
-                </NavigationList>
-              </HeaderNavigation>
+                items={searchResults}
+                noResultsMsg="No Results"
+                onItemSelect={item => {
+                  setShouldCloseSearchResults(true);
+                  history.push(
+                    item.item.type === 'post'
+                      ? `/post/${item.item._id}`
+                      : item.item.type === 'user'
+                      ? `/user/${item.item.username}`
+                      : ''
+                  );
+                }}
+              />
+            </OutsideDetector>
+          )}
+        </div>
+        
+        {/* Submit Link */}
+        <Link className="p-2 mr-5" to={Constants.PATHS.SUBMIT}
+        onClick={() => {
+          selectMenuDispatch({ selectMenu: '' });
+          history.push(Constants.PATHS.SUBMIT);
+        }}>
+          <img src="https://d1ppmvgsdgdlyy.cloudfront.net/submit.svg"
+            alt="document"
+            style={{ height: 26 }}/>
+        </Link>
+      
+        {/* Guidelines Link */}
+        <Link className="hidden md:block mr-5"
+        to={Constants.PATHS.GUIDELINES}
+        onClick={() => history.push(Constants.PATHS.GUIDELINES)}>
+          <img
+            src="https://d1ppmvgsdgdlyy.cloudfront.net/first-aid.svg"
+            alt="guidelines"
+            style={{ width: 25, cursor: 'pointer' }}
+          />
+        </Link>
+
+        {/* Notifications */}
+        <StatefulPopover
+          placement={PLACEMENT.bottomLeft}
+          content={({ close }) => notificationMenu(close)}
+        >
+          <div className="flex items-center mr-5"
+            style={{
+              cursor: 'pointer',
+              height: 40
+            }}>
+            <img
+              src="https://d1ppmvgsdgdlyy.cloudfront.net/notification.svg"
+              alt="notification"
+              style={{ width: 25 }}
+            />
+            {notifications.length > 0 && (
+              <div style={{ marginLeft: -10, marginRight: 20 }}>
+                <NotificationBadge
+                  count={notifications.length}
+                  effect={Effect.SCALE}
+                />
+              </div>
+            )}
+          </div>
+        </StatefulPopover>
+
+        {/* User profile */}
+        <StatefulPopover
+        placement={PLACEMENT.bottomLeft}
+        content={({ close }) => (
+          <StatefulMenu
+            items={[
+              {
+                label: 'My Profile',
+                icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/user.svg'
+              },
+              {
+                label: 'Settings',
+                icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/setting.svg'
+              },
+              {
+                label: 'Log Out',
+                icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/logout.svg'
+              }
+            ]}
+            onItemSelect={item => {
+              close();
+              switch (item.item.label) {
+                case 'My Profile':
+                  history.push(`/user/${user.username}`);
+                  break;
+                case 'Settings':
+                  history.push(`/settings`);
+                  break;
+                case 'Log Out':
+                  logoutDispatch({
+                    env: process.env.NODE_ENV
+                  });
+                  break;
+                default:
+                  break;
+              }
+            }}
+            overrides={{
+              List: { style: { width: '213px', outline: 'none' } }
+            }}
+          />
+        )}>
+          <div>
+            <div class="profilePic flex items-center lg:hidden"
+            style={{
+              width: 32,
+              height: 32,
+              background: `url(${generateHash(
+                user.username,
+                user.profileVersion
+              )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${user.username &&
+                user.username[0].toUpperCase()}.svg), ${stringToHslColor(
+                user.username,
+                80,
+                45
+              )}`,
+              backgroundPosition: 'center',
+              backgroundSize: 'cover',
+              borderRadius: '50%',
+              cursor: 'pointer',
+              backgroundRepeat: 'no-repeat'
+            }}></div>
+            <div 
+              className="hidden lg:flex items-center px-4 py-2 rounded-full 
+              bg-gray-200">
+              <div
+                className="profilePic"
+                style={{
+                  width: 32,
+                  height: 32,
+                  background: `url(${generateHash(
+                    user.username,
+                    user.profileVersion
+                  )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${user.username &&
+                    user.username[0].toUpperCase()}.svg), ${stringToHslColor(
+                    user.username,
+                    80,
+                    45
+                  )}`,
+                  backgroundPosition: 'center',
+                  backgroundSize: 'cover',
+                  borderRadius: '50%',
+                  marginRight: 10,
+                  cursor: 'pointer',
+                  backgroundRepeat: 'no-repeat'
+                }}
+              />
+              {user.username && user.username.length < 12 ? user.username : 'Profile'}
             </div>
-          </React.Fragment>
-        )}
-      </Media>
+          </div> 
+      </StatefulPopover>
+      </div>
+    );
+  } else { // If the user is NOT logged in, display this nav...
+    return (
+      <div className="flex items-center justify-start px-6 py-3 bg-white">
+        
+        {/* Main logo */}
+        <Link to="/home/discover" className="mr-auto">
+          <img
+          src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
+          alt="Giving Tree"
+          style={{ height: 30}}
+          />
+        </Link>
+
+        {/* Search bar */}
+        <div className="hidden md:block mr-auto px-6">
+          <Input
+          overrides={{
+            Before,
+            InputContainer: {
+              style: { borderRadius: '50px', border: '0', outlineOffset: '2px' }
+            }
+          }}
+          placeholder={center ? 'Search' : 'Search'}
+          onChange={e => {
+            console.log('e: ', e.target.value);
+            searchDispatch({ env: process.env.NODE_ENV, query: e.target.value });
+          }}/>
+          {searchResults.length !== 0 && (
+            <StatefulMenu
+              overrides={{
+                List: {
+                  style: {
+                    outline: 'none',
+                    padding: '0px',
+                    position: 'absolute',
+                    width: `${center ? '600px' : '200px'}`
+                  }
+                }
+              }}
+              items={searchResults}
+            />
+          )}
+        </div>
+        <div className="ml-auto flex items-center justify-end">
+          {/* Guidelines button */}
+          <Link className="hidden md:block mr-4"
+          to={Constants.PATHS.GUIDELINES}
+          onClick={() => history.push(Constants.PATHS.GUIDELINES)}>
+            <img
+              src="https://d1ppmvgsdgdlyy.cloudfront.net/first-aid.svg"
+              alt="guidelines"
+              style={{ width: 25, cursor: 'pointer' }}
+            />
+          </Link>
+
+          {/* Login link */}
+          <Link className="hidden md:inline mr-4"
+          style={{ textDecoration: 'none' }} to={Constants.PATHS.LOGIN}>
+            Login
+          </Link>
+
+          {/* Get started button */}
+          <Link className="py-2 px-4 rounded-full text-white bg-black"
+          onClick={() => history.push(Constants.PATHS.SIGNUP)}
+          to={Constants.PATHS.SIGNUP}>
+            Get started
+          </Link>
+        </div>
+        
+      </div>
     );
   }
 }
