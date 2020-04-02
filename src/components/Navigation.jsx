@@ -7,7 +7,9 @@ import Search from 'baseui/icon/search';
 import { Input } from 'baseui/input';
 import { StatefulMenu, OptionProfile } from 'baseui/menu';
 import { StatefulPopover, PLACEMENT } from 'baseui/popover';
-import ChevronDown from 'baseui/icon/chevron-down';
+import { RadioGroup, Radio } from 'baseui/radio';
+import { Select } from 'baseui/select';
+import { ALIGN } from 'baseui/header-navigation';
 import {
   logout,
   getCurrentUser,
@@ -25,7 +27,6 @@ import { subscribeToNotifications } from '../utils/socket';
 import moment from 'moment';
 
 import { connect } from 'react-redux';
-import Logo from './Logo/Logo';
 function Before() {
   const [css, theme] = useStyletron();
   return (
@@ -289,8 +290,98 @@ function Navigation(props) {
   // If the user IS logged in, display this nav...
   if (authenticated) {
     return (
+      
       <div
       className="flex items-center justify-start px-6 py-3 bg-white">
+        <button className="rounded-full bg-green text-white px-4 py-2"
+          style={{
+            position: 'fixed',
+            backgroundColor: '#8ec755',
+            bottom: '1rem',
+            right: '1rem',
+            zIndex: 999,
+            boxShadow: `1px 1px 6px grey`
+          }}
+          onClick={() => setIsOpen(true)}
+        >
+          Give Feedback!
+        </button>
+        <Modal
+          overrides={{ Dialog: { style: { borderRadius: '7px' } } }}
+          onClose={close}
+          isOpen={isOpen}
+        >
+          <ModalHeader>Feedback for Giving Tree</ModalHeader>
+          <ModalBody>
+            How would you feel if you could no longer use Giving Tree?
+            <RadioGroup
+              value={pmf}
+              onChange={e => setPmf(e.target.value)}
+              align={ALIGN.vertical}
+            >
+              <Radio overrides={{ Label: { style: { fontSize: 14 } } }} value="1">
+                Not disappointed
+              </Radio>
+              <Radio overrides={{ Label: { style: { fontSize: 14 } } }} value="2">
+                Somewhat disappointed
+              </Radio>
+              <Radio overrides={{ Label: { style: { fontSize: 14 } } }} value="3">
+                Very disappointed
+              </Radio>
+            </RadioGroup>
+            <br />
+            What type of people do you think would most benefit from Giving Tree?
+            <Input
+              value={benefit}
+              onChange={e => setBenefit(e.target.value)}
+              placeholder="Type your response"
+            />
+            <br />
+            What best describes your role?
+            <Select
+              options={[
+                { id: 'Post Doc', value: 'Post Doc' },
+                { id: 'Student', value: 'Student' },
+                { id: 'Health Provider', value: 'Health Provider' },
+                { id: 'Venture Capitalist', value: 'Venture Capitalist' },
+                { id: 'Researcher', value: 'Researcher' },
+                { id: 'Lab Director', value: 'Lab Director' },
+                { id: 'Medical Doctor', value: 'Medical Doctor' },
+                { id: 'Patient', value: 'Patient' },
+                { id: 'Engineer', value: 'Engineer' },
+                { id: 'Other', value: 'Other' }
+              ]}
+              labelKey="id"
+              valueKey="value"
+              maxDropdownHeight="250px"
+              placeholder="Select role"
+              onChange={({ value }) => setUserType(value)}
+              value={userType}
+            />
+            <br />
+            What is the main benefit <strong>you</strong> receive from Giving Tree?
+            <Input
+              value={personalBenefit}
+              onChange={e => setPersonalBenefit(e.target.value)}
+              placeholder="Type your response"
+            />
+            <br />
+            How can we improve Giving Tree for you?
+            <Input
+              value={suggestion}
+              onChange={e => setSuggestion(e.target.value)}
+              placeholder="Type your response"
+            />
+          </ModalBody>
+          <ModalFooter>
+            <ModalButton size={'compact'} kind={'minimal'} onClick={close}>
+              Cancel
+            </ModalButton>
+            <ModalButton size={'compact'} onClick={() => handleFeedback()}>
+              Submit
+            </ModalButton>
+          </ModalFooter>
+        </Modal>
         {/* Main logo */}
         <Link to="/home/discover" className="mr-auto">
           <img

@@ -1,10 +1,9 @@
-.App {
-  text-align: center;
+#root {
+  height: 100%;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+#root > div {
+  height: 100%;
 }
 
 .green-placeholder ::placeholder {

@@ -16,8 +16,11 @@ function Footer(props) {
     >
       {matches => (
         <React.Fragment>
-          <div style={{ position: 'relative' }} className="footer">
-            <div class="grid grid-cols-5 gap-4" style={{ paddingTop: 58, paddingLeft: 112 }}>
+          <div style={{
+            height: 'auto',
+            position: 'relative',
+          }} className="footer px-10 py-6">
+            <div className="grid grid-flow-row grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
               <div>
                 <Link to="/about#about-us">
                   <div className="footer-heading">The Giving Tree</div>
@@ -78,23 +81,26 @@ function Footer(props) {
                   </div>
                 </Link>
               </div>
-              <div>
-                <div className="footer-heading">Join The Community</div>
-                <div className="flex justify-start">
-                  <button
-                    onClick={() => (window.location = '/signup')}
-                    style={{ outline: 'none', fontSize: 18 }}
-                    className="bg-black hover:bg-green-700 text-white font-bold py-2 px-8 rounded"
-                  >
-                    Sign Up
-                  </button>
-                </div>
+              <div className="text-left">
+                <div className="footer-heading mb-3">Join The Community</div>
+                <button
+                  onClick={() => (window.location = '/signup')}
+                  style={{ outline: 'none', fontSize: 18 }}
+                  className="bg-black hover:bg-green-700 text-white font-bold py-2 px-8 rounded"
+                >
+                  Sign Up
+                </button>
                 <br />
                 {/* <div className="footer-heading mt-8">Follow Us On</div> */}
               </div>
-              <div>
+              <div className="block sm:hidden md:block">
                 <img
-                  style={{ position: 'absolute', bottom: 0, right: 0 }}
+                  style={{ 
+                    position: 'absolute', 
+                    bottom: 0, 
+                    right: 0,
+                    width: '175px'
+                  }}
                   src="https://d1ppmvgsdgdlyy.cloudfront.net/footer-logo.svg"
                   alt="footer"
                 />
