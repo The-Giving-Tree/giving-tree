@@ -166,49 +166,59 @@ function Submit(props) {
     return foodJSX();
   };
 
+  const validNumber = phoneNumber === '' || phoneNumber.length >= 12;
+  const validAddress = address === '' || !isEmpty(latLng);
+  const allowSubmit = phoneNumber.length >= 12 && !isEmpty(latLng);
+
   const foodJSX = () => {
     return (
       <div>
-        <div className="flex justify-between">
-          <div className="font-bold text-base text-left my-1">Title</div>
-          <div className="font-bold text-base text-left ml-3 my-1">Phone Number</div>
-        </div>
         <div className="flex justify-content">
-          <input
-            onChange={e => {
-              setTitle(e.target.value);
-            }}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="title"
-            value={title}
-            type="text"
-            placeholder="Title"
-          />
-          <input
-            onChange={e => {
-              var phoneValue = e.target.value;
-              var output;
-              phoneValue = phoneValue.replace(/[^0-9]/g, '');
-              var area = phoneValue.substr(0, 3);
-              var pre = phoneValue.substr(3, 3);
-              var tel = phoneValue.substr(6, 4);
+          <div style={{ width: '100%' }}>
+            <div className="font-bold text-base text-left my-1">Request Summary</div>
+            <input
+              onChange={e => {
+                setTitle(e.target.value);
+              }}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="summary"
+              value={title}
+              type="text"
+              placeholder="Briefly explain your request, e.g. Sick and need help grocery shopping"
+            />
+          </div>
+          <div className="ml-3" style={{ width: '100%' }}>
+            <div className="font-bold text-base text-left my-1">Phone Number</div>
+            <input
+              onChange={e => {
+                var phoneValue = e.target.value;
+                var output;
+                phoneValue = phoneValue.replace(/[^0-9]/g, '');
+                var area = phoneValue.substr(0, 3);
+                var pre = phoneValue.substr(3, 3);
+                var tel = phoneValue.substr(6, 4);
 
-              if (area.length < 3) {
-                output = area;
-              } else if (area.length === 3 && pre.length < 3) {
-                output = `${' '}${area}${' '}${' '}${pre}`;
-              } else if (area.length === 3 && pre.length === 3) {
-                output = `${''}${area}${''}${' '}${pre}${' '}${tel}`;
-              }
-              setPhoneNumber(output);
-            }}
-            className="ml-3 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="title"
-            value={phoneNumber}
-            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-            type="tel"
-            placeholder="Phone Number (for delivery confirmation)"
-          />
+                if (area.length < 3) {
+                  output = area;
+                } else if (area.length === 3 && pre.length < 3) {
+                  output = `${' '}${area}${' '}${' '}${pre}`;
+                } else if (area.length === 3 && pre.length === 3) {
+                  output = `${''}${area}${''}${' '}${pre}${' '}${tel}`;
+                }
+                setPhoneNumber(output);
+              }}
+              className={`shadow appearance-none border ${!validNumber &&
+                'border-red-500'} rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+              id="title"
+              value={phoneNumber}
+              pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+              type="tel"
+              placeholder="Phone Number (for delivery confirmation)"
+            />
+            {!validNumber && (
+              <p class="text-red-500 text-xs italic">Please enter a valid number.</p>
+            )}
+          </div>
         </div>
         <div className="font-bold text-base text-left my-1 mt-4">Delivery Address</div>
         <PlacesAutocomplete
@@ -244,14 +254,18 @@ function Submit(props) {
             <div>
               <input
                 {...getInputProps({
-                  placeholder: 'Enter an address',
+                  placeholder: 'Where would you like your items to be delivered?',
                   className: 'location-search-input'
                 })}
                 value={address}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className={`shadow appearance-none border ${!validAddress &&
+                  'border-red-500'} rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
                 id="address"
                 type="text"
               />
+              {!validAddress && (
+                <p class="text-red-500 text-xs italic">Please enter a valid address.</p>
+              )}
               <div className="autocomplete-dropdown-container">
                 {loading && <div>Loading...</div>}
                 {suggestions.map(suggestion => {
@@ -286,7 +300,7 @@ function Submit(props) {
           id="description"
           value={description}
           type="text"
-          placeholder="tell us a little more about your request..."
+          placeholder="Please be specific so that helpers can quickly and easily understand what you need."
         />
         <div className="font-bold text-base text-left my-1 mt-4">Due Date</div>
         <input
@@ -397,8 +411,11 @@ function Submit(props) {
                     alert('please fill out all fields');
                   }
                 }}
-                style={{ outline: 'none' }}
-                className={`bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded`}
+                disabled={!allowSubmit}
+                style={{ outline: 'none', cursor: allowSubmit ? 'pointer' : 'not-allowed' }}
+                className={`${
+                  !allowSubmit ? 'bg-gray-500' : 'bg-green-500 hover:bg-green-700'
+                } text-white font-bold py-2 px-4 rounded`}
               >
                 Submit
               </button>

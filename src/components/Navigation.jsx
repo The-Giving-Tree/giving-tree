@@ -290,10 +290,9 @@ function Navigation(props) {
   // If the user IS logged in, display this nav...
   if (authenticated) {
     return (
-      
-      <header
-      className="flex items-center justify-start px-6 py-3 bg-white">
-        <button className="rounded-full bg-green text-white px-4 py-2"
+      <header className="flex items-center justify-start px-6 py-3 bg-white">
+        <button
+          className="rounded-full bg-green text-white px-4 py-2"
           style={{
             position: 'fixed',
             backgroundColor: '#8ec755',
@@ -314,11 +313,7 @@ function Navigation(props) {
           <ModalHeader>Feedback for Giving Tree</ModalHeader>
           <ModalBody>
             How would you feel if you could no longer use Giving Tree?
-            <RadioGroup
-              value={pmf}
-              onChange={e => setPmf(e.target.value)}
-              align={ALIGN.vertical}
-            >
+            <RadioGroup value={pmf} onChange={e => setPmf(e.target.value)} align={ALIGN.vertical}>
               <Radio overrides={{ Label: { style: { fontSize: 14 } } }} value="1">
                 Not disappointed
               </Radio>
@@ -385,9 +380,9 @@ function Navigation(props) {
         {/* Main logo */}
         <Link to="/home/discover" className="mr-auto">
           <img
-          src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
-          alt="Giving Tree"
-          style={{ height: 30}}
+            src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
+            alt="Giving Tree"
+            style={{ height: 30 }}
           />
         </Link>
 
@@ -401,13 +396,9 @@ function Navigation(props) {
                 style: {
                   height: '100%',
                   borderBottomLeftRadius:
-                    searchResults.length !== 0 && !shouldCloseSearchResults
-                      ? '0px'
-                      : '25px',
+                    searchResults.length !== 0 && !shouldCloseSearchResults ? '0px' : '25px',
                   borderBottomRightRadius:
-                    searchResults.length !== 0 && !shouldCloseSearchResults
-                      ? '0px'
-                      : '25px',
+                    searchResults.length !== 0 && !shouldCloseSearchResults ? '0px' : '25px',
                   borderTopLeftRadius: '25px',
                   borderTopRightRadius: '25px',
                   border: '0',
@@ -452,20 +443,12 @@ function Navigation(props) {
                   Option: {
                     component: OptionProfile,
                     props: {
-                      getProfileItemLabels: ({
-                        username,
-                        label,
-                        name,
-                        title,
-                        type
-                      }) => ({
+                      getProfileItemLabels: ({ username, label, name, title, type }) => ({
                         title: username,
                         subtitle: (
                           <div style={{ display: 'inline' }}>
                             ...{sanitize(label.split('<em>')[0])}
-                            <div
-                              style={{ backgroundColor: '#FFFF00', display: 'inline' }}
-                            >
+                            <div style={{ backgroundColor: '#FFFF00', display: 'inline' }}>
                               {sanitize(label.split('<em>')[1].split('</em>')[0])}
                             </div>
                             {sanitize(label.split('</em>')[1])}...
@@ -476,9 +459,7 @@ function Navigation(props) {
                       getProfileItemImg: item => item.image,
                       getProfileItemImgText: item => (
                         <div>
-                          {item.label
-                            .replace('<em>', '<strong>')
-                            .replace('</em>', '</strong>')}
+                          {item.label.replace('<em>', '<strong>').replace('</em>', '</strong>')}
                         </div>
                       )
                     }
@@ -500,22 +481,29 @@ function Navigation(props) {
             </OutsideDetector>
           )}
         </div>
-        
+
         {/* Submit Link */}
-        <Link className="p-2 mr-5" to={Constants.PATHS.SUBMIT}
-        onClick={() => {
-          selectMenuDispatch({ selectMenu: '' });
-          history.push(Constants.PATHS.SUBMIT);
-        }}>
-          <img src="https://d1ppmvgsdgdlyy.cloudfront.net/submit.svg"
+        <Link
+          className="p-2 mr-5"
+          to={Constants.PATHS.SUBMIT}
+          onClick={() => {
+            selectMenuDispatch({ selectMenu: '' });
+            history.push(Constants.PATHS.SUBMIT);
+          }}
+        >
+          <img
+            src="https://d1ppmvgsdgdlyy.cloudfront.net/submit.svg"
             alt="document"
-            style={{ height: 26 }}/>
+            style={{ height: 26 }}
+          />
         </Link>
-      
+
         {/* Guidelines Link */}
-        <Link className="hidden md:block mr-5"
-        to={Constants.PATHS.GUIDELINES}
-        onClick={() => history.push(Constants.PATHS.GUIDELINES)}>
+        <Link
+          className="hidden md:block mr-5"
+          to={Constants.PATHS.GUIDELINES}
+          onClick={() => history.push(Constants.PATHS.GUIDELINES)}
+        >
           <img
             src="https://d1ppmvgsdgdlyy.cloudfront.net/first-aid.svg"
             alt="guidelines"
@@ -528,11 +516,13 @@ function Navigation(props) {
           placement={PLACEMENT.bottomLeft}
           content={({ close }) => notificationMenu(close)}
         >
-          <div className="flex items-center mr-5"
+          <div
+            className="flex items-center mr-5"
             style={{
               cursor: 'pointer',
               height: 40
-            }}>
+            }}
+          >
             <img
               src="https://d1ppmvgsdgdlyy.cloudfront.net/notification.svg"
               alt="notification"
@@ -540,10 +530,7 @@ function Navigation(props) {
             />
             {notifications.length > 0 && (
               <div style={{ marginLeft: -10, marginRight: 20 }}>
-                <NotificationBadge
-                  count={notifications.length}
-                  effect={Effect.SCALE}
-                />
+                <NotificationBadge count={notifications.length} effect={Effect.SCALE} />
               </div>
             )}
           </div>
@@ -551,69 +538,69 @@ function Navigation(props) {
 
         {/* User profile */}
         <StatefulPopover
-        placement={PLACEMENT.bottomLeft}
-        content={({ close }) => (
-          <StatefulMenu
-            items={[
-              {
-                label: 'My Profile',
-                icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/user.svg'
-              },
-              {
-                label: 'Settings',
-                icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/setting.svg'
-              },
-              {
-                label: 'Log Out',
-                icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/logout.svg'
-              }
-            ]}
-            onItemSelect={item => {
-              close();
-              switch (item.item.label) {
-                case 'My Profile':
-                  history.push(`/user/${user.username}`);
-                  break;
-                case 'Settings':
-                  history.push(`/settings`);
-                  break;
-                case 'Log Out':
-                  logoutDispatch({
-                    env: process.env.NODE_ENV
-                  });
-                  break;
-                default:
-                  break;
-              }
-            }}
-            overrides={{
-              List: { style: { width: '213px', outline: 'none' } }
-            }}
-          />
-        )}>
+          placement={PLACEMENT.bottomLeft}
+          content={({ close }) => (
+            <StatefulMenu
+              items={[
+                {
+                  label: 'My Profile',
+                  icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/user.svg'
+                },
+                {
+                  label: 'Settings',
+                  icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/setting.svg'
+                },
+                {
+                  label: 'Log Out',
+                  icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/logout.svg'
+                }
+              ]}
+              onItemSelect={item => {
+                close();
+                switch (item.item.label) {
+                  case 'My Profile':
+                    history.push(`/user/${user.username}`);
+                    break;
+                  case 'Settings':
+                    history.push(`/settings`);
+                    break;
+                  case 'Log Out':
+                    logoutDispatch({
+                      env: process.env.NODE_ENV
+                    });
+                    break;
+                  default:
+                    break;
+                }
+              }}
+              overrides={{
+                List: { style: { width: '213px', outline: 'none' } }
+              }}
+            />
+          )}
+        >
           <div>
-            <div className="profilePic flex items-center lg:hidden"
-            style={{
-              width: 32,
-              height: 32,
-              background: `url(${generateHash(
-                user.username,
-                user.profileVersion
-              )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${user.username &&
-                user.username[0].toUpperCase()}.svg), ${stringToHslColor(
-                user.username,
-                80,
-                45
-              )}`,
-              backgroundPosition: 'center',
-              backgroundSize: 'cover',
-              borderRadius: '50%',
-              cursor: 'pointer',
-              backgroundRepeat: 'no-repeat'
-            }}></div>
-            <div 
+            <div
+              className="profilePic flex items-center lg:hidden"
+              style={{
+                width: 32,
+                height: 32,
+                background: `url(${generateHash(
+                  user.username,
+                  user.profileVersion
+                )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${user.username &&
+                  user.username[0].toUpperCase()}.svg), ${stringToHslColor(user.username, 80, 45)}`,
+                backgroundPosition: 'center',
+                backgroundSize: 'cover',
+                borderRadius: '50%',
+                cursor: 'pointer',
+                backgroundRepeat: 'no-repeat'
+              }}
+            ></div>
+            <div
               className="hidden lg:flex items-center px-4 py-2 rounded-full 
-              bg-gray-200">
+              bg-gray-200"
+            >
               <div
                 className="profilePic"
                 style={{
@@ -638,37 +625,38 @@ function Navigation(props) {
               />
               {user.username && user.username.length < 12 ? user.username : 'Profile'}
             </div>
-          </div> 
-      </StatefulPopover>
+          </div>
+        </StatefulPopover>
       </header>
     );
-  } else { // If the user is NOT logged in, display this nav...
+  } else {
+    // If the user is NOT logged in, display this nav...
     return (
       <header className="flex items-center justify-start px-6 py-3 bg-white">
-        
         {/* Main logo */}
         <Link to="/home/discover" className="mr-auto">
           <img
-          src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
-          alt="Giving Tree"
-          style={{ height: 30}}
+            src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
+            alt="Giving Tree"
+            style={{ height: 30 }}
           />
         </Link>
 
         {/* Search bar */}
         <div className="hidden md:block mr-auto px-6">
           <Input
-          overrides={{
-            Before,
-            InputContainer: {
-              style: { borderRadius: '50px', border: '0', outlineOffset: '2px' }
-            }
-          }}
-          placeholder={center ? 'Search' : 'Search'}
-          onChange={e => {
-            console.log('e: ', e.target.value);
-            searchDispatch({ env: process.env.NODE_ENV, query: e.target.value });
-          }}/>
+            overrides={{
+              Before,
+              InputContainer: {
+                style: { borderRadius: '50px', border: '0', outlineOffset: '2px' }
+              }
+            }}
+            placeholder={center ? 'Search' : 'Search'}
+            onChange={e => {
+              console.log('e: ', e.target.value);
+              searchDispatch({ env: process.env.NODE_ENV, query: e.target.value });
+            }}
+          />
           {searchResults.length !== 0 && (
             <StatefulMenu
               overrides={{
@@ -687,9 +675,11 @@ function Navigation(props) {
         </div>
         <div className="ml-auto flex items-center justify-end">
           {/* Guidelines button */}
-          <Link className="hidden md:block mr-4"
-          to={Constants.PATHS.GUIDELINES}
-          onClick={() => history.push(Constants.PATHS.GUIDELINES)}>
+          <Link
+            className="hidden md:block mr-4"
+            to={Constants.PATHS.GUIDELINES}
+            onClick={() => history.push(Constants.PATHS.GUIDELINES)}
+          >
             <img
               src="https://d1ppmvgsdgdlyy.cloudfront.net/first-aid.svg"
               alt="guidelines"
@@ -698,19 +688,23 @@ function Navigation(props) {
           </Link>
 
           {/* Login link */}
-          <Link className="hidden md:inline mr-4"
-          style={{ textDecoration: 'none' }} to={Constants.PATHS.LOGIN}>
+          <Link
+            className="hidden md:inline mr-4"
+            style={{ textDecoration: 'none' }}
+            to={Constants.PATHS.LOGIN}
+          >
             Login
           </Link>
 
           {/* Get started button */}
-          <Link className="py-2 px-4 rounded-full text-white bg-black"
-          onClick={() => history.push(Constants.PATHS.SIGNUP)}
-          to={Constants.PATHS.SIGNUP}>
+          <Link
+            className="py-2 px-4 rounded-full text-white bg-black"
+            onClick={() => history.push(Constants.PATHS.SIGNUP)}
+            to={Constants.PATHS.SIGNUP}
+          >
             Get started
           </Link>
         </div>
-        
       </header>
     );
   }
@@ -722,7 +716,7 @@ const mapDispatchToProps = dispatch => ({
   addToNotificationsDispatch: payload => dispatch(addToNotifications(payload)),
   clearAllNotificationsDispatch: payload => dispatch(clearAllNotifications(payload)),
   searchDispatch: payload => dispatch(search(payload)),
-  selectMenuDispatch: payload => dispatch(selectMenu(payload)),
+  selectMenuDispatch: payload => dispatch(selectMenu(payload))
 });
 
 const mapStateToProps = state => ({

@@ -9,9 +9,7 @@ import { hotjar } from 'react-hotjar';
 import Media from 'react-media';
 import { Button, SHAPE } from 'baseui/button';
 import { useHistory } from 'react-router-dom';
-import { 
-  Modal, ModalHeader, ModalBody, ModalFooter, ModalButton
-} from 'baseui/modal';
+import { Modal, ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/modal';
 import Navigation from '../../components/Navigation';
 import Footer from '../../components/Footer';
 import { StyledAction } from 'baseui/card';
@@ -20,12 +18,7 @@ import { connect } from 'react-redux';
 
 import './Home.css';
 
-import {
-  register,
-  selectMenu,
-  initiateReset,
-  login
-} from '../../store/actions/auth/auth-actions';
+import { register, selectMenu, initiateReset, login } from '../../store/actions/auth/auth-actions';
 
 import passwordValidator from 'password-validator';
 var schema = new passwordValidator();
@@ -56,7 +49,7 @@ function Home(props) {
     errorMessage,
     registerLoading,
     initiateResetSuccess,
-    selectMenuDispatch,
+    selectMenuDispatch
   } = props;
 
   const history = useHistory();
@@ -103,7 +96,7 @@ function Home(props) {
       username,
       password,
       rememberMe: true // by default
-    })
+    });
   };
 
   const authenticated = localStorage.getItem('giving_tree_jwt');
@@ -118,7 +111,8 @@ function Home(props) {
 
   const tabDetailJSX = () => {
     return (
-      <Tabs overrides={{
+      <Tabs
+        overrides={{
           Tab: {
             style: {
               outline: 'none'
@@ -128,7 +122,7 @@ function Home(props) {
             style: {
               outline: 'none',
               width: '100%',
-              margin: '0 auto',
+              margin: '0 auto'
             }
           },
           TabBar: {
@@ -170,92 +164,87 @@ function Home(props) {
               }
             }
           }}
-          title="Sign Up">
+          title="Sign Up"
+        >
+          <div className="pt-12">
+            {errorMessage && (
+              <p className="my-3 text-sm" style={{ color: 'rgb(204, 50, 63)' }}>
+                {errorMessage}
+              </p>
+            )}
+            <Input
+              value={name}
+              onChange={event => setName(event.currentTarget.value)}
+              placeholder="Name"
+            />
+            <br />
+            <Input
+              value={username}
+              onChange={event => setUsername(event.currentTarget.value)}
+              placeholder="Username"
+            />
+            <br />
+            <Input
+              value={email}
+              onChange={event => setEmail(event.currentTarget.value)}
+              placeholder="Email"
+            />
+            <br />
+            <Input
+              value={password}
+              error={password && !validPassword}
+              positive={password && validPassword}
+              overrides={{
+                After:
+                  password && !validPassword ? Negative : password && validPassword ? Positive : ''
+              }}
+              type="password"
+              onChange={event => {
+                setPassword(event.currentTarget.value);
 
-            <div className="pt-12">
-              {errorMessage && (
-                <p className="my-3 text-sm" style={{ color: 'rgb(204, 50, 63)' }}>
-                  {errorMessage}
-                </p>
-              )}
-              <Input
-                value={name}
-                onChange={event => setName(event.currentTarget.value)}
-                placeholder="Name"
-              />
-              <br />
-              <Input
-                value={username}
-                onChange={event => setUsername(event.currentTarget.value)}
-                placeholder="Username"
-              />
-              <br />
-              <Input
-                value={email}
-                onChange={event => setEmail(event.currentTarget.value)}
-                placeholder="Email"
-              />
-              <br />
-              <Input
-                value={password}
-                error={password && !validPassword}
-                positive={password && validPassword}
-                overrides={{
-                  After:
-                    password && !validPassword
-                      ? Negative
-                      : password && validPassword
-                      ? Positive
-                      : ''
-                }}
-                type="password"
-                onChange={event => {
-                  setPassword(event.currentTarget.value);
+                if (schema.validate(event.currentTarget.value)) {
+                  setValidPassword(true);
+                } else {
+                  setValidPassword(false);
+                }
+              }}
+              placeholder="Password"
+              onKeyPress={event => enterPressed(event)}
+            />
+            {password && !validPassword && (
+              <div style={{ fontSize: 10, textAlign: 'left' }}>
+                Password must be 8+ characters, at least 1 of lowercase [a-z], uppercase [A-Z],
+                special character '!._*,#'), number [0-9]
+              </div>
+            )}
 
-                  if (schema.validate(event.currentTarget.value)) {
-                    setValidPassword(true);
-                  } else {
-                    setValidPassword(false);
-                  }
-                }}
-                placeholder="Password"
-                onKeyPress={event => enterPressed(event)}
-              />
-              {password && !validPassword && (
-                <div style={{ fontSize: 10, textAlign: 'left' }}>
-                  Password must be 8+ characters, at least 1 of lowercase [a-z], uppercase [A-Z],
-                  special character '!._*,#'), number [0-9]
-                </div>
-              )}
-
-              <br />
-              <StyledAction>
-                <Button
-                  onClick={handleSignup}
-                  shape={SHAPE.pill}
-                  disabled={
-                    !name || !email || !username || !password || registerLoading || !validPassword
-                  }
-                  isLoading={registerLoading}
-                  overrides={{
-                    BaseButton: { style: { width: '100%' } }
-                  }}
-                >
-                  Sign Up
-                </Button>
-              </StyledAction>
-              <br />
+            <br />
+            <StyledAction>
               <Button
-                onClick={() => history.push('/home/discover')}
+                onClick={handleSignup}
                 shape={SHAPE.pill}
+                disabled={
+                  !name || !email || !username || !password || registerLoading || !validPassword
+                }
+                isLoading={registerLoading}
                 overrides={{
                   BaseButton: { style: { width: '100%' } }
                 }}
               >
-                Sign Up Later
+                Sign Up
               </Button>
-            </div>
-          
+            </StyledAction>
+            <br />
+            <Button
+              onClick={() => history.push('/home/discover')}
+              shape={SHAPE.pill}
+              overrides={{
+                BaseButton: { style: { width: '100%' } }
+              }}
+            >
+              Sign Up Later
+            </Button>
+          </div>
         </Tab>
         <Tab
           overrides={{
@@ -273,108 +262,108 @@ function Home(props) {
               }
             }
           }}
-          title="Login">
-            <div className="pt-12">
-              {errorMessage && (
-                <p className="my-3 text-sm" style={{
-                  color: 'rgb(204, 50, 63)'
-                }}>
-                  {errorMessage}
-                </p>
-              )}
-              <Input
-                value={username}
-                onChange={event => setUsername(event.currentTarget.value)}
-                placeholder="Username"
-              />
-              <br />
-              <Input
-                value={password}
-                type="password"
-                onChange={event => setPassword(event.currentTarget.value)}
-                placeholder="Password"
-                onKeyPress={event => enterPressed(event)}
-              />
-              <br />
-              <Modal onClose={() => setResetModal(false)} isOpen={resetModal}>
-                <ModalHeader>Reset Your Password</ModalHeader>
-                <ModalBody>
-                  Please enter your email
-                  <Input
-                    value={resetEmail}
-                    onChange={e => setResetEmail(e.target.value)}
-                    placeholder="Email"
-                  />
-                </ModalBody>
-                <ModalFooter>
-                  <ModalButton
-                    size={'compact'}
-                    kind={'minimal'}
-                    onClick={() => setResetModal(false)}
-                  >
-                    Cancel
-                  </ModalButton>
-                  <ModalButton
-                    size={'compact'}
-                    onClick={() => {
-                      initiateResetDispatch({
-                        env: process.env.NODE_ENV,
-                        email: resetEmail
-                      });
-
-                      setResetModal(false);
-                      setResetEmail('');
-                    }}
-                  >
-                    Reset
-                  </ModalButton>
-                </ModalFooter>
-              </Modal>
-              {initiateResetSuccess && (
-                <Notification
-                  autoHideDuration={3000}
-                  overrides={{
-                    Body: {
-                      style: {
-                        position: 'fixed',
-                        left: 0,
-                        bottom: 0,
-                        textAlign: 'center',
-                        backgroundColor: 'rgb(54, 135, 89)',
-                        color: 'white'
-                      }
-                    }
-                  }}
-                  kind={'positive'}
-                >
-                  Reset Instructions Sent!
-                </Notification>
-              )}
-              <div
+          title="Login"
+        >
+          <div className="pt-12">
+            {errorMessage && (
+              <p
+                className="my-3 text-sm"
                 style={{
-                  textAlign: 'right',
-                  cursor: 'pointer',
-                  color: 'rgb(0, 121, 211)'
+                  color: 'rgb(204, 50, 63)'
                 }}
-                onClick={() => setResetModal(true)}
               >
-                Forgot password?
-              </div>
-              <br />
-              <StyledAction>
-                <Button
-                  onClick={handleLogin}
-                  disabled={!username || !password || loginLoading}
-                  shape={SHAPE.pill}
-                  overrides={{
-                    BaseButton: { style: { width: '100%' } }
+                {errorMessage}
+              </p>
+            )}
+            <Input
+              value={username}
+              onChange={event => setUsername(event.currentTarget.value)}
+              placeholder="Username"
+            />
+            <br />
+            <Input
+              value={password}
+              type="password"
+              onChange={event => setPassword(event.currentTarget.value)}
+              placeholder="Password"
+              onKeyPress={event => enterPressed(event)}
+            />
+            <br />
+            <Modal onClose={() => setResetModal(false)} isOpen={resetModal}>
+              <ModalHeader>Reset Your Password</ModalHeader>
+              <ModalBody>
+                Please enter your email
+                <Input
+                  value={resetEmail}
+                  onChange={e => setResetEmail(e.target.value)}
+                  placeholder="Email"
+                />
+              </ModalBody>
+              <ModalFooter>
+                <ModalButton size={'compact'} kind={'minimal'} onClick={() => setResetModal(false)}>
+                  Cancel
+                </ModalButton>
+                <ModalButton
+                  size={'compact'}
+                  onClick={() => {
+                    initiateResetDispatch({
+                      env: process.env.NODE_ENV,
+                      email: resetEmail
+                    });
+
+                    setResetModal(false);
+                    setResetEmail('');
                   }}
-                  isLoading={loginLoading}
                 >
-                  Login
-                </Button>
-              </StyledAction>
+                  Reset
+                </ModalButton>
+              </ModalFooter>
+            </Modal>
+            {initiateResetSuccess && (
+              <Notification
+                autoHideDuration={3000}
+                overrides={{
+                  Body: {
+                    style: {
+                      position: 'fixed',
+                      left: 0,
+                      bottom: 0,
+                      textAlign: 'center',
+                      backgroundColor: 'rgb(54, 135, 89)',
+                      color: 'white'
+                    }
+                  }
+                }}
+                kind={'positive'}
+              >
+                Reset Instructions Sent!
+              </Notification>
+            )}
+            <div
+              style={{
+                textAlign: 'right',
+                cursor: 'pointer',
+                color: 'rgb(0, 121, 211)'
+              }}
+              onClick={() => setResetModal(true)}
+            >
+              Forgot password?
             </div>
+            <br />
+            <StyledAction>
+              <Button
+                onClick={handleLogin}
+                disabled={!username || !password || loginLoading}
+                shape={SHAPE.pill}
+                overrides={{
+                  BaseButton: { style: { width: '100%' } }
+                }}
+                isLoading={loginLoading}
+              >
+                Login
+              </Button>
+            </StyledAction>
+          </div>
         </Tab>
       </Tabs>
     );
@@ -398,12 +387,8 @@ function Home(props) {
     return (
       <div className="container mx-auto max-w-xs sm:max-w-md md:max-w-screen-md">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 py-10">
-          <div className="px-6 md:pl-12 md:pr-10 lg:px-16">
-            {detailJSX()}
-          </div>
-          <div className="px-6 md:pl-10 md:pr-12 lg:px-16">
-            {tabDetailJSX()}
-          </div>
+          <div className="px-6 md:pl-12 md:pr-10 lg:px-16">{detailJSX()}</div>
+          <div className="px-6 md:pl-10 md:pr-12 lg:px-16">{tabDetailJSX()}</div>
         </div>
       </div>
     );
@@ -440,8 +425,6 @@ function Home(props) {
     );
   }
 
-  
-
   return (
     <div className="h-full flex flex-col">
       <Navigation selectMenuDispatch={selectMenuDispatch} searchBarPosition="center" />
@@ -453,7 +436,8 @@ function Home(props) {
             medium: '(min-width: 768px)',
             large: '(min-width: 1024px)',
             xl: '(min-width: 1280px)'
-          }}>
+          }}
+        >
           {matches =>
             authenticated ? (
               <React.Fragment>
@@ -471,19 +455,22 @@ function Home(props) {
                     fontSize: matches.small || matches.medium ? 25 : 36
                   }}
                 >
-                  <div style={{ 
-                    fontSize: 10, 
-                    position: 'absolute', 
-                    bottom: 0, 
-                    left: 0 
-                  }}>
+                  <div
+                    style={{
+                      fontSize: 10,
+                      position: 'absolute',
+                      bottom: 0,
+                      left: 0
+                    }}
+                  >
                     Dribbbled by @tubik_arts
                   </div>
                   <div
                     style={{
                       width: matches.small || matches.medium ? '80%' : '35%',
                       textShadow: '0px 0px 3px #000'
-                    }}>
+                    }}
+                  >
                     We are waves of the same sea,
                     <br />
                     leaves of the same tree,
@@ -492,12 +479,13 @@ function Home(props) {
                     <br />
                     <button
                       onClick={() => (window.location = '/home/discover')}
-                      style={{ 
-                        outline: 'none', 
-                        fontSize: 26, 
-                        backgroundColor: '#8ec755' 
+                      style={{
+                        outline: 'none',
+                        fontSize: 26,
+                        backgroundColor: '#8ec755'
                       }}
-                      className="mt-10 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                      className="mt-10 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                    >
                       Get Started
                     </button>
                   </div>
@@ -506,20 +494,18 @@ function Home(props) {
             ) : (
               <div className="flex-grow">
                 <div className="grid grid-cols-1 lg:grid-cols-3 h-full">
-                  <div className="col-span-2 px-6 flex"
+                  <div
+                    className="col-span-2 px-6 flex"
                     style={{
-                      height: (!matches.large && !matches.xl) ? 340 : '100%',
+                      height: !matches.large && !matches.xl ? 340 : '100%',
                       background:
                         'url(https://d1ppmvgsdgdlyy.cloudfront.net/landing.png) center center',
-                      backgroundSize: 'cover',
-                    }}>
-                  </div>
-                  <div className="col-span-1 bg-white">
-                    {homeJSX()}
-                  </div>
-                </div>                      
+                      backgroundSize: 'cover'
+                    }}
+                  ></div>
+                  <div className="col-span-1 bg-white">{homeJSX()}</div>
+                </div>
               </div>
-              
             )
           }
         </Media>

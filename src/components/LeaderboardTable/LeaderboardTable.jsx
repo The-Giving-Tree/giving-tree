@@ -2,25 +2,16 @@ import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import {
-  getLeaderboard,
-} from '../../store/actions/auth/auth-actions';
+import { getLeaderboard } from '../../store/actions/auth/auth-actions';
 
 function LeaderboardTable(props) {
-
-  const {
-    user,
-    limit,
-    leaderboard,
-    getLeaderboardDispatch
-  } = props;
+  const { user, limit, leaderboard, getLeaderboardDispatch } = props;
 
   const history = useHistory();
 
-  
   React.useEffect(() => {
     getLeaderboardDispatch({
-      env: process.env.NODE_ENV, 
+      env: process.env.NODE_ENV,
       location: 'global'
     });
   }, []);
@@ -58,8 +49,8 @@ function LeaderboardTable(props) {
 
   /**
    * The Leaderboard Table Row JSX
-   * @param {*} item 
-   * @param {*} i 
+   * @param {*} item
+   * @param {*} i
    */
   const getLeaderBoardRow = (item, i) => {
     return (
@@ -101,26 +92,26 @@ function LeaderboardTable(props) {
         </td>
       </tr>
     );
-  }
+  };
 
   /**
    * TODO: Add user ranking to user object.
    * Ranking is not stored in the user objects. Adding it here temporarily.
    */
-  const setRanking = (rows) => {
+  const setRanking = rows => {
     rows.forEach((row, i) => {
       row.ranking = i + 1;
-    })
+    });
 
     return rows;
-  }
+  };
 
   /**
    * Initialise the leaderboard table, based on the properties that have been
    * set
    */
   const initLeaderBoard = () => {
-    // User objects in leaderboard array doesn't have ranking set. Will have 
+    // User objects in leaderboard array doesn't have ranking set. Will have
     // to set it here...
     setRanking(leaderboard);
 
@@ -128,11 +119,11 @@ function LeaderboardTable(props) {
     if (user) {
       // If a specific user has been chosen, filter them from the leaderboard
       // for display
-      const found = leaderboard.filter((item) => {
+      const found = leaderboard.filter(item => {
         return item.username === user.username;
-      })  
+      });
 
-      const rows = (found.length) ? found : [];
+      const rows = found.length ? found : [];
 
       return getLeaderboardTemplate(rows);
     } else {
@@ -143,27 +134,25 @@ function LeaderboardTable(props) {
         } else {
           return Number(i);
         }
-      })
+      });
 
       // If not display full leaderboard
-      return getLeaderboardTemplate(board)
+      return getLeaderboardTemplate(board);
     }
-
-    
-  }
+  };
 
   /**
    * What to return when the leaderboard is empty.
    */
   const emptyLeadboardJSX = () => {
     return <div className="text-center">no items in leaderboard</div>;
-  }
+  };
 
   /**
    * Get the template to display for the leaderboard
    * @param {*} rows The array of user objects
    */
-  const getLeaderboardTemplate = (rows) => {
+  const getLeaderboardTemplate = rows => {
     return (
       <table className="table-auto border-transparent" style={{ width: '99%' }}>
         <thead>
@@ -203,21 +192,12 @@ function LeaderboardTable(props) {
             </th>
           </tr>
         </thead>
-        <tbody>
-          {rows.map((item, i) => (
-            getLeaderBoardRow(item, i)
-          ))}
-        </tbody>
+        <tbody>{rows.map((item, i) => getLeaderBoardRow(item, i))}</tbody>
       </table>
     );
-  }
+  };
 
-  
-  return leaderboard.length === 0 ? (
-    emptyLeadboardJSX()
-  ) : (
-    initLeaderBoard()
-  );
+  return leaderboard.length === 0 ? emptyLeadboardJSX() : initLeaderBoard();
 }
 
 const mapDispatchToProps = dispatch => ({

@@ -326,16 +326,11 @@ function NewsfeedTable(props) {
               </span>
             </div>
           )}
-          {id === 'ongoing' && (
-            <div className="mb-2">You don't have any ongoing requests yet</div>
-          )}
-          {id === 'completed' && (
-            <div className="mb-2">You haven't completed any requests yet</div>
-          )}
+          {id === 'ongoing' && <div className="mb-2">You don't have any ongoing requests yet</div>}
+          {id === 'completed' && <div className="mb-2">You haven't completed any requests yet</div>}
           {id === 'global' && (
             <div className="mb-2">
-              No requests globally completed yet! Invite your friends and start spreading
-              the love
+              No requests globally completed yet! Invite your friends and start spreading the love
             </div>
           )}
           {id !== 'discover' && (

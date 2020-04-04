@@ -24,9 +24,7 @@ import { Input, SIZE } from 'baseui/input';
 import { Button } from 'baseui/button';
 import { ChevronUp, ChevronDown } from 'baseui/icon';
 import { StatefulMenu } from 'baseui/menu';
-import {
-  Modal, ModalHeader, ModalBody, ModalFooter, ModalButton
-} from 'baseui/modal';
+import { Modal, ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/modal';
 
 import {
   getCurrentUser,
@@ -93,7 +91,7 @@ function NewsFeedPage(props) {
   // array to keep track of which items a user has claimed - to remove from newsfeed
   const [helpArrayDiscover, setHelpArrayDiscover] = React.useState({});
   // array to keep track of which items a user has claimed - to remove from newsfeed
-  const [helpArrayOngoing, setHelpArrayOngoing] = React.useState({}); 
+  const [helpArrayOngoing, setHelpArrayOngoing] = React.useState({});
 
   const items = [];
   const parsed = queryString.parse(props.location.search);
@@ -238,8 +236,7 @@ function NewsFeedPage(props) {
         </thead>
         <tbody>
           {cart.map((item, i) => (
-            <tr key={i}
-            className={i % 2 === 0 && `bg-gray-100`}>
+            <tr key={i} className={i % 2 === 0 && `bg-gray-100`}>
               <td className={`px-4 py-2`}>{item.name}</td>
               <td className={`px-4 py-2`}>{item.quantity}</td>
             </tr>
@@ -450,8 +447,8 @@ function NewsFeedPage(props) {
 
   /**
    * TODO: Add description of what this function does.
-   * @param {*} username 
-   * @param {*} version 
+   * @param {*} username
+   * @param {*} version
    */
   function generateHash(username = '', version = 0) {
     const secret = 'givingtree';
@@ -467,9 +464,9 @@ function NewsFeedPage(props) {
 
   /**
    * TODO: Add description of what this function does
-   * @param {*} str 
-   * @param {*} s 
-   * @param {*} l 
+   * @param {*} str
+   * @param {*} s
+   * @param {*} l
    */
   function stringToHslColor(str, s, l) {
     var hash = 0;
@@ -482,7 +479,7 @@ function NewsFeedPage(props) {
   }
 
   React.useEffect(() => {
-    loadNewsfeedHelper()
+    loadNewsfeedHelper();
     setUpdateNews(false);
   }, [updatedNews]);
 
@@ -518,8 +515,6 @@ function NewsFeedPage(props) {
     }
   }, [latLng, address, !openCustomAddress]);
 
-  
-  
   const render = () => {
     news.map((item, i) => {
       if (
@@ -555,9 +550,7 @@ function NewsFeedPage(props) {
                   }
                 },
                 Body: {
-                  style: {
-             
-                  }
+                  style: {}
                 }
               }}
             >
@@ -628,7 +621,8 @@ function NewsFeedPage(props) {
                       <div style={{ display: 'flex', alignContent: 'center' }}>
                         {item.type === 'Post' &&
                           item.categories.map(i => (
-                            <Tag key={i} 
+                            <Tag
+                              key={i}
                               overrides={{
                                 Root: {
                                   style: {
@@ -1348,11 +1342,7 @@ function NewsFeedPage(props) {
           <br />
         </ModalBody>
         <ModalFooter>
-          <ModalButton
-            size={'compact'}
-            kind={'minimal'}
-            onClick={() => setOpenFoodTracking(false)}
-          >
+          <ModalButton size={'compact'} kind={'minimal'} onClick={() => setOpenFoodTracking(false)}>
             Cancel
           </ModalButton>
           <ModalButton
@@ -1409,10 +1399,12 @@ function NewsFeedPage(props) {
           />
         </section>
         <section className="hidden xl:block">
-          <div style={{
-            width: '344px'
-          }}
-          className="bg-white rounded-lg p-6 shadow-lg">
+          <div
+            style={{
+              width: '344px'
+            }}
+            className="bg-white rounded-lg p-6 shadow-lg"
+          >
             <div className="flex justify-between items-center">
               <div className="text-left" style={{ fontWeight: 300 }}>
                 <div
@@ -1453,7 +1445,8 @@ function NewsFeedPage(props) {
             </div>
             {Number(userRanking) >= 0 && (
               <div className="mt-8">
-                <div style={{
+                <div
+                  style={{
                     fontStyle: 'normal',
                     fontWeight: 'normal',
                     fontSize: 12,
@@ -1495,8 +1488,8 @@ function NewsFeedPage(props) {
                         requests.
                       </div>
                       <div className="tooltip-text py-1">
-                        Upvotes you receive from users with higher karma have a greater
-                        influence on your karma points.
+                        Upvotes you receive from users with higher karma have a greater influence on
+                        your karma points.
                       </div>
                       <div className="tooltip-text py-1">
                         Have thoughts about our karma system?{' '}
@@ -1529,7 +1522,6 @@ function NewsFeedPage(props) {
           </div>
         </section>
       </div>
-
     </div>
   );
 }
