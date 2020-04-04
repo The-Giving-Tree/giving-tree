@@ -102,6 +102,7 @@ function NewsFeedPage(props) {
   let id = props.match.params.id ? props.match.params.id.toLowerCase() : '';
 
   if (true) {
+    console.log(newsfeedSort)
     switch (id) {
       case '':
         if (newsfeedSort !== 'Home') {
