@@ -291,7 +291,7 @@ function Navigation(props) {
   if (authenticated) {
     return (
       
-      <div
+      <header
       className="flex items-center justify-start px-6 py-3 bg-white">
         <button className="rounded-full bg-green text-white px-4 py-2"
           style={{
@@ -392,7 +392,7 @@ function Navigation(props) {
         </Link>
 
         {/* Search bar */}
-        <div className="hidden md:block mr-auto px-6">
+        <div className="hidden md:block mr-auto px-6 max-w-md w-full">
           <Input
             overrides={{
               Before,
@@ -592,7 +592,7 @@ function Navigation(props) {
           />
         )}>
           <div>
-            <div class="profilePic flex items-center lg:hidden"
+            <div className="profilePic flex items-center lg:hidden"
             style={{
               width: 32,
               height: 32,
@@ -640,11 +640,11 @@ function Navigation(props) {
             </div>
           </div> 
       </StatefulPopover>
-      </div>
+      </header>
     );
   } else { // If the user is NOT logged in, display this nav...
     return (
-      <div className="flex items-center justify-start px-6 py-3 bg-white">
+      <header className="flex items-center justify-start px-6 py-3 bg-white">
         
         {/* Main logo */}
         <Link to="/home/discover" className="mr-auto">
@@ -711,7 +711,7 @@ function Navigation(props) {
           </Link>
         </div>
         
-      </div>
+      </header>
     );
   }
 }

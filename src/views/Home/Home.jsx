@@ -12,17 +12,14 @@ import queryString from 'query-string';
 import Expand from 'react-expand-animated';
 import { Button, SHAPE } from 'baseui/button';
 import { useHistory } from 'react-router-dom';
-import PlacesAutocomplete from 'react-places-autocomplete';
-import { geocodeByAddress, geocodeByPlaceId, getLatLng } from 'react-places-autocomplete';
-import { StatefulSelect as Search, TYPE } from 'baseui/select';
 import { withHistory } from 'slate-history';
 import useWindowSize from 'react-use/lib/useWindowSize';
 import { Modal, ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/modal';
 import Confetti from 'react-confetti';
-import Navigation from './../Navigation';
-import Footer from './../Footer';
+import Navigation from '../../components/Navigation';
+import Footer from '../../components/Footer';
 import { geolocated } from 'react-geolocated';
-import { Card, StyledBody, StyledAction } from 'baseui/card';
+import { Card, StyledAction } from 'baseui/card';
 import { StatefulPopover, PLACEMENT } from 'baseui/popover';
 import { StatefulMenu } from 'baseui/menu';
 import { withReact } from 'slate-react';
@@ -32,9 +29,9 @@ import { ChevronUp, ChevronDown } from 'baseui/icon';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Tag, KIND } from 'baseui/tag';
 import moment from 'moment';
-import { withImages, withRichText } from '../submitHelper';
-import Sidebar from '../universal/Sidebar';
-import NewsfeedTable from './NewsfeedTable';
+import { withImages, withRichText } from '../../components/submitHelper';
+import Sidebar from '../../components/Sidebar';
+import NewsfeedTable from '../NewsFeed/NewsfeedTable'; 
 import { connect } from 'react-redux';
 
 import './Home.css';
@@ -89,29 +86,20 @@ function Home(props) {
     newsfeed,
     upvoteDispatch,
     downvoteDispatch,
-    newsfeedSuccess,
-    newsfeedLoading,
     signupDispatch,
     userRanking,
     errorMessage,
     registerLoading,
-    registerSuccess,
-    registerFailure,
-    isRegistered,
     loginLoading,
-    loginSuccess,
-    loginFailure,
     initiateResetSuccess,
     leaderboard,
     currentPage,
     pages,
     coords,
-    numOfResults,
     selectMenu,
     addCommentDispatch,
     addReplyDispatch,
     selectMenuDispatch,
-    newsfeedUpdated
   } = props;
 
   const history = useHistory();
@@ -190,8 +178,6 @@ function Home(props) {
       [id]: !prevOngoing[id]
     }));
   };
-
-  const [css, theme] = useStyletron();
 
   const isEmpty = obj => {
     for (var key in obj) {
@@ -292,11 +278,6 @@ function Home(props) {
         break;
     }
   }
-
-  const slateEditor = React.useMemo(
-    () => withImages(withRichText(withHistory(withReact(createEditor())))),
-    []
-  );
 
   const authenticated = localStorage.getItem('giving_tree_jwt');
   const refresh = async () => {
@@ -2081,14 +2062,7 @@ function Home(props) {
         </ModalFooter>
       </Modal>
       {props.match.url !== '/' ? (
-        <div
-          className="sidebar-table-container"
-          style={{
-            backgroundColor: '#fff',
-            display: 'flex',
-            flexDirection: 'row'
-          }}
-        >
+        <div className="sidebar-table-container">
           <Sidebar {...props} />
           <NewsfeedTable
             {...props}
@@ -2109,18 +2083,11 @@ function Home(props) {
             openCustomAddress={openCustomAddress}
             setUpdateNews={setUpdateNews}
           />
-          <div
-            style={{
-              paddingTop: 30,
-              height: `calc(100vh - 70px + ${60 + items.length * 60}px)`
+          <div>
+            <div style={{
+              width: '344px'
             }}
-          >
-            <div
-              style={{
-                width: '344px'
-              }}
-              className="bg-white rounded-lg p-6 shadow-lg"
-            >
+            className="bg-white rounded-lg p-6 shadow-lg">
               <div className="flex justify-between items-center">
                 <div className="text-left" style={{ fontWeight: 300 }}>
                   <div
@@ -2396,7 +2363,7 @@ function Home(props) {
                         backgroundSize: 'cover',
                       }}>
                     </div>
-                    <div className="col-span-1">
+                    <div className="col-span-1 bg-white">
                       {homeJSX()}
                     </div>
                   </div>                      

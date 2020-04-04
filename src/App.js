@@ -6,8 +6,6 @@ import { Helmet } from 'react-helmet';
 import { LightTheme, BaseProvider } from 'baseui';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Constants from './components/Constants';
-import ErrorPage from './components/ErrorPage/ErrorPage';
-import Home from './components/LandingPage/Home';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import User from './components/User';
@@ -21,6 +19,11 @@ import Post from './components/Post';
 import Draft from './components/Draft';
 import ResetPassword from './components/ResetPassword';
 import './App.css';
+
+// Views / Pages
+import ErrorPage from './views/ErrorPage/ErrorPage';
+import Home from './views/Home/Home';
+import NewsFeedPage from './views/NewsFeed/NewsFeedPage';
 
 const engine = new Styletron();
 
@@ -58,6 +61,8 @@ function App() {
         <BrowserRouter>
             <Switch>
               <Route exact path={Constants.PATHS.HOME} component={Home} />
+              <Route exact path={`/home/(discover|global|ongoing|completed)`}
+              component={NewsFeedPage} />
               <Route exact path={Constants.PATHS.LEADERBOARD} component={Leaderboard} />
               <Route exact path={Constants.PATHS.ABOUT} component={About} />
               <Route exact path={Constants.PATHS.HOWITWORKS} component={HowItWorks} />

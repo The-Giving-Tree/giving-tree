@@ -127,7 +127,7 @@ function HowItWorks(props) {
                 Communicate directly with the requester! We recommend:
                 <br />
                 <br />
-                <ul class="list-disc">
+                <ul className="list-disc">
                   <li>
                     Exchanging contact information so that you can call/text/email one another
                   </li>
@@ -153,7 +153,7 @@ function HowItWorks(props) {
                 discretion and ability.
                 <br />
                 <br />
-                <ul class="list-disc">
+                <ul className="list-disc">
                   <li>Agreeing on how/where you will deliver items and/or provide services</li>
                   <li>Keeping the requester updated on your progress and location</li>
                   <li>Review and follow our Health &amp; Safety guidelines</li>
@@ -165,7 +165,7 @@ function HowItWorks(props) {
                 When completing grocery and supply runs, or other errands:
                 <br />
                 <br />
-                <ul class="list-disc">
+                <ul className="list-disc">
                   <li>
                     Avoid touching handrails, public furniture, or any other public surfaces as much
                     as possible.
@@ -230,7 +230,7 @@ function HowItWorks(props) {
                 Communicate directly with your helper! We recommend:
                 <br />
                 <br />
-                <ul class="list-disc">
+                <ul className="list-disc">
                   <li>
                     Exchanging contact information so that you can call/text/email one another
                   </li>
@@ -257,7 +257,7 @@ function HowItWorks(props) {
                 <br />
                 <b>How to make a new request</b>
                 <br />
-                <ul class="list-disc">
+                <ul className="list-disc">
                   <li>Select the type of assistance you need, and click “Next”.</li>
                   <li>
                     Fill out the following form. Please be specific about your needs so your helper
@@ -281,7 +281,7 @@ function HowItWorks(props) {
                 <br />
                 <b>Helpful Tips</b>
                 <br />
-                <ul class="list-disc">
+                <ul className="list-disc">
                   <li>
                     Be specific about your needs so that your helper can fulfill your request as
                     quickly and easily as possible
@@ -310,7 +310,7 @@ function HowItWorks(props) {
                 When receiving goods from a helper:
                 <br />
                 <br />
-                <ul class="list-disc">
+                <ul className="list-disc">
                   <li>
                     Keep in mind that the virus can come from public places/surfaces into your home.
                   </li>

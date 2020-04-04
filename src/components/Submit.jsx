@@ -6,7 +6,7 @@ import Navigation from './Navigation';
 import { Card } from 'baseui/card';
 import { ArrowLeft } from 'baseui/icon';
 import { Tag } from 'baseui/tag';
-import Sidebar from './universal/Sidebar';
+import Sidebar from './Sidebar';
 import { hotjar } from 'react-hotjar';
 
 import { connect } from 'react-redux';
@@ -294,7 +294,7 @@ function Submit(props) {
           onChange={e => {
             setDueDate(e.target.value); // YYYY-MM-DD
           }}
-          class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
           type="datetime-local"
         />
         <div className="mt-4"></div>

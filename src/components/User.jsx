@@ -14,7 +14,7 @@ import { geolocated } from 'react-geolocated';
 import { Input } from 'baseui/input';
 import { StatefulTooltip } from 'baseui/tooltip';
 import Dropzone from 'react-dropzone';
-import Sidebar from './universal/Sidebar';
+import Sidebar from './Sidebar';
 
 import { connect } from 'react-redux';
 
