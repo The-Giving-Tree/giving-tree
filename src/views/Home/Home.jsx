@@ -445,14 +445,13 @@ function Home(props) {
                   className="flex items-center justify-center text-center font-bold flex-grow"
                   style={{
                     width: '100%',
-                    height: `calc(100vh - 70px)`,
+                    minHeight: '100vh',
                     background:
                       'url(https://d1ppmvgsdgdlyy.cloudfront.net/landing.png) center center',
                     backgroundSize: 'cover',
                     color: 'white',
                     fontWeight: 500,
                     position: 'relative',
-                    fontSize: matches.small || matches.medium ? 25 : 36
                   }}
                 >
                   <div
@@ -465,12 +464,10 @@ function Home(props) {
                   >
                     Dribbbled by @tubik_arts
                   </div>
-                  <div
-                    style={{
-                      width: matches.small || matches.medium ? '80%' : '35%',
-                      textShadow: '0px 0px 3px #000'
-                    }}
-                  >
+                  <div className="text-2xl px-6 sm:text-4xl lg:text-6xl"
+                  style={{
+                    textShadow: '0px 0px 3px #000'
+                  }}>
                     We are waves of the same sea,
                     <br />
                     leaves of the same tree,

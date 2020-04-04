@@ -4,6 +4,7 @@ import Navigation from '../../components/Navigation';
 import Sidebar from '../../components/Sidebar';
 import NewsfeedTable from '../NewsFeed/NewsfeedTable';
 import LeaderboardTable from '../../components/LeaderboardTable/LeaderboardTable';
+import Footer from '../../components/Footer';
 // Libraries
 import queryString from 'query-string';
 import { getDistance } from 'geolib';
@@ -1522,6 +1523,7 @@ function NewsFeedPage(props) {
           </div>
         </section>
       </div>
+      <Footer />
     </div>
   );
 }
