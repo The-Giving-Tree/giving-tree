@@ -24,17 +24,11 @@ import './Home.css';
 
 import {
   getCurrentUser,
-  loadNewsfeed,
   claimTask,
-  unclaimTask,
-  completeTask,
-  upvote,
-  downvote,
   addComment,
   register,
   addReply,
   selectMenu,
-  getLeaderboard,
   initiateReset,
   login
 } from '../../store/actions/auth/auth-actions';
@@ -61,7 +55,6 @@ schema
 function Home(props) {
   const {
     loadNewsfeedDispatch,
-    getLeaderboardDispatch,
     loginDispatch,
     initiateResetDispatch,
     newsfeed,
@@ -93,8 +86,6 @@ function Home(props) {
   const [activeKey, setActiveKey] = React.useState('0');
   const [news] = React.useState([]);
   const [openCustomAddress] = React.useState(false);
-  const [latLng, setLatLng] = React.useState({});
-  const [address, setAddress] = React.useState('');
   const [newsfeedDictionary] = React.useState({});
   const [updatedNews, setUpdateNews] = React.useState(false);
   const [newsfeedSort, setSort] = React.useState('');
@@ -226,25 +217,7 @@ function Home(props) {
   }, [updatedNews]);
 
   React.useEffect(() => {
-    setLatLng(parsed); // initialize
     hotjar.initialize('1751072', 6);
-
-    if (parsed.lat === '37.7749295' && parsed.lng === '-122.4194155') {
-      setAddress('San Francisco, CA');
-    } else if (parsed.lat === '34.0522342' && parsed.lng === '-118.2436849') {
-      setAddress('Los Angeles, CA');
-    } else if (parsed.lat === '43.653226' && parsed.lng === '-79.3831843') {
-      setAddress('Toronto, ON, Canada');
-    } else if (parsed.lat === '49.2827291' && parsed.lng === '-123.1207375') {
-      setAddress('Vancouver, BC, Canada');
-    } else if (parsed.lat === '40.7127753' && parsed.lng === '-74.0059728') {
-      setAddress('New York City, NY');
-    } else if (!parsed.lat && !parsed.lng) {
-      setAddress('Earth');
-    }
-
-    selectMenuDispatch({ selectMenu: 'Food' });
-    getLeaderboardDispatch({ env: process.env.NODE_ENV, location: 'global' });
   }, []);
 
   React.useEffect(() => {
@@ -713,17 +686,11 @@ function Home(props) {
 
 const mapDispatchToProps = dispatch => ({
   getCurrentUserDispatch: payload => dispatch(getCurrentUser(payload)),
-  loadNewsfeedDispatch: payload => dispatch(loadNewsfeed(payload)),
   claimTaskDispatch: payload => dispatch(claimTask(payload)),
-  unclaimTaskDispatch: payload => dispatch(unclaimTask(payload)),
-  completeTaskDispatch: payload => dispatch(completeTask(payload)),
-  upvoteDispatch: payload => dispatch(upvote(payload)),
-  downvoteDispatch: payload => dispatch(downvote(payload)),
   signupDispatch: payload => dispatch(register(payload)),
   addCommentDispatch: payload => dispatch(addComment(payload)),
   addReplyDispatch: payload => dispatch(addReply(payload)),
   selectMenuDispatch: payload => dispatch(selectMenu(payload)),
-  getLeaderboardDispatch: payload => dispatch(getLeaderboard(payload)),
   loginDispatch: payload => dispatch(login(payload)),
   initiateResetDispatch: payload => dispatch(initiateReset(payload))
 });
@@ -735,11 +702,7 @@ const mapStateToProps = state => ({
   selectMenu: state.auth.selectMenu,
   pages: state.auth.pages,
   numOfResults: state.auth.numOfResults,
-  newsfeedSuccess: state.auth.newsfeedSuccess,
-  newsfeedUpdated: state.auth.newsfeedUpdated,
-  newsfeedLoading: state.auth.newsfeedLoading,
   userRanking: state.auth.userRanking,
-  leaderboard: state.auth.leaderboard,
   errorMessage: state.auth.errorMessage,
   registerLoading: state.auth.registerLoading,
   registerSuccess: state.auth.registerSuccess,

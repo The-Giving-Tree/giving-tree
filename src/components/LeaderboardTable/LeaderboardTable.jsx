@@ -23,7 +23,7 @@ function LeaderboardTable(props) {
       env: process.env.NODE_ENV, 
       location: 'global'
     });
-  }, [getLeaderboardDispatch])
+  }, []);
 
   const getLeaderboardIcon = place => {
     switch (place.toString()) {
