@@ -7,7 +7,6 @@ import Check from 'baseui/icon/check';
 import { Notification } from 'baseui/notification';
 import { hotjar } from 'react-hotjar';
 import Media from 'react-media';
-import queryString from 'query-string';
 import { Button, SHAPE } from 'baseui/button';
 import { useHistory } from 'react-router-dom';
 import { 
@@ -15,7 +14,6 @@ import {
 } from 'baseui/modal';
 import Navigation from '../../components/Navigation';
 import Footer from '../../components/Footer';
-import { geolocated } from 'react-geolocated';
 import { StyledAction } from 'baseui/card';
 import { Input } from 'baseui/input';
 import { connect } from 'react-redux';
@@ -23,11 +21,7 @@ import { connect } from 'react-redux';
 import './Home.css';
 
 import {
-  getCurrentUser,
-  claimTask,
-  addComment,
   register,
-  addReply,
   selectMenu,
   initiateReset,
   login
@@ -54,23 +48,18 @@ schema
 
 function Home(props) {
   const {
-    loadNewsfeedDispatch,
     loginDispatch,
+    loginLoading,
+    loginSuccess,
     initiateResetDispatch,
-    newsfeed,
     signupDispatch,
     errorMessage,
     registerLoading,
-    loginLoading,
     initiateResetSuccess,
-    currentPage,
-    pages,
     selectMenuDispatch,
   } = props;
 
   const history = useHistory();
-
-  // const items = [];
 
   // signup
   const [name, setName] = React.useState('');
@@ -84,12 +73,6 @@ function Home(props) {
   const [resetModal, setResetModal] = React.useState(false);
 
   const [activeKey, setActiveKey] = React.useState('0');
-  const [news] = React.useState([]);
-  const [openCustomAddress] = React.useState(false);
-  const [newsfeedDictionary] = React.useState({});
-  const [updatedNews, setUpdateNews] = React.useState(false);
-  const [newsfeedSort, setSort] = React.useState('');
-  const [setHasMoreItems] = React.useState(true);
 
   const enterPressed = async event => {
     var code = event.keyCode || event.which;
@@ -103,107 +86,25 @@ function Home(props) {
     }
   };
 
-  const handleLogin = async () => {
-    loginDispatch({
+  const handleSignup = async () => {
+    signupDispatch({
       env: process.env.NODE_ENV,
+      name,
+      email,
       username,
       password,
       rememberMe: true // by default
     });
   };
 
-  // id dictates the type of feed
-  let id = props.match.params.id ? props.match.params.id.toLowerCase() : '';
-  const parsed = queryString.parse(props.location.search);
-
-  // if user is logged in
-  // if (!isEmpty(user)) {
-  if (true) {
-    switch (id) {
-      case '':
-        if (newsfeedSort !== 'Home') {
-          setSort('Home');
-        }
-        break;
-        if (newsfeedSort !== 'Home') {
-          setSort('Home');
-          loadNewsfeedDispatch({
-            env: process.env.NODE_ENV,
-            page: Number(currentPage),
-            location: latLng,
-            feed: 'Home'
-          });
-        }
-        break;
-      case 'discover':
-        if (newsfeedSort !== 'Discover') {
-          setSort('Discover');
-          console.log('loading discover');
-          loadNewsfeedDispatch({
-            env: process.env.NODE_ENV,
-            page: Number(currentPage),
-            location: latLng,
-            feed: 'Discover'
-          });
-        }
-        break;
-      case 'ongoing':
-        if (newsfeedSort !== 'Ongoing') {
-          setSort('Ongoing');
-          loadNewsfeedDispatch({
-            env: process.env.NODE_ENV,
-            page: Number(currentPage),
-            location: latLng,
-            feed: 'Ongoing'
-          });
-        }
-        break;
-      case 'completed':
-        if (newsfeedSort !== 'Completed') {
-          setSort('Completed');
-          loadNewsfeedDispatch({
-            env: process.env.NODE_ENV,
-            page: Number(currentPage),
-            location: latLng,
-            feed: 'Completed'
-          });
-        }
-        break;
-      case 'global':
-        if (newsfeedSort !== 'Global') {
-          setSort('Global');
-          loadNewsfeedDispatch({
-            env: process.env.NODE_ENV,
-            page: Number(currentPage),
-            feed: 'Global'
-          });
-        }
-        break;
-      case 'popular':
-        if (newsfeedSort !== 'Popular') {
-          setSort('Popular');
-          loadNewsfeedDispatch({
-            env: process.env.NODE_ENV,
-            page: Number(currentPage),
-            feed: 'Popular'
-          });
-        }
-        break;
-      case 'newest':
-        if (newsfeedSort !== 'Newest') {
-          setSort('Newest');
-          loadNewsfeedDispatch({
-            env: process.env.NODE_ENV,
-            page: Number(currentPage),
-            location: latLng,
-            feed: 'Newest'
-          });
-        }
-        break;
-      default:
-        break;
-    }
-  }
+  const handleLogin = async () => {
+    loginDispatch({
+      env: process.env.NODE_ENV,
+      username,
+      password,
+      rememberMe: true // by default
+    })
+  };
 
   const authenticated = localStorage.getItem('giving_tree_jwt');
 
@@ -212,24 +113,8 @@ function Home(props) {
   render();
 
   React.useEffect(() => {
-    loadNewsfeedHelper();
-    setUpdateNews(false);
-  }, [updatedNews]);
-
-  React.useEffect(() => {
     hotjar.initialize('1751072', 6);
   }, []);
-
-  React.useEffect(() => {
-    if (props.match.url === '/home/discover') {
-      loadNewsfeedDispatch({
-        env: process.env.NODE_ENV,
-        page: Number(currentPage),
-        location: latLng,
-        feed: 'Discover'
-      });
-    }
-  }, [latLng, address, !openCustomAddress]);
 
   const tabDetailJSX = () => {
     return (
@@ -388,8 +273,7 @@ function Home(props) {
               }
             }
           }}
-          title="Login"
-        >
+          title="Login">
             <div className="pt-12">
               {errorMessage && (
                 <p className="my-3 text-sm" style={{
@@ -525,36 +409,6 @@ function Home(props) {
     );
   };
 
-  async function loadNewsfeedHelper() {
-    if (pages === '') {
-    } else if (Number(currentPage) < Number(pages)) {
-      let nextPage = Number(currentPage) + 1;
-
-      await loadNewsfeedDispatch({
-        env: process.env.NODE_ENV,
-        location: latLng,
-        page: nextPage,
-        feed: newsfeedSort
-      });
-      for (var j = 0; j < newsfeed.length; j++) {
-        if (newsfeedDictionary[newsfeed[j]._id] === undefined) {
-          news.push(newsfeed[j]);
-          newsfeedDictionary[newsfeed[j]._id] = true;
-        }
-      }
-    } else {
-      setHasMoreItems(false);
-      if (newsfeed) {
-        for (var k = 0; k < newsfeed.length; k++) {
-          if (newsfeedDictionary[newsfeed[k]._id] === undefined) {
-            news.push(newsfeed[k]);
-            newsfeedDictionary[newsfeed[k]._id] = true;
-          }
-        }
-      }
-    }
-  }
-
   function Negative() {
     const [css, theme] = useStyletron();
     return (
@@ -586,16 +440,7 @@ function Home(props) {
     );
   }
 
-  const handleSignup = async () => {
-    signupDispatch({
-      env: process.env.NODE_ENV,
-      name,
-      email,
-      username,
-      password,
-      rememberMe: true // by default
-    });
-  };
+  
 
   return (
     <div className="h-full flex flex-col">
@@ -685,11 +530,7 @@ function Home(props) {
 }
 
 const mapDispatchToProps = dispatch => ({
-  getCurrentUserDispatch: payload => dispatch(getCurrentUser(payload)),
-  claimTaskDispatch: payload => dispatch(claimTask(payload)),
   signupDispatch: payload => dispatch(register(payload)),
-  addCommentDispatch: payload => dispatch(addComment(payload)),
-  addReplyDispatch: payload => dispatch(addReply(payload)),
   selectMenuDispatch: payload => dispatch(selectMenu(payload)),
   loginDispatch: payload => dispatch(login(payload)),
   initiateResetDispatch: payload => dispatch(initiateReset(payload))
@@ -697,12 +538,7 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
   user: state.auth.user,
-  newsfeed: state.auth.newsfeed,
-  currentPage: state.auth.currentPage,
   selectMenu: state.auth.selectMenu,
-  pages: state.auth.pages,
-  numOfResults: state.auth.numOfResults,
-  userRanking: state.auth.userRanking,
   errorMessage: state.auth.errorMessage,
   registerLoading: state.auth.registerLoading,
   registerSuccess: state.auth.registerSuccess,
@@ -718,4 +554,4 @@ Home.defaultProps = {};
 
 Home.propTypes = {};
 
-export default connect(mapStateToProps, mapDispatchToProps)(geolocated()(Home));
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

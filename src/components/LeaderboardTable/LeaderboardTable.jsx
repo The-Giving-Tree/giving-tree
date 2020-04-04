@@ -103,6 +103,10 @@ function LeaderboardTable(props) {
     );
   }
 
+  /**
+   * TODO: Add user ranking to user object.
+   * Ranking is not stored in the user objects. Adding it here temporarily.
+   */
   const setRanking = (rows) => {
     rows.forEach((row, i) => {
       row.ranking = i + 1;
@@ -208,7 +212,7 @@ function LeaderboardTable(props) {
     );
   }
 
-
+  
   return leaderboard.length === 0 ? (
     emptyLeadboardJSX()
   ) : (
