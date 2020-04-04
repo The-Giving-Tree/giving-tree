@@ -1,7 +1,10 @@
 import * as React from 'react';
+// Custom Components
 import Navigation from '../../components/Navigation';
 import Sidebar from '../../components/Sidebar';
 import NewsfeedTable from '../NewsFeed/NewsfeedTable';
+import LeaderboardTable from '../../components/LeaderboardTable/LeaderboardTable';
+// Libraries
 import queryString from 'query-string';
 import { getDistance } from 'geolib';
 import { hotjar } from 'react-hotjar';
@@ -13,7 +16,6 @@ import { useHistory } from 'react-router-dom';
 import useWindowSize from 'react-use/lib/useWindowSize';
 import Confetti from 'react-confetti';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-
 // Base UI
 import { Card } from 'baseui/card';
 import { StatefulPopover, PLACEMENT } from 'baseui/popover';
@@ -38,7 +40,6 @@ import {
   register,
   addReply,
   selectMenu,
-  getLeaderboard,
   initiateReset,
   login
 } from '../../store/actions/auth/auth-actions';
@@ -59,15 +60,12 @@ function NewsFeedPage(props) {
     addCommentDispatch,
     addReplyDispatch,
     selectMenuDispatch,
-    leaderboard,
-    getLeaderboardDispatch,
     completeTaskDispatch,
     userRanking
   } = props;
 
   const history = useHistory();
   const { width, height } = useWindowSize();
-
   const [latLng, setLatLng] = React.useState({});
   const [address, setAddress] = React.useState('');
   const [updatedNews, setUpdateNews] = React.useState(false);
@@ -75,17 +73,17 @@ function NewsFeedPage(props) {
   const [hasMoreItems, setHasMoreItems] = React.useState(true);
   const [newPost, setNewPost] = React.useState('');
   const [newsfeedSort, setSort] = React.useState('');
-  const [newsfeedDictionary, setNewsfeedDictionary] = React.useState({});
+  const [newsfeedDictionary] = React.useState({});
   const authenticated = localStorage.getItem('giving_tree_jwt');
-  const [news, setNews] = React.useState([]);
+  const [news] = React.useState([]);
   const [eta, setETA] = React.useState('');
   const [missing, setOrderMissing] = React.useState('');
   const [deliverer, setOrderDeliverer] = React.useState('');
 
-  const [upvoteIndex, setUpvoteIndex] = React.useState([]);
-  const [downvoteIndex, setDownvoteIndex] = React.useState([]);
-  const [initialDownvotes, setInitialDownvotes] = React.useState([]);
-  const [initialUpvotes, setInitialUpvotes] = React.useState([]);
+  const [upvoteIndex] = React.useState([]);
+  const [downvoteIndex] = React.useState([]);
+  const [initialDownvotes] = React.useState([]);
+  const [initialUpvotes] = React.useState([]);
   const [upvoteHover, setUpvoteHover] = React.useState([]);
   const [downvoteHover, setDownvoteHover] = React.useState([]);
   const [confetti, showConfetti] = React.useState(false);
@@ -103,40 +101,86 @@ function NewsFeedPage(props) {
   // id dictates the type of feed
   let id = props.match.params.id ? props.match.params.id.toLowerCase() : '';
 
+  if (true) {
+    switch (id) {
+      case '':
+        if (newsfeedSort !== 'Home') {
+          setSort('Home');
+        }
+        break;
+      case 'discover':
+        if (newsfeedSort !== 'Discover') {
+          setSort('Discover');
+          console.log('loading discover');
+          loadNewsfeedDispatch({
+            env: process.env.NODE_ENV,
+            page: Number(currentPage),
+            location: latLng,
+            feed: 'Discover'
+          });
+        }
+        break;
+      case 'ongoing':
+        if (newsfeedSort !== 'Ongoing') {
+          setSort('Ongoing');
+          loadNewsfeedDispatch({
+            env: process.env.NODE_ENV,
+            page: Number(currentPage),
+            location: latLng,
+            feed: 'Ongoing'
+          });
+        }
+        break;
+      case 'completed':
+        if (newsfeedSort !== 'Completed') {
+          setSort('Completed');
+          loadNewsfeedDispatch({
+            env: process.env.NODE_ENV,
+            page: Number(currentPage),
+            location: latLng,
+            feed: 'Completed'
+          });
+        }
+        break;
+      case 'global':
+        if (newsfeedSort !== 'Global') {
+          setSort('Global');
+          loadNewsfeedDispatch({
+            env: process.env.NODE_ENV,
+            page: Number(currentPage),
+            feed: 'Global'
+          });
+        }
+        break;
+      case 'popular':
+        if (newsfeedSort !== 'Popular') {
+          setSort('Popular');
+          loadNewsfeedDispatch({
+            env: process.env.NODE_ENV,
+            page: Number(currentPage),
+            feed: 'Popular'
+          });
+        }
+        break;
+      case 'newest':
+        if (newsfeedSort !== 'Newest') {
+          setSort('Newest');
+          loadNewsfeedDispatch({
+            env: process.env.NODE_ENV,
+            page: Number(currentPage),
+            location: latLng,
+            feed: 'Newest'
+          });
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
   // remove items
   const resetItems = () => {
     window.location = `/home/discover?lat=${latLng.lat}&lng=${latLng.lng}`; // explicit lat and lng coordinates
-  };
-
-  const getLeaderboardIcon = place => {
-    switch (place.toString()) {
-      case '1':
-        return (
-          <img
-            src="https://d1ppmvgsdgdlyy.cloudfront.net/1st.svg"
-            alt="1st"
-            style={{ height: 20 }}
-          />
-        );
-      case '2':
-        return (
-          <img
-            src="https://d1ppmvgsdgdlyy.cloudfront.net/2nd.svg"
-            alt="2nd"
-            style={{ height: 20 }}
-          />
-        );
-      case '3':
-        return (
-          <img
-            src="https://d1ppmvgsdgdlyy.cloudfront.net/3rd.svg"
-            alt="3rd"
-            style={{ height: 20 }}
-          />
-        );
-      default:
-        return place;
-    }
   };
 
   function openCard(i) {
@@ -181,95 +225,6 @@ function NewsFeedPage(props) {
     }
   }
 
-  const leaderboardJSX = () => {
-    return leaderboard.length === 0 ? (
-      <div className="text-center">no items in leaderboard</div>
-    ) : (
-      <table className="table-auto border-transparent" style={{ width: '99%' }}>
-        <thead>
-          <tr>
-            <th
-              className="px-4 py-2"
-              style={{
-                fontStyle: 'normal',
-                fontWeight: 'bold',
-                fontSize: '12px',
-                lineHeight: '15px'
-              }}
-            >
-              Rank
-            </th>
-            <th
-              className="px-4 py-2 text-left"
-              style={{
-                fontStyle: 'normal',
-                fontWeight: 'bold',
-                fontSize: '12px',
-                lineHeight: '15px'
-              }}
-            >
-              Helper
-            </th>
-            <th
-              className="px-4 py-2"
-              style={{
-                fontStyle: 'normal',
-                fontWeight: 'bold',
-                fontSize: '12px',
-                lineHeight: '15px'
-              }}
-            >
-              Karma
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {leaderboard
-            .filter((item, i) => Number(i) < 10)
-            .map((item, i) => (
-              <tr className={i % 2 === 0 && `bg-white`}>
-                <td
-                  className={`px-4 py-2 flex justify-center items-center`}
-                  style={{
-                    fontSize: '14px',
-                    lineHeight: '17px',
-                    fontStyle: 'normal',
-                    fontWeight: 'normal'
-                  }}
-                >
-                  {getLeaderboardIcon(Number(i) + 1)}
-                </td>
-                <td
-                  onClick={() => history.push(`/user/${item.username}`)}
-                  className={`px-4 py-2 text-left hover:text-indigo-600 transition duration-150`}
-                  style={{
-                    cursor: 'pointer',
-                    fontSize: '14px',
-                    lineHeight: '17px',
-                    fontStyle: 'normal',
-                    fontWeight: 'normal'
-                  }}
-                >
-                  <div className="flex items-center">{item.username}</div>
-                </td>
-                <td
-                  className={`px-4 py-2`}
-                  style={{
-                    fontSize: '14px',
-                    lineHeight: '17px',
-                    fontStyle: 'normal',
-                    fontWeight: 'normal'
-                  }}
-                >
-                  {item.karma}
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
-    );
-  };
-
   const foodCartJSX = cart => {
     return cart.length === 0 ? (
       <div className="text-center">no items in cart</div>
@@ -283,7 +238,8 @@ function NewsFeedPage(props) {
         </thead>
         <tbody>
           {cart.map((item, i) => (
-            <tr className={i % 2 === 0 && `bg-gray-100`}>
+            <tr key={i}
+            className={i % 2 === 0 && `bg-gray-100`}>
               <td className={`px-4 py-2`}>{item.name}</td>
               <td className={`px-4 py-2`}>{item.quantity}</td>
             </tr>
@@ -526,7 +482,7 @@ function NewsFeedPage(props) {
   }
 
   React.useEffect(() => {
-    loadNewsfeedHelper();
+    loadNewsfeedHelper()
     setUpdateNews(false);
   }, [updatedNews]);
 
@@ -549,7 +505,6 @@ function NewsFeedPage(props) {
     }
 
     selectMenuDispatch({ selectMenu: 'Food' });
-    getLeaderboardDispatch({ env: process.env.NODE_ENV, location: 'global' });
   }, []);
 
   React.useEffect(() => {
@@ -673,7 +628,7 @@ function NewsFeedPage(props) {
                       <div style={{ display: 'flex', alignContent: 'center' }}>
                         {item.type === 'Post' &&
                           item.categories.map(i => (
-                            <Tag
+                            <Tag key={i} 
                               overrides={{
                                 Root: {
                                   style: {
@@ -1283,141 +1238,6 @@ function NewsFeedPage(props) {
                                   label: 'Manually Add Details',
                                   key: 'manual'
                                 }
-                                // {
-                                //   label: (
-                                //     <div
-                                //       className="flex justify-center items-center"
-                                //       style={{ height: 40 }}
-                                //     >
-                                //       <img
-                                //         src="https://d1ppmvgsdgdlyy.cloudfront.net/postmates.svg"
-                                //         alt="postmates"
-                                //         style={{ height: 70 }}
-                                //       />
-                                //     </div>
-                                //   ),
-                                //   key: 'postmates'
-                                // },
-                                // {
-                                //   label: (
-                                //     <div
-                                //       className="flex justify-center items-center"
-                                //       style={{ height: 40 }}
-                                //     >
-                                //       <img
-                                //         src="https://d1ppmvgsdgdlyy.cloudfront.net/ubereats.svg"
-                                //         alt="ubereats"
-                                //         style={{ height: 18 }}
-                                //       />
-                                //     </div>
-                                //   ),
-                                //   key: 'ubereats'
-                                // },
-                                // {
-                                //   label: (
-                                //     <div
-                                //       className="flex justify-center items-center"
-                                //       style={{ height: 40 }}
-                                //     >
-                                //       <img
-                                //         src="https://d1ppmvgsdgdlyy.cloudfront.net/amazonfresh.svg"
-                                //         alt="amazonfresh"
-                                //         style={{ height: 30 }}
-                                //       />
-                                //     </div>
-                                //   ),
-                                //   key: 'amazonfresh'
-                                // },
-                                // {
-                                //   label: (
-                                //     <div
-                                //       className="flex justify-center items-center"
-                                //       style={{ height: 40 }}
-                                //     >
-                                //       <img
-                                //         src="https://d1ppmvgsdgdlyy.cloudfront.net/walmart.svg"
-                                //         alt="walmart"
-                                //         style={{ height: 30 }}
-                                //       />
-                                //     </div>
-                                //   ),
-                                //   key: 'walmart'
-                                // },
-                                // {
-                                //   label: (
-                                //     <div
-                                //       className="flex justify-center items-center"
-                                //       style={{ height: 40 }}
-                                //     >
-                                //       <img
-                                //         src="https://d1ppmvgsdgdlyy.cloudfront.net/costco.svg"
-                                //         alt="costco"
-                                //         style={{ height: 30 }}
-                                //       />
-                                //     </div>
-                                //   ),
-                                //   key: 'costco'
-                                // },
-                                // {
-                                //   label: (
-                                //     <div
-                                //       className="flex justify-center items-center"
-                                //       style={{ height: 40 }}
-                                //     >
-                                //       <img
-                                //         src="https://d1ppmvgsdgdlyy.cloudfront.net/grubhub.svg"
-                                //         alt="grubhub"
-                                //         style={{ height: 18 }}
-                                //       />
-                                //     </div>
-                                //   ),
-                                //   key: 'grubhub'
-                                // },
-                                // {
-                                //   label: (
-                                //     <div
-                                //       className="flex justify-center items-center"
-                                //       style={{ height: 40 }}
-                                //     >
-                                //       <img
-                                //         src="https://d1ppmvgsdgdlyy.cloudfront.net/seamless.svg"
-                                //         alt="seamless"
-                                //         style={{ height: 30 }}
-                                //       />
-                                //     </div>
-                                //   ),
-                                //   key: 'seamless'
-                                // },
-                                // {
-                                //   label: (
-                                //     <div
-                                //       className="flex justify-center items-center"
-                                //       style={{ height: 40 }}
-                                //     >
-                                //       <img
-                                //         src="https://d1ppmvgsdgdlyy.cloudfront.net/doordash.svg"
-                                //         alt="doordash"
-                                //         style={{ height: 110 }}
-                                //       />
-                                //     </div>
-                                //   ),
-                                //   key: 'doordash'
-                                // },
-                                // {
-                                //   label: (
-                                //     <div
-                                //       className="flex justify-center items-center"
-                                //       style={{ height: 40 }}
-                                //     >
-                                //       <img
-                                //         src="https://d1ppmvgsdgdlyy.cloudfront.net/instacart.svg"
-                                //         alt="instacart"
-                                //         style={{ height: 110 }}
-                                //       />
-                                //     </div>
-                                //   ),
-                                //   key: 'instacart'
-                                // }
                               ]}
                               onItemSelect={i => {
                                 close();
@@ -1628,11 +1448,12 @@ function NewsFeedPage(props) {
                 <span style={{ fontSize: 12 }}>See full list</span>
               </button>
             </div>
-            <div className="mt-4">{leaderboardJSX()}</div>
+            <div className="mt-4">
+              <LeaderboardTable limit={10} />
+            </div>
             {Number(userRanking) >= 0 && (
               <div className="mt-8">
-                <div
-                  style={{
+                <div style={{
                     fontStyle: 'normal',
                     fontWeight: 'normal',
                     fontSize: 12,
@@ -1643,97 +1464,7 @@ function NewsFeedPage(props) {
                 >
                   Your Ranking
                 </div>
-                <table className="table-auto border-transparent" style={{ width: '99%' }}>
-                  <thead>
-                    <tr>
-                      <th
-                        className="px-4 py-2"
-                        style={{
-                          fontStyle: 'normal',
-                          fontWeight: 'bold',
-                          fontSize: '12px',
-                          lineHeight: '15px'
-                        }}
-                      >
-                        Rank
-                      </th>
-                      <th
-                        className="px-4 py-2 text-left"
-                        style={{
-                          fontStyle: 'normal',
-                          fontWeight: 'bold',
-                          fontSize: '12px',
-                          lineHeight: '15px'
-                        }}
-                      >
-                        Helper
-                      </th>
-                      <th
-                        className="px-4 py-2"
-                        style={{
-                          fontStyle: 'normal',
-                          fontWeight: 'bold',
-                          fontSize: '12px',
-                          lineHeight: '15px'
-                        }}
-                      >
-                        Karma
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className={`bg-white`}>
-                      <td
-                        className={`px-4 py-2 flex justify-center items-center`}
-                        style={{
-                          fontSize: '14px',
-                          lineHeight: '17px',
-                          fontStyle: 'normal',
-                          fontWeight: 'normal'
-                        }}
-                      >
-                        {getLeaderboardIcon(Number(userRanking) + 1)}
-                      </td>
-                      <td
-                        className={`px-4 py-2 text-left hover:text-indigo-600 transition duration-150`}
-                        style={{
-                          cursor: 'pointer',
-                          fontSize: '14px',
-                          lineHeight: '17px',
-                          fontStyle: 'normal',
-                          fontWeight: 'normal'
-                        }}
-                        onClick={() =>
-                          history.push(
-                            `/user/${Number(userRanking) >= 0 &&
-                              leaderboard &&
-                              leaderboard[Number(userRanking)] &&
-                              leaderboard[Number(userRanking)].username}`
-                          )
-                        }
-                      >
-                        {Number(userRanking) >= 0 &&
-                          leaderboard &&
-                          leaderboard[Number(userRanking)] &&
-                          leaderboard[Number(userRanking)].username}
-                      </td>
-                      <td
-                        className={`px-4 py-2`}
-                        style={{
-                          fontSize: '14px',
-                          lineHeight: '17px',
-                          fontStyle: 'normal',
-                          fontWeight: 'normal'
-                        }}
-                      >
-                        {Number(userRanking) >= 0 &&
-                          leaderboard &&
-                          leaderboard[Number(userRanking)] &&
-                          leaderboard[Number(userRanking)].karma}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                <LeaderboardTable user={user} />
                 <StatefulPopover
                   placement={PLACEMENT.bottomRight}
                   overrides={{
@@ -1815,7 +1546,6 @@ const mapDispatchToProps = dispatch => ({
   addCommentDispatch: payload => dispatch(addComment(payload)),
   addReplyDispatch: payload => dispatch(addReply(payload)),
   selectMenuDispatch: payload => dispatch(selectMenu(payload)),
-  getLeaderboardDispatch: payload => dispatch(getLeaderboard(payload)),
   loginDispatch: payload => dispatch(login(payload)),
   initiateResetDispatch: payload => dispatch(initiateReset(payload))
 });
@@ -1831,7 +1561,6 @@ const mapStateToProps = state => ({
   newsfeedUpdated: state.auth.newsfeedUpdated,
   newsfeedLoading: state.auth.newsfeedLoading,
   userRanking: state.auth.userRanking,
-  leaderboard: state.auth.leaderboard,
   errorMessage: state.auth.errorMessage,
   registerLoading: state.auth.registerLoading,
   registerSuccess: state.auth.registerSuccess,
