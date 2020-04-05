@@ -16,8 +16,10 @@ function Sidebar(props) {
     <nav>
       <ul className="list-none p-0 m-0">
         <li className="text-black transition duration-150 px-6 my-2">
-          <NavLink
-            to={Constants.PATHS.NEWSFEED}
+          <NavLink to={Constants.PATHS.NEWSFEED}
+            onClick={()=>{
+              window.location = '/home/discover';
+            }}
             className="flex items-center"
             activeClassName="text-indigo-600"
           >

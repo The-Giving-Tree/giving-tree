@@ -98,7 +98,7 @@ function NewsFeedPage(props) {
   const parsed = queryString.parse(props.location.search);
 
   // id dictates the type of feed
-  let id = props.match.params.id ? props.match.params.id.toLowerCase() : '';
+  let id = props.match.params ? props.match.params[0].toLowerCase() : '';
   
   if (true) {
     switch (id) {
@@ -1310,6 +1310,8 @@ function NewsFeedPage(props) {
 
   render();
 
+  console.log(address);
+
   return (
     <div className="h-full flex flex-col">
       <Navigation selectMenuDispatch={selectMenuDispatch} searchBarPosition="center" />
@@ -1396,8 +1398,7 @@ function NewsFeedPage(props) {
             newPost={newPost}
             selectMenu={selectMenu}
             openCustomAddress={openCustomAddress}
-            setUpdateNews={setUpdateNews}
-          />
+            setUpdateNews={setUpdateNews}/>
         </section>
         <section className="hidden xl:block">
           <div
