@@ -4,7 +4,6 @@ import PlacesAutocomplete from 'react-places-autocomplete';
 import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import Navigation from './Navigation';
 import { Card } from 'baseui/card';
-import { ArrowLeft } from 'baseui/icon';
 import { Tag } from 'baseui/tag';
 import Sidebar from './Sidebar';
 import { hotjar } from 'react-hotjar';
@@ -39,13 +38,14 @@ function Submit(props) {
   } = props;
 
   const [title, setTitle] = React.useState('');
+  const [name, setName] = React.useState('');
   const [phoneNumber, setPhoneNumber] = React.useState('');
   const [address, setAddress] = useState('');
   const [latLng, setLatLng] = useState({});
   const [postal, setPostal] = useState('');
   const [cart, setCart] = React.useState([]);
-  const [selectedRequest, setRequest] = React.useState('');
-  const [checkout, setCheckout] = React.useState(false);
+  const [selectedRequest, setRequest] = React.useState('food');
+  const [checkout, setCheckout] = React.useState(true);
   let [changedCart, setChangedCart] = useState(0);
   const [cartQuantity, setCartQuantity] = React.useState('');
   const [cartName, setCartName] = React.useState('');
@@ -83,6 +83,7 @@ function Submit(props) {
         type: selectedRequest,
         description,
         cart,
+        name,
         dueDate,
         location: latLng,
         postal,
@@ -162,65 +163,122 @@ function Submit(props) {
     );
   };
 
-  const suppliesJSX = () => {
-    return foodJSX();
-  };
-
   const validNumber = phoneNumber === '' || phoneNumber.length >= 12;
   const validAddress = address === '' || !isEmpty(latLng);
   const allowSubmit = phoneNumber.length >= 12 && !isEmpty(latLng);
 
-  const foodJSX = () => {
+  const formJSX = () => {
     return (
       <div>
-        <div className="flex justify-content">
+        <div style={{ width: '100%' }}></div>
+        <div className="mt-4 flex justify-content">
           <div style={{ width: '100%' }}>
-            <div className="font-bold text-base text-left my-1">Request Summary</div>
+            <label
+              class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              for="grid-last-name"
+            >
+              Name
+            </label>
             <input
               onChange={e => {
-                setTitle(e.target.value);
+                setName(e.target.value);
               }}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               id="summary"
-              value={title}
+              value={name}
               type="text"
-              placeholder="Briefly explain your request, e.g. Sick and need help grocery shopping"
+              placeholder="Who will be receiving the order?"
             />
           </div>
           <div className="ml-3" style={{ width: '100%' }}>
-            <div className="font-bold text-base text-left my-1">Phone number</div>
-            <input
-              onChange={e => {
-                var phoneValue = e.target.value;
-                var output;
-                phoneValue = phoneValue.replace(/[^0-9]/g, '');
-                var area = phoneValue.substr(0, 3);
-                var pre = phoneValue.substr(3, 3);
-                var tel = phoneValue.substr(6, 4);
-
-                if (area.length < 3) {
-                  output = area;
-                } else if (area.length === 3 && pre.length < 3) {
-                  output = `${' '}${area}${' '}${' '}${pre}`;
-                } else if (area.length === 3 && pre.length === 3) {
-                  output = `${''}${area}${''}${' '}${pre}${' '}${tel}`;
-                }
-                setPhoneNumber(output);
-              }}
-              className={`shadow appearance-none border ${!validNumber &&
-                'border-red-500'} rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
-              id="title"
-              value={phoneNumber}
-              pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-              type="tel"
-              placeholder="Phone Number (for delivery confirmation)"
-            />
-            {!validNumber && (
-              <p class="text-red-500 text-xs italic">Please enter a valid number.</p>
-            )}
+            <label
+              class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              for="grid-state"
+            >
+              Type of Request
+            </label>
+            <div class="relative">
+              <select
+                value={selectedRequest}
+                class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                id="grid-state"
+                onChange={e => {
+                  setRequest(e.target.value.toLowerCase());
+                }}
+              >
+                <option value="food">Food</option>
+                <option value="supplies">Supplies</option>
+                <option value="miscellaneous">Miscellaneous</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <svg
+                  class="fill-current h-4 w-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                </svg>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="font-bold text-base text-left my-1 mt-4">Delivery Address</div>
+        <label
+          class="block uppercase mt-4 tracking-wide text-gray-700 text-xs font-bold mb-2"
+          for="grid-last-name"
+        >
+          Request Summary
+        </label>
+        <input
+          onChange={e => {
+            setTitle(e.target.value);
+          }}
+          className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          id="summary"
+          value={title}
+          type="text"
+          placeholder="Briefly explain your request, e.g. Sick and need help grocery shopping"
+        />
+
+        <label
+          class="block uppercase mt-4 tracking-wide text-gray-700 text-xs font-bold mb-2"
+          for="grid-last-name"
+        >
+          Phone Number
+        </label>
+        <input
+          onChange={e => {
+            var phoneValue = e.target.value;
+            var output;
+            phoneValue = phoneValue.replace(/[^0-9]/g, '');
+            var area = phoneValue.substr(0, 3);
+            var pre = phoneValue.substr(3, 3);
+            var tel = phoneValue.substr(6, 4);
+
+            if (area.length < 3) {
+              output = area;
+            } else if (area.length === 3 && pre.length < 3) {
+              output = `${' '}${area}${' '}${' '}${pre}`;
+            } else if (area.length === 3 && pre.length === 3) {
+              output = `${''}${area}${''}${' '}${pre}${' '}${tel}`;
+            }
+            setPhoneNumber(output);
+          }}
+          className={`${!validNumber &&
+            'border-red-500'} appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500`}
+          id="title"
+          value={phoneNumber}
+          pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+          type="tel"
+          placeholder="Phone Number (for delivery confirmation)"
+        />
+        {!validNumber && <p class="text-red-500 text-xs italic">Please enter a valid number.</p>}
+
+        <label
+          class="block mt-4 uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          for="grid-last-name"
+        >
+          Delivery Address
+        </label>
         <PlacesAutocomplete
           value={address}
           onChange={address => setAddress(address)}
@@ -258,8 +316,8 @@ function Submit(props) {
                   className: 'location-search-input'
                 })}
                 value={address}
-                className={`shadow appearance-none border ${!validAddress &&
-                  'border-red-500'} rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+                className={`${!validAddress &&
+                  'border-red-500'} appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500`}
                 id="address"
                 type="text"
               />
@@ -291,20 +349,29 @@ function Submit(props) {
             </div>
           )}
         </PlacesAutocomplete>
-        <div className="font-bold text-base text-left my-1 mt-4">Description</div>
+        <label
+          class="block mt-4 uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          for="grid-last-name"
+        >
+          Description
+        </label>
         <input
           onChange={e => {
             setDescription(e.target.value);
           }}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
           id="description"
           value={description}
           type="text"
-          placeholder="Please be specific so that helpers can quickly and easily understand what you need."
+          placeholder="Please be as specific as possible. Include any special instructions regarding your circumstances, needs, and/or delivery preferences here."
         />
-        <div className="font-bold text-base text-left my-1 mt-4">When do you need this by?</div>
+        <label
+          class="block mt-4 uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          for="grid-last-name"
+        >
+          When do you need this by?
+        </label>
         <input
-          style={{ height: '32px' }}
           onChange={e => {
             setDueDate(e.target.value); // YYYY-MM-DD
           }}
@@ -318,7 +385,7 @@ function Submit(props) {
             onChange={e => {
               setCartName(e.target.value);
             }}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             id="food"
             value={cartName}
             type="text"
@@ -334,7 +401,7 @@ function Submit(props) {
             onChange={e => {
               setCartQuantity(e.target.value);
             }}
-            className="mx-4 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="mx-4 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             style={{ width: 100 }}
             value={cartQuantity}
             id={
@@ -391,6 +458,7 @@ function Submit(props) {
                       type: selectedRequest,
                       description,
                       cart,
+                      name,
                       postal,
                       dueDate,
                       location: latLng,
@@ -537,31 +605,16 @@ function Submit(props) {
                 {!checkout ? (
                   <React.Fragment>
                     <div className="font-bold text-xl text-left">I need:</div>
-                    {/* <div>
-                      {selectedRequest !== '' && (
-                        <button
-                          onClick={() => setCheckout(true)}
-                          style={{ outline: 'none' }}
-                          className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
-                        >
-                          Next
-                        </button>
-                      )}
-                    </div> */}
                   </React.Fragment>
                 ) : (
-                  <React.Fragment>
-                    <div
-                      onClick={() => {
-                        setRequest('');
-                        setCheckout(false);
-                      }}
-                      className="font-bold text-xl text-left"
-                      style={{ cursor: 'pointer' }}
+                  <div className="flex justify-center" style={{ width: '100%' }}>
+                    <label
+                      class="block mt-4 uppercase tracking-wide text-gray-700 text-sm font-bold mb-2"
+                      for="grid-last-name"
                     >
-                      <ArrowLeft size={20} />
-                    </div>
-                  </React.Fragment>
+                      Create Request
+                    </label>
+                  </div>
                 )}
               </div>
               {!checkout && (
@@ -661,13 +714,7 @@ function Submit(props) {
                   </div>
                 </div>
               )}
-              {checkout && (
-                <React.Fragment>
-                  {selectedRequest === 'food' && foodJSX()}
-                  {selectedRequest === 'supplies' && suppliesJSX()}
-                  {selectedRequest === 'transportation' && transportationJSX()}
-                </React.Fragment>
-              )}
+              {checkout && <React.Fragment>{formJSX()}</React.Fragment>}
             </Card>
           )}
         </div>
