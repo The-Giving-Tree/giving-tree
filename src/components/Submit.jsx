@@ -40,6 +40,8 @@ function Submit(props) {
 
   const [title, setTitle] = React.useState('');
   const [name, setName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [contactMethod, setContactMethod] = React.useState('');
   const [phoneNumber, setPhoneNumber] = React.useState('');
   const [address, setAddress] = useState('');
   const [latLng, setLatLng] = useState({});
@@ -84,6 +86,8 @@ function Submit(props) {
         type: selectedRequest,
         description,
         cart,
+        contactMethod,
+        email,
         name,
         dueDate,
         location: latLng,
@@ -164,9 +168,15 @@ function Submit(props) {
     );
   };
 
-  const validNumber = phoneNumber === '' || phoneNumber.length >= 12;
+  function validateEmail(email) {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  }
+
+  const validNumber = phoneNumber === '' || phoneNumber.length >= 10;
+  const validEmail = email === '' || validateEmail(email);
   const validAddress = address === '' || !isEmpty(latLng);
-  const allowSubmit = phoneNumber.length >= 12 && !isEmpty(latLng);
+  const allowSubmit = phoneNumber.length >= 10 && !isEmpty(latLng);
 
   const formJSX = () => {
     return (
@@ -230,6 +240,7 @@ function Submit(props) {
           Request Summary
         </label>
         <input
+          style={{ paddingBottom: 50 }}
           onChange={e => {
             setTitle(e.target.value);
           }}
@@ -239,40 +250,123 @@ function Submit(props) {
           type="text"
           placeholder="Briefly explain your request, e.g. Sick and need help grocery shopping"
         />
+        <div className="flex items-center mt-4">
+          <label
+            class="block uppercase tracking-wide text-gray-700 text-xs font-bold mr-2"
+            for="grid-last-name"
+          >
+            Needed By:
+          </label>
+          <input
+            style={{ width: 300, height: 32 }}
+            onChange={e => {
+              setDueDate(e.target.value); // YYYY-MM-DD
+            }}
+            className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+            type="datetime-local"
+            value={`${moment(new Date()).format('YYYY-MM-DD')}T${moment(new Date()).format(
+              'HH:mm'
+            )}`}
+          />
+        </div>
 
-        <label
-          class="block uppercase mt-4 tracking-wide text-gray-700 text-xs font-bold mb-2"
-          for="grid-last-name"
-        >
-          Phone Number
-        </label>
+        <div className="mt-10 mb-4">
+          <label
+            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+            for="grid-last-name"
+          >
+            Preferred Contact Method
+          </label>
+          <label className="text-xs block tracking-wide ml-6 text-gray-700 font-bold">
+            <div className="flex items-center">
+              <input
+                checked={contactMethod === 'phone'}
+                className="mr-2 leading-tight"
+                onChange={() => setContactMethod('phone')}
+                type="radio"
+              ></input>
+              <span className="mr-2">phone (recommended)</span>
+              <div className={contactMethod === 'phone' ? '' : `hidden`}>
+                <input
+                  style={{ width: 200, height: 32 }}
+                  onChange={e => {
+                    var phoneValue = e.target.value;
+                    var output;
+                    phoneValue = phoneValue.replace(/[^0-9]/g, '');
+                    var area = phoneValue.substr(0, 3);
+                    var pre = phoneValue.substr(3, 3);
+                    var tel = phoneValue.substr(6, 4);
+
+                    if (area.length < 3) {
+                      output = area;
+                    } else if (area.length === 3 && pre.length < 3) {
+                      output = `${area}${pre}`;
+                    } else if (area.length === 3 && pre.length === 3) {
+                      output = `${''}${area}${''}${pre}${tel}`;
+                    }
+                    setPhoneNumber(output);
+                  }}
+                  className={`${!validNumber &&
+                    'border-red-500'} appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500`}
+                  id="title"
+                  value={phoneNumber}
+                  pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                  type="tel"
+                  placeholder="Phone Number"
+                />
+                {!validNumber && (
+                  <p class="text-red-500 text-xs italic">Please enter a valid number.</p>
+                )}
+              </div>
+            </div>
+          </label>
+          <label className="text-xs block tracking-wide ml-6 text-gray-700 font-bold">
+            <div className="flex items-center">
+              <input
+                checked={contactMethod === 'email'}
+                onChange={() => setContactMethod('email')}
+                className="mr-2 leading-tight"
+                type="radio"
+              ></input>
+              <span className="mr-2">email</span>
+              <div className={contactMethod === 'email' ? '' : `hidden`}>
+                <input
+                  style={{ width: 200, height: 32 }}
+                  onChange={e => {
+                    setEmail(e.target.value);
+                  }}
+                  className={`${!validEmail &&
+                    'border-red-500'} appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500`}
+                  id="email"
+                  value={email}
+                  placeholder="Email"
+                />
+                {!validEmail && (
+                  <p class="text-red-500 text-xs italic">Please enter a valid email.</p>
+                )}
+              </div>
+            </div>
+          </label>
+          <label className="text-xs block tracking-wide ml-6 text-gray-700 font-bold">
+            <input
+              checked={contactMethod === 'comments'}
+              onChange={() => setContactMethod('comments')}
+              className="mr-2 leading-tight"
+              type="radio"
+            ></input>
+            <span className="">in app comments</span>
+          </label>
+        </div>
         <input
           onChange={e => {
-            var phoneValue = e.target.value;
-            var output;
-            phoneValue = phoneValue.replace(/[^0-9]/g, '');
-            var area = phoneValue.substr(0, 3);
-            var pre = phoneValue.substr(3, 3);
-            var tel = phoneValue.substr(6, 4);
-
-            if (area.length < 3) {
-              output = area;
-            } else if (area.length === 3 && pre.length < 3) {
-              output = `${' '}${area}${' '}${' '}${pre}`;
-            } else if (area.length === 3 && pre.length === 3) {
-              output = `${''}${area}${''}${' '}${pre}${' '}${tel}`;
-            }
-            setPhoneNumber(output);
+            setDescription(e.target.value);
           }}
-          className={`${!validNumber &&
-            'border-red-500'} appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500`}
-          id="title"
-          value={phoneNumber}
-          pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-          type="tel"
-          placeholder="Phone Number (for delivery confirmation)"
+          className="appearance-none mt-4 block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          id="description"
+          value={description}
+          type="text"
+          placeholder="Add any special instructions regarding your circumstances, needs, and/or delivery preferences here."
         />
-        {!validNumber && <p class="text-red-500 text-xs italic">Please enter a valid number.</p>}
 
         <label
           class="block mt-4 uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -350,37 +444,6 @@ function Submit(props) {
             </div>
           )}
         </PlacesAutocomplete>
-        <label
-          class="block mt-4 uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-          for="grid-last-name"
-        >
-          Description
-        </label>
-        <input
-          onChange={e => {
-            setDescription(e.target.value);
-          }}
-          style={{ height: 100, lineHeight: '100px' }}
-          className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-          id="description"
-          value={description}
-          type="text"
-          placeholder="Please be as specific as possible. Include any special instructions regarding your circumstances, needs, and/or delivery preferences here."
-        />
-        <label
-          class="block mt-4 uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-          for="grid-last-name"
-        >
-          When do you need this by?
-        </label>
-        <input
-          onChange={e => {
-            setDueDate(e.target.value); // YYYY-MM-DD
-          }}
-          className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-          type="datetime-local"
-          value={`${moment(new Date()).format('YYYY-MM-DD')}T${moment(new Date()).format('HH:mm')}`}
-        />
         <div className="mt-4"></div>
         {cartJSX()}
         <div className={`flex items-center mt-4`}>
@@ -461,6 +524,8 @@ function Submit(props) {
                       type: selectedRequest,
                       description,
                       cart,
+                      contactMethod,
+                      email,
                       name,
                       postal,
                       dueDate,
