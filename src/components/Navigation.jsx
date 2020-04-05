@@ -291,10 +291,11 @@ function Navigation(props) {
   if (authenticated) {
     return (
       <header className="flex items-center justify-start px-6 py-3 bg-white">
-        {/* <button
-          className="rounded-full bg-green text-white px-4 py-2"
+        <button
+          className="rounded-full text-white px-4 py-2"
           style={{
             position: 'fixed',
+            outline: 'none',
             backgroundColor: '#8ec755',
             bottom: '1rem',
             right: '1rem',
@@ -376,7 +377,7 @@ function Navigation(props) {
               Submit
             </ModalButton>
           </ModalFooter>
-        </Modal> */}
+        </Modal>
         {/* Main logo */}
         <Link to="/home/discover" className="mr-auto">
           <img
