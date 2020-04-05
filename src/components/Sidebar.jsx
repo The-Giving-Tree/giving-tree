@@ -41,6 +41,9 @@ class Sidebar extends React.Component {
                 }}
                 className="flex items-center"
                 activeClassName="text-indigo-600"
+                onClick={()=>{
+                  window.location = '/home/ongoing';
+                }}
               >
                 <img
                   alt="search"
@@ -61,6 +64,9 @@ class Sidebar extends React.Component {
                     return Constants.PATHS.SIGNUP;
                   }
                 }}
+                onClick={()=>{
+                  window.location = '/home/completed';
+                }}
                 className="flex items-center"
                 activeClassName="text-indigo-600"
               >
@@ -79,6 +85,9 @@ class Sidebar extends React.Component {
                 to={Constants.PATHS.GLOBAL}
                 className="flex items-center"
                 activeClassName="text-indigo-600"
+                onClick={()=>{
+                  window.location = '/home/global';
+                }}
               >
                 <img
                   alt="search"

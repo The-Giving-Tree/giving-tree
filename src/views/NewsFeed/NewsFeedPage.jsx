@@ -278,7 +278,7 @@ function NewsFeedPage(props) {
   };
 
   const completedOrderGlobalJSX = item => {
-    return item.length === 0 ? (
+    return item.length === 0 || !item.assignedUser ? (
       <div className="text-center">no completed details available yet</div>
     ) : (
       <React.Fragment>
@@ -1193,7 +1193,7 @@ function NewsFeedPage(props) {
                             style={{ height: 22, width: 'auto', display: 'block' }}
                           />
                           <div style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}>
-                            <strong>{item.comments.length}&nbsp;&nbsp;Comments</strong>
+                            <strong>{item.comments.length}&nbsp;</strong>
                           </div>
                         </Button>
                       </div>
