@@ -1376,7 +1376,7 @@ function NewsFeedPage(props) {
         </ModalFooter>
       </Modal>
 
-      <div className="max-w-screen-lg w-full mx-auto xl:flex xl:max-w-6xl pt-12">
+      <div className="max-w-screen-lg w-full mx-auto xl:flex xl:max-w-6xl pt-12 mb-8">
         <section className="hidden xl:block">
           <Sidebar {...props} />
         </section>
