@@ -489,7 +489,7 @@ function Navigation(props) {
           to={Constants.PATHS.SUBMIT}
           onClick={() => {
             selectMenuDispatch({ selectMenu: '' });
-            history.push(Constants.PATHS.SUBMIT);
+            window.location = Constants.PATHS.SUBMIT;
           }}
         >
           <img

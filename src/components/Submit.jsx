@@ -45,7 +45,7 @@ function Submit(props) {
   const [postal, setPostal] = useState('');
   const [cart, setCart] = React.useState([]);
   const [selectedRequest, setRequest] = React.useState('food');
-  const [checkout, setCheckout] = React.useState(true);
+  const [checkout, setCheckout] = React.useState(false);
   let [changedCart, setChangedCart] = useState(0);
   const [cartQuantity, setCartQuantity] = React.useState('');
   const [cartName, setCartName] = React.useState('');
@@ -359,6 +359,7 @@ function Submit(props) {
           onChange={e => {
             setDescription(e.target.value);
           }}
+          style={{ height: 100, lineHeight: '100px' }}
           className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
           id="description"
           value={description}
@@ -604,7 +605,12 @@ function Submit(props) {
               <div className="flex justify-between items-center my-4 mb-6" style={{ height: 36 }}>
                 {!checkout ? (
                   <React.Fragment>
-                    <div className="font-bold text-xl text-left">I need:</div>
+                    <label
+                      class="block mt-4 uppercase tracking-wide text-gray-700 text-sm font-bold mb-2"
+                      for="grid-last-name"
+                    >
+                      I want to:
+                    </label>
                   </React.Fragment>
                 ) : (
                   <div className="flex justify-center" style={{ width: '100%' }}>
@@ -618,43 +624,21 @@ function Submit(props) {
                 )}
               </div>
               {!checkout && (
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 gap-8">
                   <div
                     onClick={() => {
-                      if (selectedRequest) {
-                        setRequest('');
-                      } else {
-                        setRequest('food');
-                        setCheckout(true);
-                      }
+                      alert('please call or text +1 415-964-4261');
                     }}
-                    className={`max-w-sm rounded overflow-hidden shadow-lg border ${selectedRequest ===
-                      'food' &&
-                      'border-indigo-600'} hover:border-indigo-600 rounded-lg hover:text-green-600 transition duration-150`}
+                    className={`max-w-sm flex items-center justify-center rounded overflow-hidden shadow-lg border hover:border-indigo-600 rounded-lg hover:text-green-600 transition duration-150`}
                     style={{ cursor: 'pointer' }}
                   >
-                    <img
-                      style={{ objectFit: 'cover', height: 150, width: 400, overflow: 'auto' }}
-                      src="https://d1ppmvgsdgdlyy.cloudfront.net/groceries.jpg"
-                      alt="Food"
-                    ></img>
                     <div className="px-6 py-8">
-                      <div
-                        className={`font-bold text-xl text-center ${selectedRequest === 'food' &&
-                          'text-green-600'}`}
-                      >
-                        Food
-                      </div>
+                      <div className={`font-bold text-xl`}>Call or Text</div>
                     </div>
                   </div>
                   <div
                     onClick={() => {
-                      if (selectedRequest) {
-                        setRequest('');
-                      } else {
-                        setRequest('supplies');
-                        setCheckout(true);
-                      }
+                      setCheckout(true);
                     }}
                     className={`max-w-sm rounded  hover:border-indigo-600 overflow-hidden shadow-lg border ${selectedRequest ===
                       'supplies' && 'border-indigo-600'} rounded-lg transition duration-150`}
@@ -667,7 +651,7 @@ function Submit(props) {
                         width: 400,
                         overflow: 'auto'
                       }}
-                      src="https://d1ppmvgsdgdlyy.cloudfront.net/supplies.jpg"
+                      src="https://d1ppmvgsdgdlyy.cloudfront.net/groceries.jpg"
                       alt="Supplies"
                     ></img>
                     <div className="px-6 py-8">
@@ -675,40 +659,7 @@ function Submit(props) {
                         className={`font-bold text-xl text-center ${selectedRequest ===
                           'supplies' && 'text-green-600'}`}
                       >
-                        Supplies
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    onClick={() => {
-                      if (selectedRequest) {
-                        setRequest('');
-                      } else {
-                        // setRequest('transportation');
-                        // setCheckout(true);
-                      }
-                    }}
-                    className={`max-w-sm rounded overflow-hidden shadow-lg border ${selectedRequest ===
-                      'transportation' && 'border-indigo-600'} rounded-lg transition duration-150`}
-                    style={{ cursor: 'not-allowed' }}
-                  >
-                    <img
-                      style={{
-                        objectFit: 'cover',
-                        maxHeight: 150,
-                        width: 400,
-                        overflow: 'auto',
-                        filter: 'grayscale(100%)'
-                      }}
-                      src="https://d1ppmvgsdgdlyy.cloudfront.net/transportation.jpg"
-                      alt="Transportation"
-                    ></img>
-                    <div className="px-6 py-8">
-                      <div
-                        className={`font-bold text-xl text-center ${selectedRequest ===
-                          'transportation' && 'text-green-600'}`}
-                      >
-                        Transportation (coming soon)
+                        Submit Request Online
                       </div>
                     </div>
                   </div>
