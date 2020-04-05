@@ -35,8 +35,6 @@ class NewsFeedPage2 extends React.Component {
     this.setLocation = this.setLocation.bind(this);
   }
 
-  componentDidMount() {
-  }
   
   /**
    * Get the feed mode/filter from the URL params
@@ -65,23 +63,19 @@ class NewsFeedPage2 extends React.Component {
     })
   }
 
-
   render() {
-
-    const urlLoc = this.props.match.params.search;
-
-    console.log(urlLoc);
-
     return (
       <div className="h-full flex flex-col">
         <Navigation searchBarPosition="center" />
         <div className="max-w-screen-lg w-full mx-auto xl:flex xl:max-w-6xl py-12">
-          <section className="hidden xl:block">
+          <aside className="hidden xl:block">
             <Sidebar {...this.props} />
-          </section>
+          </aside>
           <section className="xl:w-1/2 px-6 lg:px-12">
-            <LocationBar location={this.state.location}
-              setLocation={this.setLocation} />
+            <div className="mb-4">
+              <LocationBar location={this.state.location}
+                setLocation={this.setLocation} />
+            </div>
             <NewsFeedTable2 location={this.state.location} />
           </section>
           <section className="hidden xl:block">
