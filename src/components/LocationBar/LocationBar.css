@@ -1,0 +1,8 @@
+.autocomplete-dropdown-container {
+  border: 1px solid #e5e5e5;
+}
+
+.suggestion-item,
+.suggestion-item--active {
+  padding: .5rem 1rem;
+}

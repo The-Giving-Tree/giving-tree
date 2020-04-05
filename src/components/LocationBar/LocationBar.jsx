@@ -1,7 +1,7 @@
 import * as React from 'react';
-// import { geolocated } from 'react-geolocated';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
+import './LocationBar.css';
 
 class LocationBar extends React.Component {
 
@@ -71,7 +71,7 @@ class LocationBar extends React.Component {
           </div>
         : // What to display when the user clicks to change location
           <div className="flex items-center w-full">
-            <div className="flex justify-between items-center w-full mr-4">
+            <div className="flex justify-between items-center w-full mr-4 relative">
               <PlacesAutocomplete value={this.state.locationName}
                 onChange={(address) => this.onChange(address)}
                 onSelect={(address) => this.onSelect(address)}>
