@@ -1078,7 +1078,59 @@ function NewsFeedPage(props) {
                     marginTop: 10
                   }}
                 >
-                  <div />
+                  {props.match.url !== '/home/ongoing' ? (
+                    <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
+                      <CopyToClipboard text={`${window.location.origin}/post/${item._id}`}>
+                        <StatefulPopover
+                          placement={PLACEMENT.bottomLeft}
+                          content={({ close }) => (
+                            <StatefulMenu
+                              items={[
+                                {
+                                  label: 'Copy Link'
+                                }
+                              ]}
+                              onItemSelect={item => {
+                                close();
+                                switch (item.item.label) {
+                                  case 'Copy Link':
+                                    break;
+                                  default:
+                                    break;
+                                }
+                              }}
+                              overrides={{
+                                List: { style: { outline: 'none', padding: '0px' } }
+                              }}
+                            />
+                          )}
+                        >
+                          <Button
+                            style={{ outline: 'none', padding: 0 }}
+                            kind="minimal"
+                            size={SIZE.compact}
+                          >
+                            <img
+                              src="https://d1ppmvgsdgdlyy.cloudfront.net/share.svg"
+                              alt="share"
+                              style={{ height: 22, width: 'auto', display: 'block' }}
+                            />
+                            <div
+                              style={{
+                                marginLeft: 5,
+                                textTransform: 'uppercase',
+                                fontSize: 12
+                              }}
+                            >
+                              <strong>Share</strong>
+                            </div>
+                          </Button>
+                        </StatefulPopover>
+                      </CopyToClipboard>
+                    </div>
+                  ) : (
+                    <div />
+                  )}
                   <div style={{ display: 'flex', alignContent: 'center' }}>
                     {confetti && <Confetti width={width} height={height} recycle={false} />}
                     {item.type === 'Post' &&
@@ -1128,57 +1180,6 @@ function NewsFeedPage(props) {
                           </Button>
                         </div>
                       )}
-                    {props.match.url !== '/home/ongoing' && (
-                      <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
-                        <CopyToClipboard text={`${window.location.origin}/post/${item._id}`}>
-                          <StatefulPopover
-                            placement={PLACEMENT.bottomLeft}
-                            content={({ close }) => (
-                              <StatefulMenu
-                                items={[
-                                  {
-                                    label: 'Copy Link'
-                                  }
-                                ]}
-                                onItemSelect={item => {
-                                  close();
-                                  switch (item.item.label) {
-                                    case 'Copy Link':
-                                      break;
-                                    default:
-                                      break;
-                                  }
-                                }}
-                                overrides={{
-                                  List: { style: { outline: 'none', padding: '0px' } }
-                                }}
-                              />
-                            )}
-                          >
-                            <Button
-                              style={{ outline: 'none', padding: 0 }}
-                              kind="minimal"
-                              size={SIZE.compact}
-                            >
-                              <img
-                                src="https://d1ppmvgsdgdlyy.cloudfront.net/share.svg"
-                                alt="share"
-                                style={{ height: 22, width: 'auto', display: 'block' }}
-                              />
-                              <div
-                                style={{
-                                  marginLeft: 5,
-                                  textTransform: 'uppercase',
-                                  fontSize: 12
-                                }}
-                              >
-                                <strong>Share</strong>
-                              </div>
-                            </Button>
-                          </StatefulPopover>
-                        </CopyToClipboard>
-                      </div>
-                    )}
                     {props.match.url !== '/home/ongoing' && (
                       <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
                         <Button
@@ -1292,7 +1293,7 @@ function NewsFeedPage(props) {
                             <div
                               style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}
                             >
-                              <strong>Add Tracking Details</strong>
+                              <strong>Mark Completed</strong>
                             </div>
                           </Button>
                         </StatefulPopover>
@@ -1320,7 +1321,7 @@ function NewsFeedPage(props) {
         onClose={() => setOpenFoodTracking(false)}
         isOpen={openFoodTracking}
       >
-        <ModalHeader>Add Tracking Details</ModalHeader>
+        <ModalHeader>Mark Completed</ModalHeader>
         <ModalBody>
           When is the food arriving (ETA)?
           <Input
