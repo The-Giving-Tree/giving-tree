@@ -96,7 +96,7 @@ class NewsFeedPage2 extends React.Component {
                     }}
                     className={`mb-4`}
                   >
-                    Leaderboard
+                    Global Leaderboard
                   </div>
                   <div
                     style={{
@@ -107,7 +107,7 @@ class NewsFeedPage2 extends React.Component {
                       color: '#545454'
                     }}
                   >
-                    Most helpful people in your area
+                    Top Helpers
                   </div>
                 </div>
                 <Link to={Constants.PATHS.LEADERBOARD}

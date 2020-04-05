@@ -160,6 +160,8 @@ function Signup(props) {
                       width: matches.medium || matches.large ? '512px' : '100%',
                       margin: '0 auto',
                       border: 'none',
+                      paddingTop: '12px',
+                      paddingBottom: '12px',
                       boxShadow: 'none'
                     }
                   }
@@ -244,6 +246,9 @@ function Signup(props) {
               <p className="my-3 text-sm">
                 Already have an account? <a href="/login">Login</a>
               </p>
+              <div style={{ cursor: 'pointer' }} className="text-black hover:text-green-600 transition duration-150">
+          <a href="tel:+1415-964-4261">Hotline: +1 415-964-4261</a>
+        </div>
             </div>
           )}
         </Media>

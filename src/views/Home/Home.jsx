@@ -8,7 +8,7 @@ import { Notification } from 'baseui/notification';
 import { hotjar } from 'react-hotjar';
 import Media from 'react-media';
 import { Button, SHAPE } from 'baseui/button';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Redirect } from 'react-router-dom';
 import { Modal, ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/modal';
 import Navigation from '../../components/Navigation';
 import Footer from '../../components/Footer';
@@ -375,9 +375,12 @@ function Home(props) {
         <h1 className={`landing-title mb-4 text-center md:text-left`}>
           Request help or lend a hand
         </h1>
-        <div className={`landing-text py-4 text-center md:text-left`}>
+        <div className={`landing-text py-2 text-center md:text-left`}>
           The Giving Tree was created in response to COVID-19. Our platform connects people who need
           assistance with people who are interested in helping.
+        </div>
+        <div style={{ cursor: 'pointer' }} className="text-black hover:text-green-600 transition duration-150">
+          <a href="tel:+1415-964-4261">Hotline: +1 415-964-4261</a>
         </div>
       </div>
     );
@@ -440,54 +443,55 @@ function Home(props) {
         >
           {matches =>
             authenticated ? (
-              <React.Fragment>
-                <div
-                  className="flex items-center justify-center text-center font-bold flex-grow"
-                  style={{
-                    width: '100%',
-                    minHeight: '100vh',
-                    background:
-                      'url(https://d1ppmvgsdgdlyy.cloudfront.net/landing.png) center center',
-                    backgroundSize: 'cover',
-                    color: 'white',
-                    fontWeight: 500,
-                    position: 'relative',
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: 10,
-                      position: 'absolute',
-                      bottom: 0,
-                      left: 0
-                    }}
-                  >
-                    Dribbbled by @tubik_arts
-                  </div>
-                  <div className="text-2xl px-6 sm:text-4xl lg:text-6xl"
-                  style={{
-                    textShadow: '0px 0px 3px #000'
-                  }}>
-                    We are waves of the same sea,
-                    <br />
-                    leaves of the same tree,
-                    <br />
-                    flowers of the same garden
-                    <br />
-                    <button
-                      onClick={() => (window.location = '/home/discover')}
-                      style={{
-                        outline: 'none',
-                        fontSize: 26,
-                        backgroundColor: '#8ec755'
-                      }}
-                      className="mt-10 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                    >
-                      Get Started
-                    </button>
-                  </div>
-                </div>
-              </React.Fragment>
+              <Redirect to={`/home/discover`}/>
+              // <React.Fragment>
+              //   <div
+              //     className="flex items-center justify-center text-center font-bold flex-grow"
+              //     style={{
+              //       width: '100%',
+              //       minHeight: '100vh',
+              //       background:
+              //         'url(https://d1ppmvgsdgdlyy.cloudfront.net/landing.png) center center',
+              //       backgroundSize: 'cover',
+              //       color: 'white',
+              //       fontWeight: 500,
+              //       position: 'relative',
+              //     }}
+              //   >
+              //     <div
+              //       style={{
+              //         fontSize: 10,
+              //         position: 'absolute',
+              //         bottom: 0,
+              //         left: 0
+              //       }}
+              //     >
+              //       Dribbbled by @tubik_arts
+              //     </div>
+              //     <div className="text-2xl px-6 sm:text-4xl lg:text-6xl"
+              //     style={{
+              //       textShadow: '0px 0px 3px #000'
+              //     }}>
+              //       We are waves of the same sea,
+              //       <br />
+              //       leaves of the same tree,
+              //       <br />
+              //       flowers of the same garden
+              //       <br />
+              //       <button
+              //         onClick={() => (window.location = '/home/discover')}
+              //         style={{
+              //           outline: 'none',
+              //           fontSize: 26,
+              //           backgroundColor: '#8ec755'
+              //         }}
+              //         className="mt-10 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+              //       >
+              //         Get Started
+              //       </button>
+              //     </div>
+              //   </div>
+              // </React.Fragment>
             ) : (
               <div className="flex-grow">
                 <div className="grid grid-cols-1 lg:grid-cols-3 h-full">

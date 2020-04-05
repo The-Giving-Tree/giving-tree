@@ -121,6 +121,8 @@ function Login(props) {
                       width: matches.medium || matches.large ? '512px' : '100%',
                       margin: '0 auto',
                       border: 'none',
+                      paddingTop: '12px',
+                      paddingBottom: '12px',
                       boxShadow: 'none'
                     }
                   }

@@ -1420,7 +1420,7 @@ function NewsFeedPage(props) {
                   }}
                   className={`mb-4`}
                 >
-                  Leaderboard
+                  Global Leaderboard
                 </div>
                 <div
                   style={{
@@ -1431,7 +1431,7 @@ function NewsFeedPage(props) {
                     color: '#545454'
                   }}
                 >
-                  Most helpful people in your area
+                  Top Helpers
                 </div>
               </div>
               <button
