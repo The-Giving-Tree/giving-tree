@@ -485,7 +485,7 @@ function Navigation(props) {
 
         {/* Submit Link */}
         <Link
-          className="p-2 mr-5"
+          className="p-2 mr-4"
           to={Constants.PATHS.SUBMIT}
           onClick={() => {
             selectMenuDispatch({ selectMenu: '' });
@@ -506,7 +506,7 @@ function Navigation(props) {
           onClick={() => history.push(Constants.PATHS.GUIDELINES)}
         >
           <img
-            src="https://d1ppmvgsdgdlyy.cloudfront.net/first-aid.svg"
+            src="https://d1ppmvgsdgdlyy.cloudfront.net/information.svg"
             alt="guidelines"
             style={{ width: 25, cursor: 'pointer' }}
           />
@@ -547,10 +547,10 @@ function Navigation(props) {
                   label: 'My Profile',
                   icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/user.svg'
                 },
-                {
-                  label: 'Settings',
-                  icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/setting.svg'
-                },
+                // {
+                //   label: 'Settings',
+                //   icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/setting.svg'
+                // },
                 {
                   label: 'Log Out',
                   icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/logout.svg'
@@ -682,7 +682,7 @@ function Navigation(props) {
             onClick={() => history.push(Constants.PATHS.GUIDELINES)}
           >
             <img
-              src="https://d1ppmvgsdgdlyy.cloudfront.net/first-aid.svg"
+              src="https://d1ppmvgsdgdlyy.cloudfront.net/information.svg"
               alt="guidelines"
               style={{ width: 25, cursor: 'pointer' }}
             />

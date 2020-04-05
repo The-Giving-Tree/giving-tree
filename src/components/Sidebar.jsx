@@ -27,7 +27,7 @@ class Sidebar extends React.Component {
                   src="https://d1ppmvgsdgdlyy.cloudfront.net/search.svg"
                   style={{ height: 20 }}
                 />
-                Discover Requests
+                Find Requests
               </NavLink>
             </li>
 

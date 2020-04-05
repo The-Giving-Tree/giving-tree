@@ -110,7 +110,7 @@ function HowItWorks(props) {
               <b>Helper Guidelines</b>
               <div className="section-text">
                 <br />
-                Explore the Discover Requests feed to find new, unclaimed requests near you
+                Explore the Find Requests feed to find new, unclaimed requests near you
                 <br />
                 <br />
                 Review the request’s details thoroughly to ensure you’ll be able to fulfill all
