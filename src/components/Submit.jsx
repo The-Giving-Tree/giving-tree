@@ -126,7 +126,7 @@ function Submit(props) {
 
   const cartJSX = () => {
     return cart.length === 0 ? (
-      <div className="text-center">no items in cart</div>
+      <div className="text-center">Start adding items below</div>
     ) : (
       <table className="table-auto" style={{ width: '100%' }}>
         <thead>
@@ -188,7 +188,7 @@ function Submit(props) {
             />
           </div>
           <div className="ml-3" style={{ width: '100%' }}>
-            <div className="font-bold text-base text-left my-1">Phone Number</div>
+            <div className="font-bold text-base text-left my-1">Phone number</div>
             <input
               onChange={e => {
                 var phoneValue = e.target.value;
@@ -302,7 +302,7 @@ function Submit(props) {
           type="text"
           placeholder="Please be specific so that helpers can quickly and easily understand what you need."
         />
-        <div className="font-bold text-base text-left my-1 mt-4">Due Date</div>
+        <div className="font-bold text-base text-left my-1 mt-4">When do you need this by?</div>
         <input
           style={{ height: '32px' }}
           onChange={e => {
@@ -324,9 +324,9 @@ function Submit(props) {
             type="text"
             placeholder={
               selectedRequest === 'food'
-                ? `food item`
+                ? `Item name, brand, and store location`
                 : selectedRequest === 'supplies'
-                ? 'household supplies'
+                ? 'Item name, brand, and store location'
                 : ''
             }
           />
@@ -341,7 +341,7 @@ function Submit(props) {
               selectedRequest === 'food' ? `food` : selectedRequest === 'supplies' ? 'supplies' : ''
             }
             type="number"
-            placeholder="quantity"
+            placeholder="Quantity"
             min="1"
           />
           <button
@@ -581,7 +581,7 @@ function Submit(props) {
                     style={{ cursor: 'pointer' }}
                   >
                     <img
-                      style={{ objectFit: 'cover', maxHeight: 150, width: 400, overflow: 'auto' }}
+                      style={{ objectFit: 'cover', height: 150, width: 400, overflow: 'auto' }}
                       src="https://d1ppmvgsdgdlyy.cloudfront.net/groceries.jpg"
                       alt="Food"
                     ></img>
