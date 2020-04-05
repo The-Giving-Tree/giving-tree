@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import PlacesAutocomplete from 'react-places-autocomplete';
+import moment from 'moment';
 import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import Navigation from './Navigation';
 import { Card } from 'baseui/card';
@@ -378,6 +379,7 @@ function Submit(props) {
           }}
           className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
           type="datetime-local"
+          value={`${moment(new Date()).format('YYYY-MM-DD')}T${moment(new Date()).format('HH:mm')}`}
         />
         <div className="mt-4"></div>
         {cartJSX()}
