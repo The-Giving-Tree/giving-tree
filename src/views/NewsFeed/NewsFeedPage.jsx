@@ -99,7 +99,7 @@ function NewsFeedPage(props) {
 
   // id dictates the type of feed
   let id = props.match.params ? props.match.params[0].toLowerCase() : '';
-  
+
   if (true) {
     switch (id) {
       case '':
@@ -1398,7 +1398,8 @@ function NewsFeedPage(props) {
             newPost={newPost}
             selectMenu={selectMenu}
             openCustomAddress={openCustomAddress}
-            setUpdateNews={setUpdateNews}/>
+            setUpdateNews={setUpdateNews}
+          />
         </section>
         <section className="hidden xl:block">
           <div

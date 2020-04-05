@@ -379,7 +379,10 @@ function Home(props) {
           The Giving Tree was created in response to COVID-19. Our platform connects people who need
           assistance with people who are interested in helping.
         </div>
-        <div style={{ cursor: 'pointer' }} className="text-black hover:text-green-600 transition duration-150">
+        <div
+          style={{ cursor: 'pointer' }}
+          className="text-black hover:text-green-600 transition duration-150"
+        >
           <a href="tel:+1415-964-4261">Hotline: +1 415-964-4261</a>
         </div>
       </div>
@@ -443,7 +446,8 @@ function Home(props) {
         >
           {matches =>
             authenticated ? (
-              <Redirect to={`/home/discover`}/>
+              <Redirect to={`/home/discover`} />
+            ) : (
               // <React.Fragment>
               //   <div
               //     className="flex items-center justify-center text-center font-bold flex-grow"
@@ -492,7 +496,6 @@ function Home(props) {
               //     </div>
               //   </div>
               // </React.Fragment>
-            ) : (
               <div className="flex-grow">
                 <div className="grid grid-cols-1 lg:grid-cols-3 h-full">
                   <div

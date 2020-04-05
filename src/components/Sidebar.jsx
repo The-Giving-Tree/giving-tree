@@ -8,13 +8,14 @@ class Sidebar extends React.Component {
     return (
       <div>
         {/* Mobile Nav */}
-  
+
         {/* Desktop Nav */}
         <nav className="hidden lg:block">
           <ul className="list-none p-0 m-0">
             <li className="text-black transition duration-150 px-6 my-2">
-              <NavLink to={Constants.PATHS.NEWSFEED}
-                onClick={()=>{
+              <NavLink
+                to={Constants.PATHS.NEWSFEED}
+                onClick={() => {
                   window.location = '/home/discover';
                 }}
                 className="flex items-center"
@@ -29,7 +30,7 @@ class Sidebar extends React.Component {
                 Discover Requests
               </NavLink>
             </li>
-    
+
             <li className="text-black transition duration-150 px-6 my-2">
               <NavLink
                 to={() => {
@@ -41,7 +42,7 @@ class Sidebar extends React.Component {
                 }}
                 className="flex items-center"
                 activeClassName="text-indigo-600"
-                onClick={()=>{
+                onClick={() => {
                   window.location = '/home/ongoing';
                 }}
               >
@@ -54,7 +55,7 @@ class Sidebar extends React.Component {
                 Your requests
               </NavLink>
             </li>
-    
+
             <li className="text-black transition duration-150 px-6 my-2">
               <NavLink
                 to={() => {
@@ -64,7 +65,7 @@ class Sidebar extends React.Component {
                     return Constants.PATHS.SIGNUP;
                   }
                 }}
-                onClick={()=>{
+                onClick={() => {
                   window.location = '/home/completed';
                 }}
                 className="flex items-center"
@@ -79,13 +80,13 @@ class Sidebar extends React.Component {
                 Completed requests
               </NavLink>
             </li>
-    
+
             <li className="text-black transition duration-150 px-6 my-2">
               <NavLink
                 to={Constants.PATHS.GLOBAL}
                 className="flex items-center"
                 activeClassName="text-indigo-600"
-                onClick={()=>{
+                onClick={() => {
                   window.location = '/home/global';
                 }}
               >
@@ -98,7 +99,7 @@ class Sidebar extends React.Component {
                 Global requests
               </NavLink>
             </li>
-    
+
             <li className="text-black transition duration-150 px-6 my-2">
               <NavLink
                 to={() => {

@@ -9,7 +9,7 @@ import Footer from '../../components/Footer';
 import Constants from '../../components/Constants';
 import LocationBar from '../../components/LocationBar/LocationBar';
 import NewsFeedTable2 from './NewsFeedTable2';
-import LeaderboardTable from '../../components/LeaderboardTable/LeaderboardTable'
+import LeaderboardTable from '../../components/LeaderboardTable/LeaderboardTable';
 
 // Base UI
 import { StatefulPopover, PLACEMENT } from 'baseui/popover';
@@ -18,9 +18,8 @@ import { StatefulPopover, PLACEMENT } from 'baseui/popover';
 import { getCurrentUser } from '../../store/actions/auth/auth-actions';
 
 class NewsFeedPage2 extends React.Component {
-
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       params: '',
@@ -35,7 +34,6 @@ class NewsFeedPage2 extends React.Component {
     this.setLocation = this.setLocation.bind(this);
   }
 
-  
   /**
    * Get the feed mode/filter from the URL params
    * @returns
@@ -60,7 +58,7 @@ class NewsFeedPage2 extends React.Component {
         lat: loc.lat,
         lng: loc.lng
       }
-    })
+    });
   }
 
   render() {
@@ -73,16 +71,17 @@ class NewsFeedPage2 extends React.Component {
           </aside>
           <section className="xl:w-1/2 px-6 lg:px-12">
             <div className="mb-4">
-              <LocationBar location={this.state.location}
-                setLocation={this.setLocation} />
+              <LocationBar location={this.state.location} setLocation={this.setLocation} />
             </div>
             <NewsFeedTable2 location={this.state.location} />
           </section>
           <section className="hidden xl:block">
-            <div style={{
+            <div
+              style={{
                 width: '344px'
-            }}
-              className="bg-white rounded-lg p-6 shadow-lg">
+              }}
+              className="bg-white rounded-lg p-6 shadow-lg"
+            >
               <div className="flex justify-between items-center">
                 <div className="text-left" style={{ fontWeight: 300 }}>
                   <div
@@ -110,9 +109,11 @@ class NewsFeedPage2 extends React.Component {
                     Top Helpers
                   </div>
                 </div>
-                <Link to={Constants.PATHS.LEADERBOARD}
+                <Link
+                  to={Constants.PATHS.LEADERBOARD}
                   className="bg-transparent hover:bg-gray-600 text-gray-700 font-semibold hover:text-white py-1 px-3 border border-gray-600 hover:border-transparent transition duration-150 rounded"
-                  style={{ outline: 'none' }}>
+                  style={{ outline: 'none' }}
+                >
                   <span style={{ fontSize: 12 }}>See full list</span>
                 </Link>
               </div>
