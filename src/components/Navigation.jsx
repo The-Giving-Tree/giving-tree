@@ -379,7 +379,7 @@ function Navigation(props) {
           </ModalFooter>
         </Modal>
         {/* Main logo */}
-        <Link to="/home/discover" className="mr-auto">
+        <Link to={authenticated ? '/home/discover' : '/'} className="mr-auto">
           <img
             src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
             alt="Giving Tree"
@@ -635,7 +635,7 @@ function Navigation(props) {
     return (
       <header className="flex items-center justify-start px-6 py-3 bg-white">
         {/* Main logo */}
-        <Link to="/home/discover" className="mr-auto">
+        <Link to={authenticated ? '/home/discover' : '/'} className="mr-auto">
           <img
             src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
             alt="Giving Tree"

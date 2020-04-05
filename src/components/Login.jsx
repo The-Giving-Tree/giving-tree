@@ -82,7 +82,7 @@ function Login(props) {
             <NavigationItem>
               <div
                 style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}
-                onClick={() => history.push('/home/discover')}
+                onClick={() => history.push(authenticated ? '/home/discover' : '/')}
               >
                 <img
                   src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
