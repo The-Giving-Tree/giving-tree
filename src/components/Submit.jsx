@@ -176,7 +176,16 @@ function Submit(props) {
   const validNumber = phoneNumber === '' || phoneNumber.length >= 10;
   const validEmail = email === '' || validateEmail(email);
   const validAddress = address === '' || !isEmpty(latLng);
-  const allowSubmit = phoneNumber.length >= 10 && !isEmpty(latLng);
+  const validContactMethod =
+    (contactMethod === 'phone' && phoneNumber.length >= 10) ||
+    (contactMethod === 'email' && validateEmail(email)) ||
+    contactMethod === 'comments';
+  const allowSubmit =
+    cart.length > 0 &&
+    name !== '' &&
+    !isEmpty(latLng) &&
+    contactMethod !== '' &&
+    validContactMethod;
 
   const formJSX = () => {
     return (
@@ -478,9 +487,11 @@ function Submit(props) {
             min="1"
           />
           <button
-            className={`bg-indigo-500 ${validCart &&
-              'hover:bg-indigo-700'} text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
+            className={`${
+              validCart ? 'bg-indigo-500 hover:bg-indigo-700' : 'bg-gray-500'
+            } text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
             type="button"
+            style={{ outline: 'none', cursor: validCart ? 'pointer' : 'not-allowed' }}
             onClick={() => {
               if (validCart) {
                 let cartNew = cart;
@@ -488,16 +499,6 @@ function Submit(props) {
                 setCart(cartNew);
                 setCartQuantity('');
                 setCartName('');
-              } else {
-                alert(
-                  `please enter a valid ${
-                    selectedRequest === 'food'
-                      ? `food`
-                      : selectedRequest === 'supplies'
-                      ? 'supplies'
-                      : ''
-                  } cart item`
-                );
               }
             }}
           >
