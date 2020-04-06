@@ -11,7 +11,7 @@ import { Button, SHAPE } from 'baseui/button';
 import { useHistory, Redirect } from 'react-router-dom';
 import { Modal, ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/modal';
 import Navigation from '../../components/Navigation';
-import Footer from '../../components/Footer';
+import StickyFooter from '../../components/StickyFooter/StickyFooter';
 import { StyledAction } from 'baseui/card';
 import { Input } from 'baseui/input';
 import { connect } from 'react-redux';
@@ -432,7 +432,7 @@ function Home(props) {
   }
 
   return (
-    <div className="h-full flex flex-col">
+    <StickyFooter className="h-full flex flex-col">
       <Navigation selectMenuDispatch={selectMenuDispatch} searchBarPosition="center" />
       <React.Fragment>
         <Media
@@ -514,8 +514,7 @@ function Home(props) {
           }
         </Media>
       </React.Fragment>
-      <Footer />
-    </div>
+    </StickyFooter>
   );
 }
 
