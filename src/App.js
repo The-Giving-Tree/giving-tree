@@ -65,7 +65,7 @@ function App() {
             <Route
               exact
               path={`/home/(discover|ongoing|completed|global)`}
-              component={NewsFeedPage2}
+              component={NewsFeedPage}
             />
             <Route exact path={Constants.PATHS.LEADERBOARD} component={Leaderboard} />
             <Route exact path={Constants.PATHS.ABOUT} component={About} />

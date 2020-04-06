@@ -8,13 +8,14 @@ class Sidebar extends React.Component {
     return (
       <div>
         {/* Mobile Nav */}
-  
+
         {/* Desktop Nav */}
         <nav className="hidden lg:block">
           <ul className="list-none p-0 m-0">
             <li className="text-black transition duration-150 px-6 my-2">
-              <NavLink to={Constants.PATHS.NEWSFEED}
-                onClick={()=>{
+              <NavLink
+                to={Constants.PATHS.NEWSFEED}
+                onClick={() => {
                   window.location = '/home/discover';
                 }}
                 className="flex items-center"
@@ -26,10 +27,10 @@ class Sidebar extends React.Component {
                   src="https://d1ppmvgsdgdlyy.cloudfront.net/search.svg"
                   style={{ height: 20 }}
                 />
-                Discover Requests
+                Find Requests
               </NavLink>
             </li>
-    
+
             <li className="text-black transition duration-150 px-6 my-2">
               <NavLink
                 to={() => {
@@ -41,6 +42,9 @@ class Sidebar extends React.Component {
                 }}
                 className="flex items-center"
                 activeClassName="text-indigo-600"
+                onClick={() => {
+                  window.location = '/home/ongoing';
+                }}
               >
                 <img
                   alt="search"
@@ -51,7 +55,7 @@ class Sidebar extends React.Component {
                 Your requests
               </NavLink>
             </li>
-    
+
             <li className="text-black transition duration-150 px-6 my-2">
               <NavLink
                 to={() => {
@@ -60,6 +64,9 @@ class Sidebar extends React.Component {
                   } else {
                     return Constants.PATHS.SIGNUP;
                   }
+                }}
+                onClick={() => {
+                  window.location = '/home/completed';
                 }}
                 className="flex items-center"
                 activeClassName="text-indigo-600"
@@ -73,12 +80,15 @@ class Sidebar extends React.Component {
                 Completed requests
               </NavLink>
             </li>
-    
+
             <li className="text-black transition duration-150 px-6 my-2">
               <NavLink
                 to={Constants.PATHS.GLOBAL}
                 className="flex items-center"
                 activeClassName="text-indigo-600"
+                onClick={() => {
+                  window.location = '/home/global';
+                }}
               >
                 <img
                   alt="search"
@@ -89,7 +99,7 @@ class Sidebar extends React.Component {
                 Global requests
               </NavLink>
             </li>
-    
+
             <li className="text-black transition duration-150 px-6 my-2">
               <NavLink
                 to={() => {

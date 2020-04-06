@@ -105,6 +105,8 @@ function ResetPassword(props) {
     history.push('/login');
   }
 
+  const authenticated = localStorage.getItem('giving_tree_jwt');
+
   return (
     <div style={{ width: '100%' }}>
       <HeaderNavigation
@@ -121,7 +123,7 @@ function ResetPassword(props) {
           <NavigationItem>
             <div
               style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}
-              onClick={() => history.push('/home/discover')}
+              onClick={() => history.push(authenticated ? '/home/discover' : '/')}
             >
               <img
                 src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"

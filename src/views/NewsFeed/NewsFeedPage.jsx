@@ -99,7 +99,7 @@ function NewsFeedPage(props) {
 
   // id dictates the type of feed
   let id = props.match.params ? props.match.params[0].toLowerCase() : '';
-  
+
   if (true) {
     switch (id) {
       case '':
@@ -278,7 +278,7 @@ function NewsFeedPage(props) {
   };
 
   const completedOrderGlobalJSX = item => {
-    return item.length === 0 ? (
+    return item.length === 0 || !item.assignedUser ? (
       <div className="text-center">no completed details available yet</div>
     ) : (
       <React.Fragment>
@@ -1078,7 +1078,59 @@ function NewsFeedPage(props) {
                     marginTop: 10
                   }}
                 >
-                  <div />
+                  {props.match.url !== '/home/ongoing' ? (
+                    <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
+                      <CopyToClipboard text={`${window.location.origin}/post/${item._id}`}>
+                        <StatefulPopover
+                          placement={PLACEMENT.bottomLeft}
+                          content={({ close }) => (
+                            <StatefulMenu
+                              items={[
+                                {
+                                  label: 'Copy Link'
+                                }
+                              ]}
+                              onItemSelect={item => {
+                                close();
+                                switch (item.item.label) {
+                                  case 'Copy Link':
+                                    break;
+                                  default:
+                                    break;
+                                }
+                              }}
+                              overrides={{
+                                List: { style: { outline: 'none', padding: '0px' } }
+                              }}
+                            />
+                          )}
+                        >
+                          <Button
+                            style={{ outline: 'none', padding: 0 }}
+                            kind="minimal"
+                            size={SIZE.compact}
+                          >
+                            <img
+                              src="https://d1ppmvgsdgdlyy.cloudfront.net/share.svg"
+                              alt="share"
+                              style={{ height: 22, width: 'auto', display: 'block' }}
+                            />
+                            <div
+                              style={{
+                                marginLeft: 5,
+                                textTransform: 'uppercase',
+                                fontSize: 12
+                              }}
+                            >
+                              <strong>Share</strong>
+                            </div>
+                          </Button>
+                        </StatefulPopover>
+                      </CopyToClipboard>
+                    </div>
+                  ) : (
+                    <div />
+                  )}
                   <div style={{ display: 'flex', alignContent: 'center' }}>
                     {confetti && <Confetti width={width} height={height} recycle={false} />}
                     {item.type === 'Post' &&
@@ -1130,57 +1182,6 @@ function NewsFeedPage(props) {
                       )}
                     {props.match.url !== '/home/ongoing' && (
                       <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
-                        <CopyToClipboard text={`${window.location.origin}/post/${item._id}`}>
-                          <StatefulPopover
-                            placement={PLACEMENT.bottomLeft}
-                            content={({ close }) => (
-                              <StatefulMenu
-                                items={[
-                                  {
-                                    label: 'Copy Link'
-                                  }
-                                ]}
-                                onItemSelect={item => {
-                                  close();
-                                  switch (item.item.label) {
-                                    case 'Copy Link':
-                                      break;
-                                    default:
-                                      break;
-                                  }
-                                }}
-                                overrides={{
-                                  List: { style: { outline: 'none', padding: '0px' } }
-                                }}
-                              />
-                            )}
-                          >
-                            <Button
-                              style={{ outline: 'none', padding: 0 }}
-                              kind="minimal"
-                              size={SIZE.compact}
-                            >
-                              <img
-                                src="https://d1ppmvgsdgdlyy.cloudfront.net/share.svg"
-                                alt="share"
-                                style={{ height: 22, width: 'auto', display: 'block' }}
-                              />
-                              <div
-                                style={{
-                                  marginLeft: 5,
-                                  textTransform: 'uppercase',
-                                  fontSize: 12
-                                }}
-                              >
-                                <strong>Share</strong>
-                              </div>
-                            </Button>
-                          </StatefulPopover>
-                        </CopyToClipboard>
-                      </div>
-                    )}
-                    {props.match.url !== '/home/ongoing' && (
-                      <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
                         <Button
                           style={{ outline: 'none', padding: 0 }}
                           kind="minimal"
@@ -1193,7 +1194,7 @@ function NewsFeedPage(props) {
                             style={{ height: 22, width: 'auto', display: 'block' }}
                           />
                           <div style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}>
-                            <strong>{item.comments.length}&nbsp;&nbsp;Comments</strong>
+                            <strong>{item.comments.length}&nbsp;</strong>
                           </div>
                         </Button>
                       </div>
@@ -1292,7 +1293,7 @@ function NewsFeedPage(props) {
                             <div
                               style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}
                             >
-                              <strong>Add Tracking Details</strong>
+                              <strong>Mark Completed</strong>
                             </div>
                           </Button>
                         </StatefulPopover>
@@ -1320,7 +1321,7 @@ function NewsFeedPage(props) {
         onClose={() => setOpenFoodTracking(false)}
         isOpen={openFoodTracking}
       >
-        <ModalHeader>Add Tracking Details</ModalHeader>
+        <ModalHeader>Mark Completed</ModalHeader>
         <ModalBody>
           When is the food arriving (ETA)?
           <Input
@@ -1376,7 +1377,7 @@ function NewsFeedPage(props) {
         </ModalFooter>
       </Modal>
 
-      <div className="max-w-screen-lg w-full mx-auto xl:flex xl:max-w-6xl pt-12">
+      <div className="max-w-screen-lg w-full mx-auto xl:flex xl:max-w-6xl pt-12 mb-8">
         <section className="hidden xl:block">
           <Sidebar {...props} />
         </section>
@@ -1398,7 +1399,8 @@ function NewsFeedPage(props) {
             newPost={newPost}
             selectMenu={selectMenu}
             openCustomAddress={openCustomAddress}
-            setUpdateNews={setUpdateNews}/>
+            setUpdateNews={setUpdateNews}
+          />
         </section>
         <section className="hidden xl:block">
           <div
@@ -1420,7 +1422,7 @@ function NewsFeedPage(props) {
                   }}
                   className={`mb-4`}
                 >
-                  Leaderboard
+                  Global Leaderboard
                 </div>
                 <div
                   style={{
@@ -1431,7 +1433,7 @@ function NewsFeedPage(props) {
                     color: '#545454'
                   }}
                 >
-                  Most helpful people in your area
+                  Top Helpers
                 </div>
               </div>
               <button

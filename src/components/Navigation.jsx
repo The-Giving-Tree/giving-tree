@@ -379,7 +379,7 @@ function Navigation(props) {
           </ModalFooter>
         </Modal>
         {/* Main logo */}
-        <Link to="/home/discover" className="mr-auto">
+        <Link to={authenticated ? '/home/discover' : '/'} className="mr-auto">
           <img
             src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
             alt="Giving Tree"
@@ -485,11 +485,11 @@ function Navigation(props) {
 
         {/* Submit Link */}
         <Link
-          className="p-2 mr-5"
+          className="p-2 mr-4"
           to={Constants.PATHS.SUBMIT}
           onClick={() => {
             selectMenuDispatch({ selectMenu: '' });
-            history.push(Constants.PATHS.SUBMIT);
+            window.location = Constants.PATHS.SUBMIT;
           }}
         >
           <img
@@ -506,7 +506,7 @@ function Navigation(props) {
           onClick={() => history.push(Constants.PATHS.GUIDELINES)}
         >
           <img
-            src="https://d1ppmvgsdgdlyy.cloudfront.net/first-aid.svg"
+            src="https://d1ppmvgsdgdlyy.cloudfront.net/information.svg"
             alt="guidelines"
             style={{ width: 25, cursor: 'pointer' }}
           />
@@ -547,10 +547,10 @@ function Navigation(props) {
                   label: 'My Profile',
                   icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/user.svg'
                 },
-                {
-                  label: 'Settings',
-                  icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/setting.svg'
-                },
+                // {
+                //   label: 'Settings',
+                //   icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/setting.svg'
+                // },
                 {
                   label: 'Log Out',
                   icon: 'https://d1ppmvgsdgdlyy.cloudfront.net/logout.svg'
@@ -635,7 +635,7 @@ function Navigation(props) {
     return (
       <header className="flex items-center justify-start px-6 py-3 bg-white">
         {/* Main logo */}
-        <Link to="/home/discover" className="mr-auto">
+        <Link to={authenticated ? '/home/discover' : '/'} className="mr-auto">
           <img
             src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
             alt="Giving Tree"
@@ -682,7 +682,7 @@ function Navigation(props) {
             onClick={() => history.push(Constants.PATHS.GUIDELINES)}
           >
             <img
-              src="https://d1ppmvgsdgdlyy.cloudfront.net/first-aid.svg"
+              src="https://d1ppmvgsdgdlyy.cloudfront.net/information.svg"
               alt="guidelines"
               style={{ width: 25, cursor: 'pointer' }}
             />

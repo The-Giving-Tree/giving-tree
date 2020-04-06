@@ -4,7 +4,6 @@ import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import './LocationBar.css';
 
 class LocationBar extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -15,7 +14,7 @@ class LocationBar extends React.Component {
         lat: '',
         lng: ''
       }
-    }
+    };
   }
 
   /**
@@ -25,7 +24,7 @@ class LocationBar extends React.Component {
    * @memberof LocationBar
    */
   onChange(val) {
-    this.setState({locationName: val});
+    this.setState({ locationName: val });
   }
 
   /**
@@ -35,13 +34,13 @@ class LocationBar extends React.Component {
    * @memberof LocationBar
    */
   onSelect(address) {
-    this.setState({locationName: address});
+    this.setState({ locationName: address });
     geocodeByAddress(address)
       .then(res => getLatLng(res[0]))
       .then(latLng => {
         this.setState({ latLng: latLng });
         console.log(this.state);
-      })
+      });
   }
 
   /**
@@ -51,30 +50,32 @@ class LocationBar extends React.Component {
    * @memberof LocationBar
    */
   toggleChangeLocation(val) {
-    this.setState({ showChangeLocation: val })
+    this.setState({ showChangeLocation: val });
   }
 
   render() {
-    return(
+    return (
       <div>
-        { // What to display when the location is set
-          !this.state.showChangeLocation ?
+        {// What to display when the location is set
+        !this.state.showChangeLocation ? (
           <div>
-            <span>{
-              !this.props.location.name ? 'Earth 🌍' :
-                this.props.location.name}
-            </span>
-            <button className="ml-2 underline text-indigo-600"
-              onClick={() => this.toggleChangeLocation(true)}>
+            <span>{!this.props.location.name ? 'Earth 🌍' : this.props.location.name}</span>
+            <button
+              className="ml-2 underline text-indigo-600"
+              onClick={() => this.toggleChangeLocation(true)}
+            >
               (Edit)
             </button>
           </div>
-        : // What to display when the user clicks to change location
+        ) : (
+          // What to display when the user clicks to change location
           <div className="flex items-center w-full">
             <div className="flex justify-between items-center w-full mr-4 relative">
-              <PlacesAutocomplete value={this.state.locationName}
-                onChange={(address) => this.onChange(address)}
-                onSelect={(address) => this.onSelect(address)}>
+              <PlacesAutocomplete
+                value={this.state.locationName}
+                onChange={address => this.onChange(address)}
+                onSelect={address => this.onSelect(address)}
+              >
                 {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                   <div style={{ width: '100%' }}>
                     <input
@@ -113,25 +114,28 @@ class LocationBar extends React.Component {
                 )}
               </PlacesAutocomplete>
             </div>
-            <button className="rounded-full px-4 py-2 bg-transparent border border-gray-600 mr-3 ml-auto"
-              onClick={() => this.toggleChangeLocation(false)}>
-                Cancel
+            <button
+              className="rounded-full px-4 py-2 bg-transparent border border-gray-600 mr-3 ml-auto"
+              onClick={() => this.toggleChangeLocation(false)}
+            >
+              Cancel
             </button>
-            <button className="rounded-full px-4 py-2 bg-blue-600 text-white font-semibold"
-                onClick={() => {
-                  this.props.setLocation({
-                    name: this.state.locationName,
-                    lat: this.state.latLng.lat,
-                    lng: this.state.latLng.lng
-                  })
-                  this.toggleChangeLocation(false);
-                }}>
-                  Save
-              </button>
+            <button
+              className="rounded-full px-4 py-2 bg-blue-600 text-white font-semibold"
+              onClick={() => {
+                this.props.setLocation({
+                  name: this.state.locationName,
+                  lat: this.state.latLng.lat,
+                  lng: this.state.latLng.lng
+                });
+                this.toggleChangeLocation(false);
+              }}
+            >
+              Save
+            </button>
           </div>
-        }
+        )}
       </div>
-      
     );
   }
 }
