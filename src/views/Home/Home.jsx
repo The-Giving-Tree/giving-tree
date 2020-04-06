@@ -448,54 +448,6 @@ function Home(props) {
             authenticated ? (
               <Redirect to={`/home/discover`} />
             ) : (
-              // <React.Fragment>
-              //   <div
-              //     className="flex items-center justify-center text-center font-bold flex-grow"
-              //     style={{
-              //       width: '100%',
-              //       minHeight: '100vh',
-              //       background:
-              //         'url(https://d1ppmvgsdgdlyy.cloudfront.net/landing.png) center center',
-              //       backgroundSize: 'cover',
-              //       color: 'white',
-              //       fontWeight: 500,
-              //       position: 'relative',
-              //     }}
-              //   >
-              //     <div
-              //       style={{
-              //         fontSize: 10,
-              //         position: 'absolute',
-              //         bottom: 0,
-              //         left: 0
-              //       }}
-              //     >
-              //       Dribbbled by @tubik_arts
-              //     </div>
-              //     <div className="text-2xl px-6 sm:text-4xl lg:text-6xl"
-              //     style={{
-              //       textShadow: '0px 0px 3px #000'
-              //     }}>
-              //       We are waves of the same sea,
-              //       <br />
-              //       leaves of the same tree,
-              //       <br />
-              //       flowers of the same garden
-              //       <br />
-              //       <button
-              //         onClick={() => (window.location = '/home/discover')}
-              //         style={{
-              //           outline: 'none',
-              //           fontSize: 26,
-              //           backgroundColor: '#8ec755'
-              //         }}
-              //         className="mt-10 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-              //       >
-              //         Get Started
-              //       </button>
-              //     </div>
-              //   </div>
-              // </React.Fragment>
               <div className="flex-grow">
                 <div className="grid grid-cols-1 lg:grid-cols-3 h-full">
                   <div

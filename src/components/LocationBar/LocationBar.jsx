@@ -58,8 +58,13 @@ class LocationBar extends React.Component {
       <div>
         {// What to display when the location is set
         !this.state.showChangeLocation ? (
-          <div>
-            <span>{!this.props.location.name ? 'Earth 🌍' : this.props.location.name}</span>
+          <div className="py-2">
+            <span className="mr-2">
+              Your current location:
+            </span>
+            <span>
+              {!this.props.location.name ? 'Earth 🌍' : this.props.location.name}
+            </span>
             <button
               className="ml-2 underline text-indigo-600"
               onClick={() => this.toggleChangeLocation(true)}

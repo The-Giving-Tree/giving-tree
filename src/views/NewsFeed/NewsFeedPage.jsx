@@ -413,7 +413,6 @@ function NewsFeedPage(props) {
     if (pages === '') {
     } else if (Number(currentPage) < Number(pages)) {
       let nextPage = Number(currentPage) + 1;
-
       await loadNewsfeedDispatch({
         env: process.env.NODE_ENV,
         location: latLng,
@@ -1310,8 +1309,6 @@ function NewsFeedPage(props) {
   };
 
   render();
-
-  console.log(address);
 
   return (
     <div className="h-full flex flex-col">

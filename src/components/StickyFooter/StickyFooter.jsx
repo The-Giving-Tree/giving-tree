@@ -1,4 +1,5 @@
 import * as React from 'react';
+import './StickyFooter.css';
 
 // Custom Components
 import Footer from '../../components/Footer';

@@ -23,7 +23,7 @@ class NewsFeedPage2 extends React.Component {
 
     this.state = {
       params: '',
-      id: this.getFeedMode(),
+      feedMode: this.getFeedMode(),
       location: {
         name: '',
         lat: '',
@@ -35,15 +35,30 @@ class NewsFeedPage2 extends React.Component {
   }
 
   /**
+   * What to do when the component updates
+   *
+   * @param {*} prevProps
+   * @param {*} prevState
+   * @memberof NewsFeedPage2
+   */
+  componentDidUpdate(prevProps, prevState) {
+    const mode = this.getFeedMode();
+    if (prevState.feedMode !== mode) {
+      this.setState({feedMode: mode})
+    }
+    
+  }
+
+  /**
    * Get the feed mode/filter from the URL params
    * @returns
    * @memberof NewsFeedPage2
    */
   getFeedMode() {
     const params = this.props.match.params;
-    // const _id = params ? params[0].toLowerCase() : '';
-    const _id = '';
-    return _id;
+    const loc = params ? params[0].toLowerCase() : '';
+    const name = loc ? loc.charAt(0).toUpperCase() + loc.slice(1) : '';
+    return name;
   }
 
   /**
@@ -71,10 +86,11 @@ class NewsFeedPage2 extends React.Component {
             <Sidebar {...this.props} />
           </aside>
           <section className="xl:w-1/2 px-6 lg:px-12">
-            <div className="mb-4">
+            { this.state.feedMode === 'Discover' ? (<div className="mb-4">
               <LocationBar location={this.state.location} setLocation={this.setLocation} />
-            </div>
-            <NewsFeedTable2 location={this.state.location} />
+            </div>) : ''}
+            <NewsFeedTable2 feedMode={this.state.feedMode}
+            location={this.state.location} />
           </section>
           <section className="hidden xl:block">
           <div
