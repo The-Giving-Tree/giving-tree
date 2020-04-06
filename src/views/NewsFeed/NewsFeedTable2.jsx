@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import InfiniteScroll from 'react-infinite-scroller';
-
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { loadNewsfeed } from '../../store/actions/auth/auth-actions';
 
 class NewsFeedTable2 extends React.Component {
@@ -10,37 +9,32 @@ class NewsFeedTable2 extends React.Component {
     super(props);
 
     this.state = {
-      currentPage: 1,
-      totalPages: 0,
-      hasMoreItems: true
+      hasMoreItems: true,
+      newsfeed: []
     }
   }
 
   componentDidMount() {
     // Get the newsfeed items
-    console.log(this.props.feedMode);
     this.getNewsFeed({
       lat: this.props.location.lat,
       lng: this.props.location.lng
-    }, this.props.currentPage, this.props.feedMode);
-    // this.loadNewsfeedHelper();
-    
+    }, Number(this.props.currentPage), this.props.feedMode)
+  }
+
+  setNewsFeed(feed) {
+    this.setState({newsfeed: feed})
   }
 
   componentDidUpdate(prevProps, prevState) {
     // if the route changes...
     if (this.props.feedMode !== prevProps.feedMode) {
-      // this.loadNewsfeedHelper()
+      console.log(this.props);
       this.getNewsFeed({
         lat: this.props.location.lat,
         lng: this.props.location.lng
-      }, this.state.currentPage, this.props.feedMode);
-      // this.loadNewsfeedHelper() 
+      }, Number(this.props.currentPage), this.props.feedMode);
     }
-  }
-
-  componentWillUnmount() {
-    
   }
 
   getNewsFeed(loc, currentPage, feedMode) {      
@@ -53,31 +47,33 @@ class NewsFeedTable2 extends React.Component {
   }
 
   async loadNewsfeedHelper() {
-    console.log("PAGES: ", this.props)
-    if (this.props.pages === ''){
-    } else if (Number(this.props.currentPage) < Number(this.props.pages)) {
-      const nextPage = Number(this.props.currentPage) + 1;
-      console.log(nextPage);
+    console.log(this.props)
+    const currentPage = Number(this.props.currentPage);
+    if (currentPage < this.props.pages) {
 
+      const nextPage = Number(this.props.currentPage) + 1;
       await this.getNewsFeed({
         lat: this.props.location.lat,
         lng: this.props.location.lng
       }, nextPage, this.props.feedMode);
 
-      console.log("Oi!: ", this.props);
+      this.setNewsFeed(this.parseFeed(this.props.newsfeed))
+
+      console.log(this.props.newsfeed)
     } else {
       this.setHasMoreItems(false);
-      if (this.props.newsfeed) {
-        console.log(this.props.newsfeed)
-      }
     }
+
+    
   }
 
   parseFeed() {
     const feed = [];
-
+    console.log("PARSING")
     this.props.newsfeed.forEach((item, i) => {
-      feed.push(<div key={i} className="p-3">{item.title}</div>);
+      feed.push(<div key={i} className="p-3" style={{
+        height: '500px'
+      }}>{item.title}</div>);
     })
 
     return feed;
@@ -88,36 +84,27 @@ class NewsFeedTable2 extends React.Component {
   }
 
 
-  setCurrentPage(page) {
-    console.log(page);
-    this.setState({currentPage: page})
-  }
-
-
-
   render() {
-    if (this.props.newsfeedLoading) return <div className="loading-spinner"></div>;
-
-    let items = this.parseFeed();
 
     return (
       <div>
-        {items.length ? (
-          // <InfiniteScroll
-          // pageStart={1}
-          // loadMore={(page) => {
-          //   console.log("CURR", this.props.currentPage)
-          //   console.log
-          // }}
-          // hasMore={this.state.hasMoreItems}
-          // loader={
-          //   <div key={0} className="loading-spinner"></div>
-          // }>
-            <div>{items}</div>
-          // </InfiniteScroll>
-        ): (
-          <p>There are no items.</p>
-        )}
+        <InfiniteScroll
+        dataLength={this.props.numOfResults}
+        next={() => {
+          this.loadNewsfeedHelper()
+        }}
+        hasMore={this.state.hasMoreItems}
+        endMessage={
+          <p className="text-center">
+            <b>Yay! You have seen it all</b>
+          </p>
+        }
+        loader={
+          <div className="loading-spinner"></div>
+        }>
+          {this.state.newsfeed}
+        </InfiniteScroll>
+
       </div>
       
     );
