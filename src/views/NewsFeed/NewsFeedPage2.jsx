@@ -82,7 +82,7 @@ class NewsFeedPage2 extends React.Component {
       <StickyFooter>
         <Navigation searchBarPosition="center" />
         <div className="max-w-screen-lg w-full mx-auto xl:flex xl:max-w-6xl py-12">
-          <aside className="hidden xl:block">
+          <aside>
             <Sidebar {...this.props} />
           </aside>
           <section className="xl:w-1/2 px-6 lg:px-12">

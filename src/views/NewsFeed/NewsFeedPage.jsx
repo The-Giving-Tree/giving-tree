@@ -1375,11 +1375,9 @@ function NewsFeedPage(props) {
       </Modal>
 
       <div className="max-w-screen-lg w-full mx-auto xl:flex xl:max-w-6xl pt-12 mb-8">
-        <section className="hidden xl:block">
-          <Sidebar {...props} />
-        </section>
+        
+        <Sidebar {...props} />
         <section className="xl:w-1/2 px-6 lg:px-12">
-          <h2 className="text-lg font-bold">Requests near you</h2>
           <NewsfeedTable
             {...props}
             authenticated={authenticated}

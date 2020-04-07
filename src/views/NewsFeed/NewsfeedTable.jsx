@@ -133,20 +133,23 @@ function NewsfeedTable(props) {
         </div>
       ) : (
         match.url === '/home/discover' && (
-          <div className={`text-left mt-2`} style={{ fontSize: 12 }}>
-            Your current location:{' '}
-            {(address === 'Earth' && 'Earth 🌍') ||
-              `(${latLng.lat ? latLng.lat : coords && coords.latitude}, ${
-                latLng.lng ? latLng.lng : coords && coords.longitude
-              })`}
-            &nbsp;
-            <span
-              onClick={() => setOpenCustomAddress(true)}
-              className="text-indigo-600 hover:text-indigo-800 transition duration-150"
-              style={{ cursor: 'pointer' }}
-            >
-              (edit)
-            </span>
+          <div>
+            <h2 className="text-lg font-bold">Requests near you</h2>
+            <div className={`text-left mt-2`} style={{ fontSize: 12 }}>
+              Your current location:{' '}
+              {(address === 'Earth' && 'Earth 🌍') ||
+                `(${latLng.lat ? latLng.lat : coords && coords.latitude}, ${
+                  latLng.lng ? latLng.lng : coords && coords.longitude
+                })`}
+              &nbsp;
+              <span
+                onClick={() => setOpenCustomAddress(true)}
+                className="text-indigo-600 hover:text-indigo-800 transition duration-150"
+                style={{ cursor: 'pointer' }}
+              >
+                (edit)
+              </span>
+            </div>
           </div>
         )
       )}
