@@ -16,7 +16,7 @@ import { Drawer } from 'baseui/drawer';
 import { Notification } from 'baseui/notification';
 import moment from 'moment';
 import { Modal, ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/modal';
-import Sidebar from './universal/Sidebar';
+import Sidebar from './Sidebar';
 import { connect } from 'react-redux';
 import { hotjar } from 'react-hotjar';
 
@@ -1314,7 +1314,7 @@ function Post(props) {
                       }}
                       className={`mb-4`}
                     >
-                      Leaderboard
+                      Global Leaderboard
                     </div>
                     <div
                       style={{
@@ -1325,7 +1325,7 @@ function Post(props) {
                         color: '#545454'
                       }}
                     >
-                      Most helpful people in your area
+                      Top Helpers
                     </div>
                   </div>
                   <button

@@ -17,6 +17,7 @@ import { register } from '../store/actions/auth/auth-actions';
 import Media from 'react-media';
 import passwordValidator from 'password-validator';
 import { hotjar } from 'react-hotjar';
+import Navigation from './Navigation';
 
 var schema = new passwordValidator();
 schema
@@ -107,7 +108,7 @@ function Signup(props) {
   } else {
     return (
       <div style={{ width: '100%' }}>
-        <HeaderNavigation
+        <Navigation
           overrides={{
             Root: {
               style: {
@@ -121,7 +122,7 @@ function Signup(props) {
             <NavigationItem>
               <div
                 style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}
-                onClick={() => history.push('/home/discover')}
+                onClick={() => history.push(authenticated ? '/home/discover' : '/')}
               >
                 <img
                   src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
@@ -136,7 +137,7 @@ function Signup(props) {
           </NavigationList>
           <NavigationList $align={ALIGN.center} />
           <NavigationList $align={ALIGN.right} />
-        </HeaderNavigation>
+        </Navigation>
         <Media
           queries={{
             small: '(max-width: 599px)',
@@ -160,6 +161,8 @@ function Signup(props) {
                       width: matches.medium || matches.large ? '512px' : '100%',
                       margin: '0 auto',
                       border: 'none',
+                      paddingTop: '12px',
+                      paddingBottom: '12px',
                       boxShadow: 'none'
                     }
                   }
@@ -244,6 +247,12 @@ function Signup(props) {
               <p className="my-3 text-sm">
                 Already have an account? <a href="/login">Login</a>
               </p>
+              <div
+                style={{ cursor: 'pointer' }}
+                className="text-sm text-black hover:text-green-600 transition duration-150"
+              >
+                <a href="tel:+1415-964-4261">Hotline: +1 415-964-4261</a>
+              </div>
             </div>
           )}
         </Media>

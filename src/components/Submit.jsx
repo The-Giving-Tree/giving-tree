@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import PlacesAutocomplete from 'react-places-autocomplete';
+import moment from 'moment';
 import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import Navigation from './Navigation';
 import { Card } from 'baseui/card';
-import { ArrowLeft } from 'baseui/icon';
 import { Tag } from 'baseui/tag';
-import Sidebar from './universal/Sidebar';
+import Sidebar from './Sidebar';
 import { hotjar } from 'react-hotjar';
 
 import { connect } from 'react-redux';
@@ -18,6 +18,7 @@ import {
   handleSeenSubmit,
   uploadPhoto
 } from '../store/actions/user/user-actions';
+import StickyFooter from './StickyFooter/StickyFooter';
 
 export const Portal = ({ children }) => {
   return ReactDOM.createPortal(children, document.body);
@@ -39,12 +40,15 @@ function Submit(props) {
   } = props;
 
   const [title, setTitle] = React.useState('');
+  const [name, setName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [contactMethod, setContactMethod] = React.useState('');
   const [phoneNumber, setPhoneNumber] = React.useState('');
   const [address, setAddress] = useState('');
   const [latLng, setLatLng] = useState({});
   const [postal, setPostal] = useState('');
   const [cart, setCart] = React.useState([]);
-  const [selectedRequest, setRequest] = React.useState('');
+  const [selectedRequest, setRequest] = React.useState('food');
   const [checkout, setCheckout] = React.useState(false);
   let [changedCart, setChangedCart] = useState(0);
   const [cartQuantity, setCartQuantity] = React.useState('');
@@ -83,6 +87,9 @@ function Submit(props) {
         type: selectedRequest,
         description,
         cart,
+        contactMethod,
+        email,
+        name,
         dueDate,
         location: latLng,
         postal,
@@ -126,7 +133,7 @@ function Submit(props) {
 
   const cartJSX = () => {
     return cart.length === 0 ? (
-      <div className="text-center">no items in cart</div>
+      <div className="text-center">Start adding items below</div>
     ) : (
       <table className="table-auto" style={{ width: '100%' }}>
         <thead>
@@ -162,55 +169,221 @@ function Submit(props) {
     );
   };
 
-  const suppliesJSX = () => {
-    return foodJSX();
-  };
+  function validateEmail(email) {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  }
 
-  const foodJSX = () => {
+  const validNumber = phoneNumber === '' || phoneNumber.length >= 10;
+  const validEmail = email === '' || validateEmail(email);
+  const validAddress = address === '' || !isEmpty(latLng);
+  const validContactMethod =
+    (contactMethod === 'phone' && phoneNumber.length >= 10) ||
+    (contactMethod === 'email' && validateEmail(email)) ||
+    contactMethod === 'comments';
+  const allowSubmit =
+    cart.length > 0 &&
+    name !== '' &&
+    !isEmpty(latLng) &&
+    contactMethod !== '' &&
+    validContactMethod;
+
+  const formJSX = () => {
     return (
       <div>
-        <div className="flex justify-between">
-          <div className="font-bold text-base text-left my-1">Title</div>
-          <div className="font-bold text-base text-left ml-3 my-1">Phone Number</div>
+        <div style={{ width: '100%' }}></div>
+        <div className="mt-4 flex justify-content">
+          <div style={{ width: '100%' }}>
+            <label
+              class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              for="grid-last-name"
+            >
+              Name
+            </label>
+            <input
+              onChange={e => {
+                setName(e.target.value);
+              }}
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              id="summary"
+              value={name}
+              type="text"
+              placeholder="Who will be receiving the order?"
+            />
+          </div>
+          <div className="ml-3" style={{ width: '100%' }}>
+            <label
+              class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              for="grid-state"
+            >
+              Type of Request
+            </label>
+            <div class="relative">
+              <select
+                value={selectedRequest}
+                class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                id="grid-state"
+                onChange={e => {
+                  setRequest(e.target.value.toLowerCase());
+                }}
+              >
+                <option value="food">Food</option>
+                <option value="supplies">Supplies</option>
+                <option value="miscellaneous">Miscellaneous</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <svg
+                  class="fill-current h-4 w-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                </svg>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="flex justify-content">
+        <label
+          class="block uppercase mt-4 tracking-wide text-gray-700 text-xs font-bold mb-2"
+          for="grid-last-name"
+        >
+          Request Summary
+        </label>
+        <input
+          style={{ paddingBottom: 50 }}
+          onChange={e => {
+            setTitle(e.target.value);
+          }}
+          className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          id="summary"
+          value={title}
+          type="text"
+          placeholder="Briefly explain your request, e.g. Sick and need help grocery shopping"
+        />
+        <div className="flex items-center mt-4">
+          <label
+            class="block uppercase tracking-wide text-gray-700 text-xs font-bold mr-2"
+            for="grid-last-name"
+          >
+            Needed By:
+          </label>
           <input
+            style={{ width: 300, height: 32 }}
             onChange={e => {
-              setTitle(e.target.value);
+              setDueDate(e.target.value); // YYYY-MM-DD
             }}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="title"
-            value={title}
-            type="text"
-            placeholder="Title"
+            className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+            type="datetime-local"
+            value={`${moment(new Date()).format('YYYY-MM-DD')}T${moment(new Date()).format(
+              'HH:mm'
+            )}`}
           />
-          <input
-            onChange={e => {
-              var phoneValue = e.target.value;
-              var output;
-              phoneValue = phoneValue.replace(/[^0-9]/g, '');
-              var area = phoneValue.substr(0, 3);
-              var pre = phoneValue.substr(3, 3);
-              var tel = phoneValue.substr(6, 4);
+        </div>
 
-              if (area.length < 3) {
-                output = area;
-              } else if (area.length === 3 && pre.length < 3) {
-                output = `${' '}${area}${' '}${' '}${pre}`;
-              } else if (area.length === 3 && pre.length === 3) {
-                output = `${''}${area}${''}${' '}${pre}${' '}${tel}`;
-              }
-              setPhoneNumber(output);
-            }}
-            className="ml-3 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="title"
-            value={phoneNumber}
-            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-            type="tel"
-            placeholder="Phone Number (for delivery confirmation)"
-          />
+        <div className="mt-10 mb-4">
+          <label
+            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+            for="grid-last-name"
+          >
+            Preferred Contact Method
+          </label>
+          <label className="text-xs block tracking-wide ml-6 text-gray-700 font-bold">
+            <div className="flex items-center">
+              <input
+                checked={contactMethod === 'phone'}
+                className="mr-2 leading-tight"
+                onChange={() => setContactMethod('phone')}
+                type="radio"
+              ></input>
+              <span className="mr-2">phone (recommended)</span>
+              <div className={contactMethod === 'phone' ? '' : `hidden`}>
+                <input
+                  style={{ width: 200, height: 32 }}
+                  onChange={e => {
+                    var phoneValue = e.target.value;
+                    var output;
+                    phoneValue = phoneValue.replace(/[^0-9]/g, '');
+                    var area = phoneValue.substr(0, 3);
+                    var pre = phoneValue.substr(3, 3);
+                    var tel = phoneValue.substr(6, 4);
+
+                    if (area.length < 3) {
+                      output = area;
+                    } else if (area.length === 3 && pre.length < 3) {
+                      output = `${area}${pre}`;
+                    } else if (area.length === 3 && pre.length === 3) {
+                      output = `${''}${area}${''}${pre}${tel}`;
+                    }
+                    setPhoneNumber(output);
+                  }}
+                  className={`${!validNumber &&
+                    'border-red-500'} appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500`}
+                  id="title"
+                  value={phoneNumber}
+                  pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                  type="tel"
+                  placeholder="Phone Number"
+                />
+                {!validNumber && (
+                  <p class="text-red-500 text-xs italic">Please enter a valid number.</p>
+                )}
+              </div>
+            </div>
+          </label>
+          <label className="text-xs block tracking-wide ml-6 text-gray-700 font-bold">
+            <div className="flex items-center">
+              <input
+                checked={contactMethod === 'email'}
+                onChange={() => setContactMethod('email')}
+                className="mr-2 leading-tight"
+                type="radio"
+              ></input>
+              <span className="mr-2">email</span>
+              <div className={contactMethod === 'email' ? '' : `hidden`}>
+                <input
+                  style={{ width: 200, height: 32 }}
+                  onChange={e => {
+                    setEmail(e.target.value);
+                  }}
+                  className={`${!validEmail &&
+                    'border-red-500'} appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500`}
+                  id="email"
+                  value={email}
+                  placeholder="Email"
+                />
+                {!validEmail && (
+                  <p class="text-red-500 text-xs italic">Please enter a valid email.</p>
+                )}
+              </div>
+            </div>
+          </label>
+          <label className="text-xs block tracking-wide ml-6 text-gray-700 font-bold">
+            <input
+              checked={contactMethod === 'comments'}
+              onChange={() => setContactMethod('comments')}
+              className="mr-2 leading-tight"
+              type="radio"
+            ></input>
+            <span className="">in app comments</span>
+          </label>
         </div>
-        <div className="font-bold text-base text-left my-1 mt-4">Delivery Address</div>
+        <input
+          onChange={e => {
+            setDescription(e.target.value);
+          }}
+          className="appearance-none mt-4 block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          id="description"
+          value={description}
+          type="text"
+          placeholder="Add any special instructions regarding your circumstances, needs, and/or delivery preferences here."
+        />
+
+        <label
+          class="block mt-4 uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          for="grid-last-name"
+        >
+          Delivery Address
+        </label>
         <PlacesAutocomplete
           value={address}
           onChange={address => setAddress(address)}
@@ -244,14 +417,18 @@ function Submit(props) {
             <div>
               <input
                 {...getInputProps({
-                  placeholder: 'Enter an address',
+                  placeholder: 'Where would you like your items to be delivered?',
                   className: 'location-search-input'
                 })}
                 value={address}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className={`${!validAddress &&
+                  'border-red-500'} appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500`}
                 id="address"
                 type="text"
               />
+              {!validAddress && (
+                <p class="text-red-500 text-xs italic">Please enter a valid address.</p>
+              )}
               <div className="autocomplete-dropdown-container">
                 {loading && <div>Loading...</div>}
                 {suggestions.map(suggestion => {
@@ -277,26 +454,6 @@ function Submit(props) {
             </div>
           )}
         </PlacesAutocomplete>
-        <div className="font-bold text-base text-left my-1 mt-4">Description</div>
-        <input
-          onChange={e => {
-            setDescription(e.target.value);
-          }}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          id="description"
-          value={description}
-          type="text"
-          placeholder="tell us a little more about your request..."
-        />
-        <div className="font-bold text-base text-left my-1 mt-4">Due Date</div>
-        <input
-          style={{ height: '32px' }}
-          onChange={e => {
-            setDueDate(e.target.value); // YYYY-MM-DD
-          }}
-          class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-          type="datetime-local"
-        />
         <div className="mt-4"></div>
         {cartJSX()}
         <div className={`flex items-center mt-4`}>
@@ -304,15 +461,15 @@ function Submit(props) {
             onChange={e => {
               setCartName(e.target.value);
             }}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             id="food"
             value={cartName}
             type="text"
             placeholder={
               selectedRequest === 'food'
-                ? `food item`
+                ? `Item name, brand, and store location`
                 : selectedRequest === 'supplies'
-                ? 'household supplies'
+                ? 'Item name, brand, and store location'
                 : ''
             }
           />
@@ -320,20 +477,22 @@ function Submit(props) {
             onChange={e => {
               setCartQuantity(e.target.value);
             }}
-            className="mx-4 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="mx-4 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             style={{ width: 100 }}
             value={cartQuantity}
             id={
               selectedRequest === 'food' ? `food` : selectedRequest === 'supplies' ? 'supplies' : ''
             }
             type="number"
-            placeholder="quantity"
+            placeholder="Quantity"
             min="1"
           />
           <button
-            className={`bg-indigo-500 ${validCart &&
-              'hover:bg-indigo-700'} text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
+            className={`${
+              validCart ? 'bg-indigo-500 hover:bg-indigo-700' : 'bg-gray-500'
+            } text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
             type="button"
+            style={{ outline: 'none', cursor: validCart ? 'pointer' : 'not-allowed' }}
             onClick={() => {
               if (validCart) {
                 let cartNew = cart;
@@ -341,16 +500,6 @@ function Submit(props) {
                 setCart(cartNew);
                 setCartQuantity('');
                 setCartName('');
-              } else {
-                alert(
-                  `please enter a valid ${
-                    selectedRequest === 'food'
-                      ? `food`
-                      : selectedRequest === 'supplies'
-                      ? 'supplies'
-                      : ''
-                  } cart item`
-                );
               }
             }}
           >
@@ -377,6 +526,9 @@ function Submit(props) {
                       type: selectedRequest,
                       description,
                       cart,
+                      contactMethod,
+                      email,
+                      name,
                       postal,
                       dueDate,
                       location: latLng,
@@ -397,8 +549,11 @@ function Submit(props) {
                     alert('please fill out all fields');
                   }
                 }}
-                style={{ outline: 'none' }}
-                className={`bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded`}
+                disabled={!allowSubmit}
+                style={{ outline: 'none', cursor: allowSubmit ? 'pointer' : 'not-allowed' }}
+                className={`${
+                  !allowSubmit ? 'bg-gray-500' : 'bg-green-500 hover:bg-green-700'
+                } text-white font-bold py-2 px-4 rounded`}
               >
                 Submit
               </button>
@@ -410,252 +565,169 @@ function Submit(props) {
   };
 
   return (
-    <div style={{ width: '100%' }}>
+    <StickyFooter>
       <Navigation selectMenuDispatch={selectMenuDispatch} searchBarPosition="center" />
-      <div
-        style={{
-          background: '#fff',
-          display: 'flex',
-          flexDirection: 'row',
-          height: 'calc(100vh - 70px)',
-          width: '100%'
-        }}
-      >
-        <Sidebar {...props} />
-        <div
-          style={{
-            paddingLeft: 24,
-            paddingTop: 30,
-            width: '46.5vw'
-          }}
-        >
+      <div className="max-w-screen-lg w-full mx-auto xl:flex xl:max-w-6xl py-12 px-6">
+        <aside className>
+          <Sidebar {...props} />
+        </aside>
+        <section>
           {!isEmpty(user) && !user.seenSubmitTutorial && (
-            <Card
-              overrides={{
-                Root: {
-                  style: {
-                    margin: '0 auto',
-                    marginBottom: '30px'
-                  }
+          <Card
+            overrides={{
+              Root: {
+                style: {
+                  margin: '0 auto',
+                  marginBottom: '30px'
                 }
-              }}
+              }
+            }}
+          >
+            <div
+              style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
             >
+              <div>
+                <Tag
+                  overrides={{ Root: { style: { marginLeft: 0 } } }}
+                  closeable={false}
+                  variant={'variant'}
+                  kind="accent"
+                >
+                  How It Works
+                </Tag>
+              </div>
               <div
-                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                onClick={() =>
+                  handleSeenSubmitDispatch({ env: process.env.NODE_ENV, type: 'submit' })
+                }
+                style={{ cursor: 'pointer', color: 'black' }}
               >
-                <div>
-                  <Tag
-                    overrides={{ Root: { style: { marginLeft: 0 } } }}
-                    closeable={false}
-                    variant={'variant'}
-                    kind="accent"
+                <img
+                  src="https://d1ppmvgsdgdlyy.cloudfront.net/close.svg"
+                  alt="close"
+                  style={{ height: 10 }}
+                />
+              </div>
+            </div>
+            <div style={{ marginTop: 15 }}>
+              Welcome to The Giving Tree!
+              <br />
+              <br />
+              To receive help, either make a request or call/text us at{' '}
+              <a className="text-indigo-600 hover:text-indigo-800" href="tel:+1415-964-4261">
+                415-964-4261
+              </a>{' '}
+              to have us make one on your behalf. <br />
+              <br />
+              Here to help? Explore the feed to find new, unclaimed requests near you.
+            </div>
+          </Card>
+        )}
+        {submitPostSuccess ? (
+          <Card
+            overrides={{
+              Root: {
+                style: {
+                  margin: '0 auto',
+                  marginBottom: '30px',
+                  color: 'green'
+                }
+              }
+            }}
+          >
+            Your post is now live!{' '}
+            <span role="img" aria-label="Smiley emoji with party hat">
+              🥳
+            </span>
+            Check it out{' '}
+            <a
+              className="text-indigo-600 hover:text-indigo-800 transition duration-150"
+              style={{ textDecoration: 'none' }}
+              href={`/post/${submittedPost._id}`}
+            >
+              here
+            </a>
+            .
+          </Card>
+        ) : (
+          <Card
+            overrides={{
+              Root: {
+                style: {
+                  margin: '0 auto'
+                }
+              }
+            }}
+          >
+            <div className="flex justify-between items-center my-4 mb-6" style={{ height: 36 }}>
+              {!checkout ? (
+                <React.Fragment>
+                  <label
+                    class="block mt-4 uppercase tracking-wide text-gray-700 text-sm font-bold mb-2"
+                    for="grid-last-name"
                   >
-                    How It Works
-                  </Tag>
+                    I want to:
+                  </label>
+                </React.Fragment>
+              ) : (
+                <div className="flex justify-center" style={{ width: '100%' }}>
+                  <label
+                    class="block mt-4 uppercase tracking-wide text-gray-700 text-sm font-bold mb-2"
+                    for="grid-last-name"
+                  >
+                    Create Request
+                  </label>
+                </div>
+              )}
+            </div>
+            {!checkout && (
+              <div className="grid grid-cols-2 gap-8">
+                <div
+                  onClick={() => {
+                    alert('please call or text +1 415-964-4261');
+                  }}
+                  className={`max-w-sm flex items-center justify-center rounded overflow-hidden shadow-lg border hover:border-indigo-600 rounded-lg hover:text-green-600 transition duration-150`}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <div className="px-6 py-8">
+                    <div className={`font-bold text-xl`}>Call or Text</div>
+                  </div>
                 </div>
                 <div
-                  onClick={() =>
-                    handleSeenSubmitDispatch({ env: process.env.NODE_ENV, type: 'submit' })
-                  }
-                  style={{ cursor: 'pointer', color: 'black' }}
+                  onClick={() => {
+                    setCheckout(true);
+                  }}
+                  className={`max-w-sm rounded  hover:border-indigo-600 overflow-hidden shadow-lg border ${selectedRequest ===
+                    'supplies' && 'border-indigo-600'} rounded-lg transition duration-150`}
+                  style={{ cursor: 'pointer' }}
                 >
                   <img
-                    src="https://d1ppmvgsdgdlyy.cloudfront.net/close.svg"
-                    alt="close"
-                    style={{ height: 10 }}
-                  />
-                </div>
-              </div>
-              <div style={{ marginTop: 15 }}>
-                Welcome to The Giving Tree!
-                <br />
-                <br />
-                To receive help, either make a request or call/text us at{' '}
-                <a className="text-indigo-600 hover:text-indigo-800" href="tel:+1415-964-4261">
-                  415-964-4261
-                </a>{' '}
-                to have us make one on your behalf. <br />
-                <br />
-                Here to help? Explore the feed to find new, unclaimed requests near you.
-              </div>
-            </Card>
-          )}
-          {submitPostSuccess ? (
-            <Card
-              overrides={{
-                Root: {
-                  style: {
-                    margin: '0 auto',
-                    marginBottom: '30px',
-                    color: 'green'
-                  }
-                }
-              }}
-            >
-              Your post is now live!{' '}
-              <span role="img" aria-label="Smiley emoji with party hat">
-                🥳
-              </span>
-              Check it out{' '}
-              <a
-                className="text-indigo-600 hover:text-indigo-800 transition duration-150"
-                style={{ textDecoration: 'none' }}
-                href={`/post/${submittedPost._id}`}
-              >
-                here
-              </a>
-              .
-            </Card>
-          ) : (
-            <Card
-              overrides={{
-                Root: {
-                  style: {
-                    margin: '0 auto'
-                  }
-                }
-              }}
-            >
-              <div className="flex justify-between items-center my-4 mb-6" style={{ height: 36 }}>
-                {!checkout ? (
-                  <React.Fragment>
-                    <div className="font-bold text-xl text-left">I need:</div>
-                    {/* <div>
-                      {selectedRequest !== '' && (
-                        <button
-                          onClick={() => setCheckout(true)}
-                          style={{ outline: 'none' }}
-                          className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
-                        >
-                          Next
-                        </button>
-                      )}
-                    </div> */}
-                  </React.Fragment>
-                ) : (
-                  <React.Fragment>
+                    style={{
+                      objectFit: 'cover',
+                      maxHeight: 150,
+                      width: 400,
+                      overflow: 'auto'
+                    }}
+                    src="https://d1ppmvgsdgdlyy.cloudfront.net/groceries.jpg"
+                    alt="Supplies"
+                  ></img>
+                  <div className="px-6 py-8">
                     <div
-                      onClick={() => {
-                        setRequest('');
-                        setCheckout(false);
-                      }}
-                      className="font-bold text-xl text-left"
-                      style={{ cursor: 'pointer' }}
+                      className={`font-bold text-xl text-center ${selectedRequest ===
+                        'supplies' && 'text-green-600'}`}
                     >
-                      <ArrowLeft size={20} />
-                    </div>
-                  </React.Fragment>
-                )}
-              </div>
-              {!checkout && (
-                <div className="grid grid-cols-3 gap-4">
-                  <div
-                    onClick={() => {
-                      if (selectedRequest) {
-                        setRequest('');
-                      } else {
-                        setRequest('food');
-                        setCheckout(true);
-                      }
-                    }}
-                    className={`max-w-sm rounded overflow-hidden shadow-lg border ${selectedRequest ===
-                      'food' &&
-                      'border-indigo-600'} hover:border-indigo-600 rounded-lg hover:text-green-600 transition duration-150`}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <img
-                      style={{ objectFit: 'cover', maxHeight: 150, width: 400, overflow: 'auto' }}
-                      src="https://d1ppmvgsdgdlyy.cloudfront.net/groceries.jpg"
-                      alt="Food"
-                    ></img>
-                    <div className="px-6 py-8">
-                      <div
-                        className={`font-bold text-xl text-center ${selectedRequest === 'food' &&
-                          'text-green-600'}`}
-                      >
-                        Food
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    onClick={() => {
-                      if (selectedRequest) {
-                        setRequest('');
-                      } else {
-                        setRequest('supplies');
-                        setCheckout(true);
-                      }
-                    }}
-                    className={`max-w-sm rounded  hover:border-indigo-600 overflow-hidden shadow-lg border ${selectedRequest ===
-                      'supplies' && 'border-indigo-600'} rounded-lg transition duration-150`}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <img
-                      style={{
-                        objectFit: 'cover',
-                        maxHeight: 150,
-                        width: 400,
-                        overflow: 'auto'
-                      }}
-                      src="https://d1ppmvgsdgdlyy.cloudfront.net/supplies.jpg"
-                      alt="Supplies"
-                    ></img>
-                    <div className="px-6 py-8">
-                      <div
-                        className={`font-bold text-xl text-center ${selectedRequest ===
-                          'supplies' && 'text-green-600'}`}
-                      >
-                        Supplies
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    onClick={() => {
-                      if (selectedRequest) {
-                        setRequest('');
-                      } else {
-                        // setRequest('transportation');
-                        // setCheckout(true);
-                      }
-                    }}
-                    className={`max-w-sm rounded overflow-hidden shadow-lg border ${selectedRequest ===
-                      'transportation' && 'border-indigo-600'} rounded-lg transition duration-150`}
-                    style={{ cursor: 'not-allowed' }}
-                  >
-                    <img
-                      style={{
-                        objectFit: 'cover',
-                        maxHeight: 150,
-                        width: 400,
-                        overflow: 'auto',
-                        filter: 'grayscale(100%)'
-                      }}
-                      src="https://d1ppmvgsdgdlyy.cloudfront.net/transportation.jpg"
-                      alt="Transportation"
-                    ></img>
-                    <div className="px-6 py-8">
-                      <div
-                        className={`font-bold text-xl text-center ${selectedRequest ===
-                          'transportation' && 'text-green-600'}`}
-                      >
-                        Transportation (coming soon)
-                      </div>
+                      Submit Request Online
                     </div>
                   </div>
                 </div>
-              )}
-              {checkout && (
-                <React.Fragment>
-                  {selectedRequest === 'food' && foodJSX()}
-                  {selectedRequest === 'supplies' && suppliesJSX()}
-                  {selectedRequest === 'transportation' && transportationJSX()}
-                </React.Fragment>
-              )}
-            </Card>
-          )}
-        </div>
+              </div>
+            )}
+            {checkout && <React.Fragment>{formJSX()}</React.Fragment>}
+          </Card>
+        )}
+        </section>
       </div>
-    </div>
+    </StickyFooter>        
   );
 }
 

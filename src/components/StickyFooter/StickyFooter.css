@@ -1,0 +1,11 @@
+/**
+ * I'll implement the sticky footer better once I clean up the front end a bit
+ */
+ html,
+ body,
+ #root, 
+ #root > div:nth-child(1) {
+   display: flex;
+   flex-direction: column;
+   height: 100%;
+ }
