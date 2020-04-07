@@ -567,7 +567,7 @@ function Submit(props) {
   return (
     <StickyFooter>
       <Navigation selectMenuDispatch={selectMenuDispatch} searchBarPosition="center" />
-      <div className="max-w-screen-lg w-full mx-auto xl:flex xl:max-w-6xl py-12">
+      <div className="max-w-screen-lg w-full mx-auto xl:flex xl:max-w-6xl py-12 px-6">
         <aside className>
           <Sidebar {...props} />
         </aside>
