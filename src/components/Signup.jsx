@@ -17,6 +17,7 @@ import { register } from '../store/actions/auth/auth-actions';
 import Media from 'react-media';
 import passwordValidator from 'password-validator';
 import { hotjar } from 'react-hotjar';
+import Navigation from './Navigation';
 
 var schema = new passwordValidator();
 schema
@@ -107,7 +108,7 @@ function Signup(props) {
   } else {
     return (
       <div style={{ width: '100%' }}>
-        <HeaderNavigation
+        <Navigation
           overrides={{
             Root: {
               style: {
@@ -136,7 +137,7 @@ function Signup(props) {
           </NavigationList>
           <NavigationList $align={ALIGN.center} />
           <NavigationList $align={ALIGN.right} />
-        </HeaderNavigation>
+        </Navigation>
         <Media
           queries={{
             small: '(max-width: 599px)',

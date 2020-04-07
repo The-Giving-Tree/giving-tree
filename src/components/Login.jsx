@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  HeaderNavigation,
   ALIGN,
   StyledNavigationItem as NavigationItem,
   StyledNavigationList as NavigationList
@@ -17,6 +16,7 @@ import Media from 'react-media';
 import { Modal, ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/modal';
 
 import { login, initiateReset } from '../store/actions/auth/auth-actions';
+import Navigation from './Navigation';
 
 const componentDidUpdate = props => {};
 
@@ -68,7 +68,7 @@ function Login(props) {
   } else {
     return (
       <div style={{ width: '100%' }}>
-        <HeaderNavigation
+        <Navigation
           overrides={{
             Root: {
               style: {
@@ -97,7 +97,7 @@ function Login(props) {
           </NavigationList>
           <NavigationList $align={ALIGN.center} />
           <NavigationList $align={ALIGN.right} />
-        </HeaderNavigation>
+        </Navigation>
         <Media
           queries={{
             small: '(max-width: 599px)',
