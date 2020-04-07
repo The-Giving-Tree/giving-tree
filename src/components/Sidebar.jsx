@@ -1,6 +1,6 @@
 import * as React from 'react';
-import Constants from './Constants';
-import { NavLink } from 'react-router-dom';
+// import Constants from './Constants';
+// import { NavLink } from 'react-router-dom';
 
 class Sidebar extends React.Component {
   render() {

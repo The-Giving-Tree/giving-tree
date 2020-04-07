@@ -1379,6 +1379,7 @@ function NewsFeedPage(props) {
           <Sidebar {...props} />
         </section>
         <section className="xl:w-1/2 px-6 lg:px-12">
+          <h2 className="text-lg font-bold">Requests near you</h2>
           <NewsfeedTable
             {...props}
             authenticated={authenticated}
