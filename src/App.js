@@ -24,7 +24,7 @@ import './App.css';
 import ErrorPage from './views/ErrorPage/ErrorPage';
 import Home from './views/Home/Home';
 import NewsFeedPage from './views/NewsFeed/NewsFeedPage';
-import NewsFeedPage2 from './views/NewsFeed/NewsFeedPage2';
+// import NewsFeedPage2 from './views/NewsFeed/NewsFeedPage2';
 
 const engine = new Styletron();
 
@@ -65,7 +65,7 @@ function App() {
             <Route
               exact
               path={`/home/(discover|ongoing|completed|global)`}
-              component={NewsFeedPage2}
+              component={NewsFeedPage}
             />
             <Route exact path={Constants.PATHS.LEADERBOARD} component={Leaderboard} />
             <Route exact path={Constants.PATHS.ABOUT} component={About} />

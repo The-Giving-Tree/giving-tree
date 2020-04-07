@@ -13,7 +13,7 @@ class Sidebar extends React.Component {
         <nav className="hidden lg:block">
           <ul className="list-none p-0 m-0">
             <li className="text-black transition duration-150 px-6 my-2">
-              {/* <button onClick={() => {
+              <button onClick={() => {
                 window.location = '/home/discover';
               }}
                 className="flex items-center">
@@ -23,9 +23,9 @@ class Sidebar extends React.Component {
                     style={{ height: 20 }}
                   />
                   Find Requests
-              </button> */}
+              </button>
               {/* TODO: Use NavLink when NewsFeedPage2 is implemented */}
-              <NavLink
+              {/* <NavLink
                 to={Constants.PATHS.NEWSFEED}
                 // onClick={() => {
                 //   window.location = '/home/discover';
@@ -40,11 +40,11 @@ class Sidebar extends React.Component {
                   style={{ height: 20 }}
                 />
                 Find Requests
-              </NavLink>
+              </NavLink> */}
             </li>
 
             <li className="text-black transition duration-150 px-6 my-2">
-              {/* <button onClick={() => {
+              <button onClick={() => {
                 window.location = '/home/ongoing';
               }}
                 className="flex items-center">
@@ -54,9 +54,9 @@ class Sidebar extends React.Component {
                     style={{ height: 20 }}
                   />
                   Your requests
-              </button> */}
+              </button>
               {/* TODO: Use NavLink when NewsFeedPage2 is implemented */}
-               <NavLink to={() => {
+               {/* <NavLink to={() => {
                   if (authenticated) {
                     return Constants.PATHS.ONGOING;
                   } else {
@@ -76,11 +76,11 @@ class Sidebar extends React.Component {
                   style={{ height: 20 }}
                 />
                 Your requests
-              </NavLink>
+              </NavLink> */}
             </li>
 
             <li className="text-black transition duration-150 px-6 my-2">
-              {/* <button onClick={() => {
+              <button onClick={() => {
                 window.location = '/home/completed';
               }}
                 className="flex items-center">
@@ -90,9 +90,9 @@ class Sidebar extends React.Component {
                     style={{ height: 20 }}
                   />
                   Completed requests
-              </button> */}
+              </button>
               {/* TODO: Use NavLink when NewsFeedPage2 is implemented */}
-              <NavLink
+              {/* <NavLink
                 to={() => {
                   if (authenticated) {
                     return Constants.PATHS.COMPLETED;
@@ -113,24 +113,23 @@ class Sidebar extends React.Component {
                   style={{ height: 20 }}
                 />
                 Completed requests
-              </NavLink>
+              </NavLink> */}
             </li>
 
             <li className="text-black transition duration-150 px-6 my-2">
-              {/* <button onClick={() => {
+              <button onClick={() => {
                 window.location = '/home/global';
               }}
-                className="flex items-center"
-                activeClassName="text-indigo-600">
+                className="flex items-center">
                   <img alt="Global"
                     className="inline mr-3"
                     src="https://d1ppmvgsdgdlyy.cloudfront.net/global.svg"
                     style={{ height: 20 }}
                   />
                   Global requests
-              </button> */}
+              </button>
               {/* TODO: Use NavLink when NewsFeedPage2 is implemented */}
-              <NavLink
+              {/* <NavLink
                 to={Constants.PATHS.GLOBAL}
                 className="flex items-center"
                 activeClassName="text-indigo-600">
@@ -141,7 +140,7 @@ class Sidebar extends React.Component {
                   style={{ height: 20 }}
                 />
                 Global requests
-              </NavLink>
+              </NavLink> */}
             </li>
 
             <li className="text-black transition duration-150 px-6 my-2">
