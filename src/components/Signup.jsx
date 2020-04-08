@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  HeaderNavigation,
   ALIGN,
   StyledNavigationItem as NavigationItem,
   StyledNavigationList as NavigationList

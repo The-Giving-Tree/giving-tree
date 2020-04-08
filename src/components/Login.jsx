@@ -13,7 +13,9 @@ import { Input } from 'baseui/input';
 import { Button, SHAPE } from 'baseui/button';
 import { connect } from 'react-redux';
 import Media from 'react-media';
-import { Modal, ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/modal';
+import { 
+  Modal, ModalHeader, ModalBody, ModalFooter, ModalButton
+} from 'baseui/modal';
 
 import { login, initiateReset } from '../store/actions/auth/auth-actions';
 import Navigation from './Navigation';
@@ -255,4 +257,5 @@ Login.defaultProps = {};
 
 Login.propTypes = {};
 
-export default lifecycle(methods)(connect(mapStateToProps, mapDispatchToProps)(Login));
+export default lifecycle(methods)
+  (connect(mapStateToProps, mapDispatchToProps)(Login));
