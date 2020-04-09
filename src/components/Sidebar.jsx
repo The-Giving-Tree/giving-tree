@@ -10,7 +10,7 @@ class Sidebar extends React.Component {
         {/* Mobile Nav HERE */}
 
         {/* Table & Desktop Nav */}
-        <nav className="lg:block mb-4">
+        <nav className="lg:block mb-10">
           <ul className="list-none p-0 m-0 flex items-center justify-center xl:block xl:px-6">
             <li className="text-black transition duration-150 xl:my-2 mx-4 xl:mx-0">
               <button onClick={() => {

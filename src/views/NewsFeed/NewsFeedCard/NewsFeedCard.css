@@ -1,0 +1,8 @@
+.NewsFeedCard {
+  max-height: 800px;
+  transition: .25s;
+}
+
+.NewsFeedCard:hover {
+  background-color: #f5f5f5;
+}

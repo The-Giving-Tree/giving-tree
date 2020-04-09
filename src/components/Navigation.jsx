@@ -379,13 +379,15 @@ function Navigation(props) {
           </ModalFooter>
         </Modal>
         {/* Main logo */}
-        <Link to={authenticated ? '/home/discover' : '/'} className="mr-auto">
-          <img
-            src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
-            alt="Giving Tree"
-            style={{ height: 30 }}
+        <button className="mr-auto" onClick={() => {
+          const url = (authenticated) ? '/home/discover' : '/';
+          window.location = url;
+        }}><img
+          src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
+          alt="Giving Tree"
+          style={{ height: 30 }}
           />
-        </Link>
+        </button>
 
         {/* Search bar */}
         <div className="hidden md:block mr-auto px-6 max-w-md w-full">
@@ -635,13 +637,16 @@ function Navigation(props) {
     return (
       <header className="flex items-center justify-start px-6 py-3 bg-white">
         {/* Main logo */}
-        <Link to={authenticated ? '/home/discover' : '/'} className="mr-auto">
+        <button className="mr-auto" onClick={() => {
+          const url = (authenticated) ? '/home/discover' : '/';
+          window.location = url;
+        }}>
           <img
             src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
             alt="Giving Tree"
             style={{ height: 30 }}
           />
-        </Link>
+        </button>
 
         {/* Search bar */}
         <div className="hidden md:block mr-auto px-6">
