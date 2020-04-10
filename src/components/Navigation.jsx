@@ -230,7 +230,7 @@ function Navigation(props) {
         }`,
         subText: notifications[i].postId.content,
         timeStamp: moment(notifications[i].postId.createdAt).format('MMM D, YYYY h:mm A'),
-        postId: notifications[i].postId.postId,
+        postId: (notifications[i].postId.type.toLowerCase() === 'comment') ? notifications[i].postId.parentId : notifications[i].postId.postId,
         imgUrl: notifications[i].from.profilePictureUrl
       };
       labels.push(newObj);
