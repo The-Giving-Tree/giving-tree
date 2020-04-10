@@ -16,10 +16,13 @@ function Footer(props) {
     >
       {matches => (
         <React.Fragment>
-          <div style={{
-            height: 'auto',
-            position: 'relative',
-          }} className="footer px-10 py-6">
+          <div
+            style={{
+              height: 'auto',
+              position: 'relative'
+            }}
+            className="footer px-10 py-6"
+          >
             <div className="grid grid-flow-row grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
               <div>
                 <Link to="/about#about-us">
@@ -95,9 +98,9 @@ function Footer(props) {
               </div>
               <div className="block sm:hidden md:block">
                 <img
-                  style={{ 
-                    position: 'absolute', 
-                    bottom: 0, 
+                  style={{
+                    position: 'absolute',
+                    bottom: 0,
                     right: 0,
                     width: '175px'
                   }}

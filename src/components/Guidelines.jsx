@@ -127,7 +127,7 @@ function Guidelines(props) {
               <br />
               <b>General Health &amp; Safety Protocol</b>
               <br />
-              <ul class="list-disc">
+              <ul className="list-disc">
                 <li>
                   Keep at least 6 feet of distance between yourself and others in public places, and
                   when delivering/receiving items through The Giving Tree.
@@ -159,7 +159,7 @@ function Guidelines(props) {
               <br />
               <b>Safety Guidelines for Helpers</b>
               <br />
-              <ul class="list-disc">
+              <ul className="list-disc">
                 <li>
                   Avoid touching handrails, public furniture, or any other public surfaces as much
                   as possible.
@@ -202,7 +202,7 @@ function Guidelines(props) {
               <br />
               <b>Safety Guidelines for Requesters</b>
               <br />
-              <ul class="list-disc">
+              <ul className="list-disc">
                 <li>
                   Keep in mind that the virus can come from public places/surfaces into your home.
                 </li>
@@ -237,7 +237,7 @@ function Guidelines(props) {
               deactivation and removal from the site.
               <br />
               <br />
-              <ol class="list-decimal">
+              <ol className="list-decimal">
                 <li>
                   Registered users must be 16 years old or older. If you are under 18, please have a
                   parent or guardian attend any drop-offs or pick-ups as necessary.

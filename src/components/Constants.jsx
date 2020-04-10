@@ -10,6 +10,10 @@ module.exports = Object.freeze({
     LEADERBOARD: '/leaderboard',
     ABOUT: '/about',
     HOWITWORKS: '/how-it-works',
-    GUIDELINES: '/guidelines'
+    GUIDELINES: '/guidelines',
+    NEWSFEED: '/home/discover',
+    ONGOING: '/home/ongoing',
+    COMPLETED: '/home/completed',
+    GLOBAL: '/home/global'
   }
 });

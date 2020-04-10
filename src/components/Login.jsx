@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  HeaderNavigation,
   ALIGN,
   StyledNavigationItem as NavigationItem,
   StyledNavigationList as NavigationList
@@ -17,6 +16,7 @@ import Media from 'react-media';
 import { Modal, ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/modal';
 
 import { login, initiateReset } from '../store/actions/auth/auth-actions';
+import Navigation from './Navigation';
 
 const componentDidUpdate = props => {};
 
@@ -68,7 +68,7 @@ function Login(props) {
   } else {
     return (
       <div style={{ width: '100%' }}>
-        <HeaderNavigation
+        <Navigation
           overrides={{
             Root: {
               style: {
@@ -82,7 +82,7 @@ function Login(props) {
             <NavigationItem>
               <div
                 style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}
-                onClick={() => history.push('/home/discover')}
+                onClick={() => history.push(authenticated ? '/home/discover' : '/')}
               >
                 <img
                   src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
@@ -97,7 +97,7 @@ function Login(props) {
           </NavigationList>
           <NavigationList $align={ALIGN.center} />
           <NavigationList $align={ALIGN.right} />
-        </HeaderNavigation>
+        </Navigation>
         <Media
           queries={{
             small: '(max-width: 599px)',
@@ -121,6 +121,8 @@ function Login(props) {
                       width: matches.medium || matches.large ? '512px' : '100%',
                       margin: '0 auto',
                       border: 'none',
+                      paddingTop: '12px',
+                      paddingBottom: '12px',
                       boxShadow: 'none'
                     }
                   }

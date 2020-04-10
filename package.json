@@ -34,6 +34,7 @@
     "react-geolocated": "^3.0.1",
     "react-helmet": "^5.2.1",
     "react-hotjar": "^2.2.0",
+    "react-infinite-scroll-component": "^5.0.4",
     "react-infinite-scroller": "^1.2.4",
     "react-instantsearch-dom": "^6.0.0",
     "react-latex": "^1.5.0",
