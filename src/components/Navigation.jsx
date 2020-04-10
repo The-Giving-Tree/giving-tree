@@ -291,7 +291,7 @@ function Navigation(props) {
   if (authenticated) {
     return (
       <header className="flex items-center justify-start px-6 py-3 bg-white">
-        <button
+        {/* <button
           className="rounded-full text-white px-4 py-2"
           style={{
             position: 'fixed',
@@ -305,7 +305,7 @@ function Navigation(props) {
           onClick={() => setIsOpen(true)}
         >
           Give Feedback!
-        </button>
+        </button> */}
         <Modal
           overrides={{ Dialog: { style: { borderRadius: '7px' } } }}
           onClose={close}

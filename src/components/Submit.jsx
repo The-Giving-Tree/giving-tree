@@ -6,7 +6,7 @@ import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import Navigation from './Navigation';
 import { Card } from 'baseui/card';
 import { Tag } from 'baseui/tag';
-import Sidebar from './Sidebar';
+import Sidebar from './Sidebar/Sidebar';
 import { hotjar } from 'react-hotjar';
 
 import { connect } from 'react-redux';

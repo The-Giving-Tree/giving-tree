@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 // Custom Components
 import Navigation from '../../components/Navigation';
-import Sidebar from '../../components/Sidebar';
+import Sidebar from '../../components/Sidebar/Sidebar';
 import Constants from '../../components/Constants';
 import LocationBar from '../../components/LocationBar/LocationBar';
 import NewsFeedTable2 from './NewsFeedTable2';

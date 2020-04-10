@@ -1,7 +1,7 @@
 import * as React from 'react';
 // Custom Components
 import Navigation from '../../components/Navigation';
-import Sidebar from '../../components/Sidebar';
+import Sidebar from '../../components/Sidebar/Sidebar';
 import NewsfeedTable from '../NewsFeed/NewsfeedTable';
 import LeaderboardTable from '../../components/LeaderboardTable/LeaderboardTable';
 import StickyFooter from '../../components/StickyFooter/StickyFooter'

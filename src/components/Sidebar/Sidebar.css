@@ -1,0 +1,48 @@
+.sidebar-nav-sm {
+  z-index: 100;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(248, 248, 248, 0.95);
+  color: rgba(0,0,0, 0.5);
+  -webkit-backdrop-filter: blur(27.2px);
+  backdrop-filter: blur(27.2px);
+  font-size: 0.625rem;
+}
+
+.sidebar-nav-sm svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* Colors for all icons (Except for heart) */
+.sidebar-nav-sm svg:not(.icon-heart-active) {
+  fill: rgba(0,0,0, 0.5);
+}
+
+/* Active Color for all icons (except the heart) */
+.sidebar-nav-sm li.nav-item-active svg:not(.icon-heart-active) {
+  fill: rgba(5,147,5, 0.5);
+}
+
+/* Heart icon */
+.sidebar-nav-sm .icon-heart path {
+  fill: rgba(0,0,0, 0.5);
+}
+.sidebar-nav-sm .icon-heart-active {
+  fill: red;
+}
+
+/* Badge icon */
+.sidebar-nav-sm .icon-heart path {
+  fill: rgba(0,0,0, 0.5);
+}
+
+/* Text in the menu items */
+.sidebar-nav-sm li strong {
+  line-height: normal;
+}
+
+.sidebar-nav-sm li.nav-item-active strong {
+  color: #059305;
+  opacity: 0.5;
+}
