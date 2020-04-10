@@ -19,33 +19,13 @@ class Sidebar extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      authenticated: false
-    }
+    this.state = { }
   }
 
   componentDidMount() {
-    this.setAuthentication();
   }
 
   componentDidUpdate(oProps, oState) {
-    if (this.state.authenticated) {
-      // this.setAuthentication();
-      console.log(oProps, oState);
-    }
-  }
-
-  /**
-   * Check local storage for authentication
-   *
-   * @memberof Sidebar
-   */
-  setAuthentication() {
-    // Check if auth key is set.
-    const bool = (localStorage.getItem('giving_tree_jwt')) ? true : false;
-    this.setState({
-      authenticated: bool
-    })
   }
 
   /**

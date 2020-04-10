@@ -733,40 +733,6 @@ function NewsFeedPage(props) {
         //                     {item.type === 'Post' ? (
         //                       <div style={{ marginTop: 20 }}>
         //                         <div>
-        //                           {props.match.url === '/home/ongoing' ? (
-        //                             <div className="text-sm my-1 mt-4">
-        //                               {item && `Address: ${JSON.parse(item.text).address}`}
-        //                             </div>
-        //                           ) : (
-        //                             <div className="text-sm my-1 mt-4">
-        //                               {coords
-        //                                 ? `${calculateDistance(
-        //                                     JSON.parse(item.text).location
-        //                                   )} miles from
-        //                               you ${
-        //                                 JSON.parse(item.text).postal
-        //                                   ? `(${JSON.parse(item.text).postal.split('-')[0] ||
-        //                                       JSON.parse(item.text).postal})`
-        //                                   : ''
-        //                               }`
-        //                                 : `Zip Code: ${
-        //                                     JSON.parse(item.text).postal
-        //                                       ? `${JSON.parse(item.text).postal.split('-')[0] ||
-        //                                           JSON.parse(item.text).postal}`
-        //                                       : ''
-        //                                   }`}
-        //                             </div>
-        //                           )}
-        //                           <div className="text-sm my-1 mt-4">
-        //                             {item &&
-        //                               JSON.parse(item.text).dueDate &&
-        //                               `Due Date: ${moment(
-        //                                 new Date(JSON.parse(item.text).dueDate)
-        //                               ).fromNow()} (${JSON.parse(item.text).dueDate})`}
-        //                           </div>
-        //                           <div className="text-sm my-1 mt-4">
-        //                             {item && `Description: ${JSON.parse(item.text).description}`}
-        //                           </div>
         //                           {item &&
         //                             JSON.parse(item.text).phoneNumber &&
         //                             (props.match.url === '/home/discover' ||
