@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Button, SHAPE } from 'baseui/button';
 import { useHistory } from 'react-router-dom';
 import PlacesAutocomplete from 'react-places-autocomplete';
-import { geocodeByAddress } from 'react-places-autocomplete';
+import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import InfiniteScroll from 'react-infinite-scroller';
 import { Card, StyledBody } from 'baseui/card';
 import { StatefulPopover, PLACEMENT } from 'baseui/popover';
