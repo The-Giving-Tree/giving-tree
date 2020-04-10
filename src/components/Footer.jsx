@@ -96,7 +96,7 @@ function Footer(props) {
                 <br />
                 {/* <div className="footer-heading mt-8">Follow Us On</div> */}
               </div>
-              <div className="block sm:hidden md:block">
+              <div className="hidden md:block">
                 <img
                   style={{
                     position: 'absolute',
