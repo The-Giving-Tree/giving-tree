@@ -1,4 +1,5 @@
-.sidebar-nav-sm {
+/* ======= Mobile navigation ================ */
+.sidebar-nav-xs {
   z-index: 100;
   bottom: 0;
   left: 0;
@@ -9,40 +10,103 @@
   font-size: 0.625rem;
 }
 
-.sidebar-nav-sm svg {
+.sidebar-nav-xs svg {
   width: 1.5rem;
   height: 1.5rem;
 }
 
 /* Colors for all icons (Except for heart) */
-.sidebar-nav-sm svg:not(.icon-heart-active) {
+.sidebar-nav-xs svg:not(.icon-heart-active) {
   fill: rgba(0,0,0, 0.5);
 }
 
 /* Active Color for all icons (except the heart) */
-.sidebar-nav-sm li.nav-item-active svg:not(.icon-heart-active) {
+.sidebar-nav-xs li.nav-item-active svg:not(.icon-heart-active) {
   fill: rgba(5,147,5, 0.5);
 }
 
 /* Heart icon */
-.sidebar-nav-sm .icon-heart path {
+.sidebar-nav-xs .icon-heart path {
   fill: rgba(0,0,0, 0.5);
 }
-.sidebar-nav-sm .icon-heart-active {
+.sidebar-nav-xs .icon-heart-active {
   fill: red;
 }
 
 /* Badge icon */
-.sidebar-nav-sm .icon-heart path {
+.sidebar-nav-xs .icon-heart path {
   fill: rgba(0,0,0, 0.5);
 }
 
 /* Text in the menu items */
-.sidebar-nav-sm li strong {
+.sidebar-nav-xs li strong {
   line-height: normal;
 }
 
-.sidebar-nav-sm li.nav-item-active strong {
+.sidebar-nav-xs li.nav-item-active strong {
   color: #059305;
   opacity: 0.5;
+}
+
+/* ======= Tablet + navigation ================ */
+.sidebar-nav-sm {
+  font-size: .875rem;
+}
+
+/* Colors for all icons (Except for heart) */
+.sidebar-nav-sm svg:not(.icon-heart-active) {
+  fill: rgba(0,0,0,1);
+}
+
+/* Heart icon */
+.sidebar-nav-sm .icon-heart path {
+  fill: rgba(0,0,0,1);
+}
+
+.sidebar-nav-sm button > span {
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+.sidebar-nav-sm li.nav-item-active:before {
+  position: absolute;
+  bottom: -4px;
+  height: 2px;
+  background-color: #8ec755;
+  left: 0;
+  width: 100%;
+  content: '';
+  display: block;
+}
+
+/* ======= Media Queries ================ */
+
+@media all and (max-width: 414px) {
+  .sidebar-nav-xs {
+    display: block;
+  }
+
+  .sidebar-nav-sm {
+    display: none;
+  }
+}
+
+@media all and (min-width: 415px) {
+  .sidebar-nav-xs {
+    display: none;
+  }
+
+  .sidebar-nav-sm {
+    display: block;
+  }
+}
+
+/* XL Devies/Desktop */
+@media all and (min-width: 1280px) {
+  .sidebar-nav-sm button > span {
+    box-shadow: none;
+  }
+
+  .sidebar-nav-sm li.nav-item-active:before {
+    display: none;
+  }
 }

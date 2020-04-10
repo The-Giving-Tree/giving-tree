@@ -64,7 +64,7 @@ class Sidebar extends React.Component {
     return (
       <aside className="">
         {/* Mobile Nav HERE */}
-        <nav className="sidebar-nav-sm fixed w-full block md:hidden">
+        <nav className="sidebar-nav-xs fixed w-full">
           <ul className="list-none py-1 flex items-end justify-between">
             <li className={`px-2 ${(this.isLocation('/home/discover')) ? 'nav-item-active' : ''}`}>
               <button onClick={() => {
@@ -125,80 +125,70 @@ class Sidebar extends React.Component {
         </nav>
 
         {/* Table & Desktop Nav */}
-        <nav className="hidden md:block mb-10 sidebar-nav-md">
+        <nav className="mb-10 sidebar-nav-sm">
           <ul className="list-none p-0 m-0 flex items-center justify-center xl:block xl:px-6">
-            <li className="text-black transition duration-150 xl:my-2 mx-4 xl:mx-0">
+            <li className={`text-black transition duration-150 xl:my-2 mx-2 md:mx-4 xl:mx-0 relative ${(this.isLocation('/home/discover')) ? 'nav-item-active' : ''}`}>
               <button onClick={() => {
                 window.location = '/home/discover';
               }}
-                className="flex flex-col xl:flex-row items-center justify-center xl:justify-start">
-                  <span className="xl:inline-block border h-10 w-10 rounded-full border-gray-300 border flex items-center justify-center xl:mr-3 xl:border-none xl:h-5 xl:w-5 bg-white">
-                    <img alt="search"
-                      className="block w-5 h-5 xl:w-full xl:h-full"
-                      src="https://d1ppmvgsdgdlyy.cloudfront.net/search.svg"
-                    />
+                className="flex flex-col xl:flex-row items-center justify-center 
+                xl:justify-start">
+                  <span className="xl:inline-block border h-12 w-12 rounded-full 
+                  border-gray-300 border flex items-center justify-center 
+                  xl:mr-3 xl:border-none xl:h-5 xl:w-5 bg-white mb-1 xl:mb-0 xl:shadow-none xl:bg-transparent">
+                    <IconSearch className="w-6 h-6 xl:h-5 xl:w-5" />
                   </span>
-                  <span>Find Requests</span>
+                  <strong>Find Requests</strong>
               </button>
             </li>
 
-            <li className="text-black transition duration-150 xl:my-2 mx-4 xl:mx-0">
-              <button onClick={() => {
-                window.location = '/home/ongoing';
-              }}
-                className="flex flex-col xl:flex-row items-center justify-center xl:justify-start">
-                  <span className="xl:inline-block border h-10 w-10 rounded-full border-gray-300 border flex items-center justify-center xl:mr-3 xl:border-none xl:h-5 xl:w-5 bg-white">
-                    <img alt="search"
-                      className="block w-5 h-5 xl:w-full xl:h-full"
-                      src="https://d1ppmvgsdgdlyy.cloudfront.net/care.svg"
-                    />
-                  </span>
-                  Your requests
-              </button>
-            </li>
-
-            <li className="text-black transition duration-150 xl:my-2 mx-4 xl:mx-0 hidden xl:block">
-              <button onClick={() => {
-                window.location = '/home/completed';
-              }}
-                className="flex flex-col xl:flex-row items-center justify-center xl:justify-start">
-                  <span className="xl:inline-block border h-10 w-10 rounded-full border-gray-300 border flex items-center justify-center xl:mr-3 xl:border-none xl:h-5 xl:w-5 bg-white">
-                    <img alt="Gift"
-                      className="block w-5 h-5 xl:w-full xl:h-full"
-                      src="https://d1ppmvgsdgdlyy.cloudfront.net/gift.svg"
-                    />
-                  </span>
-                    Completed requests
-              </button>
-            </li>
-
-            <li className="text-black transition duration-150 xl:my-2 mx-4 xl:mx-0">
+            <li className={`text-black transition duration-150 xl:my-2 mx-2 md:mx-4 xl:mx-0 relative ${(this.isLocation('/home/global')) ? 'nav-item-active' : ''}`}>
               <button onClick={() => {
                 window.location = '/home/global';
               }}
-              className="flex flex-col xl:flex-row items-center justify-center xl:justify-start">
-                <span className="xl:inline-block border h-10 w-10 rounded-full border-gray-300 border flex items-center justify-center xl:mr-3 xl:border-none xl:h-5 xl:w-5 bg-white">
-                  <img alt="Global"
-                    className="block w-5 h-5 xl:w-full xl:h-full"
-                    src="https://d1ppmvgsdgdlyy.cloudfront.net/global.svg"
-                    style={{ height: 20 }}
-                  />
+              className="flex flex-col xl:flex-row items-center justify-center 
+              xl:justify-start">
+                <span className="xl:inline-block border h-12 w-12 rounded-full 
+                border-gray-300 border flex items-center justify-center xl:mr-3 
+                xl:border-none xl:h-5 xl:w-5 bg-white mb-1 xl:mb-0 xl:shadow-none xl:bg-transparent">
+                  <IconGlobal className="w-6 h-6 xl:h-5 xl:w-5" />
                 </span>
-                  Global requests
+                <strong>Global requests</strong>
               </button>
             </li>
 
-            <li className="text-black transition duration-150 xl:my-2 mx-4 xl:mx-0">
+            <li className={`text-black transition duration-150 xl:my-2 mx-2 md:mx-4 xl:mx-0 relative ${(this.isLocation('/home/ongoing')) ? 'nav-item-active' : ''}`}>
               <button onClick={() => {
-                const loc = (authenticated) ? '/home/submit' : '/home/signup';
+                window.location = '/home/ongoing';
+              }}
+                className="flex flex-col xl:flex-row items-center justify-center 
+                xl:justify-start">
+                  <span className="xl:inline-block border h-12 w-12 rounded-full 
+                  border-gray-300 border flex items-center justify-center 
+                  xl:mr-3 xl:border-none xl:h-5 xl:w-5 bg-white mb-1 xl:mb-0 xl:shadow-none xl:bg-transparent">
+                    <IconCare className="w-6 h-6 xl:h-5 xl:w-5" />
+                  </span>
+                  <strong>Your requests</strong>
+              </button>
+            </li>
+
+            <li className={`text-black transition duration-150 xl:my-2 mx-2 md:mx-4 xl:mx-0 relative ${(this.isLocation('/submit')) ? 'nav-item-active' : ''}`}>
+              <button onClick={() => {
+                const loc = (authenticated) ? '/submit' : '/signup';
                 window.location = loc;
               }}
-                className="flex flex-col xl:flex-row items-center justify-center xl:justify-start">
-                <span className="xl:inline-block border h-10 w-10 rounded-full border-gray-300 border flex items-center justify-center xl:mr-3 xl:border-none xl:h-5 xl:w-5 bg-white">
-                  <span role="img" aria-label="Heart emoji"
-                  className="block w-5 h-5 xl:w-full xl:h-full">❤️</span> 
+                className="flex flex-col xl:flex-row items-center justify-center 
+                xl:justify-start">
+                <span className="xl:inline-block border h-12 w-12 rounded-full 
+                border-gray-300 border flex items-center justify-center xl:mr-3 
+                xl:border-none xl:h-5 xl:w-5 bg-white mb-1 xl:mb-0 xl:shadow-none xl:bg-transparent">
+                  {this.isLocation('/submit') ? (
+                    <IconHeartActive className="icon-heart-active w-6 h-6 xl:h-5 xl:w-5" />
+                  ) : (
+                    <IconHeart className="icon-heart w-6 h-6 xl:h-5 xl:w-5" />
+                  )}
                 </span>
-                Make a Request
+                <strong>Make a Request</strong>
               </button>
             </li>
           </ul>
