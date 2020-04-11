@@ -535,107 +535,9 @@ function NewsFeedPage(props) {
         upvoteIndex.push(i);
       }
       items.push(
-        
           <NewsFeedCard item={item} key={i} user={user} className="mb-4"
-          index={i} />
-          
-      
-        
+          index={i} setOpenFoodTracking={setOpenFoodTracking} />
 
-
-        // <div className="shadow item" key={i}>
-        //   <Expand key={i} open={openCard(item._id)}>
-        //     <Card
-        //     >
-        //         <div>
-        //             <div style={{ display: 'table' }}>
-        //               <div style={{ textAlign: 'center' }}>
-        //                 <ChevronUp
-        //                   size={25}
-        //                   color={
-        //                     upvoteIndex.includes(i) || upvoteHover.includes(i) ? '#268bd2' : '#aaa'
-        //                   }
-        //                   style={{ alignContent: 'center', cursor: 'pointer' }}
-        //                   onMouseEnter={() => mouseOverUp(i)}
-        //                   onMouseLeave={() => mouseOutUp(i)}
-        //                   onClick={async () => {
-        //                     if (authenticated) {
-        //                       await handleUpClick(
-        //                         item.type,
-        //                         item._id,
-        //                         item.type === 'Comment' && item.postId
-        //                       );
-
-        //                       if (downvoteIndex.includes(i)) {
-        //                         removeIndex(downvoteIndex, i);
-        //                       }
-
-        //                       if (upvoteIndex.includes(i)) {
-        //                         removeIndex(upvoteIndex, i);
-        //                       } else {
-        //                         upvoteIndex.push(i);
-        //                       }
-        //                     } else {
-        //                       alert('please signup first');
-        //                       history.push('/signup');
-        //                     }
-        //                   }}
-        //                 />
-        //                 <div style={{ alignContent: 'center', marginBottom: 3 }}>
-        //                   {item.voteTotal +
-        //                     Number(
-        //                       upvoteIndex.includes(i)
-        //                         ? item.upVotes.includes(user._id)
-        //                           ? 0
-        //                           : 1
-        //                         : item.upVotes.includes(user._id)
-        //                         ? -1
-        //                         : 0
-        //                     ) -
-        //                     Number(
-        //                       downvoteIndex.includes(i)
-        //                         ? item.downVotes.includes(user._id)
-        //                           ? 0
-        //                           : 1
-        //                         : item.downVotes.includes(user._id)
-        //                         ? -1
-        //                         : 0
-        //                     )}
-        //                 </div>
-        //                 <ChevronDown
-        //                   color={
-        //                     downvoteIndex.includes(i) || downvoteHover.includes(i)
-        //                       ? '#268bd2'
-        //                       : '#aaa'
-        //                   }
-        //                   size={25}
-        //                   style={{ alignContent: 'center', cursor: 'pointer' }}
-        //                   onMouseEnter={() => mouseOverDown(i)}
-        //                   onMouseLeave={() => mouseOutDown(i)}
-        //                   onClick={async () => {
-        //                     if (authenticated) {
-        //                       await handleDownClick(
-        //                         item.type,
-        //                         item._id,
-        //                         item.type === 'Comment' && item.postId
-        //                       );
-
-        //                       if (upvoteIndex.includes(i)) {
-        //                         removeIndex(upvoteIndex, i);
-        //                       }
-
-        //                       if (downvoteIndex.includes(i)) {
-        //                         removeIndex(downvoteIndex, i);
-        //                       } else {
-        //                         downvoteIndex.push(i);
-        //                       }
-        //                     } else {
-        //                       alert('please signup first');
-        //                       history.push('/signup');
-        //                     }
-        //                   }}
-        //                 />
-        //               </div>
         //                   {item.type === 'Comment' && (
         //                     <div>
         //                       <Card
@@ -837,59 +739,6 @@ function NewsFeedPage(props) {
         //             marginTop: 10
         //           }}
         //         >
-        //           {props.match.url !== '/home/ongoing' ? (
-        //             <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
-        //               <CopyToClipboard text={`${window.location.origin}/post/${item._id}`}>
-        //                 <StatefulPopover
-        //                   placement={PLACEMENT.bottomLeft}
-        //                   content={({ close }) => (
-        //                     <StatefulMenu
-        //                       items={[
-        //                         {
-        //                           label: 'Copy Link'
-        //                         }
-        //                       ]}
-        //                       onItemSelect={item => {
-        //                         close();
-        //                         switch (item.item.label) {
-        //                           case 'Copy Link':
-        //                             break;
-        //                           default:
-        //                             break;
-        //                         }
-        //                       }}
-        //                       overrides={{
-        //                         List: { style: { outline: 'none', padding: '0px' } }
-        //                       }}
-        //                     />
-        //                   )}
-        //                 >
-        //                   <Button
-        //                     style={{ outline: 'none', padding: 0 }}
-        //                     kind="minimal"
-        //                     size={SIZE.compact}
-        //                   >
-        //                     <img
-        //                       src="https://d1ppmvgsdgdlyy.cloudfront.net/share.svg"
-        //                       alt="share"
-        //                       style={{ height: 22, width: 'auto', display: 'block' }}
-        //                     />
-        //                     <div
-        //                       style={{
-        //                         marginLeft: 5,
-        //                         textTransform: 'uppercase',
-        //                         fontSize: 12
-        //                       }}
-        //                     >
-        //                       <strong>Share</strong>
-        //                     </div>
-        //                   </Button>
-        //                 </StatefulPopover>
-        //               </CopyToClipboard>
-        //             </div>
-        //           ) : (
-        //             <div />
-        //           )}
         //           <div style={{ display: 'flex', alignContent: 'center' }}>
         //             {confetti && <Confetti width={width} height={height} recycle={false} />}
         //             {item.type === 'Post' &&
@@ -939,25 +788,6 @@ function NewsFeedPage(props) {
         //                   </Button>
         //                 </div>
         //               )}
-        //             {props.match.url !== '/home/ongoing' && (
-        //               <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
-        //                 <Button
-        //                   style={{ outline: 'none', padding: 0 }}
-        //                   kind="minimal"
-        //                   size={SIZE.compact}
-        //                   onClick={() => history.push(`/post/${item._id}`)}
-        //                 >
-        //                   <img
-        //                     src="https://d1ppmvgsdgdlyy.cloudfront.net/comment.svg"
-        //                     alt="comment"
-        //                     style={{ height: 22, width: 'auto', display: 'block' }}
-        //                   />
-        //                   <div style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}>
-        //                     <strong>{item.comments.length}&nbsp;</strong>
-        //                   </div>
-        //                 </Button>
-        //               </div>
-        //             )}
         //             {props.match.url === '/home/ongoing' && (
         //               <div className="flex justify-between items-center" style={{ marginLeft: 15 }}>
         //                 <Button
@@ -1133,153 +963,156 @@ function NewsFeedPage(props) {
           </ModalButton>
         </ModalFooter>
       </Modal>
-      <div className="max-w-screen-lg w-full mx-auto xl:flex xl:max-w-6xl pt-12 mb-8">
-        <Sidebar {...props} />
-        <section className="xl:w-1/2 px-6 lg:px-12">
-          <NewsfeedTable
-            {...props}
-            authenticated={authenticated}
-            address={address}
-            setNewPost={setNewPost}
-            hasMoreItems={hasMoreItems}
-            selectMenuDispatch={selectMenuDispatch}
-            id={id}
-            items={items}
-            resetItems={resetItems}
-            setOpenCustomAddress={setOpenCustomAddress}
-            setAddress={setAddress}
-            setLatLng={setLatLng}
-            latLng={latLng}
-            newPost={newPost}
-            selectMenu={selectMenu}
-            openCustomAddress={openCustomAddress}
-            setUpdateNews={setUpdateNews}
-          />
-        </section>
-        <section className="hidden xl:block">
-          <div
-            style={{
-              width: '344px'
-            }}
-            className="bg-white rounded-lg p-6 shadow-lg"
-          >
-            <div className="flex justify-between items-center">
-              <div className="text-left" style={{ fontWeight: 300 }}>
-                <div
-                  style={{
-                    fontStyle: 'normal',
-                    fontWeight: 500,
-                    fontSize: 16,
-                    lineHeight: '20px',
-                    color: '#545454',
-                    paddingTop: '0px'
-                  }}
-                  className={`mb-4`}
-                >
-                  Global Leaderboard
-                </div>
-                <div
-                  style={{
-                    fontStyle: 'normal',
-                    fontWeight: 'normal',
-                    fontSize: 12,
-                    lineHeight: '14px',
-                    color: '#545454'
-                  }}
-                >
-                  Top Helpers
-                </div>
-              </div>
-              <button
-                className="bg-transparent hover:bg-gray-600 text-gray-700 font-semibold hover:text-white py-1 px-3 border border-gray-600 hover:border-transparent transition duration-150 rounded"
-                style={{ outline: 'none' }}
-                onClick={() => history.push('/leaderboard')}
-              >
-                <span style={{ fontSize: 12 }}>See full list</span>
-              </button>
-            </div>
-            <div className="mt-4">
-              <LeaderboardTable limit={10} />
-            </div>
-            {Number(userRanking) >= 0 && (
-              <div className="mt-8">
-                <div
-                  style={{
-                    fontStyle: 'normal',
-                    fontWeight: 'normal',
-                    fontSize: 12,
-                    lineHeight: '14px',
-                    color: '#545454'
-                  }}
-                  className="text-left mb-4"
-                >
-                  Your Ranking
-                </div>
-                <LeaderboardTable user={user} />
-                <StatefulPopover
-                  placement={PLACEMENT.bottomRight}
-                  overrides={{
-                    Arrow: {
-                      style: {
-                        borderRadius: '50px'
-                      }
-                    },
-                    Body: {
-                      style: {
-                        borderRadius: '50px'
-                      }
-                    },
-                    Root: {
-                      style: {
-                        borderRadius: '50px',
-                        boxShadow: `0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)`
-                      }
-                    }
-                  }}
-                  content={({ close }) => (
-                    <div className="bg-white rounded-lg p-5 shadow-lg">
-                      <div className="tooltip-heading py-1 mb-1">
-                        How does Karma on Giving Tree work?
-                      </div>
-                      <div className="tooltip-text py-1">
-                        Your karma points accumulate when other users upvote your completed
-                        requests.
-                      </div>
-                      <div className="tooltip-text py-1">
-                        Upvotes you receive from users with higher karma have a greater influence on
-                        your karma points.
-                      </div>
-                      <div className="tooltip-text py-1">
-                        Have thoughts about our karma system?{' '}
-                        <a className="tooltip-heading" href="mailto:givingtree@gmail.com">
-                          Email Us
-                        </a>
-                      </div>
-                    </div>
-                  )}
-                >
+      <div className="lg:max-w-4xl xl:max-w-screen-xl w-full mx-auto py-12 px-6">
+        <div className="block xl:flex">
+          <div className="xl:pr-6 sidebar-wrapper">
+            <Sidebar {...props} />
+          </div>
+          <section className="w-full xl:px-6">
+            <NewsfeedTable
+              {...props}
+              authenticated={authenticated}
+              address={address}
+              setNewPost={setNewPost}
+              hasMoreItems={hasMoreItems}
+              selectMenuDispatch={selectMenuDispatch}
+              id={id}
+              items={items}
+              resetItems={resetItems}
+              setOpenCustomAddress={setOpenCustomAddress}
+              setAddress={setAddress}
+              setLatLng={setLatLng}
+              latLng={latLng}
+              newPost={newPost}
+              selectMenu={selectMenu}
+              openCustomAddress={openCustomAddress}
+              setUpdateNews={setUpdateNews}
+            />
+          </section>
+          <section className="hidden xl:block xl:pl-6 w-full" style={{
+            maxWidth: '344px'
+          }}>
+            <div className="bg-white rounded-lg p-6 shadow-lg">
+              <div className="flex justify-between items-center">
+                <div className="text-left" style={{ fontWeight: 300 }}>
+                  <div
+                    style={{
+                      fontStyle: 'normal',
+                      fontWeight: 500,
+                      fontSize: 16,
+                      lineHeight: '20px',
+                      color: '#545454',
+                      paddingTop: '0px'
+                    }}
+                    className={`mb-4`}
+                  >
+                    Leaderboard
+                  </div>
                   <div
                     style={{
                       fontStyle: 'normal',
                       fontWeight: 'normal',
                       fontSize: 12,
                       lineHeight: '14px',
-                      color: '#545454',
-                      cursor: 'pointer'
+                      color: '#545454'
                     }}
-                    className="text-left mt-4"
                   >
-                    Want to improve your ranking?{' '}
-                    <span className="font-bold hover:text-indigo-600 transition duration-150">
-                      Find out how
-                    </span>
+                    Top Helpers
                   </div>
-                </StatefulPopover>
+                </div>
+                <button
+                  className="bg-transparent hover:bg-gray-600 text-gray-700 font-semibold hover:text-white py-1 px-3 border border-gray-600 hover:border-transparent transition duration-150 rounded"
+                  style={{ outline: 'none' }}
+                  onClick={() => history.push('/leaderboard')}
+                >
+                  <span style={{ fontSize: 12 }}>See full list</span>
+                </button>
               </div>
-            )}
-          </div>
-        </section>
+              <div className="mt-4">
+                <LeaderboardTable limit={10} />
+              </div>
+              {Number(userRanking) >= 0 && (
+                <div className="mt-8">
+                  <div
+                    style={{
+                      fontStyle: 'normal',
+                      fontWeight: 'normal',
+                      fontSize: 12,
+                      lineHeight: '14px',
+                      color: '#545454'
+                    }}
+                    className="text-left mb-4"
+                  >
+                    Your Ranking
+                  </div>
+                  <LeaderboardTable user={user} />
+                  <StatefulPopover
+                    placement={PLACEMENT.bottomRight}
+                    overrides={{
+                      Arrow: {
+                        style: {
+                          borderRadius: '50px'
+                        }
+                      },
+                      Body: {
+                        style: {
+                          borderRadius: '50px'
+                        }
+                      },
+                      Root: {
+                        style: {
+                          borderRadius: '50px',
+                          boxShadow: `0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)`
+                        }
+                      }
+                    }}
+                    content={({ close }) => (
+                      <div className="bg-white rounded-lg p-5 shadow-lg">
+                        <div className="tooltip-heading py-1 mb-1">
+                          How does Karma on Giving Tree work?
+                        </div>
+                        <div className="tooltip-text py-1">
+                          Your karma points accumulate when other users upvote your completed
+                          requests.
+                        </div>
+                        <div className="tooltip-text py-1">
+                          Upvotes you receive from users with higher karma have a greater influence on
+                          your karma points.
+                        </div>
+                        <div className="tooltip-text py-1">
+                          Have thoughts about our karma system?{' '}
+                          <a className="tooltip-heading" href="mailto:givingtree@gmail.com">
+                            Email Us
+                          </a>
+                        </div>
+                      </div>
+                    )}
+                  >
+                    <div
+                      style={{
+                        fontStyle: 'normal',
+                        fontWeight: 'normal',
+                        fontSize: 12,
+                        lineHeight: '14px',
+                        color: '#545454',
+                        cursor: 'pointer'
+                      }}
+                      className="text-left mt-4"
+                    >
+                      Want to improve your ranking?{' '}
+                      <span className="font-bold hover:text-indigo-600 transition duration-150">
+                        Find out how
+                      </span>
+                    </div>
+                  </StatefulPopover>
+                </div>
+              )}
+            </div>
+          </section>
+        </div>
       </div>
+        
+        
     </StickyFooter>
   );
 }

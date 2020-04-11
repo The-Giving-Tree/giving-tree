@@ -36,6 +36,7 @@ import {
 } from '../store/actions/auth/auth-actions';
 
 import { editPost } from '../store/actions/user/user-actions';
+import LeaderboardTable from './LeaderboardTable/LeaderboardTable';
 
 function Post(props) {
   const {
@@ -760,11 +761,7 @@ function Post(props) {
   };
 
   return (
-    <div
-      style={{
-        width: '100%'
-      }}
-    >
+    <div>
       <Navigation searchBarPosition="center" />
       {successComment && (
         <Notification
@@ -786,727 +783,623 @@ function Post(props) {
           Added comment successfully!
         </Notification>
       )}
-      <div
-        style={{
-          background: '#fff',
-          height: 'calc(100vh - 70px)',
-          width: '100%'
-        }}
-      >
-        {/* ELEMENT TO SHOW IF THERE IS AN ERROR MESSAGE */}
-        {errorMessage && (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row'
-            }}
-          >
+      <div className="lg:max-w-4xl xl:max-w-screen-xl w-full mx-auto py-12 px-6">
+        <div className="block xl:flex">
+          <div className="xl:pr-6 sidebar-wrapper">
             <Sidebar {...props} />
-            <div
-              style={{
-                color: 'rgb(204, 50, 63)',
-                paddingTop: 30,
-                width: '50%',
-                textAlign: 'center'
-              }}
-            >
-              {errorMessage}
-            </div>
           </div>
-        )}
-        {/* SHOW THE ACTUAL POST IF THERE IS NO ERROR MESSAGE */}
-        {!errorMessage && (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row'
-            }}
-          >
-            <Drawer
-              autoFocus
-              isOpen={annotationOpen}
-              onClose={() => setAnnotationOpen(false)}
-              overrides={{
-                Backdrop: {
-                  style: {
-                    opacity: 0
-                  }
-                },
-                Close: {
-                  style: {
-                    border: 0
-                  }
-                }
-              }}
-              size="auto"
-            >
-              <div style={{ width: '17vw' }}>NOTES!</div>
-            </Drawer>
-            <Sidebar {...props} />
-            <div
-              style={{
-                paddingLeft: 24,
-                paddingRight: 24,
-                paddingTop: 30
-              }}
-            >
-              {isEmpty(foundPost) ? (
-                <Card
+          <div className="w-full xl:px-6">
+            {/* ELEMENT TO SHOW IF THERE IS AN ERROR MESSAGE */}
+            {errorMessage && (
+              <div
+                style={{
+                  color: 'rgb(204, 50, 63)',
+                  width: '50%',
+                  textAlign: 'center'
+                }}
+              >
+                {errorMessage}
+              </div>
+            )}
+            {/* SHOW THE ACTUAL POST IF THERE IS NO ERROR MESSAGE */}
+            {!errorMessage && (
+              <div>
+                <Drawer
+                  autoFocus
+                  isOpen={annotationOpen}
+                  onClose={() => setAnnotationOpen(false)}
                   overrides={{
-                    Root: {
+                    Backdrop: {
                       style: {
-                        width: '45vw',
-                        boxShadow: 'none'
+                        opacity: 0
                       }
                     },
-                    Body: {
+                    Close: {
                       style: {
-                        margin: '-10px'
+                        border: 0
                       }
                     }
                   }}
+                  size="auto"
                 >
-                  <div
-                    style={{
-                      alignContent: 'center',
-                      display: 'flex',
-                      justifyContent: 'center'
-                    }}
-                  >
-                    <div className="loading-spinner"></div>
-                  </div>
-                </Card>
-              ) : (
-                <React.Fragment>
-                  <Card
-                    overrides={{
-                      Root: {
-                        style: {
-                          width: '45vw',
-                          boxShadow: 'none'
+                  <div style={{ width: '17vw' }}>NOTES!</div>
+                </Drawer>
+                
+                <div>
+                  {isEmpty(foundPost) ? (
+                    <Card
+                      overrides={{
+                        Root: {
+                          style: {
+                            width: '100%',
+                            boxShadow: 'none'
+                          }
+                        },
+                        Body: {
+                          style: {
+                            margin: '-10px'
+                          }
                         }
-                      },
-                      Body: {
-                        style: {
-                          margin: '-10px'
-                        }
-                      }
-                    }}
-                  >
-                    <div
-                      style={{
-                        alignContent: 'center',
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        paddingBottom: 15
                       }}
                     >
                       <div
                         style={{
-                          alignItems: 'center',
+                          alignContent: 'center',
                           display: 'flex',
-                          fontSize: 12,
-                          marginLeft: 5,
-                          textTransform: 'lowercase'
+                          justifyContent: 'center'
                         }}
                       >
-                        <div
-                          onClick={() => history.push(`/user/${foundPost.username}`)}
-                          style={{
-                            background: `url(${generateHash(
-                              foundPost.username,
-                              foundPost.authorId.profileVersion
-                            )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${foundPost.username[0].toUpperCase()}.svg), ${stringToHslColor(
-                              foundPost.username,
-                              80,
-                              45
-                            )}`,
-                            backgroundPosition: 'center',
-                            backgroundSize: 'cover',
-                            borderRadius: '50%',
-                            marginRight: 10,
-                            cursor: 'pointer',
-                            backgroundRepeat: 'no-repeat',
-                            height: 32,
-                            width: 32
-                          }}
-                        />
-                        <div>
-                          <strong>
-                            <a
-                              style={{
-                                color: 'rgb(0, 121, 211)',
-                                textDecoration: 'none'
-                              }}
-                              href={`/user/${foundPost.username}`}
-                            >
-                              {foundPost.username}
-                            </a>
-                          </strong>{' '}
-                          ·{' '}
-                          <StatefulTooltip
-                            content={moment(foundPost.updatedAt).format('MMM D, YYYY h:mm A')}
-                          >{`${
-                            foundPost.createdAt === foundPost.updatedAt ? 'published' : 'updated'
-                          } ${moment(new Date(foundPost.updatedAt)).fromNow()}`}</StatefulTooltip>
-                        </div>
-                        {/* <div style={{ textTransform: 'capitalize' }}>&nbsp;·&nbsp;{0}&nbsp;Views</div> */}
+                        <div className="loading-spinner"></div>
                       </div>
-                      <div
-                        style={{
-                          alignContent: 'flex-start'
+                    </Card>
+                  ) : (
+                    <React.Fragment>
+                      <Card
+                        overrides={{
+                          Root: {
+                            style: {
+                              width: '100%',
+                              boxShadow: 'none'
+                            }
+                          },
+                          Body: {
+                            style: {
+                              margin: '-10px'
+                            }
+                          }
                         }}
                       >
                         <div
                           style={{
                             alignContent: 'center',
-                            display: 'flex'
-                          }}
-                        >
-                          {foundPost.type === 'Post' &&
-                            !editor &&
-                            foundPost.categories.map(i => (
-                              <Tag
-                                closeable={false}
-                                color="#4327F1"
-                                kind={KIND.custom}
-                                overrides={{
-                                  Root: {
-                                    style: {
-                                      marginTop: '0px',
-                                      marginBottom: '0px'
-                                    }
-                                  }
-                                }}
-                              >
-                                {i}
-                              </Tag>
-                            ))}
-                          {foundPost.assignedUser && !foundPost.completed && (
-                            <Tag
-                              closeable={false}
-                              color="#FFA500"
-                              kind={KIND.custom}
-                              overrides={{
-                                Root: {
-                                  style: {
-                                    marginBottom: '0px',
-                                    marginRight: '15px',
-                                    marginTop: '0px'
-                                  }
-                                }
-                              }}
-                            >
-                              In Progress
-                            </Tag>
-                          )}
-                          {foundPost.assignedUser && foundPost.completed && (
-                            <Tag
-                              closeable={false}
-                              color="#4BCA81"
-                              kind={KIND.custom}
-                              overrides={{
-                                Root: {
-                                  style: {
-                                    marginRight: '15px',
-                                    marginTop: '0px',
-                                    marginBottom: '0px'
-                                  }
-                                }
-                              }}
-                            >
-                              Completed
-                            </Tag>
-                          )}
-                          {!isEmpty(user) &&
-                            user._id.toString() === foundPost.authorId._id.toString() &&
-                            !foundPost.assignedUser &&
-                            !foundPost.completed &&
-                            (editor ? (
-                              <div className="flex items-center">
-                                <img
-                                  onClick={() => {
-                                    if (window.confirm('Are you sure you want to delete?')) {
-                                      deletePostDispatch({
-                                        env: process.env.NODE_ENV,
-                                        postId: foundPost._id
-                                      });
-
-                                      setTimeout(function() {
-                                        alert('post deleted succcessfully');
-                                        window.location = '/home/discover';
-                                      }, 2000);
-                                    }
-                                  }}
-                                  style={{
-                                    objectFit: 'cover',
-                                    maxHeight: 15,
-                                    overflow: 'auto',
-                                    marginRight: 5,
-                                    cursor: 'pointer'
-                                  }}
-                                  src="https://d1ppmvgsdgdlyy.cloudfront.net/trash.svg"
-                                  alt="delete"
-                                ></img>
-                                <Button
-                                  kind={'secondary'}
-                                  onClick={() => setEditor(false)}
-                                  shape={'pill'}
-                                  size={'compact'}
-                                  style={{
-                                    fontSize: '12px',
-                                    marginLeft: 10,
-                                    marginRight: 10
-                                  }}
-                                >
-                                  Cancel
-                                </Button>
-                                <Button
-                                  disabled={editPostLoading}
-                                  kind={KIND.secondary}
-                                  onClick={() => {
-                                    editPostDispatch({
-                                      env: process.env.NODE_ENV,
-                                      postId: foundPost._id,
-                                      title,
-                                      text: foundPost.text,
-                                      categories: tags.join(',')
-                                    });
-
-                                    setEditor(false);
-                                  }}
-                                  shape={SHAPE.pill}
-                                  size={SIZE.compact}
-                                  style={{
-                                    backgroundColor: '#03a87c',
-                                    color: 'white',
-                                    fontSize: '12px'
-                                  }}
-                                >
-                                  {editPostLoading
-                                    ? 'Saving...'
-                                    : editPostSuccess
-                                    ? 'Saved'
-                                    : 'Save'}
-                                </Button>
-                              </div>
-                            ) : (
-                              <img
-                                alt="edit"
-                                onClick={() => {
-                                  setEditor(true);
-                                }}
-                                src="https://d1ppmvgsdgdlyy.cloudfront.net/edit.svg"
-                                style={{
-                                  cursor: 'pointer',
-                                  height: 25,
-                                  marginLeft: 15,
-                                  width: 15
-                                }}
-                              />
-                            ))}
-                        </div>
-                      </div>
-                    </div>
-                    <div style={{ alignContent: 'center' }}>
-                      <div style={{ display: 'table' }}>
-                        <div style={{ textAlign: 'center' }}>
-                          <ChevronUp
-                            size={25}
-                            color={
-                              upvoteHover.includes(foundPost._id) ||
-                              foundPost.upVotes.includes(user._id)
-                                ? '#268bd2'
-                                : '#aaa'
-                            }
-                            style={{ alignContent: 'center', cursor: 'pointer' }}
-                            onMouseEnter={() => mouseOverUp(foundPost._id)}
-                            onMouseLeave={() => mouseOutUp(foundPost._id)}
-                            onClick={async () =>
-                              await handleUpClick(
-                                foundPost.type,
-                                foundPost._id,
-                                foundPost.type === 'Comment' && foundPost.postId
-                              )
-                            }
-                          />
-                          <div style={{ alignContent: 'center', marginBottom: 3 }}>
-                            {foundPost.voteTotal}
-                          </div>
-                          <ChevronDown
-                            color={
-                              downvoteHover.includes(foundPost._id) ||
-                              foundPost.downVotes.includes(user._id)
-                                ? '#268bd2'
-                                : '#aaa'
-                            }
-                            size={25}
-                            style={{ outline: 'none', alignContent: 'center', cursor: 'pointer' }}
-                            onMouseEnter={() => mouseOverDown(foundPost._id)}
-                            onMouseLeave={() => mouseOutDown(foundPost._id)}
-                            onClick={async () =>
-                              await handleDownClick(
-                                foundPost.type,
-                                foundPost._id,
-                                foundPost.type === 'Comment' && foundPost.postId
-                              )
-                            }
-                          />
-                        </div>
-                        <div
-                          style={{
-                            display: 'table-cell',
-                            verticalAlign: 'middle',
-                            tableLayout: 'fixed',
-                            width: '100%'
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            paddingBottom: 15
                           }}
                         >
                           <div
                             style={{
-                              display: 'block',
-                              alignContent: 'center',
-                              marginBottom: 3,
-                              marginLeft: 20
+                              alignItems: 'center',
+                              display: 'flex',
+                              fontSize: 12,
+                              marginLeft: 5,
+                              textTransform: 'lowercase'
                             }}
                           >
-                            {editor ? (
-                              <Input
-                                onChange={event => {
-                                  setTitle(event.target.value);
-                                }}
-                                size={'compact'}
-                                value={title}
-                              ></Input>
-                            ) : (
-                              <div
-                                style={{
-                                  textTransform: 'capitalize',
-                                  fontSize: 16,
-                                  marginTop: 15
-                                }}
-                              >
-                                <strong>{foundPost.title}</strong>
-                              </div>
-                            )}
                             <div
-                              className="mb-4"
-                              style={{ marginTop: 5 }}
-                              onClick={() => {
-                                // setAnnotationOpen(!editor ? true : false);
+                              onClick={() => history.push(`/user/${foundPost.username}`)}
+                              style={{
+                                background: `url(${generateHash(
+                                  foundPost.username,
+                                  foundPost.authorId.profileVersion
+                                )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${foundPost.username[0].toUpperCase()}.svg), ${stringToHslColor(
+                                  foundPost.username,
+                                  80,
+                                  45
+                                )}`,
+                                backgroundPosition: 'center',
+                                backgroundSize: 'cover',
+                                borderRadius: '50%',
+                                marginRight: 10,
+                                cursor: 'pointer',
+                                backgroundRepeat: 'no-repeat',
+                                height: 32,
+                                width: 32
+                              }}
+                            />
+                            <div>
+                              <strong>
+                                <a
+                                  style={{
+                                    color: 'rgb(0, 121, 211)',
+                                    textDecoration: 'none'
+                                  }}
+                                  href={`/user/${foundPost.username}`}
+                                >
+                                  {foundPost.username}
+                                </a>
+                              </strong>{' '}
+                              ·{' '}
+                              <StatefulTooltip
+                                content={moment(foundPost.updatedAt).format('MMM D, YYYY h:mm A')}
+                              >{`${
+                                foundPost.createdAt === foundPost.updatedAt ? 'published' : 'updated'
+                              } ${moment(new Date(foundPost.updatedAt)).fromNow()}`}</StatefulTooltip>
+                            </div>
+                            {/* <div style={{ textTransform: 'capitalize' }}>&nbsp;·&nbsp;{0}&nbsp;Views</div> */}
+                          </div>
+                          <div
+                            style={{
+                              alignContent: 'flex-start'
+                            }}
+                          >
+                            <div
+                              style={{
+                                alignContent: 'center',
+                                display: 'flex'
                               }}
                             >
-                              {foundPost.type === 'Post' ? (
-                                <div style={{ marginTop: 20 }}>
-                                  <div>
-                                    {text && (
-                                      <div className="text-sm my-1 mt-4">
-                                        {coords
-                                          ? `${calculateDistance(text.location)} miles from
-                                      you ${
-                                        text.postal
-                                          ? `(${text.postal.split('-')[0] || text.postal})`
-                                          : ''
-                                      }`
-                                          : `Zip Code: ${
-                                              text.postal
-                                                ? `${text.postal.split('-')[0] || text.postal}`
-                                                : ''
-                                            }`}
-                                      </div>
-                                    )}
-                                    <div className="text-sm my-1 mt-4">
-                                      {text && `Description: ${text.description}`}
-                                    </div>
-                                    <div className="text-sm my-1 mt-4">
-                                      {text &&
-                                        text.dueDate &&
-                                        `Due Date: ${moment(new Date(text.dueDate)).fromNow()} (${
-                                          text.dueDate
-                                        })`}
-                                    </div>
-                                    {text && (
-                                      <div className="text-sm my-1 mt-4">
-                                        Phone Number:{' '}
-                                        {text.phoneNumber &&
-                                          `***-***-${text.phoneNumber.substring(
-                                            text.phoneNumber.length - 4
-                                          )}`}
-                                      </div>
-                                    )}
-                                    <div className="mt-4"></div>
-                                    {cartJSX()}
-                                  </div>
-                                </div>
-                              ) : editor ? (
-                                <Input size={'compact'} value={foundPost.content}></Input>
-                              ) : (
-                                foundPost.content
-                              )}
-                            </div>
-                            {!editor && (
-                              <div style={{ paddingTop: 5, paddingBottom: 10 }}>
-                                <Input
+                              {foundPost.type === 'Post' &&
+                                !editor &&
+                                foundPost.categories.map(i => (
+                                  <Tag
+                                    closeable={false}
+                                    color="#4327F1"
+                                    kind={KIND.custom}
+                                    overrides={{
+                                      Root: {
+                                        style: {
+                                          marginTop: '0px',
+                                          marginBottom: '0px'
+                                        }
+                                      }
+                                    }}
+                                  >
+                                    {i}
+                                  </Tag>
+                                ))}
+                              {foundPost.assignedUser && !foundPost.completed && (
+                                <Tag
+                                  closeable={false}
+                                  color="#FFA500"
+                                  kind={KIND.custom}
                                   overrides={{
-                                    InputContainer: {
+                                    Root: {
                                       style: {
-                                        border: 0,
-                                        borderRadius: '5px'
+                                        marginBottom: '0px',
+                                        marginRight: '15px',
+                                        marginTop: '0px'
                                       }
                                     }
                                   }}
-                                  autoFocus
-                                  value={postComment}
-                                  onChange={event => {
-                                    setPostComment(event.target.value);
-                                    setSuccessComment(false);
-                                  }}
-                                  size={SIZE.compact}
-                                  onKeyPress={event => {
-                                    var code = event.keyCode || event.which;
-                                    if (code === 13 && event.target.value !== '') {
-                                      // submit comment
-                                      addCommentDispatch({
-                                        env: process.env.NODE_ENV,
-                                        postId: foundPost._id,
-                                        newComment: postComment
-                                      });
-                                      // close
-                                      setSuccessComment(true);
-                                      setPostComment('');
+                                >
+                                  In Progress
+                                </Tag>
+                              )}
+                              {foundPost.assignedUser && foundPost.completed && (
+                                <Tag
+                                  closeable={false}
+                                  color="#4BCA81"
+                                  kind={KIND.custom}
+                                  overrides={{
+                                    Root: {
+                                      style: {
+                                        marginRight: '15px',
+                                        marginTop: '0px',
+                                        marginBottom: '0px'
+                                      }
                                     }
                                   }}
-                                  placeholder="add a comment..."
-                                />
-                              </div>
-                            )}
+                                >
+                                  Completed
+                                </Tag>
+                              )}
+                              {!isEmpty(user) &&
+                                user._id.toString() === foundPost.authorId._id.toString() &&
+                                !foundPost.assignedUser &&
+                                !foundPost.completed &&
+                                (editor ? (
+                                  <div className="flex items-center">
+                                    <img
+                                      onClick={() => {
+                                        if (window.confirm('Are you sure you want to delete?')) {
+                                          deletePostDispatch({
+                                            env: process.env.NODE_ENV,
+                                            postId: foundPost._id
+                                          });
+
+                                          setTimeout(function() {
+                                            alert('post deleted succcessfully');
+                                            window.location = '/home/discover';
+                                          }, 2000);
+                                        }
+                                      }}
+                                      style={{
+                                        objectFit: 'cover',
+                                        maxHeight: 15,
+                                        overflow: 'auto',
+                                        marginRight: 5,
+                                        cursor: 'pointer'
+                                      }}
+                                      src="https://d1ppmvgsdgdlyy.cloudfront.net/trash.svg"
+                                      alt="delete"
+                                    ></img>
+                                    <Button
+                                      kind={'secondary'}
+                                      onClick={() => setEditor(false)}
+                                      shape={'pill'}
+                                      size={'compact'}
+                                      style={{
+                                        fontSize: '12px',
+                                        marginLeft: 10,
+                                        marginRight: 10
+                                      }}
+                                    >
+                                      Cancel
+                                    </Button>
+                                    <Button
+                                      disabled={editPostLoading}
+                                      kind={KIND.secondary}
+                                      onClick={() => {
+                                        editPostDispatch({
+                                          env: process.env.NODE_ENV,
+                                          postId: foundPost._id,
+                                          title,
+                                          text: foundPost.text,
+                                          categories: tags.join(',')
+                                        });
+
+                                        setEditor(false);
+                                      }}
+                                      shape={SHAPE.pill}
+                                      size={SIZE.compact}
+                                      style={{
+                                        backgroundColor: '#03a87c',
+                                        color: 'white',
+                                        fontSize: '12px'
+                                      }}
+                                    >
+                                      {editPostLoading
+                                        ? 'Saving...'
+                                        : editPostSuccess
+                                        ? 'Saved'
+                                        : 'Save'}
+                                    </Button>
+                                  </div>
+                                ) : (
+                                  <img
+                                    alt="edit"
+                                    onClick={() => {
+                                      setEditor(true);
+                                    }}
+                                    src="https://d1ppmvgsdgdlyy.cloudfront.net/edit.svg"
+                                    style={{
+                                      cursor: 'pointer',
+                                      height: 25,
+                                      marginLeft: 15,
+                                      width: 15
+                                    }}
+                                  />
+                                ))}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                    <hr />
-                    <div style={{ marginTop: 15 }}>{commentFeed}</div>
-                  </Card>
-                </React.Fragment>
-              )}
-            </div>
-            <div
-              style={{
-                paddingTop: 30,
-                height: `calc(100vh - 70px + ${60 + 1 * 60}px)`
-              }}
-            >
+                        <div style={{ alignContent: 'center' }}>
+                          <div style={{ display: 'table' }}>
+                            <div style={{ textAlign: 'center' }}>
+                              <ChevronUp
+                                size={25}
+                                color={
+                                  upvoteHover.includes(foundPost._id) ||
+                                  foundPost.upVotes.includes(user._id)
+                                    ? '#268bd2'
+                                    : '#aaa'
+                                }
+                                style={{ alignContent: 'center', cursor: 'pointer' }}
+                                onMouseEnter={() => mouseOverUp(foundPost._id)}
+                                onMouseLeave={() => mouseOutUp(foundPost._id)}
+                                onClick={async () =>
+                                  await handleUpClick(
+                                    foundPost.type,
+                                    foundPost._id,
+                                    foundPost.type === 'Comment' && foundPost.postId
+                                  )
+                                }
+                              />
+                              <div style={{ alignContent: 'center', marginBottom: 3 }}>
+                                {foundPost.voteTotal}
+                              </div>
+                              <ChevronDown
+                                color={
+                                  downvoteHover.includes(foundPost._id) ||
+                                  foundPost.downVotes.includes(user._id)
+                                    ? '#268bd2'
+                                    : '#aaa'
+                                }
+                                size={25}
+                                style={{ outline: 'none', alignContent: 'center', cursor: 'pointer' }}
+                                onMouseEnter={() => mouseOverDown(foundPost._id)}
+                                onMouseLeave={() => mouseOutDown(foundPost._id)}
+                                onClick={async () =>
+                                  await handleDownClick(
+                                    foundPost.type,
+                                    foundPost._id,
+                                    foundPost.type === 'Comment' && foundPost.postId
+                                  )
+                                }
+                              />
+                            </div>
+                            <div
+                              style={{
+                                display: 'table-cell',
+                                verticalAlign: 'middle',
+                                tableLayout: 'fixed',
+                                width: '100%'
+                              }}
+                            >
+                              <div
+                                style={{
+                                  display: 'block',
+                                  alignContent: 'center',
+                                  marginBottom: 3,
+                                  marginLeft: 20
+                                }}
+                              >
+                                {editor ? (
+                                  <Input
+                                    onChange={event => {
+                                      setTitle(event.target.value);
+                                    }}
+                                    size={'compact'}
+                                    value={title}
+                                  ></Input>
+                                ) : (
+                                  <div
+                                    style={{
+                                      textTransform: 'capitalize',
+                                      fontSize: 16,
+                                      marginTop: 15
+                                    }}
+                                  >
+                                    <strong>{foundPost.title}</strong>
+                                  </div>
+                                )}
+                                <div
+                                  className="mb-4"
+                                  style={{ marginTop: 5 }}
+                                  onClick={() => {
+                                    // setAnnotationOpen(!editor ? true : false);
+                                  }}
+                                >
+                                  {foundPost.type === 'Post' ? (
+                                    <div style={{ marginTop: 20 }}>
+                                      <div>
+                                        {text && (
+                                          <div className="text-sm my-1 mt-4">
+                                            {coords
+                                              ? `${calculateDistance(text.location)} miles from
+                                          you ${
+                                            text.postal
+                                              ? `(${text.postal.split('-')[0] || text.postal})`
+                                              : ''
+                                          }`
+                                              : `Zip Code: ${
+                                                  text.postal
+                                                    ? `${text.postal.split('-')[0] || text.postal}`
+                                                    : ''
+                                                }`}
+                                          </div>
+                                        )}
+                                        <div className="text-sm my-1 mt-4">
+                                          {text && `Description: ${text.description}`}
+                                        </div>
+                                        <div className="text-sm my-1 mt-4">
+                                          {text &&
+                                            text.dueDate &&
+                                            `Due Date: ${moment(new Date(text.dueDate)).fromNow()} (${
+                                              text.dueDate
+                                            })`}
+                                        </div>
+                                        {text && (
+                                          <div className="text-sm my-1 mt-4">
+                                            Phone Number:{' '}
+                                            {text.phoneNumber &&
+                                              `***-***-${text.phoneNumber.substring(
+                                                text.phoneNumber.length - 4
+                                              )}`}
+                                          </div>
+                                        )}
+                                        <div className="mt-4"></div>
+                                        {cartJSX()}
+                                      </div>
+                                    </div>
+                                  ) : editor ? (
+                                    <Input size={'compact'} value={foundPost.content}></Input>
+                                  ) : (
+                                    foundPost.content
+                                  )}
+                                </div>
+                                {!editor && (
+                                  <div style={{ paddingTop: 5, paddingBottom: 10 }}>
+                                    <Input
+                                      overrides={{
+                                        InputContainer: {
+                                          style: {
+                                            border: 0,
+                                            borderRadius: '5px'
+                                          }
+                                        }
+                                      }}
+                                      autoFocus
+                                      value={postComment}
+                                      onChange={event => {
+                                        setPostComment(event.target.value);
+                                        setSuccessComment(false);
+                                      }}
+                                      size={SIZE.compact}
+                                      onKeyPress={event => {
+                                        var code = event.keyCode || event.which;
+                                        if (code === 13 && event.target.value !== '') {
+                                          // submit comment
+                                          addCommentDispatch({
+                                            env: process.env.NODE_ENV,
+                                            postId: foundPost._id,
+                                            newComment: postComment
+                                          });
+                                          // close
+                                          setSuccessComment(true);
+                                          setPostComment('');
+                                        }
+                                      }}
+                                      placeholder="add a comment..."
+                                    />
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <hr />
+                        <div style={{ marginTop: 15 }}>
+                          {commentFeed}
+                        </div>
+                      </Card>
+                    </React.Fragment>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="hidden xl:block xl:pl-6 w-full" style={{
+            maxWidth: '344px'
+          }}>
+            <div class="bg-white shadow-lg rounded-lg p-6">
+            <div className="flex justify-between items-center mb-4">
+              <div className="text-left" style={{ fontWeight: 300 }}>
+                <div
+                  style={{
+                    fontStyle: 'normal',
+                    fontWeight: 500,
+                    lineHeight: '20px',
+                    color: '#545454',
+                    paddingTop: '0px'
+                  }}
+                  className={`mb-4`}
+                >
+                  Leaderboard<br/>
+                  <span style={{
+                    fontStyle: 'normal',
+                    fontWeight: 'normal',
+                    fontSize: 12,
+                    lineHeight: '14px',
+                    color: '#545454'
+                  }}>
+                    Most helpful people in your area
+                  </span>
+                </div>
+              </div>
+              <button
+              className="bg-transparent hover:bg-gray-600 text-gray-700 
+              font-semibold hover:text-white py-1 px-3 border border-gray-600 
+              hover:border-transparent transition duration-150 rounded"
+              style={{ outline: 'none' }}
+              onClick={() => history.push('/leaderboard')}>
+                <span style={{ fontSize: 12 }}>See full list</span>
+              </button>
+              </div>
               <div
                 style={{
-                  width: '344px'
+                  fontStyle: 'normal',
+                  fontWeight: 'normal',
+                  fontSize: 12,
+                  lineHeight: '14px',
+                  color: '#545454'
                 }}
-                className="bg-white rounded-lg p-6 shadow-lg"
               >
-                <div className="flex justify-between items-center">
-                  <div className="text-left" style={{ fontWeight: 300 }}>
-                    <div
-                      style={{
-                        fontStyle: 'normal',
-                        fontWeight: 500,
-                        fontSize: 16,
-                        lineHeight: '20px',
-                        color: '#545454',
-                        paddingTop: '0px'
-                      }}
-                      className={`mb-4`}
-                    >
-                      Global Leaderboard
-                    </div>
-                    <div
-                      style={{
-                        fontStyle: 'normal',
-                        fontWeight: 'normal',
-                        fontSize: 12,
-                        lineHeight: '14px',
-                        color: '#545454'
-                      }}
-                    >
-                      Top Helpers
-                    </div>
-                  </div>
-                  <button
-                    className="bg-transparent hover:bg-gray-600 text-gray-700 font-semibold hover:text-white py-1 px-3 border border-gray-600 hover:border-transparent transition duration-150 rounded"
-                    style={{ outline: 'none' }}
-                    onClick={() => history.push('/leaderboard')}
-                  >
-                    <span style={{ fontSize: 12 }}>See full list</span>
-                  </button>
-                </div>
-                <div className="mt-4">{leaderboardJSX()}</div>
-                {Number(userRanking) >= 0 && (
-                  <div className="mt-8">
-                    <div
-                      style={{
-                        fontStyle: 'normal',
-                        fontWeight: 'normal',
-                        fontSize: 12,
-                        lineHeight: '14px',
-                        color: '#545454'
-                      }}
-                      className="text-left mb-4"
-                    >
-                      Your Ranking
-                    </div>
-                    <table className="table-auto border-transparent" style={{ width: '99%' }}>
-                      <thead>
-                        <tr>
-                          <th
-                            className="px-4 py-2"
-                            style={{
-                              fontStyle: 'normal',
-                              fontWeight: 'bold',
-                              fontSize: '12px',
-                              lineHeight: '15px'
-                            }}
-                          >
-                            Rank
-                          </th>
-                          <th
-                            className="px-4 py-2 text-left"
-                            style={{
-                              fontStyle: 'normal',
-                              fontWeight: 'bold',
-                              fontSize: '12px',
-                              lineHeight: '15px'
-                            }}
-                          >
-                            Helper
-                          </th>
-                          <th
-                            className="px-4 py-2"
-                            style={{
-                              fontStyle: 'normal',
-                              fontWeight: 'bold',
-                              fontSize: '12px',
-                              lineHeight: '15px'
-                            }}
-                          >
-                            Karma
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr className={`bg-white`}>
-                          <td
-                            className={`px-4 py-2 flex justify-center items-center`}
-                            style={{
-                              fontSize: '14px',
-                              lineHeight: '17px',
-                              fontStyle: 'normal',
-                              fontWeight: 'normal'
-                            }}
-                          >
-                            {getLeaderboardIcon(Number(userRanking) + 1)}
-                          </td>
-                          <td
-                            className={`px-4 py-2 text-left hover:text-indigo-600 transition duration-150`}
-                            style={{
-                              cursor: 'pointer',
-                              fontSize: '14px',
-                              lineHeight: '17px',
-                              fontStyle: 'normal',
-                              fontWeight: 'normal'
-                            }}
-                            onClick={() =>
-                              history.push(
-                                `/user/${Number(userRanking) >= 0 &&
-                                  leaderboard &&
-                                  leaderboard[Number(userRanking)] &&
-                                  leaderboard[Number(userRanking)].username}`
-                              )
-                            }
-                          >
-                            {Number(userRanking) >= 0 &&
-                              leaderboard &&
-                              leaderboard[Number(userRanking)] &&
-                              leaderboard[Number(userRanking)].username}
-                          </td>
-                          <td
-                            className={`px-4 py-2`}
-                            style={{
-                              fontSize: '14px',
-                              lineHeight: '17px',
-                              fontStyle: 'normal',
-                              fontWeight: 'normal'
-                            }}
-                          >
-                            {Number(userRanking) >= 0 &&
-                              leaderboard &&
-                              leaderboard[Number(userRanking)] &&
-                              leaderboard[Number(userRanking)].karma}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <StatefulPopover
-                      placement={PLACEMENT.bottomRight}
-                      overrides={{
-                        Arrow: {
-                          style: {
-                            borderRadius: '50px'
-                          }
-                        },
-                        Body: {
-                          style: {
-                            borderRadius: '50px'
-                          }
-                        },
-                        Root: {
-                          style: {
-                            borderRadius: '50px',
-                            boxShadow: `0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)`
-                          }
-                        }
-                      }}
-                      content={({ close }) => (
-                        <div className="bg-white rounded-lg p-5 shadow-lg">
-                          <div className="tooltip-heading py-1 mb-1">
-                            How does Karma on Giving Tree work?
-                          </div>
-                          <div className="tooltip-text py-1">
-                            Your karma points accumulate when other users upvote your completed
-                            requests.
-                          </div>
-                          <div className="tooltip-text py-1">
-                            Upvotes you receive from users with higher karma have a greater
-                            influence on your karma points.
-                          </div>
-                          <div className="tooltip-text py-1">
-                            Have thoughts about our karma system?{' '}
-                            <a className="tooltip-heading" href="mailto:givingtree@gmail.com">
-                              Email Us
-                            </a>
-                          </div>
-                        </div>
-                      )}
-                    >
-                      <div
-                        style={{
-                          fontStyle: 'normal',
-                          fontWeight: 'normal',
-                          fontSize: 12,
-                          lineHeight: '14px',
-                          color: '#545454',
-                          cursor: 'pointer'
-                        }}
-                        className="text-left mt-4"
-                      >
-                        Want to improve your ranking?{' '}
-                        <span className="font-bold hover:text-indigo-600 transition duration-150">
-                          Find out how
-                        </span>
-                      </div>
-                    </StatefulPopover>
-                  </div>
-                )}
+                Top Helpers
               </div>
+              <LeaderboardTable limit={10} />
+              {Number(userRanking) >= 0 && (
+                <div className="mt-8">
+                  <div
+                    style={{
+                      fontStyle: 'normal',
+                      fontWeight: 'normal',
+                      fontSize: 12,
+                      lineHeight: '14px',
+                      color: '#545454'
+                    }}
+                    className="text-left mb-4"
+                  >
+                    Your Ranking
+                  </div>
+                  <LeaderboardTable user={user} />
+                  <StatefulPopover
+                    placement={PLACEMENT.bottomRight}
+                    overrides={{
+                      Arrow: {
+                        style: {
+                          borderRadius: '50px'
+                        }
+                      },
+                      Body: {
+                        style: {
+                          borderRadius: '50px'
+                        }
+                      },
+                      Root: {
+                        style: {
+                          borderRadius: '50px',
+                          boxShadow: `0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)`
+                        }
+                      }
+                    }}
+                    content={({ close }) => (
+                      <div className="bg-white rounded-lg p-5 shadow-lg">
+                        <div className="tooltip-heading py-1 mb-1">
+                          How does Karma on Giving Tree work?
+                        </div>
+                        <div className="tooltip-text py-1">
+                          Your karma points accumulate when other users upvote your completed
+                          requests.
+                        </div>
+                        <div className="tooltip-text py-1">
+                          Upvotes you receive from users with higher karma have a greater influence on
+                          your karma points.
+                        </div>
+                        <div className="tooltip-text py-1">
+                          Have thoughts about our karma system?{' '}
+                          <a className="tooltip-heading" href="mailto:givingtree@gmail.com">
+                            Email Us
+                          </a>
+                        </div>
+                      </div>
+                    )}
+                  >
+                    <div
+                      style={{
+                        fontStyle: 'normal',
+                        fontWeight: 'normal',
+                        fontSize: 12,
+                        lineHeight: '14px',
+                        color: '#545454',
+                        cursor: 'pointer'
+                      }}
+                      className="text-left mt-4"
+                    >
+                      Want to improve your ranking?{' '}
+                      <span className="font-bold hover:text-indigo-600 transition duration-150">
+                        Find out how
+                      </span>
+                    </div>
+                  </StatefulPopover>
+                </div>
+              )}
             </div>
+            
+            
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

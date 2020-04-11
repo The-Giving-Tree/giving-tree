@@ -2,6 +2,15 @@ body {
   background-color: #f5f5f5;
 }
 
+/* XL Devices/Desktop */
+@media all and (min-width: 1280px) {
+  .sidebar-wrapper {
+    max-width: 200px;
+    width: 100%;
+  }
+}
+
+
 .green-placeholder ::placeholder {
   color:    #03a87c;
 }

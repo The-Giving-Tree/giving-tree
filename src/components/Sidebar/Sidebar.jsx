@@ -106,7 +106,7 @@ class Sidebar extends React.Component {
 
         {/* Table & Desktop Nav */}
         <nav className="mb-10 sidebar-nav-sm">
-          <ul className="list-none p-0 m-0 flex items-center justify-center xl:block xl:px-6">
+          <ul className="list-none p-0 m-0 flex items-center justify-center xl:block">
             <li className={`text-black transition duration-150 xl:my-2 mx-2 md:mx-4 xl:mx-0 relative ${(this.isLocation('/home/discover')) ? 'nav-item-active' : ''}`}>
               <button onClick={() => {
                 window.location = '/home/discover';

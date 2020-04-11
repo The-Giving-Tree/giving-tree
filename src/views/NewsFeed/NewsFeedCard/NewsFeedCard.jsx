@@ -1,15 +1,21 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import moment from 'moment';
+import Tag from '../../../components/Tag/Tag';
 import Avatar from '../../../components/Avatar/Avatar';
 import './NewsFeedCard.css';
-import Tag from '../../../components/Tag/Tag';
+
 import { getDistance } from 'geolib';
-
-import { upvote, downvote } from '../../../store/actions/auth/auth-actions';
-
+import { 
+  upvote, downvote, claimTask, unclaimTask, completeTask
+} from '../../../store/actions/auth/auth-actions';
 import { ChevronUp, ChevronDown } from 'baseui/icon';
+import { StatefulPopover, PLACEMENT } from 'baseui/popover';
+import { StatefulMenu } from 'baseui/menu';
+
+import Confetti from 'react-confetti';
 
 class NewsFeedCard extends React.Component {
 
@@ -21,7 +27,13 @@ class NewsFeedCard extends React.Component {
       upvoteIndex: [],
       downvoteIndex: [],
       upvoteHover: [],
-      downvoteHover: []
+      downvoteHover: [],
+      initialUpvotes: [],
+      initialDownvotes: [],
+      helpArrayDiscover: {}, // Tasks claimed by user (remove from discover)
+      helpArrayOngoing: {}, // Tasks claimed by user (remove from discover)
+      postId: '',
+      showConfetti: false
     }
   }
 
@@ -31,27 +43,79 @@ class NewsFeedCard extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    
+    console.log(this.props);
   }
 
-  // setVoteIndex() {
-  //   if (
-  //     this.props.item.downVotes.includes(this.props.user._id) &&
-  //     !this.state.downvoteIndex.includes(this.props.index) &&
-  //     !this.props.item.initialDownvotes.includes(this.props.index)
-  //   ) {
-  //     this.props.item.initialDownvotes.push(this.props.index);
-  //     this.state.downvoteIndex.push(this.props.index);
-  //   }
-  //   if (
-  //     this.props.item.item.upVotes.includes(this.props.user._id) &&
-  //     !this.state.upvoteIndex.includes(this.props.index) &&
-  //     !this.props.item.initialUpvotes.includes(this.props.index)
-  //   ) {
-  //     this.props.item.initialUpvotes.push(this.props.index);
-  //     this.state.upvoteIndex.push(this.props.index);
-  //   }
-  // }
+  /**
+   * Set the voting index for this post
+   *
+   * @memberof NewsFeedCard
+   */
+  setVoteIndex() {
+    console.log(this.props.item);
+    if (this.props.item.downVotes.includes(this.props.user._id) &&
+      !this.state.downvoteIndex.includes(this.props.index) &&
+      !this.state.initialDownvotes.includes(this.props.index)
+    ) {
+      this.state.initialDownvotes.push(this.props.index);
+      this.state.downvoteIndex.push(this.props.index);
+    }
+    if (this.props.item.upVotes.includes(this.props.user._id) && 
+      !this.state.upvoteIndex.includes(this.props.index) &&
+      !this.state.initialUpvotes.includes(this.props.index)
+    ) {
+      this.state.initialUpvotes.push(this.props.index);
+      this.state.upvoteIndex.push(this.props.index);
+    }
+  }
+
+  /**
+   * Remove an item from the ongoing feed when it's released
+   *
+   * @param {*} id
+   * @memberof NewsFeedCard
+   */
+  removeOngoing(id) {
+    const prevOngoing = this.state.helpArrayOngoing;
+    this.setState({
+      helpArrayOngoing: {
+        ...prevOngoing,
+        [id]: !prevOngoing[id]
+      }
+    })
+  };
+
+  /**
+   * Remove an item from the discover feed when it's claimed
+   *
+   * @param {*} id
+   * @memberof NewsFeedCard
+   */
+  removeDiscover(id) {
+    const prevDiscover = this.state.helpArrayDiscover;
+
+    this.setState({
+      helpArrayDiscover: {
+        ...prevDiscover,
+        [id]: !prevDiscover[id]
+      }
+    })
+  };
+
+  /**
+   * Hide a card if it's claimed on discover, or released on ongoing page
+   *
+   * @param {*} i
+   * @returns
+   * @memberof NewsFeedCard
+   */
+  hideCard(i) {
+    return this.props.match.url === '/home/discover'
+      ? this.state.helpArrayDiscover[i]
+      : this.props.match.url === '/home/ongoing'
+      ? this.state.helpArrayOngoing[i]
+      : true;
+  }
 
   /**
    * Set the tags that will be shown on this card. Also sets the status tags.
@@ -155,7 +219,7 @@ class NewsFeedCard extends React.Component {
     return cart.length === 0 ? (
       <p className="text-center">no items in cart</p>
     ) : (
-      <table className="table-auto w-full">
+      <table className="table-auto w-full text-sm">
         <thead>
           <tr>
             <th className="px-4 py-2 text-left">Item</th>
@@ -181,7 +245,8 @@ class NewsFeedCard extends React.Component {
     ) : (
       <React.Fragment>
         <div
-          className="bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-4 mt-8"
+          className="bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 
+          text-sm p-4 mt-8"
           role="alert"
         >
           <div className="font-bold mb-4 underline capitalize">
@@ -285,6 +350,11 @@ class NewsFeedCard extends React.Component {
     });
   }
 
+  removeIndex(array, element) {
+    const index = array.indexOf(element);
+    array.splice(index, 1);
+  }
+
   async handleUpClick(type, _id, postId = '') {
     switch (type) {
       case 'Post':
@@ -325,23 +395,33 @@ class NewsFeedCard extends React.Component {
     }
   }
 
+  setPostId(id) {
+    this.setState({
+      postId: id
+    })
+  }
+
   render() {
     const authenticated = localStorage.getItem('giving_tree_jwt');
-    console.log("THIS CARDS STATE: ", this.state)
-    console.log("THIS CARDS PROPS: ", this.props)
+
+    this.setVoteIndex();
+
     return (
       <article onClick={(e) => {
         this.props.history.push(`/post/${this.props.item._id}`)
         window.scrollTo(0,0);
       }}
-      className={`${this.props.className} NewsFeedCard rounded shadow bg-white p-4 block cursor-pointer`}>
+      className={`${this.props.className} NewsFeedCard rounded shadow bg-white 
+      p-4 block cursor-pointer ${this.hideCard(this.props.item._id) ? 'hidden' : ''}`}>
+        {this.state.showConfetti && 
+          <Confetti width={window.innerWidth} height={window.innerHeight} recycle={false} />
+        }
         <div id="newsfeed-avatar-wrapper" 
         className="flex items-center flex-wrap mb-3">
-          <a href={`/user/${this.props.item.authorId.username}`} onClick={(e) => {
-            e.stopPropagation();
-          }}
+          <a href={`/user/${this.props.item.authorId.username}`} 
+          onClick={(e, elem) => this.preventGoToPost(e, elem)}
           className="inline-block">
-            <Avatar id="author-avatar"user={this.props.item.authorId} />
+            <Avatar user={this.props.item.authorId} />
           </a>
           <strong className="mx-2 text-sm">
             {this.props.item.authorId.username}
@@ -354,12 +434,10 @@ class NewsFeedCard extends React.Component {
             {this.setTags()}
           </div>
         </div>
-        <div className="flex">
+        <div className="flex mb-5">
 
           <div className="text-center flex flex-col items-center w-8">
-            <ChevronUp
-            size={25}
-            color={
+            <ChevronUp size={25} color={
               this.state.upvoteIndex.includes(this.props.index) || 
                 this.state.upvoteHover.includes(this.props.index) ? 
                   '#268bd2' : '#aaa'
@@ -367,7 +445,9 @@ class NewsFeedCard extends React.Component {
             style={{ alignContent: 'center', cursor: 'pointer' }}
             onMouseEnter={() => this.mouseOverUp(this.props.index)}
             onMouseLeave={() => this.mouseOutUp(this.props.index)}
-            onClick={async () => {
+            onClick={async (e) => {
+              e.stopPropagation();
+
               if (authenticated) {
                 await this.handleUpClick(
                   this.props.item.type,
@@ -390,28 +470,59 @@ class NewsFeedCard extends React.Component {
               }
             }}
           />            
-            <span>
-              {this.props.item.voteTotal +
-                Number(
-                  this.state.upvoteIndex.includes(this.props.index)
-                    ? this.props.item.upVotes.includes(this.props.user._id)
-                      ? 0
-                      : 1
-                    : this.props.item.upVotes.includes(this.props.user._id)
-                    ? -1
-                    : 0
-                ) -
-                Number(
-                  this.state.downvoteIndex.includes(this.props.index)
-                    ? this.props.item.downVotes.includes(this.props.user._id)
-                      ? 0
-                      : 1
-                    : this.props.item.downVotes.includes(this.props.user._id)
-                    ? -1
-                    : 0
-                )}
-            </span>
+          <span>
+            {this.props.item.voteTotal +
+              Number(
+                this.state.upvoteIndex.includes(this.props.index)
+                  ? this.props.item.upVotes.includes(this.props.user._id)
+                    ? 0
+                    : 1
+                  : this.props.item.upVotes.includes(this.props.user._id)
+                  ? -1
+                  : 0
+              ) -
+              Number(
+                this.state.downvoteIndex.includes(this.props.index)
+                  ? this.props.item.downVotes.includes(this.props.user._id)
+                    ? 0
+                    : 1
+                  : this.props.item.downVotes.includes(this.props.user._id)
+                  ? -1
+                  : 0
+              )}
+          </span>
+          <ChevronDown color={
+            this.state.downvoteIndex.includes(this.props.index) || 
+              this.state.downvoteHover.includes(this.props.index) ? '#268bd2' : 
+                '#aaa'}
+            size={25}
+            style={{ alignContent: 'center', cursor: 'pointer' }}
+            onMouseEnter={() => this.mouseOverDown(this.props.index)}
+            onMouseLeave={() => this.mouseOutDown(this.props.index)}
+            onClick={async (e) => {
+            e.stopPropagation();
+            if (authenticated) {
+              await this.handleDownClick(
+                this.props.item.type,
+                this.props.item._id,
+                this.props.item.type === 'Comment' && this.props.item.postId
+              );
 
+              if (this.state.upvoteIndex.includes(this.props.index)) {
+                this.removeIndex(this.state.upvoteIndex, this.props.index);
+              }
+
+              if (this.state.downvoteIndex.includes(this.props.index)) {
+                this.removeIndex(this.state.downvoteIndex, this.props.index);
+              } else {
+                this.state.downvoteIndex.push(this.props.index);
+              }
+            } else {
+              alert('please signup first');
+              this.props.history.push('/signup');
+            }
+            }}
+          />
           </div>
           
           <div className="pl-2 w-full">
@@ -466,10 +577,139 @@ class NewsFeedCard extends React.Component {
               )}
             </div>
           </div>
-          
         </div>
-
         
+        {this.props.match.url !== '/home/ongoing' && (
+          <div className="flex items-center">
+            <CopyToClipboard 
+            text={`${window.location.origin}/post/${this.props.item._id}`}>
+              <StatefulPopover onClick={(e) => {
+                  e.stopPropagation()
+                }}
+                placement={PLACEMENT.bottomLeft}
+                content={({ close }) => (
+                  <StatefulMenu
+                    items={[
+                      {
+                        label: 'Copy Link'
+                      }
+                    ]}
+                    onItemSelect={item => {
+                      close();
+                      switch (item.item.label) {
+                        case 'Copy Link':
+                          break;
+                        default:
+                          break;
+                      }
+                    }}
+                    overrides={{
+                      List: { style: { outline: 'none', padding: '0px' } }
+                    }}
+                  />
+                )}
+              >
+                <button className="text-xs flex items-center">
+                  <img
+                    src="https://d1ppmvgsdgdlyy.cloudfront.net/share.svg"
+                    alt="share"
+                    className="block h-5 mr-3"
+                  />
+                  <strong className="uppercase">Share</strong>
+                </button>
+              </StatefulPopover>
+            </CopyToClipboard>
+            
+            <div className="ml-auto flex items-center">
+              {this.props.item.type === 'Post' && !this.props.item.completed &&
+                this.props.match.url === '/home/discover' && 
+                  !this.props.item.assignedUser && (
+                    <button className="mr-4 flex items-center uppercase text-xs" 
+                    onClick={(e) => {
+                      e.stopPropagation()
+
+                      if (this.props.item.assignedUser) {
+                        alert('someone is already helping on this task ' + 
+                        '(in progress) - please look other requests');
+                        return;
+                      }
+
+                      if (window.confirm(
+                        'Please confirm your committment to helping this person - ' +
+                        'by saying yes, other people cannot claim this request.'
+                        )
+                      ) {
+                        this.props.claimTaskDispatch({
+                          env: process.env.NODE_ENV,
+                          postId: this.props.item._id
+                        });
+                        this.removeDiscover(this.props.item._id);
+                      }
+
+                    }}>
+                      <img className="block h-5 mr-2"
+                        src="https://d1ppmvgsdgdlyy.cloudfront.net/help_color.svg"
+                        alt="help"
+                      />
+                      <strong>Help</strong>
+                    </button>
+              )}
+              <button className="flex items-center text-xs">
+                <img src="https://d1ppmvgsdgdlyy.cloudfront.net/comment.svg"
+                  alt="comment"
+                  className="h-5 block mr-2" />
+                <strong className="">
+                  {this.props.item.comments.length}
+                </strong>
+              </button>
+            </div>
+        </div>
+        )}
+        {this.props.match.url === '/home/ongoing' && (
+          <div className="flex justify-between items-center">
+            <button className="uppercase text-xs text-red-600" onClick={(e) => {
+              e.stopPropagation()
+              let cancelReason = window.prompt(
+                'Warning: By releasing this request back into the Requests ' + 
+                'Feed, you are breaking your commitment and may lose Karma ' +
+                'points.'
+              );
+
+              if (cancelReason) {
+                this.props.unclaimTaskDispatch({
+                  env: process.env.NODE_ENV,
+                  postId: this.props.item._id,
+                  cancelReason
+                });
+
+                this.removeOngoing(this.props.item._id);
+              }
+            }}>
+              Release request
+            </button>
+
+            <button className="uppercase text-xs ml-auto" onClick={(e) => {
+              e.stopPropagation()
+
+              const completed = window.confirm(
+                'Are you sure you want to mark this task as completed?'
+              );
+
+              if (completed) {
+                this.props.completeTaskDispatch({
+                  env: process.env.NODE_ENV,
+                  postId: this.props.item._id
+                });
+
+                this.setState({
+                  showConfetti: true
+                });
+              }
+            }}>
+              Mark completed
+            </button>
+          </div>
+        )}
       </article>
     );
   }
@@ -478,6 +718,9 @@ class NewsFeedCard extends React.Component {
 const mapDispatchToProps = dispatch => ({
   upvoteDispatch: payload => dispatch(upvote(payload)),
   downvoteDispatch: payload => dispatch(downvote(payload)),
+  claimTaskDispatch: payload => dispatch(claimTask(payload)),
+  unclaimTaskDispatch: payload => dispatch(unclaimTask(payload)),
+  completeTaskDispatch: payload => dispatch(completeTask(payload))
 });
 
 const mapStateToProps = state => ({});
