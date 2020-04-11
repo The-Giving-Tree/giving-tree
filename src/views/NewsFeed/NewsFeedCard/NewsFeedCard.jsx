@@ -37,19 +37,19 @@ class NewsFeedCard extends React.Component {
   // setVoteIndex() {
   //   if (
   //     this.props.item.downVotes.includes(this.props.user._id) &&
-  //     !this.state.downvoteIndex.includes(this.props.key) &&
-  //     !this.props.item.initialDownvotes.includes(this.props.key)
+  //     !this.state.downvoteIndex.includes(this.props.index) &&
+  //     !this.props.item.initialDownvotes.includes(this.props.index)
   //   ) {
-  //     this.props.item.initialDownvotes.push(this.props.key);
-  //     this.state.downvoteIndex.push(this.props.key);
+  //     this.props.item.initialDownvotes.push(this.props.index);
+  //     this.state.downvoteIndex.push(this.props.index);
   //   }
   //   if (
   //     this.props.item.item.upVotes.includes(this.props.user._id) &&
-  //     !this.state.upvoteIndex.includes(this.props.key) &&
-  //     !this.props.item.initialUpvotes.includes(this.props.key)
+  //     !this.state.upvoteIndex.includes(this.props.index) &&
+  //     !this.props.item.initialUpvotes.includes(this.props.index)
   //   ) {
-  //     this.props.item.initialUpvotes.push(this.props.key);
-  //     this.state.upvoteIndex.push(this.props.key);
+  //     this.props.item.initialUpvotes.push(this.props.index);
+  //     this.state.upvoteIndex.push(this.props.index);
   //   }
   // }
 
@@ -328,12 +328,13 @@ class NewsFeedCard extends React.Component {
   render() {
     const authenticated = localStorage.getItem('giving_tree_jwt');
     console.log("THIS CARDS STATE: ", this.state)
+    console.log("THIS CARDS PROPS: ", this.props)
     return (
       <article onClick={(e) => {
         this.props.history.push(`/post/${this.props.item._id}`)
         window.scrollTo(0,0);
       }}
-      className="NewsFeedCard rounded shadow bg-white p-4 block cursor-pointer">
+      className={`${this.props.className} NewsFeedCard rounded shadow bg-white p-4 block cursor-pointer`}>
         <div id="newsfeed-avatar-wrapper" 
         className="flex items-center flex-wrap mb-3">
           <a href={`/user/${this.props.item.authorId.username}`} onClick={(e) => {
@@ -359,13 +360,13 @@ class NewsFeedCard extends React.Component {
             <ChevronUp
             size={25}
             color={
-              this.state.upvoteIndex.includes(this.props.key) || 
-                this.state.upvoteHover.includes(this.props.key) ? 
+              this.state.upvoteIndex.includes(this.props.index) || 
+                this.state.upvoteHover.includes(this.props.index) ? 
                   '#268bd2' : '#aaa'
             }
             style={{ alignContent: 'center', cursor: 'pointer' }}
-            onMouseEnter={() => this.mouseOverUp(this.props.key)}
-            onMouseLeave={() => this.mouseOutUp(this.props.key)}
+            onMouseEnter={() => this.mouseOverUp(this.props.index)}
+            onMouseLeave={() => this.mouseOutUp(this.props.index)}
             onClick={async () => {
               if (authenticated) {
                 await this.handleUpClick(
@@ -374,14 +375,14 @@ class NewsFeedCard extends React.Component {
                   this.props.item.type === 'Comment' && this.props.item.postId
                 );
 
-                if (this.state.downvoteIndex.includes(this.props.key)) {
-                  this.removeIndex(this.state.downvoteIndex, this.props.key);
+                if (this.state.downvoteIndex.includes(this.props.index)) {
+                  this.removeIndex(this.state.downvoteIndex, this.props.index);
                 }
 
-                if (this.state.upvoteIndex.includes(this.props.key)) {
-                  this.removeIndex(this.state.upvoteIndex, this.props.key);
+                if (this.state.upvoteIndex.includes(this.props.index)) {
+                  this.removeIndex(this.state.upvoteIndex, this.props.index);
                 } else {
-                  this.state.upvoteIndex.push(this.props.key);
+                  this.state.upvoteIndex.push(this.props.index);
                 }
               } else {
                 alert('please signup first');
@@ -392,7 +393,7 @@ class NewsFeedCard extends React.Component {
             <span>
               {this.props.item.voteTotal +
                 Number(
-                  this.state.upvoteIndex.includes(this.props.key)
+                  this.state.upvoteIndex.includes(this.props.index)
                     ? this.props.item.upVotes.includes(this.props.user._id)
                       ? 0
                       : 1
@@ -401,7 +402,7 @@ class NewsFeedCard extends React.Component {
                     : 0
                 ) -
                 Number(
-                  this.state.downvoteIndex.includes(this.props.key)
+                  this.state.downvoteIndex.includes(this.props.index)
                     ? this.props.item.downVotes.includes(this.props.user._id)
                       ? 0
                       : 1

@@ -535,10 +535,11 @@ function NewsFeedPage(props) {
         upvoteIndex.push(i);
       }
       items.push(
-        <div key={i} className="mb-4">
-          <NewsFeedCard item={item} key={i} user={user} />
-          {console.log("THE ITEM: ", item)}
-        </div>
+        
+          <NewsFeedCard item={item} key={i} user={user} className="mb-4"
+          index={i} />
+          
+      
         
 
 
