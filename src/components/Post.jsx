@@ -37,6 +37,7 @@ import {
 
 import { editPost } from '../store/actions/user/user-actions';
 import LeaderboardTable from './LeaderboardTable/LeaderboardTable';
+import HelpMenu from './HelpMenu/HelpMenu';
 
 function Post(props) {
   const {
@@ -647,95 +648,6 @@ function Post(props) {
   };
 
   createCommentFeed();
-
-  const leaderboardJSX = () => {
-    return leaderboard.length === 0 ? (
-      <div className="text-center">no items in leaderboard</div>
-    ) : (
-      <table className="table-auto border-transparent" style={{ width: '99%' }}>
-        <thead>
-          <tr>
-            <th
-              className="px-4 py-2"
-              style={{
-                fontStyle: 'normal',
-                fontWeight: 'bold',
-                fontSize: '12px',
-                lineHeight: '15px'
-              }}
-            >
-              Rank
-            </th>
-            <th
-              className="px-4 py-2 text-left"
-              style={{
-                fontStyle: 'normal',
-                fontWeight: 'bold',
-                fontSize: '12px',
-                lineHeight: '15px'
-              }}
-            >
-              Helper
-            </th>
-            <th
-              className="px-4 py-2"
-              style={{
-                fontStyle: 'normal',
-                fontWeight: 'bold',
-                fontSize: '12px',
-                lineHeight: '15px'
-              }}
-            >
-              Karma
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {leaderboard
-            .filter((item, i) => Number(i) < 10)
-            .map((item, i) => (
-              <tr className={i % 2 === 0 && `bg-white`}>
-                <td
-                  className={`px-4 py-2 flex justify-center items-center`}
-                  style={{
-                    fontSize: '14px',
-                    lineHeight: '17px',
-                    fontStyle: 'normal',
-                    fontWeight: 'normal'
-                  }}
-                >
-                  {getLeaderboardIcon(Number(i) + 1)}
-                </td>
-                <td
-                  onClick={() => history.push(`/user/${item.username}`)}
-                  className={`px-4 py-2 text-left hover:text-indigo-600 transition duration-150`}
-                  style={{
-                    cursor: 'pointer',
-                    fontSize: '14px',
-                    lineHeight: '17px',
-                    fontStyle: 'normal',
-                    fontWeight: 'normal'
-                  }}
-                >
-                  <div className="flex items-center">{item.username}</div>
-                </td>
-                <td
-                  className={`px-4 py-2`}
-                  style={{
-                    fontSize: '14px',
-                    lineHeight: '17px',
-                    fontStyle: 'normal',
-                    fontWeight: 'normal'
-                  }}
-                >
-                  {item.karma}
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
-    );
-  };
 
   const cartJSX = () => {
     return cart.length === 0 ? (
@@ -1401,6 +1313,7 @@ function Post(props) {
           </div>
         </div>
       </div>
+      <HelpMenu />
     </div>
   );
 }

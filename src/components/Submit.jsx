@@ -19,6 +19,7 @@ import {
   uploadPhoto
 } from '../store/actions/user/user-actions';
 import StickyFooter from './StickyFooter/StickyFooter';
+import HelpMenu from './HelpMenu/HelpMenu';
 
 export const Portal = ({ children }) => {
   return ReactDOM.createPortal(children, document.body);
@@ -565,169 +566,181 @@ function Submit(props) {
   };
 
   return (
-    <StickyFooter>
+    <div>
       <Navigation selectMenuDispatch={selectMenuDispatch} searchBarPosition="center" />
-      <div className="max-w-screen-lg w-full mx-auto xl:flex xl:max-w-6xl py-12 px-6">
-        <aside className>
-          <Sidebar {...props} />
-        </aside>
-        <section>
-          {!isEmpty(user) && !user.seenSubmitTutorial && (
-          <Card
-            overrides={{
-              Root: {
-                style: {
-                  margin: '0 auto',
-                  marginBottom: '30px'
+      <div className="lg:max-w-4xl xl:max-w-screen-xl w-full mx-auto py-12 px-6">
+        <div className="block xl:flex">
+          <aside className="xl:pr-6 sidebar-wrapper">
+            <Sidebar {...props} />
+          </aside>
+          <section className="w-full xl:px-6">
+            {!isEmpty(user) && !user.seenSubmitTutorial && (
+              <Card
+              overrides={{
+                Root: {
+                  style: {
+                    margin: '0 auto',
+                    marginBottom: '30px'
+                  }
                 }
-              }
-            }}
-          >
-            <div
-              style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-            >
-              <div>
-                <Tag
-                  overrides={{ Root: { style: { marginLeft: 0 } } }}
-                  closeable={false}
-                  variant={'variant'}
-                  kind="accent"
-                >
-                  How It Works
-                </Tag>
-              </div>
+              }}>
               <div
-                onClick={() =>
-                  handleSeenSubmitDispatch({ env: process.env.NODE_ENV, type: 'submit' })
-                }
-                style={{ cursor: 'pointer', color: 'black' }}
+                style={{ 
+                  display: 'flex', 
+                  justifyContent: 'space-between', 
+                  alignItems: 'center'
+                }}
               >
-                <img
-                  src="https://d1ppmvgsdgdlyy.cloudfront.net/close.svg"
-                  alt="close"
-                  style={{ height: 10 }}
-                />
-              </div>
-            </div>
-            <div style={{ marginTop: 15 }}>
-              Welcome to The Giving Tree!
-              <br />
-              <br />
-              To receive help, either make a request or call/text us at{' '}
-              <a className="text-indigo-600 hover:text-indigo-800" href="tel:+1415-964-4261">
-                415-964-4261
-              </a>{' '}
-              to have us make one on your behalf. <br />
-              <br />
-              Here to help? Explore the feed to find new, unclaimed requests near you.
-            </div>
-          </Card>
-        )}
-        {submitPostSuccess ? (
-          <Card
-            overrides={{
-              Root: {
-                style: {
-                  margin: '0 auto',
-                  marginBottom: '30px',
-                  color: 'green'
-                }
-              }
-            }}
-          >
-            Your post is now live!{' '}
-            <span role="img" aria-label="Smiley emoji with party hat">
-              🥳
-            </span>
-            Check it out{' '}
-            <a
-              className="text-indigo-600 hover:text-indigo-800 transition duration-150"
-              style={{ textDecoration: 'none' }}
-              href={`/post/${submittedPost._id}`}
-            >
-              here
-            </a>
-            .
-          </Card>
-        ) : (
-          <Card
-            overrides={{
-              Root: {
-                style: {
-                  margin: '0 auto'
-                }
-              }
-            }}
-          >
-            <div className="flex justify-between items-center my-4 mb-6" style={{ height: 36 }}>
-              {!checkout ? (
-                <React.Fragment>
-                  <label
-                    class="block mt-4 uppercase tracking-wide text-gray-700 text-sm font-bold mb-2"
-                    for="grid-last-name"
+                <div>
+                  <Tag
+                    overrides={{ Root: { style: { marginLeft: 0 } } }}
+                    closeable={false}
+                    variant={'variant'}
+                    kind="accent"
                   >
-                    I want to:
-                  </label>
-                </React.Fragment>
-              ) : (
-                <div className="flex justify-center" style={{ width: '100%' }}>
-                  <label
-                    class="block mt-4 uppercase tracking-wide text-gray-700 text-sm font-bold mb-2"
-                    for="grid-last-name"
-                  >
-                    Create Request
-                  </label>
-                </div>
-              )}
-            </div>
-            {!checkout && (
-              <div className="grid grid-cols-2 gap-8">
-                <div
-                  onClick={() => {
-                    alert('please call or text +1 415-964-4261');
-                  }}
-                  className={`max-w-sm flex items-center justify-center rounded overflow-hidden shadow-lg border hover:border-indigo-600 rounded-lg hover:text-green-600 transition duration-150`}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <div className="px-6 py-8">
-                    <div className={`font-bold text-xl`}>Call or Text</div>
-                  </div>
+                    How It Works
+                  </Tag>
                 </div>
                 <div
-                  onClick={() => {
-                    setCheckout(true);
-                  }}
-                  className={`max-w-sm rounded  hover:border-indigo-600 overflow-hidden shadow-lg border ${selectedRequest ===
-                    'supplies' && 'border-indigo-600'} rounded-lg transition duration-150`}
-                  style={{ cursor: 'pointer' }}
+                  onClick={() =>
+                    handleSeenSubmitDispatch({ env: process.env.NODE_ENV, type: 'submit' })
+                  }
+                  style={{ cursor: 'pointer', color: 'black' }}
                 >
                   <img
-                    style={{
-                      objectFit: 'cover',
-                      maxHeight: 150,
-                      width: 400,
-                      overflow: 'auto'
-                    }}
-                    src="https://d1ppmvgsdgdlyy.cloudfront.net/groceries.jpg"
-                    alt="Supplies"
-                  ></img>
-                  <div className="px-6 py-8">
-                    <div
-                      className={`font-bold text-xl text-center ${selectedRequest ===
-                        'supplies' && 'text-green-600'}`}
-                    >
-                      Submit Request Online
-                    </div>
-                  </div>
+                    src="https://d1ppmvgsdgdlyy.cloudfront.net/close.svg"
+                    alt="close"
+                    style={{ height: 10 }}
+                  />
                 </div>
               </div>
+              <div style={{ marginTop: 15 }}>
+                Welcome to The Giving Tree!
+                <br />
+                <br />
+                To receive help, either make a request or call/text us at{' '}
+                <a className="text-indigo-600 hover:text-indigo-800" href="tel:+1415-964-4261">
+                  415-964-4261
+                </a>{' '}
+                to have us make one on your behalf. <br />
+                <br />
+                Here to help? Explore the feed to find new, unclaimed requests near you.
+              </div>
+            </Card>
             )}
-            {checkout && <React.Fragment>{formJSX()}</React.Fragment>}
-          </Card>
-        )}
-        </section>
+            {submitPostSuccess ? (
+              <Card
+                overrides={{
+                  Root: {
+                    style: {
+                      margin: '0 auto',
+                      marginBottom: '30px',
+                      color: 'green'
+                    }
+                  }
+                }}
+              >
+                Your post is now live!{' '}
+                <span role="img" aria-label="Smiley emoji with party hat">
+                  🥳
+                </span>
+                Check it out{' '}
+                <a
+                  className="text-indigo-600 hover:text-indigo-800 transition duration-150"
+                  style={{ textDecoration: 'none' }}
+                  href={`/post/${submittedPost._id}`}
+                >
+                  here
+                </a>
+                .
+              </Card>
+            ) : (
+              <Card
+                overrides={{
+                  Root: {
+                    style: {
+                      margin: '0 auto'
+                    }
+                  }
+                }}
+              >
+                <div className="flex justify-between items-center my-4 mb-6" style={{ height: 36 }}>
+                  {!checkout ? (
+                    <React.Fragment>
+                      <label
+                        class="block mt-4 uppercase tracking-wide text-gray-700 text-sm font-bold mb-2"
+                        for="grid-last-name"
+                      >
+                        I want to:
+                      </label>
+                    </React.Fragment>
+                  ) : (
+                    <div className="flex justify-center" style={{ width: '100%' }}>
+                      <label
+                        class="block mt-4 uppercase tracking-wide text-gray-700 text-sm font-bold mb-2"
+                        for="grid-last-name"
+                      >
+                        Create Request
+                      </label>
+                    </div>
+                  )}
+                </div>
+                {!checkout && (
+                  <div className="md:grid md:grid-cols-2 md:gap-8">
+                    <div
+                      onClick={() => {
+                        alert('please call or text +1 415-964-4261');
+                      }}
+                      className={`mb-6 md:mb-0 max-w-sm flex items-center justify-center 
+                      rounded overflow-hidden shadow-lg border
+                      hover:border-indigo-600 rounded-lg hover:text-green-600 
+                      transition duration-150 mx-auto md:mx-0`}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <div className="px-6 py-8">
+                        <div className={`font-bold text-xl`}>Call or Text</div>
+                      </div>
+                    </div>
+                    <div
+                      onClick={() => {
+                        setCheckout(true);
+                      }}
+                      className={`max-w-sm rounded  hover:border-indigo-600 
+                      overflow-hidden shadow-lg border mx-auto md:mx-0 rounded-lg 
+                      ${selectedRequest === 'supplies' && 'border-indigo-600'} 
+                      transition duration-150`}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <img
+                        style={{
+                          objectFit: 'cover',
+                          maxHeight: 150,
+                          width: 400,
+                          overflow: 'auto'
+                        }}
+                        src="https://d1ppmvgsdgdlyy.cloudfront.net/groceries.jpg"
+                        alt="Supplies"
+                      ></img>
+                      <div className="px-6 py-8">
+                        <div
+                          className={`font-bold text-xl text-center ${selectedRequest ===
+                            'supplies' && 'text-green-600'}`}
+                        >
+                          Submit Request Online
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {checkout && <React.Fragment>{formJSX()}</React.Fragment>}
+              </Card>
+            )}
+          </section>
+        </div>
+        
       </div>
-    </StickyFooter>        
+      <HelpMenu />
+    </div>        
   );
 }
 

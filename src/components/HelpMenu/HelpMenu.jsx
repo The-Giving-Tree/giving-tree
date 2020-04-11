@@ -8,7 +8,7 @@ class HelpMenu extends React.Component {
   render() {
     return (
       <div className="HelpMenu rounded-full shadow-lg bg-white">
-        <StatefulPopover placement={PLACEMENT.topLeft}
+        <StatefulPopover placement={PLACEMENT.topRight}
         overrides={{
           Body: {
             style: {

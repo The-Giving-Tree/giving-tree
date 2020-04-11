@@ -721,12 +721,12 @@ function User(props) {
   return (
     <StickyFooter>
       <Navigation selectMenuDispatch={selectMenuDispatch} searchBarPosition="center" />
-      <div className="max-w-screen-lg w-full mx-auto xl:max-w-6xl py-12 px-6">
-        <div className="grid grid-cols-4 gap-6">
-          <aside className="col-span-4 xl:col-span-1">
+      <div className="lg:max-w-4xl xl:max-w-screen-xl w-full mx-auto py-12 px-6">
+        <div className="block xl:flex">
+          <aside className="xl:pr-6 sidebar-wrapper">
             <Sidebar {...props} />
           </aside>
-          <section className="col-span-4 xl:col-span-3">
+          <section className="w-full xl:px-6">
             {foundUserNull && isEmpty(foundUser) ? (
               <div style={{ margin: '0 auto', textAlign: 'center' }}>
                 Sorry, {id} is banned or is not a real user
@@ -1094,7 +1094,12 @@ function User(props) {
                       }}
                       activeKey={activeKey}
                       overrides={{
-                        TabContent: { style: { paddingLeft: '0px', paddingRight: '0px' } }
+                        TabContent: { style: { paddingLeft: '0px', paddingRight: '0px' } },
+                        TabBar: {
+                          style: {
+                            overflow: 'auto'
+                          }
+                        }
                       }}
                     >
                       <Tab
