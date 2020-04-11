@@ -1,0 +1,17 @@
+.Tag.tag-category {
+  color: #4327F1;
+  background-color: #eae7fd;
+}
+
+.Tag.tag-generic {
+  background-color: #e2e8f0;
+}
+
+.Tag.tag-completed {
+  color: #4BCA81;
+}
+
+.Tag.tag-in-progress {
+  color: #855600;
+  background-color: #ffedcc;
+}

@@ -21,6 +21,7 @@ import {
   selectMenu,
   getLeaderboard
 } from '../store/actions/auth/auth-actions';
+import HelpMenu from './HelpMenu/HelpMenu';
 
 function Leaderboard(props) {
   const { user, getCurrentUserDispatch, getLeaderboardDispatch, userRanking, leaderboard } = props;
@@ -334,6 +335,7 @@ function Leaderboard(props) {
           </div>
         </div>
       </div>
+      <HelpMenu />
     </div>
   );
 }

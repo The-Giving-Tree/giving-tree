@@ -5,11 +5,7 @@ import { useHistory } from 'react-router-dom';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import InfiniteScroll from 'react-infinite-scroller';
-import { Card, StyledBody } from 'baseui/card';
-import { StatefulPopover, PLACEMENT } from 'baseui/popover';
-import { StatefulMenu } from 'baseui/menu';
-import { Input } from 'baseui/input';
-import { ChevronDown } from 'baseui/icon';
+import { StyledBody } from 'baseui/card';
 import { hotjar } from 'react-hotjar';
 
 function NewsfeedTable(props) {
@@ -45,7 +41,7 @@ function NewsfeedTable(props) {
   return (
     <div>
       {openCustomAddress ? (
-        <div className="flex justify-between items-center mt-2">
+        <div className="flex justify-between items-center my-3">
           <PlacesAutocomplete
             value={address}
             onChange={address => setAddress(address)}
@@ -133,7 +129,7 @@ function NewsfeedTable(props) {
         </div>
       ) : (
         match.url === '/home/discover' && (
-          <div>
+          <div className="mb-4">
             <h2 className="text-lg font-bold">Requests near you</h2>
             <div className={`text-left mt-2`} style={{ fontSize: 12 }}>
               Your current location:{' '}
