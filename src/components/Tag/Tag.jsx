@@ -31,11 +31,12 @@ class Tag extends React.Component {
   componentDidUpdate(prevProps, prevState) { }
 
   render() {
+    const classes = (this.props.className) ? ' ' + this.props.className : ' ';
 
     return (
       <span 
       className={`Tag ${this.state.class} text-xs inline-block py-1 px-3 
-      max-w-32 bg-blue rounded-full`}>
+      max-w-32 bg-blue rounded-full${classes}`}>
         {this.props.label}
       </span>
     );

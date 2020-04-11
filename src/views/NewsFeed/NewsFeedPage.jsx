@@ -536,7 +536,7 @@ function NewsFeedPage(props) {
       }
       items.push(
         <div key={i} className="mb-4">
-          <NewsFeedCard item={item} />
+          <NewsFeedCard item={item} key={i} user={user} />
           {console.log("THE ITEM: ", item)}
         </div>
         
@@ -546,73 +546,7 @@ function NewsFeedPage(props) {
         //   <Expand key={i} open={openCard(item._id)}>
         //     <Card
         //     >
-        //       <div
-        //         style={{
-        //           display: 'flex',
-        //           flexDirection: 'column',
-        //           justifyContent: 'space-between'
-        //         }}
-        //       >
         //         <div>
-        //           <div
-        //             style={{
-        //               display: 'flex',
-        //               justifyContent: 'space-between',
-        //               alignContent: 'center',
-        //               paddingBottom: 15
-        //             }}
-        //           >
-        //             <div
-        //               style={{
-        //                 textTransform: 'lowercase',
-        //                 fontSize: 12,
-        //                 marginLeft: 5,
-        //                 display: 'flex',
-        //                 alignContent: 'center'
-        //               }}
-        //             >
-        //               <div
-        //                 className={`flex items-center justify-center`}
-        //                 onClick={() => history.push(`/user/${item.username}`)}
-        //                 style={{
-        //                   width: 32,
-        //                   height: 32,
-        //                   background: `url(${generateHash(
-        //                     item.username,
-        //                     item.authorId.profileVersion
-        //                   )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${item.username[0].toUpperCase()}.svg), ${stringToHslColor(
-        //                     item.username,
-        //                     80,
-        //                     45
-        //                   )}`,
-        //                   backgroundPosition: 'center',
-        //                   backgroundSize: 'cover',
-        //                   borderRadius: '50%',
-        //                   marginRight: 10,
-        //                   cursor: 'pointer',
-        //                   backgroundRepeat: 'no-repeat'
-        //                 }}
-        //               />
-        //               <div>
-        //                 <strong>
-        //                   <a
-        //                     style={{ textDecoration: 'none', color: 'rgb(0, 121, 211)' }}
-        //                     href={`/user/${item.username}`}
-        //                   >
-        //                     {item.username}
-        //                   </a>
-        //                 </strong>{' '}
-        //                 · {moment(new Date(item.createdAt)).fromNow()}
-        //               </div>
-        //             </div>
-        //             <div
-        //               style={{
-        //                 alignContent: 'flex-start'
-        //               }}
-        //             >
-        //             </div>
-        //           </div>
-        //           <div>
         //             <div style={{ display: 'table' }}>
         //               <div style={{ textAlign: 'center' }}>
         //                 <ChevronUp
@@ -701,69 +635,6 @@ function NewsFeedPage(props) {
         //                   }}
         //                 />
         //               </div>
-        //               <div
-        //                 style={{
-        //                   display: 'table-cell',
-        //                   maxHeight: 'calc(0.7 * 300px)',
-        //                   tableLayout: 'fixed',
-        //                   textAlign: 'left',
-        //                   verticalAlign: 'middle',
-        //                   width: '100%'
-        //                 }}
-        //               >
-        //                 <div
-        //                   style={{
-        //                     display: 'block',
-        //                     alignContent: 'center',
-        //                     marginBottom: 3,
-        //                     marginLeft: 20
-        //                   }}
-        //                 >
-        //                   <div
-        //                     style={{
-        //                       textTransform: 'capitalize',
-        //                       fontSize: 20,
-        //                       fontWeight: 600,
-        //                       marginTop: 5
-        //                     }}
-        //                   >
-        //                     {item.title}
-        //                   </div>
-        //                   <div style={{ marginTop: 5 }}>
-        //                     {item.type === 'Post' ? (
-        //                       <div style={{ marginTop: 20 }}>
-        //                         <div>
-        //                           {item &&
-        //                             JSON.parse(item.text).phoneNumber &&
-        //                             (props.match.url === '/home/discover' ||
-        //                               props.match.url === '/home/ongoing') && (
-        //                               <div className="text-sm my-1 mt-4">
-        //                                 Phone Number:{' '}
-        //                                 {props.match.url === '/home/ongoing'
-        //                                   ? JSON.parse(item.text).phoneNumber
-        //                                   : `***-***-${JSON.parse(item.text).phoneNumber.substring(
-        //                                       JSON.parse(item.text).phoneNumber.length - 4
-        //                                     )}`}
-        //                               </div>
-        //                             )}
-        //                           <div className="mt-4"></div>
-        //                           {item.text &&
-        //                             props.match.url !== '/home/ongoing' &&
-        //                             JSON.parse(item.text).type === 'food' &&
-        //                             foodCartJSX(JSON.parse(item.text).cart)}
-        //                           {item.text &&
-        //                             props.match.url === '/home/completed' &&
-        //                             item.trackingDetails &&
-        //                             completedOrderJSX(item.trackingDetails)}
-        //                           {item.text &&
-        //                             props.match.url === '/home/global' &&
-        //                             completedOrderGlobalJSX(item)}
-        //                         </div>
-        //                       </div>
-        //                     ) : (
-        //                       item.content
-        //                     )}
-        //                   </div>
         //                   {item.type === 'Comment' && (
         //                     <div>
         //                       <Card

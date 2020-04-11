@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import * as axios from 'axios';
+import { computeDestinationPoint } from 'geolib';
 
 class Avatar extends React.Component {
 
@@ -8,13 +10,14 @@ class Avatar extends React.Component {
 
     this.state = {
       src: '',
-      isLink: false,
-      initial: ''
+      color: '',
+      initial: '',
+      loading: true
     }
   }
 
   componentDidMount() {
-    this.setSource();
+    this.setImage();
   }
 
   componentDidUpdate(prevProps, prevState) { }
@@ -35,44 +38,92 @@ class Avatar extends React.Component {
       Number(version) === 0 || !version ? '' : `%3Fver%3D${version}`;
     const url =
       `https://d1ppmvgsdgdlyy.cloudfront.net/user/${hash}${suffix}`;
+
     return url;
   }
 
-  setSource() {
-    this.setState({ 
-      src: this.generateHash(
-        this.props.user.username, this.props.user.profileVersion)
-    });
+  /**
+   * Generate a random colour based off the username. Used for the fallback,
+   * and background colour of the avatar
+   * @param {*} str
+   * @param {*} s
+   * @param {*} l
+   */
+  stringToHslColor(str, s, l) {
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
 
-    if (!this.state.src) this.setFallBack();
+    var h = hash % 360;
+    return 'hsl(' + h + ', ' + s + '%, ' + l + '%)';
   }
 
+  /**
+   * Check to see if the user has uploaded an image. If not, set a fallback.
+   *
+   * @memberof Avatar
+   */
+  setImage() {    
+    const imgUrl = this.generateHash(this.props.user.username,
+      this.props.user.profileVersion);
+
+    this.checkImage(imgUrl).then(res => {
+      this.setState({ 
+        src: imgUrl,
+        loading: false,
+        color: this.stringToHslColor(this.props.user.username, 80, 45),
+      });
+    }).catch(err => {
+      this.setFallBack();
+    })
+  }
+
+  /**
+   * Check to see if the image exists at the hashed location
+   *
+   * @memberof Avatar
+   */
+  checkImage = path =>
+    new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = path;
+      img.onload = () => resolve({path, status: 'ok'});
+      img.onerror = () => reject({path, status: 'error'});
+    });
+
+  /**
+   * Set a fallback profile image. Take the first letter of their username,
+   * and randomly generate a colour.
+   *
+   * @memberof Avatar
+   */
   setFallBack() {
     const letter = this.props.user.username.charAt(0).toUpperCase();
-    this.setState({ initial: letter })
+    this.setState({ 
+      initial: letter,
+      color: this.stringToHslColor(this.props.user.username, 80, 45),
+      loading: false
+    })
   }
 
   render() {
-    if (this.props.isLink) {
-      return (
-        <a href={`/user/${this.props.user.username}`}
-        className="Avatar inline-block w-8 h-8">
-          {/* {this.state.src ? (
-            <img src={this.props.profilePictureUrl} 
-            alt={`Avatar for User: ${this.props.user.username}`}/>
-          ) : (
-            <span>{this.state.initial}</span>
-          )} */}
-        </a>
-      );
-    } else {
-      return (
-        <div className="Avatar inline-block w-8 h-8">
-          {/* <img src={this.props.profilePictureUrl}
-          alt={`Avatar for User: ${this.props.user.username}`} /> */}
-        </div>
-      );
-    }
+    return (
+      <div id={this.props.id} 
+      className={`${this.props.className} Avatar inline-flex items-center justify-center w-8 h-8 
+      overflow-hidden rounded-full ${this.state.loading ? `bg-gray-200` : ''}`} 
+      style={{
+        backgroundColor: this.state.color
+      }}>
+        {this.state.src ? (
+          <img src={
+            this.state.src} alt={`Avatar for: ${this.props.user.username}`}/>
+        ) : (
+          <span className="text-white text-xl">{this.state.initial}</span>
+        )}
+      </div>
+    );
+
   }
 }
 
