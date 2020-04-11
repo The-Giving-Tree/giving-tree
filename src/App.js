@@ -24,7 +24,6 @@ import './App.css';
 import ErrorPage from './views/ErrorPage/ErrorPage';
 import Home from './views/Home/Home';
 import NewsFeedPage from './views/NewsFeed/NewsFeedPage';
-import NewsFeedPageOLD from './views/NewsFeed/NewsFeedPageOLD';
 
 const engine = new Styletron();
 

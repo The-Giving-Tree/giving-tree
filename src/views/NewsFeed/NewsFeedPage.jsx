@@ -7,34 +7,16 @@ import LeaderboardTable from '../../components/LeaderboardTable/LeaderboardTable
 import StickyFooter from '../../components/StickyFooter/StickyFooter'
 // Libraries
 import queryString from 'query-string';
-import { getDistance } from 'geolib';
 import { hotjar } from 'react-hotjar';
 import { connect } from 'react-redux';
 import { geolocated } from 'react-geolocated';
-import Expand from 'react-expand-animated';
-import moment from 'moment';
 import { useHistory } from 'react-router-dom';
-import useWindowSize from 'react-use/lib/useWindowSize';
-import Confetti from 'react-confetti';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 // Base UI
-import { Card } from 'baseui/card';
 import { StatefulPopover, PLACEMENT } from 'baseui/popover';
-import { Tag, KIND } from 'baseui/tag';
-import { Input, SIZE } from 'baseui/input';
-import { Button } from 'baseui/button';
-import { ChevronUp, ChevronDown } from 'baseui/icon';
-import { StatefulMenu } from 'baseui/menu';
-import { Modal, ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/modal';
 
 import {
   getCurrentUser,
   loadNewsfeed,
-  claimTask,
-  unclaimTask,
-  completeTask,
-  upvote,
-  downvote,
   addComment,
   register,
   addReply,
@@ -43,29 +25,21 @@ import {
   login
 } from '../../store/actions/auth/auth-actions';
 import NewsFeedCard from './NewsFeedCard/NewsFeedCard';
+import HelpMenu from '../../components/HelpMenu/HelpMenu';
 
 function NewsFeedPage(props) {
   const {
     user,
     loadNewsfeedDispatch,
-    claimTaskDispatch,
-    unclaimTaskDispatch,
     newsfeed,
-    upvoteDispatch,
-    downvoteDispatch,
     currentPage,
     pages,
-    coords,
     selectMenu,
-    addCommentDispatch,
-    addReplyDispatch,
     selectMenuDispatch,
-    completeTaskDispatch,
     userRanking
   } = props;
 
   const history = useHistory();
-  const { width, height } = useWindowSize();
   const [latLng, setLatLng] = React.useState({});
   const [address, setAddress] = React.useState('');
   const [updatedNews, setUpdateNews] = React.useState(false);
@@ -76,24 +50,10 @@ function NewsFeedPage(props) {
   const [newsfeedDictionary] = React.useState({});
   const authenticated = localStorage.getItem('giving_tree_jwt');
   const [news] = React.useState([]);
-  const [eta, setETA] = React.useState('');
-  const [missing, setOrderMissing] = React.useState('');
-  const [deliverer, setOrderDeliverer] = React.useState('');
-
   const [upvoteIndex] = React.useState([]);
   const [downvoteIndex] = React.useState([]);
   const [initialDownvotes] = React.useState([]);
   const [initialUpvotes] = React.useState([]);
-  const [upvoteHover, setUpvoteHover] = React.useState([]);
-  const [downvoteHover, setDownvoteHover] = React.useState([]);
-  const [confetti, showConfetti] = React.useState(false);
-  const [postId, setPostId] = React.useState('');
-  const [openFoodTracking, setOpenFoodTracking] = React.useState(false);
-
-  // array to keep track of which items a user has claimed - to remove from newsfeed
-  const [helpArrayDiscover, setHelpArrayDiscover] = React.useState({});
-  // array to keep track of which items a user has claimed - to remove from newsfeed
-  const [helpArrayOngoing, setHelpArrayOngoing] = React.useState({});
 
   const items = [];
   const parsed = queryString.parse(props.location.search);
@@ -183,233 +143,6 @@ function NewsFeedPage(props) {
     window.location = `/home/discover?lat=${latLng.lat}&lng=${latLng.lng}`; // explicit lat and lng coordinates
   };
 
-  function openCard(i) {
-    return props.match.url === '/home/discover'
-      ? !helpArrayDiscover[i]
-      : props.match.url === '/home/ongoing'
-      ? !helpArrayOngoing[i]
-      : true;
-  }
-
-  function removeIndex(array, element) {
-    const index = array.indexOf(element);
-    array.splice(index, 1);
-  }
-
-  const removeOngoing = id => {
-    setHelpArrayOngoing(prevOngoing => ({
-      ...prevOngoing,
-      [id]: !prevOngoing[id]
-    }));
-  };
-
-  function calculateDistance(requestLocation) {
-    if (requestLocation.lat && requestLocation.lng && coords) {
-      var request = {
-        latitude: requestLocation.lat,
-        longitude: requestLocation.lng
-      };
-
-      var user = {
-        latitude: coords.latitude,
-        longitude: coords.longitude
-      };
-
-      let distance = getDistance(request, user); // meters
-      let km = distance / 1000;
-      let mi = km * 0.621371;
-
-      return mi.toFixed(2);
-    } else {
-      return '-';
-    }
-  }
-
-  const foodCartJSX = cart => {
-    return cart.length === 0 ? (
-      <div className="text-center">no items in cart</div>
-    ) : (
-      <table className="table-auto" style={{ width: '99%' }}>
-        <thead>
-          <tr>
-            <th className="px-4 py-2">Item Description</th>
-            <th className="px-4 py-2">Quantity</th>
-          </tr>
-        </thead>
-        <tbody>
-          {cart.map((item, i) => (
-            <tr key={i} className={(i % 2 === 0) ? `bg-gray-100` : ''}>
-              <td className={`px-4 py-2`}>{item.name}</td>
-              <td className={`px-4 py-2`}>{item.quantity}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    );
-  };
-
-  // completed order details
-  const completedOrderJSX = trackingDetails => {
-    return trackingDetails.length === 0 ? (
-      <div className="text-center">no tracking details added yet</div>
-    ) : (
-      <React.Fragment>
-        <div
-          className="bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-4 mt-8"
-          role="alert"
-        >
-          <div
-            style={{
-              textTransform: 'capitalize',
-              fontSize: 16,
-              fontWeight: 600,
-              marginBottom: 10,
-              textDecoration: 'underline'
-            }}
-          >
-            Order Details:
-          </div>
-          <p style={{ textTransform: 'capitalize' }}>order created: {trackingDetails.created}</p>
-          <p style={{ textTransform: 'capitalize' }}>dropoff ETA: {trackingDetails.dropoffEta}</p>
-          <p style={{ textTransform: 'capitalize' }}>method: {trackingDetails.method}</p>
-          <p style={{ textTransform: 'capitalize' }}>notes: {trackingDetails.notes}</p>
-        </div>
-      </React.Fragment>
-    );
-  };
-
-  const completedOrderGlobalJSX = item => {
-    return item.length === 0 || !item.assignedUser ? (
-      <div className="text-center">no completed details available yet</div>
-    ) : (
-      <React.Fragment>
-        <div
-          className="bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-4 mt-8"
-          role="alert"
-        >
-          {item.trackingDetails && (
-            <React.Fragment>
-              <div
-                style={{
-                  textTransform: 'capitalize',
-                  fontSize: 16,
-                  fontWeight: 600,
-                  marginBottom: 10,
-                  textDecoration: 'underline'
-                }}
-              >
-                Order Details:
-              </div>
-              <p style={{ textTransform: 'capitalize' }}>
-                order created: {moment(item.trackingDetails.created).format('MMM D, YYYY h:mm A')}
-              </p>
-              <p style={{ textTransform: 'capitalize' }}>
-                dropoff ETA: {item.trackingDetails.dropoffEta}
-              </p>
-              <p style={{ textTransform: 'capitalize' }}>method: {item.trackingDetails.method}</p>
-              <p style={{ textTransform: 'capitalize' }}>notes: {item.trackingDetails.notes}</p>
-            </React.Fragment>
-          )}
-
-          <div
-            style={{
-              fontSize: 16,
-              fontWeight: 600,
-              marginTop: item.trackingDetails ? 15 : 0,
-              textDecoration: 'underline'
-            }}
-          >
-            Fulfilled By:
-          </div>
-          <p
-            style={{ textTransform: 'lowercase', cursor: 'pointer' }}
-            className="flex items-center"
-          >
-            <span
-              onClick={() => history.push(`/user/${item.assignedUser.username}`)}
-              className="hover:text-indigo-800"
-            >
-              {item.assignedUser.username}
-            </span>
-            {Number(item.assignedUser.karma) >= 0 && (
-              <span>&nbsp;&bull; {item.assignedUser.karma} karma</span>
-            )}
-          </p>
-          <p style={{ textTransform: 'lowercase' }}>
-            email: <a href={`mailto:${item.assignedUser.email}`}>{item.assignedUser.email}</a>
-          </p>
-        </div>
-      </React.Fragment>
-    );
-  };
-
-  const shorten = (length, text) => {
-    if (text) {
-      if (text.length <= length) {
-        return text;
-      } else {
-        return text.slice(0, length) + '...';
-      }
-    }
-    return text;
-  };
-
-  function mouseOutUp(i) {
-    setUpvoteHover(upvoteHover.filter(item => item !== i));
-  }
-
-  function mouseOverUp(i) {
-    setUpvoteHover(upvoteHover.concat(i));
-  }
-
-  function mouseOutDown(i) {
-    setDownvoteHover(downvoteHover.filter(item => item !== i));
-  }
-
-  function mouseOverDown(i) {
-    setDownvoteHover(downvoteHover.concat(i));
-  }
-
-  async function handleUpClick(type, _id, postId = '') {
-    switch (type) {
-      case 'Post':
-        await upvoteDispatch({
-          env: process.env.NODE_ENV,
-          postId: _id
-        });
-        break;
-      case 'Comment':
-        await upvoteDispatch({
-          env: process.env.NODE_ENV,
-          postId,
-          commentId: _id
-        });
-        break;
-      default:
-        break;
-    }
-  }
-
-  async function handleDownClick(type, _id, postId = '') {
-    switch (type) {
-      case 'Post':
-        await downvoteDispatch({
-          env: process.env.NODE_ENV,
-          postId: _id
-        });
-        break;
-      case 'Comment':
-        await downvoteDispatch({
-          env: process.env.NODE_ENV,
-          postId,
-          commentId: _id
-        });
-        break;
-      default:
-        break;
-    }
-  }
-
   async function loadNewsfeedHelper() {
     if (pages === '') {
     } else if (Number(currentPage) < Number(pages)) {
@@ -437,46 +170,6 @@ function NewsFeedPage(props) {
         }
       }
     }
-  }
-
-  const removeDiscover = id => {
-    setHelpArrayDiscover(prevDiscover => ({
-      ...prevDiscover,
-      [id]: !prevDiscover[id]
-    }));
-  };
-
-  /**
-   * TODO: Add description of what this function does.
-   * @param {*} username
-   * @param {*} version
-   */
-  function generateHash(username = '', version = 0) {
-    const secret = 'givingtree';
-    const hash = require('crypto')
-      .createHmac('sha256', secret)
-      .update(username.toLowerCase())
-      .digest('hex');
-
-    const suffix = Number(version) === 0 || !version ? '' : `%3Fver%3D${version}`;
-    const url = `https://d1ppmvgsdgdlyy.cloudfront.net/user/${hash}${suffix}`;
-    return url;
-  }
-
-  /**
-   * TODO: Add description of what this function does
-   * @param {*} str
-   * @param {*} s
-   * @param {*} l
-   */
-  function stringToHslColor(str, s, l) {
-    var hash = 0;
-    for (var i = 0; i < str.length; i++) {
-      hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-
-    var h = hash % 360;
-    return 'hsl(' + h + ', ' + s + '%, ' + l + '%)';
   }
 
   React.useEffect(() => {
@@ -535,365 +228,8 @@ function NewsFeedPage(props) {
         upvoteIndex.push(i);
       }
       items.push(
-          <NewsFeedCard item={item} key={i} user={user} className="mb-4"
-          index={i} setOpenFoodTracking={setOpenFoodTracking} />
-
-        //                   {item.type === 'Comment' && (
-        //                     <div>
-        //                       <Card
-        //                         overrides={{
-        //                           Root: {
-        //                             style: {
-        //                               borderRadius: '10px',
-        //                               maxHeight: '300px',
-        //                               overflow: 'hidden'
-        //                             }
-        //                           }
-        //                         }}
-        //                         style={{ /*width: '100%',*/ marginTop: 15 }}
-        //                       >
-        //                         <div
-        //                           style={{
-        //                             marginTop: -10,
-        //                             display: 'flex',
-        //                             justifyContent: 'space-between',
-        //                             alignContent: 'center'
-        //                           }}
-        //                         >
-        //                           <div
-        //                             style={{
-        //                               display: 'flex',
-        //                               alignContent: 'center',
-        //                               textTransform: 'lowercase',
-        //                               fontSize: 12
-        //                             }}
-        //                           >
-        //                             <div
-        //                               onClick={() => history.push(`/user/${item.parent.username}`)}
-        //                               style={{
-        //                                 width: 32,
-        //                                 height: 32,
-        //                                 background: `url(${generateHash(
-        //                                   item.parent.username
-        //                                 )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${item.parent.username[0].toUpperCase()}.svg), ${stringToHslColor(
-        //                                   item.parent.username,
-        //                                   80,
-        //                                   45
-        //                                 )}`,
-        //                                 backgroundPosition: 'center',
-        //                                 backgroundSize: 'cover',
-        //                                 borderRadius: '50%',
-        //                                 marginRight: 10,
-        //                                 cursor: 'pointer',
-        //                                 backgroundRepeat: 'no-repeat'
-        //                               }}
-        //                             />
-        //                             <strong>
-        //                               <a
-        //                                 style={{
-        //                                   textDecoration: 'none',
-        //                                   color: 'rgb(0, 121, 211)'
-        //                                 }}
-        //                                 href={`/user/${item.parent.username}`}
-        //                               >
-        //                                 {item.parent && item.parent.username}
-        //                               </a>
-        //                             </strong>
-        //                             &nbsp;·&nbsp;
-        //                             {moment(item.parent && item.parent.createdAt).format(
-        //                               'MMM D, YYYY h:mm A'
-        //                             )}
-        //                             &nbsp;
-        //                             {item.parent && item.parent.type === 'Post' && (
-        //                               <React.Fragment>
-        //                                 ·&nbsp;
-        //                                 <a
-        //                                   href={`/post/${item.parent && item.parent._id}`}
-        //                                   style={{
-        //                                     textDecoration: 'none',
-        //                                     color: 'rgb(0, 121, 211)'
-        //                                   }}
-        //                                 >
-        //                                   {shorten(60, (item.parent && item.parent.title) || '')}
-        //                                 </a>
-        //                               </React.Fragment>
-        //                             )}
-        //                           </div>
-        //                           <div style={{ alignContent: 'flex-start' }}>
-        //                             <img
-        //                               onClick={() =>
-        //                                 history.push(`/post/${item.parent && item.parent._id}`)
-        //                               }
-        //                               src="https://d1ppmvgsdgdlyy.cloudfront.net/more.svg"
-        //                               alt="more"
-        //                               style={{ width: 15, height: 'auto', cursor: 'pointer' }}
-        //                             />
-        //                           </div>
-        //                         </div>
-        //                         <br />
-        //                         {/* String length <= 250 or add '...' */}
-        //                         {item.parent && item.parent.type === 'Post'
-        //                           ? item.parent && (
-        //                               <div>
-        //                                 <div className="text-sm my-1 mt-4">
-        //                                   {item.parent && item.parent.address}
-        //                                 </div>
-        //                                 <div className="text-sm my-1 mt-4">
-        //                                   {item.parent && `Description: ${item.parent.description}`}
-        //                                 </div>
-        //                                 <div className="mt-4"></div>
-        //                                 {item.parent.text &&
-        //                                   JSON.parse(item.parent.text).type === 'food' &&
-        //                                   foodCartJSX(JSON.parse(item.parent.text).cart)}
-        //                               </div>
-        //                             )
-        //                           : item.parent && shorten(250, item.parent.content)}
-        //                         <div
-        //                           style={{
-        //                             display: 'flex',
-        //                             justifyContent: 'space-between',
-        //                             alignContent: 'center',
-        //                             marginTop: 10,
-        //                             textTransform: 'lowercase',
-        //                             fontSize: 12,
-        //                             zIndex: 200
-        //                           }}
-        //                         >
-        //                           <strong>
-        //                             {item.parent && item.parent.upVotes.length !== 0 ? (
-        //                               <div style={{ color: 'green', display: 'inline' }}>
-        //                                 +{item.parent && item.parent.upVotes.length} upvotes
-        //                               </div>
-        //                             ) : (
-        //                               '0 upvotes'
-        //                             )}{' '}
-        //                             ,{' '}
-        //                             {item.parent && item.parent.downVotes.length !== 0 ? (
-        //                               <div style={{ color: 'red', display: 'inline' }}>
-        //                                 -{item.parent && item.parent.downVotes.length} downvotes
-        //                               </div>
-        //                             ) : (
-        //                               '0 downvotes'
-        //                             )}
-        //                           </strong>
-        //                           <div>
-        //                             <strong>
-        //                               {item.parent && item.parent.comments.length} comments
-        //                             </strong>
-        //                           </div>
-        //                         </div>
-        //                       </Card>
-        //                     </div>
-        //                   )}
-        //                   {item.type === 'Comment' && (
-        //                     <div style={{ paddingTop: 20 }}>
-        //                       <Input
-        //                         overrides={{
-        //                           InputContainer: {
-        //                             style: {
-        //                               border: 0,
-        //                               borderRadius: '5px'
-        //                             }
-        //                           }
-        //                         }}
-        //                         clearable
-        //                         onClick={() => history.push('/submit')}
-        //                         size={SIZE.compact}
-        //                         onKeyPress={async event => {
-        //                           var code = event.keyCode || event.which;
-        //                           if (code === 13 && event.target.value !== '') {
-        //                             // post comment if post parent, reply if comment parent
-        //                             if (item.parent.type === 'Post') {
-        //                               await addCommentDispatch({
-        //                                 env: process.env.NODE_ENV,
-        //                                 postId: item.parent._id,
-        //                                 newComment: event.target.value
-        //                               });
-        //                             } else if (item.parent.type === 'Comment') {
-        //                               await addReplyDispatch({
-        //                                 env: process.env.NODE_ENV,
-        //                                 postId: item.postId,
-        //                                 commentId: item._id,
-        //                                 newReply: event.target.value
-        //                               });
-        //                             }
-
-        //                             history.push(`/post/${item._id}`);
-        //                           }
-        //                         }}
-        //                         placeholder="add a comment..."
-        //                       />
-        //                     </div>
-        //                   )}
-        //                 </div>
-        //               </div>
-        //             </div>
-        //           </div>
-        //         </div>
-        //         <div
-        //           style={{
-        //             display: 'flex',
-        //             maxHeight: 'calc(0.2 * 550px)',
-        //             justifyContent: 'space-between',
-        //             alignContent: 'center',
-        //             marginTop: 10
-        //           }}
-        //         >
-        //           <div style={{ display: 'flex', alignContent: 'center' }}>
-        //             {confetti && <Confetti width={width} height={height} recycle={false} />}
-        //             {item.type === 'Post' &&
-        //               !item.completed &&
-        //               props.match.url === '/home/discover' &&
-        //               !item.assignedUser && (
-        //                 <div style={{ display: 'flex', alignContent: 'center', marginLeft: 15 }}>
-        //                   <Button
-        //                     style={{ outline: 'none', padding: 0 }}
-        //                     kind="minimal"
-        //                     size={SIZE.compact}
-        //                     onClick={() => {
-        //                       if (item.assignedUser) {
-        //                         alert(
-        //                           'someone is already helping on this task (in progress) - please look other requests'
-        //                         );
-        //                         return;
-        //                       }
-
-        //                       if (
-        //                         window.confirm(
-        //                           'Please confirm your committment to helping this person - by saying yes, other people cannot claim this request.'
-        //                         )
-        //                       ) {
-        //                         claimTaskDispatch({
-        //                           env: process.env.NODE_ENV,
-        //                           postId: item._id
-        //                         });
-
-        //                         removeDiscover(item._id);
-
-        //                         showConfetti(false);
-        //                         showConfetti(true);
-        //                       }
-        //                     }}
-        //                   >
-        //                     <img
-        //                       src="https://d1ppmvgsdgdlyy.cloudfront.net/help_color.svg"
-        //                       alt="help"
-        //                       style={{ height: 22, width: 'auto', display: 'block' }}
-        //                     />
-        //                     <div
-        //                       style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}
-        //                     >
-        //                       <strong>Help</strong>
-        //                     </div>
-        //                   </Button>
-        //                 </div>
-        //               )}
-        //             {props.match.url === '/home/ongoing' && (
-        //               <div className="flex justify-between items-center" style={{ marginLeft: 15 }}>
-        //                 <Button
-        //                   style={{ outline: 'none', padding: 0, marginRight: 15 }}
-        //                   kind="minimal"
-        //                   size={SIZE.compact}
-        //                   onClick={() => {
-        //                     let cancelReason = window.prompt(
-        //                       'Why are you cancelling? Too many cancelled requests will flag your account'
-        //                     );
-
-        //                     if (cancelReason) {
-        //                       unclaimTaskDispatch({
-        //                         env: process.env.NODE_ENV,
-        //                         postId: item._id,
-        //                         cancelReason
-        //                       });
-
-        //                       removeOngoing(item._id);
-        //                     }
-        //                   }}
-        //                 >
-        //                   <div style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}>
-        //                     cancel
-        //                   </div>
-        //                 </Button>
-        //                 <StatefulPopover
-        //                   placement={PLACEMENT.bottomLeft}
-        //                   content={({ close }) => (
-        //                     <StatefulMenu
-        //                       items={[
-        //                         {
-        //                           label: 'Manually Add Details',
-        //                           key: 'manual'
-        //                         }
-        //                       ]}
-        //                       onItemSelect={i => {
-        //                         close();
-        //                         switch (i.item.key) {
-        //                           case 'manual':
-        //                             setPostId(item._id);
-        //                             setOpenFoodTracking(true);
-        //                             break;
-        //                           case 'postmates':
-        //                             window.open('https://postmates.com/', '_blank');
-        //                             break;
-        //                           case 'ubereats':
-        //                             window.open('https://www.ubereats.com/', '_blank');
-        //                             break;
-        //                           case 'amazonfresh':
-        //                             window.open(
-        //                               'https://www.amazon.com/alm/storefront?almBrandId=QW1hem9uIEZyZXNo',
-        //                               '_blank'
-        //                             );
-        //                             break;
-        //                           case 'walmart':
-        //                             window.open('https://grocery.walmart.com/', '_blank');
-        //                             break;
-        //                           case 'costco':
-        //                             window.open(
-        //                               'https://www.costco.com/my-life-costco-grocery-online-delivery.html',
-        //                               '_blank'
-        //                             );
-        //                             break;
-        //                           case 'grubhub':
-        //                             window.open('https://grocery.walmart.com/', '_blank');
-        //                             break;
-        //                           case 'seamless':
-        //                             window.open('https://www.seamless.com/', '_blank');
-        //                             break;
-        //                           case 'instacart':
-        //                             window.open('https://www.instacart.com/', '_blank');
-        //                             break;
-        //                           case 'doordash':
-        //                             window.open('https://www.doordash.com/', '_blank');
-        //                             break;
-        //                           default:
-        //                             break;
-        //                         }
-        //                       }}
-        //                       overrides={{
-        //                         List: { style: { outline: 'none', padding: '0px' } }
-        //                       }}
-        //                     />
-        //                   )}
-        //                 >
-        //                   <Button
-        //                     style={{ outline: 'none', padding: 0 }}
-        //                     kind="minimal"
-        //                     size={SIZE.compact}
-        //                   >
-        //                     <div
-        //                       style={{ marginLeft: 5, textTransform: 'uppercase', fontSize: 12 }}
-        //                     >
-        //                       <strong>Mark Completed</strong>
-        //                     </div>
-        //                   </Button>
-        //                 </StatefulPopover>
-        //               </div>
-        //             )}
-        //           </div>
-        //         </div>
-        //       </div>
-        //     </Card>
-        //   </Expand>
-        // </div>
+        <NewsFeedCard item={item} key={i} user={user} className="mb-4"
+        index={i} />
       );
     });
   };
@@ -901,68 +237,9 @@ function NewsFeedPage(props) {
   render();
 
   return (
-    <StickyFooter>
+    <div>
       <Navigation selectMenuDispatch={selectMenuDispatch} 
       searchBarPosition="center" />
-      <Modal
-        overrides={{ Dialog: { style: { borderRadius: '7px' } } }}
-        onClose={() => setOpenFoodTracking(false)}
-        isOpen={openFoodTracking}>
-        <ModalHeader>Mark Completed</ModalHeader>
-        <ModalBody>
-          When is the food arriving (ETA)?
-          <Input
-            value={eta}
-            onChange={e => setETA(e.target.value)}
-            placeholder="4/2/2020 @ 6:40pm"
-          />
-          <br />
-          Are you missing anything from the order?
-          <Input
-            value={missing}
-            onChange={e => setOrderMissing(e.target.value)}
-            placeholder="spinach was out"
-          />
-          <br />
-          Who is delivering the food? (name, phone number, etc)
-          <Input
-            value={deliverer}
-            onChange={e => setOrderDeliverer(e.target.value)}
-            placeholder="Barack Obama, 6465335281"
-          />
-          <br />
-        </ModalBody>
-        <ModalFooter>
-          <ModalButton size={'compact'} kind={'minimal'} onClick={() => setOpenFoodTracking(false)}>
-            Cancel
-          </ModalButton>
-          <ModalButton
-            size={'compact'}
-            onClick={() => {
-              if (eta && missing && deliverer && postId) {
-                completeTaskDispatch({
-                  env: process.env.NODE_ENV,
-                  postId: postId,
-                  trackingDetails: {
-                    method: 'manual',
-                    created: new Date(),
-                    dropoffEta: eta,
-                    notes: `${missing}. \n\n${deliverer}`
-                  }
-                });
-
-                showConfetti(false);
-                showConfetti(true);
-                setOpenFoodTracking(false); // close dialog
-              } else {
-                alert('you need to fill all the details');
-              }
-            }}
-          >
-            Submit
-          </ModalButton>
-        </ModalFooter>
-      </Modal>
       <div className="lg:max-w-4xl xl:max-w-screen-xl w-full mx-auto py-12 px-6">
         <div className="block xl:flex">
           <div className="xl:pr-6 sidebar-wrapper">
@@ -1111,20 +388,14 @@ function NewsFeedPage(props) {
           </section>
         </div>
       </div>
-        
-        
-    </StickyFooter>
+      <HelpMenu />     
+    </div>
   );
 }
 
 const mapDispatchToProps = dispatch => ({
   getCurrentUserDispatch: payload => dispatch(getCurrentUser(payload)),
   loadNewsfeedDispatch: payload => dispatch(loadNewsfeed(payload)),
-  claimTaskDispatch: payload => dispatch(claimTask(payload)),
-  unclaimTaskDispatch: payload => dispatch(unclaimTask(payload)),
-  completeTaskDispatch: payload => dispatch(completeTask(payload)),
-  upvoteDispatch: payload => dispatch(upvote(payload)),
-  downvoteDispatch: payload => dispatch(downvote(payload)),
   signupDispatch: payload => dispatch(register(payload)),
   addCommentDispatch: payload => dispatch(addComment(payload)),
   addReplyDispatch: payload => dispatch(addReply(payload)),

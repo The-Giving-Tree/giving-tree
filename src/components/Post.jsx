@@ -1273,7 +1273,7 @@ function Post(props) {
           <div className="hidden xl:block xl:pl-6 w-full" style={{
             maxWidth: '344px'
           }}>
-            <div class="bg-white shadow-lg rounded-lg p-6">
+            <div className="bg-white shadow-lg rounded-lg p-6">
             <div className="flex justify-between items-center mb-4">
               <div className="text-left" style={{ fontWeight: 300 }}>
                 <div

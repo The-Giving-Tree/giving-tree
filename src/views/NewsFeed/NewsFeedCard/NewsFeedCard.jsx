@@ -43,7 +43,6 @@ class NewsFeedCard extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log(this.props);
   }
 
   /**
@@ -52,7 +51,6 @@ class NewsFeedCard extends React.Component {
    * @memberof NewsFeedCard
    */
   setVoteIndex() {
-    console.log(this.props.item);
     if (this.props.item.downVotes.includes(this.props.user._id) &&
       !this.state.downvoteIndex.includes(this.props.index) &&
       !this.state.initialDownvotes.includes(this.props.index)
@@ -215,6 +213,13 @@ class NewsFeedCard extends React.Component {
     }
   }
 
+  /**
+   * Generate the JSX for the food cart section of the news feed item
+   *
+   * @param {*} cart
+   * @returns
+   * @memberof NewsFeedCard
+   */
   foodCartJSX(cart) {
     return cart.length === 0 ? (
       <p className="text-center">no items in cart</p>
@@ -416,8 +421,7 @@ class NewsFeedCard extends React.Component {
         {this.state.showConfetti && 
           <Confetti width={window.innerWidth} height={window.innerHeight} recycle={false} />
         }
-        <div id="newsfeed-avatar-wrapper" 
-        className="flex items-center flex-wrap mb-3">
+        <div className="flex items-center flex-wrap mb-3">
           <a href={`/user/${this.props.item.authorId.username}`} 
           onClick={(e, elem) => this.preventGoToPost(e, elem)}
           className="inline-block">
@@ -564,10 +568,6 @@ class NewsFeedCard extends React.Component {
                     this.state.details.type === 'food' &&
                     this.foodCartJSX(this.state.details.cart)
                   }
-                  {this.state.trackingDetails &&
-                    this.props.match.url === '/home/completed' &&
-                    this.props.item.trackingDetails &&
-                    this.completedOrderJSX(this.props.item.trackingDetails)}
                   {this.props.match.url === '/home/global' &&
                     this.completedOrderGlobalJSX(this.props.item)
                   }
@@ -594,7 +594,8 @@ class NewsFeedCard extends React.Component {
                         label: 'Copy Link'
                       }
                     ]}
-                    onItemSelect={item => {
+                    onItemSelect={(item) => {
+                      item.event.stopPropagation();
                       close();
                       switch (item.item.label) {
                         case 'Copy Link':
