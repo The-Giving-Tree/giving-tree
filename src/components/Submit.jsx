@@ -275,7 +275,7 @@ function Submit(props) {
             }}
             className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             type="datetime-local"
-            value={`${moment(new Date()).format('YYYY-MM-DD')}T${moment(new Date()).format(
+            value={`${moment(dueDate || new Date()).format('YYYY-MM-DD')}T${moment(dueDate || new Date()).format(
               'HH:mm'
             )}`}
           />
