@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 import { StatefulTooltip } from 'baseui/tooltip';
 import { StatefulPopover, PLACEMENT } from 'baseui/popover';
-import Navigation from './Navigation';
+import Navigation from './Navigation/Navigation';
 import { geolocated } from 'react-geolocated';
 import { Card, StyledBody } from 'baseui/card';
 import { Block } from 'baseui/block';

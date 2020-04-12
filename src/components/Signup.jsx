@@ -16,7 +16,7 @@ import { register } from '../store/actions/auth/auth-actions';
 import Media from 'react-media';
 import passwordValidator from 'password-validator';
 import { hotjar } from 'react-hotjar';
-import Navigation from './Navigation';
+import Navigation from './Navigation/Navigation';
 
 var schema = new passwordValidator();
 schema

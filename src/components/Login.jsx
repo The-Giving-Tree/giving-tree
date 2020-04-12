@@ -18,7 +18,7 @@ import {
 } from 'baseui/modal';
 
 import { login, initiateReset } from '../store/actions/auth/auth-actions';
-import Navigation from './Navigation';
+import Navigation from './Navigation/Navigation';
 
 const componentDidUpdate = props => {};
 
