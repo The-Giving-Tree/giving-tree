@@ -436,7 +436,7 @@ function Navigation(props) {
             rounded-full bg-gray-200`}>
               <input placeholder="Search..."
               ref={(inp) => searchInp = inp }
-              className="bg-transparent px-3 py-2 w-full"
+              className="bg-transparent px-3 py-2 w-full outline-none"
               onChange={(e) => {
                 searchDispatch({ env: process.env.NODE_ENV, query: e.target.value });
                 setShouldCloseSearchResults(false);
