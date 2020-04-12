@@ -192,9 +192,8 @@ function Submit(props) {
   const formJSX = () => {
     return (
       <div>
-        <div style={{ width: '100%' }}></div>
-        <div className="mt-4 flex justify-content">
-          <div style={{ width: '100%' }}>
+        <div className="mt-4 sm:flex w-full">
+          <div className="sm:mr-3 w-full mb-4 sm:mb-0">
             <label
               class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
               for="grid-last-name"
@@ -212,7 +211,7 @@ function Submit(props) {
               placeholder="Who will be receiving the order?"
             />
           </div>
-          <div className="ml-3" style={{ width: '100%' }}>
+          <div className="w-full">
             <label
               class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
               for="grid-state"
@@ -261,19 +260,22 @@ function Submit(props) {
           type="text"
           placeholder="Briefly explain your request, e.g. Sick and need help grocery shopping"
         />
-        <div className="flex items-center mt-4">
+        <div className="sm:flex sm:items-center mt-4">
           <label
-            class="block uppercase tracking-wide text-gray-700 text-xs font-bold mr-2"
+            class="block uppercase tracking-wide text-gray-700 text-xs font-bold 
+            mb-2 sm:mb-0 mr-2"
             for="grid-last-name"
           >
             Needed By:
           </label>
           <input
-            style={{ width: 300, height: 32 }}
+            style={{ maxWidth: 300, height: 32 }}
             onChange={e => {
               setDueDate(e.target.value); // YYYY-MM-DD
             }}
-            className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+            className="appearance-none block w-full bg-white text-gray-700 
+            border border-gray-400 rounded py-3 px-4 leading-tight 
+            focus:outline-none focus:bg-white focus:border-gray-500 w-full"
             type="datetime-local"
             value={`${moment(dueDate || new Date()).format('YYYY-MM-DD')}T${moment(dueDate || new Date()).format(
               'HH:mm'
