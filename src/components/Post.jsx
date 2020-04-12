@@ -785,6 +785,7 @@ function Post(props) {
                           style={{
                             alignContent: 'center',
                             display: 'flex',
+                            flexWrap: 'wrap',
                             justifyContent: 'space-between',
                             paddingBottom: 15
                           }}
@@ -840,7 +841,7 @@ function Post(props) {
                             </div>
                             {/* <div style={{ textTransform: 'capitalize' }}>&nbsp;·&nbsp;{0}&nbsp;Views</div> */}
                           </div>
-                          <div
+                          <div className="my-1"
                             style={{
                               alignContent: 'flex-start'
                             }}
