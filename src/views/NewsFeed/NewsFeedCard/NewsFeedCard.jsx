@@ -32,17 +32,25 @@ class NewsFeedCard extends React.Component {
       initialDownvotes: [],
       helpArrayDiscover: {}, // Tasks claimed by user (remove from discover)
       helpArrayOngoing: {}, // Tasks claimed by user (remove from discover)
-      postId: '',
-      showConfetti: false
+      showConfetti: false,
     }
   }
 
   componentDidMount() {
+    // Set the tags for this post (Food, in progress etc)
     this.setTags();
+    // Set the post details (Zip code, phone no. etc.)
     this.setDetails();
+
+    // Create the vote index
+    this.setVoteIndex();
+
+    // Set initial vote count based on the total votes sent from the back end
+    this.setState({ voteCount: this.props.item.voteTotal})    
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) { 
+    this.setVoteIndex()
   }
 
   /**
@@ -360,6 +368,14 @@ class NewsFeedCard extends React.Component {
     array.splice(index, 1);
   }
 
+  /**
+   * Fired when user clicks upvote button. Requests a change to the backend
+   *
+   * @param {*} type
+   * @param {*} _id
+   * @param {string} [postId='']
+   * @memberof NewsFeedCard
+   */
   async handleUpClick(type, _id, postId = '') {
     switch (type) {
       case 'Post':
@@ -380,6 +396,14 @@ class NewsFeedCard extends React.Component {
     }
   }
 
+  /**
+   * Fired when user clicks downvote button. Requests a change to the backend
+   *
+   * @param {*} type
+   * @param {*} _id
+   * @param {string} [postId='']
+   * @memberof NewsFeedCard
+   */
   async handleDownClick(type, _id, postId = '') {
     switch (type) {
       case 'Post':
@@ -400,10 +424,35 @@ class NewsFeedCard extends React.Component {
     }
   }
 
-  setPostId(id) {
-    this.setState({
-      postId: id
-    })
+  /**
+   * Check the vote count on render (logs to console);
+   *
+   * @memberof NewsFeedCard
+   */
+  setVoteCount() {
+    const propsTotal = this.props.item.voteTotal;
+
+    const upvoteCalc = Number(
+      this.state.upvoteIndex.includes(this.props.index)
+        ? this.props.item.upVotes.includes(this.props.user._id)
+            ? 0 : 1
+        : this.props.item.upVotes.includes(this.props.user._id)
+          ? -1 : 0
+    )
+
+    const downvoteCalc = Number(
+      this.state.downvoteIndex.includes(this.props.index)
+        ? this.props.item.downVotes.includes(this.props.user._id)
+          ? 0
+          : 1
+        : this.props.item.downVotes.includes(this.props.user._id)
+        ? -1
+        : 0
+    )
+
+    const newVoteCount = propsTotal + upvoteCalc - downvoteCalc;
+    
+    this.setState({ voteCount: newVoteCount })
   }
 
   render() {
@@ -468,6 +517,8 @@ class NewsFeedCard extends React.Component {
                 } else {
                   this.state.upvoteIndex.push(this.props.index);
                 }
+
+                this.setVoteCount();
               } else {
                 alert('please signup first');
                 this.props.history.push('/signup');
@@ -475,25 +526,7 @@ class NewsFeedCard extends React.Component {
             }}
           />            
           <span>
-            {this.props.item.voteTotal +
-              Number(
-                this.state.upvoteIndex.includes(this.props.index)
-                  ? this.props.item.upVotes.includes(this.props.user._id)
-                    ? 0
-                    : 1
-                  : this.props.item.upVotes.includes(this.props.user._id)
-                  ? -1
-                  : 0
-              ) -
-              Number(
-                this.state.downvoteIndex.includes(this.props.index)
-                  ? this.props.item.downVotes.includes(this.props.user._id)
-                    ? 0
-                    : 1
-                  : this.props.item.downVotes.includes(this.props.user._id)
-                  ? -1
-                  : 0
-              )}
+            {this.state.voteCount}
           </span>
           <ChevronDown color={
             this.state.downvoteIndex.includes(this.props.index) || 
@@ -521,6 +554,7 @@ class NewsFeedCard extends React.Component {
               } else {
                 this.state.downvoteIndex.push(this.props.index);
               }
+              this.setVoteCount();
             } else {
               alert('please signup first');
               this.props.history.push('/signup');
