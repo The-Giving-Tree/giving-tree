@@ -4,7 +4,6 @@ import Navigation from '../../components/Navigation/Navigation';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import NewsfeedTable from '../NewsFeed/NewsfeedTable';
 import LeaderboardTable from '../../components/LeaderboardTable/LeaderboardTable';
-import StickyFooter from '../../components/StickyFooter/StickyFooter'
 // Libraries
 import queryString from 'query-string';
 import { hotjar } from 'react-hotjar';
@@ -50,10 +49,6 @@ function NewsFeedPage(props) {
   const [newsfeedDictionary] = React.useState({});
   const authenticated = localStorage.getItem('giving_tree_jwt');
   const [news] = React.useState([]);
-  const [upvoteIndex] = React.useState([]);
-  const [downvoteIndex] = React.useState([]);
-  const [initialDownvotes] = React.useState([]);
-  const [initialUpvotes] = React.useState([]);
 
   const items = [];
   const parsed = queryString.parse(props.location.search);
@@ -211,22 +206,6 @@ function NewsFeedPage(props) {
 
   const render = () => {
     news.map((item, i) => {
-      if (
-        item.downVotes.includes(user._id) &&
-        !downvoteIndex.includes(i) &&
-        !initialDownvotes.includes(i)
-      ) {
-        initialDownvotes.push(i);
-        downvoteIndex.push(i);
-      }
-      if (
-        item.upVotes.includes(user._id) &&
-        !upvoteIndex.includes(i) &&
-        !initialUpvotes.includes(i)
-      ) {
-        initialUpvotes.push(i);
-        upvoteIndex.push(i);
-      }
       items.push(
         <NewsFeedCard item={item} key={i} user={user} className="mb-4"
         index={i} />

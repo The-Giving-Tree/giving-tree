@@ -1315,7 +1315,7 @@ function NewsFeedPageOLD(props) {
 
   return (
     <StickyFooter>
-<Navigation selectMenuDispatch={selectMenuDispatch} searchBarPosition="center" />
+      <Navigation selectMenuDispatch={selectMenuDispatch} searchBarPosition="center" />
       <Modal
         overrides={{ Dialog: { style: { borderRadius: '7px' } } }}
         onClose={() => setOpenFoodTracking(false)}
