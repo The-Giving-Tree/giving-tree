@@ -670,7 +670,7 @@ class NewsFeedCard extends React.Component {
           <div className="flex justify-between items-center">
             <button className="uppercase text-xs text-red-600" onClick={(e) => {
               e.stopPropagation()
-              let cancelReason = window.prompt(
+              let cancelReason = window.confirm(
                 'Warning: By releasing this request back into the Requests ' + 
                 'Feed, you are breaking your commitment and may lose Karma ' +
                 'points.'
