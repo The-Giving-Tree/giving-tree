@@ -498,6 +498,8 @@ class NewsFeedCard extends React.Component {
             style={{ alignContent: 'center', cursor: 'pointer' }}
             onMouseEnter={() => this.mouseOverUp(this.props.index)}
             onMouseLeave={() => this.mouseOutUp(this.props.index)}
+            onTouchStart={() => this.mouseOverUp(this.props.index)}
+            onTouchEnd={() => this.mouseOutUp(this.props.index)}
             onClick={async (e) => {
               e.stopPropagation();
 
@@ -536,6 +538,8 @@ class NewsFeedCard extends React.Component {
             style={{ alignContent: 'center', cursor: 'pointer' }}
             onMouseEnter={() => this.mouseOverDown(this.props.index)}
             onMouseLeave={() => this.mouseOutDown(this.props.index)}
+            onTouchStart={() => this.mouseOverDown(this.props.index)}
+            onTouchEnd={() => this.mouseOutDown(this.props.index)}
             onClick={async (e) => {
             e.stopPropagation();
             if (authenticated) {
