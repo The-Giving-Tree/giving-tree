@@ -13,7 +13,7 @@ class StickyFooter extends React.Component {
 
   render() {
     return (
-      <div className="flex flex-col flex-grow">
+      <div className="StickyFooter flex flex-col flex-grow">
         <div className="flex-grow flex flex-col">
           {this.props.children}
         </div>

@@ -402,35 +402,6 @@ function Navigation(props) {
 
         {/* Search bar */}
         <div className="hidden md:block max-w-md ml-auto px-6 w-full">
-          {/* <Input
-            overrides={{
-              Before,
-              After,
-              InputContainer: {
-                style: {
-                  height: '100%',
-                  borderBottomLeftRadius:
-                    searchResults.length !== 0 && !shouldCloseSearchResults ? '0px' : '25px',
-                  borderBottomRightRadius:
-                    searchResults.length !== 0 && !shouldCloseSearchResults ? '0px' : '25px',
-                  borderTopLeftRadius: '25px',
-                  borderTopRightRadius: '25px',
-                  border: '0',
-                  outlineOffset: '2px'
-                }
-              },
-              Input: {
-                style: {
-                  maxHeight: '100%'
-                }
-              }
-            }}
-            placeholder={'Search...'}
-            onChange={e => {
-              searchDispatch({ env: process.env.NODE_ENV, query: e.target.value });
-              setShouldCloseSearchResults(false);
-            }}
-          /> */}
           <div className="search-wrapper relative">
             <div className={`overflow-hidden ${showSearch ? 'w-full' : 'w-0'}
             rounded-full bg-gray-200`}>
@@ -667,7 +638,7 @@ function Navigation(props) {
   } else {
     // If the user is NOT logged in, display this nav...
     return (
-      <header className="flex items-center justify-start px-6 py-3 bg-white">
+      <header className="Navigation flex items-center justify-start px-6 py-3 bg-white">
         {/* Main logo */}
         <button className="mr-auto" onClick={() => {
           const url = (authenticated) ? '/home/discover' : '/';
@@ -679,40 +650,6 @@ function Navigation(props) {
             style={{ height: 30 }}
           />
         </button>
-
-        {/* Search bar: Removed this for logged out users. Currently doesn't work
-        if the user is logged out. */}
-        {/* <div className="hidden md:block mr-auto px-6">
-          <Input
-            overrides={{
-              Before,
-              InputContainer: {
-                style: { borderRadius: '50px', border: '0', outlineOffset: '2px' }
-              }
-            }}
-            placeholder={center ? 'Search' : 'Search'}
-            onChange={e => {
-              console.log('e: ', e.target.value);
-              searchDispatch({ env: process.env.NODE_ENV, query: e.target.value });
-            }}
-          />
-          {searchResults.length !== 0 && (
-            <StatefulMenu
-              overrides={{
-                List: {
-                  style: {
-                    outline: 'none',
-                    padding: '0px',
-                    position: 'absolute',
-                    width: `${center ? '600px' : '200px'}`
-                  }
-                }
-              }}
-              items={searchResults}
-            />
-          )}
-        </div>
-         */}
         <div className="ml-auto flex items-center justify-end">
           {/* Guidelines button */}
           <Link

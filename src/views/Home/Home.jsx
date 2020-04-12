@@ -448,22 +448,78 @@ function Home(props) {
             authenticated ? (
               <Redirect to={`/home/discover`} />
             ) : (
-              // <div className="flex-grow">
-              //   <div className="grid grid-cols-1 lg:grid-cols-3 h-full">
-              //     <div
-              //       className="col-span-2 px-6 flex"
-              //       style={{
-              //         height: !matches.large && !matches.xl ? 340 : '100%',
-              //         background:
-              //           'url(https://d1ppmvgsdgdlyy.cloudfront.net/landing.png) center center',
-              //         backgroundSize: 'cover'
-              //       }}
-              //     ></div>
-              //     <div className="col-span-1 bg-white">{homeJSX()}</div>
-              //   </div>
-              // </div>
+              <div className="flex-grow py-4 lg:py-20 LandingPage">
+                <div className="max-w-screen-lg w-full mx-auto px-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2">
+                    <div className="col-span-1">
+                      <div style={{
+                        minHeight: 270,
+                        background: 'url(https://d1ppmvgsdgdlyy.cloudfront.net/' + 
+                          'landing.png) center center',
+                        backgroundSize: 'cover' 
+                      }}></div>
+                      <em className="block mb-4 text-xs">
+                        Image by <a className="text-blue-500"
+                        href="https://dribbble.com/Tubik">
+                        Tubikstudio</a> via Dribbble
+                      </em>
+                    </div>
+                    <div className="col-span-1 lg:pl-6 flex flex-col items-center">
+                      <h2 className="text-lg font-bold text-center mb-2">
+                        Ask for help or lend a hand
+                      </h2>
+                      <p className="text-center mb-4">
+                        The Giving Tree was created in response to COVID-19. 
+                        Our platform connects 
+                        people who need help shopping for essential items with 
+                        local low-risk people who want to help.
+                      </p>
+                      <div className="text-center mb-4">
+                        <button 
+                        className="py-2 bg-green-700 text-white font-semibold
+                        w-48 rounded-md">
+                          Sign up
+                        </button>
+                      </div>
+                      <p className="uppercase text-center mb-4">Or</p>
+                      <p className="text-center">
+                        Call/text our hotline to request help: 
+                        <strong>415-964-4261</strong>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center justify-center 
+                landing-page-title max-w-screen-lg mx-auto">
+                  <h2 className="text-2xl font-semibold text-center">
+                    How it works
+                  </h2>
+                </div>
+                <div className="relative px-6 max-w-screen-lg steps-container">
+                  
+                  <button className="rounded-lg bg-green-700 font-semibold 
+                  text-white py-2 px-3 start-button mb-2">
+                    Start!
+                  </button>
+                  <div className="">
+                    <div className="flex items-center justify-center no-1 mr-4
+                    h-8 w-8 font-bold text-white bg-green-500 rounded-full">
+                      <span>1</span>
+                    </div>
+                    <p className="text-lg">
+                      Doug, who needs help getting groceries, posts a request 
+                      on The Giving Tree
+                    </p>
+                  </div>
+                  
 
-              <div></div>
+                  <div className="flex items-center justify-center no-2
+                  h-8 w-8 font-bold text-white bg-green-500 rounded-full">
+                    <span>2</span>
+                  </div>
+                  
+                </div>
+              </div>
             )
           }
         </Media>

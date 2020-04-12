@@ -2,3 +2,12 @@
 Will make this in to SCSS when we implement it
 */
 
+.landing-page-title {
+  min-height: 111px;
+  background: url('../../assets/homepage/Divider_Responsive.svg') no-repeat center center;
+  background-size: cover;
+}
+
+/**
+How it works section
+**/
