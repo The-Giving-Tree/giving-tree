@@ -1,7 +1,7 @@
 /* eslint-disable */
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
-import Navigation from './Navigation';
+import Navigation from './Navigation/Navigation';
 import Footer from './Footer';
 import { geolocated } from 'react-geolocated';
 import { connect } from 'react-redux';

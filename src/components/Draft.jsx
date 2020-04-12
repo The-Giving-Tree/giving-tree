@@ -8,7 +8,7 @@ import moment from 'moment';
 import { StatefulTooltip } from 'baseui/tooltip';
 import { Button, SHAPE, KIND, SIZE } from 'baseui/button';
 import { StatefulMenu } from 'baseui/menu';
-import Navigation from './Navigation';
+import Navigation from './Navigation/Navigation';
 import { Redirect } from 'react-router-dom';
 import { Card, StyledBody } from 'baseui/card';
 import { useStyletron } from 'baseui';

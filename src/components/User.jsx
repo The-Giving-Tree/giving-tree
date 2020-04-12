@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, SIZE } from 'baseui/button';
-import Navigation from './Navigation';
+import Navigation from './Navigation/Navigation';
 import { Avatar } from 'baseui/avatar';
 import { useHistory } from 'react-router-dom';
 import { Card, StyledBody } from 'baseui/card';

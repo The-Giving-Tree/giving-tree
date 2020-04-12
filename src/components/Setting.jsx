@@ -6,7 +6,7 @@ import {
   StyledNavigationList as NavigationList
 } from 'baseui/header-navigation';
 import { Button } from 'baseui/button';
-import Navigation from './Navigation';
+import Navigation from './Navigation/Navigation';
 import { Block } from 'baseui/block';
 import { connect } from 'react-redux';
 import { hotjar } from 'react-hotjar';

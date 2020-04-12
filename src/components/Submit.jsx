@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import moment from 'moment';
 import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
-import Navigation from './Navigation';
+import Navigation from './Navigation/Navigation';
 import { Card } from 'baseui/card';
 import { Tag } from 'baseui/tag';
 import Sidebar from './Sidebar/Sidebar';

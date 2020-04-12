@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Tabs, Tab } from 'baseui/tabs';
-import Navigation from './Navigation';
+import Navigation from './Navigation/Navigation';
 import { geolocated } from 'react-geolocated';
 import { StatefulPopover, PLACEMENT } from 'baseui/popover';
 import { connect } from 'react-redux';

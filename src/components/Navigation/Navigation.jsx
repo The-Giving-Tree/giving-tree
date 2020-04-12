@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Constants from './Constants';
+import Constants from '../Constants';
 import { useHistory, Link } from 'react-router-dom';
 import { useStyletron } from 'baseui';
 import { Spinner } from 'baseui/spinner';
@@ -16,17 +16,23 @@ import {
   addToNotifications,
   clearAllNotifications,
   selectMenu
-} from '../store/actions/auth/auth-actions';
-import { search } from '../store/actions/global/global-actions';
+} from '../../store/actions/auth/auth-actions';
+import { search } from '../../store/actions/global/global-actions';
 import NotificationBadge from 'react-notification-badge';
 import { Modal, ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/modal';
 import { Effect } from 'react-notification-badge';
 import axios from 'axios';
-import ROUTES from '../utils/routes';
-import { subscribeToNotifications } from '../utils/socket';
+import ROUTES from '../../utils/routes';
+import { subscribeToNotifications } from '../../utils/socket';
 import moment from 'moment';
 
 import { connect } from 'react-redux';
+
+import { ReactComponent as IconSearch } from '../../assets/icons/search.svg';
+
+import './Navigation.css';
+
+
 function Before() {
   const [css, theme] = useStyletron();
   return (
@@ -59,6 +65,8 @@ function Navigation(props) {
   require('dotenv').config();
 
   const history = useHistory();
+  const [showSearch, setShowSearch] = React.useState(false);
+  let searchInp;
 
   // Detects when mouse is clicked outside of search results
   const [shouldCloseSearchResults, setShouldCloseSearchResults] = React.useState(false);
@@ -290,7 +298,7 @@ function Navigation(props) {
   // If the user IS logged in, display this nav...
   if (authenticated) {
     return (
-      <header className="flex items-center justify-start px-6 py-3 bg-white">
+      <header className="Navigation flex items-center justify-start px-6 py-3 bg-white">
         {/* <button
           className="rounded-full text-white px-4 py-2"
           style={{
@@ -379,7 +387,10 @@ function Navigation(props) {
           </ModalFooter>
         </Modal>
         {/* Main logo */}
-        <button className="mr-auto" onClick={() => {
+        <button className="mr-auto" style={{
+          width: 165
+        }} 
+        onClick={() => {
           const url = (authenticated) ? '/home/discover' : '/';
           window.location = url;
         }}><img
@@ -390,8 +401,8 @@ function Navigation(props) {
         </button>
 
         {/* Search bar */}
-        <div className="hidden md:block mr-auto px-6 max-w-md w-full">
-          <Input
+        <div className="hidden md:block mx-auto px-6 max-w-md w-full">
+          {/* <Input
             overrides={{
               Before,
               After,
@@ -419,75 +430,96 @@ function Navigation(props) {
               searchDispatch({ env: process.env.NODE_ENV, query: e.target.value });
               setShouldCloseSearchResults(false);
             }}
-          />
-          {searchResults.length !== 0 && !shouldCloseSearchResults && (
-            <OutsideDetector>
-              <StatefulMenu
-                overrides={{
-                  List: {
-                    style: {
-                      outline: 'none',
-                      padding: '0px',
-                      position: 'absolute',
-                      width: `${center ? '576px' : '200px'}`,
-                      maxHeight: '400px',
-                      borderBottomLeftRadius: '25px',
-                      borderBottomRightRadius: '25px',
-                      zIndex: 100
-                    }
-                  },
-                  ProfileImgContainer: { style: { height: '32px', width: '32px' } },
-                  ListItemProfile: {
-                    style: { display: 'flex', alignContent: 'center' }
-                  },
-                  ProfileLabelsContainer: {
-                    style: { display: 'flex', alignContent: 'center' }
-                  },
-                  Option: {
-                    component: OptionProfile,
-                    props: {
-                      getProfileItemLabels: ({ username, label, name, title, type }) => ({
-                        title: username,
-                        subtitle: (
-                          <div style={{ display: 'inline' }}>
-                            ...{sanitize(label.split('<em>')[0])}
-                            <div style={{ backgroundColor: '#FFFF00', display: 'inline' }}>
-                              {sanitize(label.split('<em>')[1].split('</em>')[0])}
+          /> */}
+          <div className="search-wrapper relative">
+            <div className={`overflow-hidden ${showSearch ? 'w-full' : 'w-0'}
+            rounded-full bg-gray-200`}>
+              <input placeholder="Search..."
+              ref={(inp) => searchInp = inp }
+              className="bg-transparent px-3 py-2 w-full outline-none"
+              onChange={(e) => {
+                searchDispatch({ env: process.env.NODE_ENV, query: e.target.value });
+                setShouldCloseSearchResults(false);
+              }} />
+              {searchResults.length !== 0 && !shouldCloseSearchResults && (
+                <OutsideDetector>
+                  <StatefulMenu
+                    overrides={{
+                      List: {
+                        style: {
+                          outline: 'none',
+                          padding: '0px',
+                          position: 'absolute',
+                          width: '100%',
+                          maxHeight: '400px',
+                          borderBottomLeftRadius: '25px',
+                          borderBottomRightRadius: '25px',
+                          zIndex: 100
+                        }
+                      },
+                      ProfileImgContainer: { style: { height: '32px', width: '32px' } },
+                      ListItemProfile: {
+                        style: { display: 'flex', alignContent: 'center' }
+                      },
+                      ProfileLabelsContainer: {
+                        style: { display: 'flex', alignContent: 'center' }
+                      },
+                      Option: {
+                        component: OptionProfile,
+                        props: {
+                          getProfileItemLabels: ({ username, label, name, title, type }) => ({
+                            title: username,
+                            subtitle: (
+                              <div style={{ display: 'inline' }}>
+                                ...{sanitize(label.split('<em>')[0])}
+                                <div style={{ backgroundColor: '#FFFF00', display: 'inline' }}>
+                                  {sanitize(label.split('<em>')[1].split('</em>')[0])}
+                                </div>
+                                {sanitize(label.split('</em>')[1])}...
+                              </div>
+                            ),
+                            body: type === 'post' ? title : name
+                          }),
+                          getProfileItemImg: item => item.image,
+                          getProfileItemImgText: item => (
+                            <div>
+                              {item.label.replace('<em>', '<strong>').replace('</em>', '</strong>')}
                             </div>
-                            {sanitize(label.split('</em>')[1])}...
-                          </div>
-                        ),
-                        body: type === 'post' ? title : name
-                      }),
-                      getProfileItemImg: item => item.image,
-                      getProfileItemImgText: item => (
-                        <div>
-                          {item.label.replace('<em>', '<strong>').replace('</em>', '</strong>')}
-                        </div>
-                      )
-                    }
-                  }
-                }}
-                items={searchResults}
-                noResultsMsg="No Results"
-                onItemSelect={item => {
-                  setShouldCloseSearchResults(true);
-                  history.push(
-                    item.item.type === 'post'
-                      ? `/post/${item.item._id}`
-                      : item.item.type === 'user'
-                      ? `/user/${item.item.username}`
-                      : ''
-                  );
-                }}
-              />
-            </OutsideDetector>
-          )}
+                          )
+                        }
+                      }
+                    }}
+                    items={searchResults}
+                    noResultsMsg="No Results"
+                    onItemSelect={item => {
+                      setShouldCloseSearchResults(true);
+                      history.push(
+                        item.item.type === 'post'
+                          ? `/post/${item.item._id}`
+                          : item.item.type === 'user'
+                          ? `/user/${item.item.username}`
+                          : ''
+                      );
+                    }}
+                  />
+                </OutsideDetector>
+              )}
+              {searchLoading && <div className="loading-spinner absolute"></div>}
+            </div>
+            
+            <button className="p-2 absolute right-0 btn-show-search"
+            onClick={() => {
+              setShowSearch(!showSearch);
+              searchInp.focus();
+            }}>
+              <IconSearch className="inline-block w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         {/* Submit Link */}
         <Link
-          className="p-2 mr-4"
+          className="mr-4"
           to={Constants.PATHS.SUBMIT}
           onClick={() => {
             selectMenuDispatch({ selectMenu: '' });
@@ -648,8 +680,9 @@ function Navigation(props) {
           />
         </button>
 
-        {/* Search bar */}
-        <div className="hidden md:block mr-auto px-6">
+        {/* Search bar: Removed this for logged out users. Currently doesn't work
+        if the user is logged out. */}
+        {/* <div className="hidden md:block mr-auto px-6">
           <Input
             overrides={{
               Before,
@@ -679,6 +712,7 @@ function Navigation(props) {
             />
           )}
         </div>
+         */}
         <div className="ml-auto flex items-center justify-end">
           {/* Guidelines button */}
           <Link

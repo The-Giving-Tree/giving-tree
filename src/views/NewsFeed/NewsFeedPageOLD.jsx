@@ -1,6 +1,6 @@
 import * as React from 'react';
 // Custom Components
-import Navigation from '../../components/Navigation';
+import Navigation from '../../components/Navigation/Navigation';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import NewsfeedTable from '../NewsFeed/NewsfeedTable';
 import LeaderboardTable from '../../components/LeaderboardTable/LeaderboardTable';

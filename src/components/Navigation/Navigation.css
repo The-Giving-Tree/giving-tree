@@ -1,0 +1,9 @@
+.Navigation .btn-show-search {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.Navigation .search-wrapper .loading-spinner {
+  right: 2rem;
+  top: 30%;
+}
