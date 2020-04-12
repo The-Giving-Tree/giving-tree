@@ -401,7 +401,7 @@ function Navigation(props) {
         </button>
 
         {/* Search bar */}
-        <div className="hidden md:block mx-auto px-6 max-w-md w-full">
+        <div className="hidden md:block max-w-md ml-auto px-6 w-full">
           {/* <Input
             overrides={{
               Before,

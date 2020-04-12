@@ -448,20 +448,22 @@ function Home(props) {
             authenticated ? (
               <Redirect to={`/home/discover`} />
             ) : (
-              <div className="flex-grow">
-                <div className="grid grid-cols-1 lg:grid-cols-3 h-full">
-                  <div
-                    className="col-span-2 px-6 flex"
-                    style={{
-                      height: !matches.large && !matches.xl ? 340 : '100%',
-                      background:
-                        'url(https://d1ppmvgsdgdlyy.cloudfront.net/landing.png) center center',
-                      backgroundSize: 'cover'
-                    }}
-                  ></div>
-                  <div className="col-span-1 bg-white">{homeJSX()}</div>
-                </div>
-              </div>
+              // <div className="flex-grow">
+              //   <div className="grid grid-cols-1 lg:grid-cols-3 h-full">
+              //     <div
+              //       className="col-span-2 px-6 flex"
+              //       style={{
+              //         height: !matches.large && !matches.xl ? 340 : '100%',
+              //         background:
+              //           'url(https://d1ppmvgsdgdlyy.cloudfront.net/landing.png) center center',
+              //         backgroundSize: 'cover'
+              //       }}
+              //     ></div>
+              //     <div className="col-span-1 bg-white">{homeJSX()}</div>
+              //   </div>
+              // </div>
+
+              <div></div>
             )
           }
         </Media>
