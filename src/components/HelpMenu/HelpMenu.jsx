@@ -63,7 +63,7 @@ class HelpMenu extends React.Component {
           </div>
         )}
         >
-          <button className="text-xs flex items-center h-6 w-6">
+          <button className="text-xs flex items-center h-8 w-8">
             <img className="block w-full"
             src="https://d1ppmvgsdgdlyy.cloudfront.net/information.svg" 
             alt="Help menu"/>

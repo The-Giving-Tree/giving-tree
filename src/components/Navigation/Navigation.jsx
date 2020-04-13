@@ -34,6 +34,9 @@ import {
 import {
   ReactComponent as LogoIcon
 } from '../../assets/logos/tgt-icon-only.svg';
+import {
+  ReactComponent as IconGuidelines
+} from '../../assets/icons/Guidelines.svg';
 
 import './Navigation.css';
 import ModalLoginSignUp from '../Modals/LoginSignUp/ModalLoginSignUp';
@@ -482,11 +485,7 @@ function Navigation(props) {
           to={Constants.PATHS.GUIDELINES}
           onClick={() => history.push(Constants.PATHS.GUIDELINES)}
         >
-          <img
-            src="https://d1ppmvgsdgdlyy.cloudfront.net/information.svg"
-            alt="guidelines"
-            style={{ width: 25, cursor: 'pointer' }}
-          />
+          <IconGuidelines />
         </Link>
 
         {/* Notifications */}

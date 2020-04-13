@@ -104,10 +104,21 @@ class ModalLoginSignUp extends React.Component {
     // Get the key that was pressed
     const code = e.keyCode || e.which;
     if (code === 13) {
-      if (this.state.isLogin) {
-        this.handleLogin(this.state.userInput, this.state.passwordInput);
-      } else {
-        this.handleSignup();
+      switch (this.state.type) {
+        case 'login': {
+          this.handleLogin(this.state.userInput, this.state.passwordInput);
+          break;
+        }
+        case 'signup': {
+          this.handleSignup();
+          break;
+        }
+        case 'forgot': {
+          this.handleForgotPassword();
+          break;
+        }
+        default: 
+        break;
       }
     }
   }
@@ -416,10 +427,7 @@ class ModalLoginSignUp extends React.Component {
             <button className={`px-8 py-2 font-semibold text-white bg-green-700
             rounded mb-4 ${!this.state.emailInput && 'opacity-50 cursor-not-allowed'}`}
             disabled={!this.state.emailInput} onClick={() => {
-              this.props.initiateResetDispatch({
-                env: process.env.NODE_ENV,
-                email: this.state.emailInput
-              });
+              this.handleForgotPassword();
             }}>
               {!this.props.initiateResetLoading && `Reset`}
                 {this.props.initiateResetLoading && 
@@ -440,6 +448,18 @@ class ModalLoginSignUp extends React.Component {
       </p>
     }
     
+  }
+
+  /**
+   * Fire a request to the back end to reset password
+   *
+   * @memberof ModalLoginSignUp
+   */
+  async handleForgotPassword() {
+    await this.props.initiateResetDispatch({
+      env: process.env.NODE_ENV,
+      email: this.state.emailInput
+    });
   }
 
   /**
