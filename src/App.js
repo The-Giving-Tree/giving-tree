@@ -18,7 +18,12 @@ import Submit from './components/Submit';
 import Post from './components/Post';
 import Draft from './components/Draft';
 import ResetPassword from './components/ResetPassword';
+
+// TODO: Eventually we'll replace this with component-bound css, and tailwind
 import './App.css';
+
+// Import Tailwind CSS
+import './assets/css/styles.css';
 
 // Views / Pages
 import ErrorPage from './views/ErrorPage/ErrorPage';

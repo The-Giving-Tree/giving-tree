@@ -81,10 +81,6 @@
 /* ======= Media Queries ================ */
 
 @media all and (max-width: 414px) {
-  .footer {
-    padding-bottom: 76px;
-  }
-
   .sidebar-nav-xs {
     display: block;
   }

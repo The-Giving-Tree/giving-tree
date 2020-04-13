@@ -6,21 +6,27 @@ import Alert from 'baseui/icon/alert';
 import Check from 'baseui/icon/check';
 import { Notification } from 'baseui/notification';
 import { hotjar } from 'react-hotjar';
-import Media from 'react-media';
 import { Button, SHAPE } from 'baseui/button';
-import { useHistory, Redirect } from 'react-router-dom';
-import { Modal, ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/modal';
+import { useHistory, Redirect, Link } from 'react-router-dom';
+import { 
+  Modal, ModalHeader, ModalBody, ModalFooter, ModalButton
+} from 'baseui/modal';
 import Navigation from '../../components/Navigation/Navigation';
-import StickyFooter from '../../components/StickyFooter/StickyFooter';
 import { StyledAction } from 'baseui/card';
 import { Input } from 'baseui/input';
 import { connect } from 'react-redux';
 
+import Footer from '../../components/Footer/Footer';
+import Constants from '../../components/Constants';
+
 import './Home.css';
 
-import { register, selectMenu, initiateReset, login } from '../../store/actions/auth/auth-actions';
+import {
+  register, selectMenu, initiateReset, login
+} from '../../store/actions/auth/auth-actions';
 
 import passwordValidator from 'password-validator';
+import ModalLoginSignUp from '../../components/Modals/LoginSignUp/ModalLoginSignUp';
 var schema = new passwordValidator();
 schema
   .is()
@@ -66,6 +72,8 @@ function Home(props) {
   const [resetModal, setResetModal] = React.useState(false);
 
   const [activeKey, setActiveKey] = React.useState('0');
+
+  const [isOpen, setIsOpen] = React.useState(false);
 
   const enterPressed = async event => {
     var code = event.keyCode || event.which;
@@ -389,17 +397,6 @@ function Home(props) {
     );
   };
 
-  const homeJSX = () => {
-    return (
-      <div className="container mx-auto max-w-xs sm:max-w-md md:max-w-screen-md">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 py-10">
-          <div className="px-6 md:pl-12 md:pr-10 lg:px-16">{detailJSX()}</div>
-          <div className="px-6 md:pl-10 md:pr-12 lg:px-16">{tabDetailJSX()}</div>
-        </div>
-      </div>
-    );
-  };
-
   function Negative() {
     const [css, theme] = useStyletron();
     return (
@@ -432,42 +429,144 @@ function Home(props) {
   }
 
   return (
-    <StickyFooter className="h-full flex flex-col">
-      <Navigation selectMenuDispatch={selectMenuDispatch} searchBarPosition="center" />
-      <React.Fragment>
-        <Media
-          queries={{
-            xs: '(max-width: 639px)',
-            small: '(min-width: 640px)',
-            medium: '(min-width: 768px)',
-            large: '(min-width: 1024px)',
-            xl: '(min-width: 1280px)'
-          }}
-        >
-          {matches =>
-            authenticated ? (
-              <Redirect to={`/home/discover`} />
-            ) : (
-              <div className="flex-grow">
-                <div className="grid grid-cols-1 lg:grid-cols-3 h-full">
-                  <div
-                    className="col-span-2 px-6 flex"
-                    style={{
-                      height: !matches.large && !matches.xl ? 340 : '100%',
-                      background:
-                        'url(https://d1ppmvgsdgdlyy.cloudfront.net/landing.png) center center',
-                      backgroundSize: 'cover'
-                    }}
-                  ></div>
-                  <div className="col-span-1 bg-white">{homeJSX()}</div>
+    <div>
+      <Navigation selectMenuDispatch={selectMenuDispatch} 
+      searchBarPosition="center" />
+        {authenticated ? (
+          <Redirect to={`/home/discover`} />
+        ) : (
+          <div className="flex-grow py-8 lg:py-20 LandingPage bg-white">
+            <ModalLoginSignUp type={`signup`} isOpen={isOpen} setIsOpen={setIsOpen} />
+            <div className="max-w-screen-lg w-full mx-auto px-6 xl:px-0">
+              <div className="grid grid-cols-1 md:grid-cols-2">
+                <div className="col-span-1">
+                  <div className="landing-image">
+                    <img src="https://d1ppmvgsdgdlyy.cloudfront.net/homepage/landing.jpg" />
+                  </div>
+                  <em className="block mb-4 text-xs">
+                    Image by <a className="text-blue-500"
+                    href="https://dribbble.com/Tubik">
+                    Tubikstudio</a> via Dribbble
+                  </em>
+                </div>
+                <div className="max-w-sm mx-auto col-span-1 md:pl-6 flex flex-col justify-center items-center">
+                  <h2 className="text-lg font-bold text-center mb-2">
+                    Ask for help or lend a hand
+                  </h2>
+                  <p className="text-center mb-4">
+                    The Giving Tree was created in response to COVID-19. 
+                    Our platform connects 
+                    people who need help shopping for essential items with 
+                    local low-risk people who want to help.
+                  </p>
+                  <div className="text-center mb-4">
+                    <button onClick={() => setIsOpen(true)}
+                    className="py-2 bg-green-700 text-white font-semibold
+                    w-48 rounded-md inline-block">
+                      Sign up
+                    </button>
+                  </div>
+                  <p className="uppercase text-center mb-4">Or</p>
+                  <p className="text-center">
+                    Call/text our hotline to request help: <strong>
+                      415-964-4261</strong>
+                  </p>
                 </div>
               </div>
-            )
-          }
-        </Media>
-      </React.Fragment>
-    </StickyFooter>
-  );
+            </div>
+
+            {/* HOW IT WORKS SECTION */}
+            <div className="flex items-center justify-center 
+            landing-page-title max-w-screen-lg mx-auto mb-3 sm:h-48 relative overflow-hidden">
+              <h2 className="text-2xl font-semibold text-center">
+                How it works
+              </h2>
+            </div>
+            <div className="relative px-6 max-w-sm md:max-w-lg mx-auto">
+              <div className="dotted-line absolute"></div>
+              {/* <div className="inline-block rounded-lg bg-green-700 font-semibold 
+              text-white py-1 px-2 start-button mb-4 relative z-10">
+                Start!
+              </div> */}
+              <div className="flex px-3 mb-8 items-center relative z-10">
+                <div className="flex items-center justify-center 
+                mr-4 h-10 w-10 font-bold text-white bg-hlgreen text-2xl
+                rounded-full flex-shrink-0">
+                  <span>1</span>
+                </div>
+                <p className="text-lg">
+                  Doug, who needs help getting groceries, posts a request 
+                  on The Giving Tree
+                </p>
+              </div>
+
+              <div className="flex px-3 mb-8 items-center relative z-10">
+                <div className="flex items-center justify-center text-2xl
+                h-10 w-10 font-bold text-white bg-hlgreen rounded-full
+                flex-shrink-0 mr-4">
+                  <span>2</span>
+                </div>
+                <p className="text-lg">
+                  Nadia, who lives 1.3 miles away from Doug, finds and 
+                  claims the request
+                </p>
+              </div>
+              
+              <div className="flex px-3 mb-4 items-center relative z-10">
+                <div className="flex items-center justify-center text-2xl
+                h-10 w-10 font-bold text-white bg-hlgreen rounded-full
+                flex-shrink-0 mr-4">
+                  <span>3</span>
+                </div>
+                <p className="text-lg">
+                  Nadia safely delivers the groceries to Doug, who reimburses 
+                  her using Venmo
+                </p>
+              </div>
+              {/* <div className="inline-block rounded-lg bg-green-700 font-semibold 
+              text-white py-1 px-2 start-button mb-3 relative z-10">
+                Finish!
+              </div> */}
+            </div>
+            
+            {/* JOIN THE COMMUNIT SECTION */}
+            <div className="flex items-center justify-center 
+            landing-page-title-flipped max-w-screen-lg 
+            mx-auto mb-3 sm:h-48">
+              <h2 className="text-2xl font-semibold text-center">
+                Join the community
+              </h2>
+            </div>
+
+            <div className="px-4 md:px-6 md:max-w-screen-lg mx-auto lg:px-0">
+              <div className="shadow-lg rounded-sm p-4 md:p-6">
+                <p className="text-xl mb-4 text-center">
+                  Sign up to receive the latest news and updates from The Giving 
+                  Tree
+                </p>
+                <div className="md:flex text-center items-center justify-center max-w-xl mx-auto mb-4">
+                  <input className="w-full md:mr-4 shadow-sm border 
+                  border-gray-200 border-solid rounded-md px-4 py-2 mb-8 md:mb-0" 
+                  placeholder="Enter email (e.g. johnsmith@yahoo.com)" />
+                  <button className="font-semibold text-white bg-green-700
+                  py-2 rounded-lg px-12">
+                    Submit
+                  </button>
+                </div>
+                <small className="text-center max-w-lg block mx-auto">
+                  <em>
+                    We promise we'll only send you relevant updates, and will 
+                    never share or sell your data. You can subscribe at any 
+                    time.  
+                  </em>
+                </small>
+              </div>
+            </div>
+          </div>
+        )}
+      <Footer />
+    </div>
+    );
 }
 
 const mapDispatchToProps = dispatch => ({

@@ -1,6 +1,6 @@
 .HelpMenu {
   position: fixed;
-  bottom: 2rem;
+  bottom: 5rem;
   right: 2rem;
 }
 
@@ -22,6 +22,12 @@
   left: 0;
   transform: translateY(-50%);
   width: 100%;
+}
+
+@media all and (min-width: 415px) {
+  .HelpMenu {
+    bottom: 3rem;
+  }
 }
 
 @media all and (min-width: 1280px) {

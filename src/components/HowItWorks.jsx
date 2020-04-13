@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 import Navigation from './Navigation/Navigation';
-import Footer from './Footer';
+import Footer from './Footer/Footer';
 import { geolocated } from 'react-geolocated';
 import { connect } from 'react-redux';
 import { hotjar } from 'react-hotjar';

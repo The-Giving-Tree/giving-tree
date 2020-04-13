@@ -1,0 +1,13 @@
+/**
+Need to override a baseUI password field here because for some reason their
+built in overrides aren't working.
+TODO: Remove this when we remove BaseUI from client.
+**/
+
+.ModalLoginSignUp input[placeholder="Password"]::placeholder {
+  color: #b8c2d0;
+}
+
+.ModalLoginSignUp input[placeholder="Password"] + button:not(.bg-green-700) {
+  padding: 0;
+}

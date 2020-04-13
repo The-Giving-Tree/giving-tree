@@ -2,3 +2,24 @@
 Will make this in to SCSS when we implement it
 */
 
+.LandingPage .dotted-line {
+  left: 55px;
+  top: 16px;
+  height: calc(100% - 32px);
+  border: 1px dashed #8CBF3F;
+}
+
+.landing-page-title-flipped {
+  background-image: url('https://d1ppmvgsdgdlyy.cloudfront.net/homepage/divider_responsive_flipped.svg');
+  min-height: 7rem;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+.landing-page-title {
+  background-image: url('https://d1ppmvgsdgdlyy.cloudfront.net/homepage/divider_responsive.svg');
+  min-height: 7rem;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}

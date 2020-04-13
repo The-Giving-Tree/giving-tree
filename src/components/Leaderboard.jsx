@@ -7,6 +7,7 @@ import { geolocated } from 'react-geolocated';
 import { StatefulPopover, PLACEMENT } from 'baseui/popover';
 import { connect } from 'react-redux';
 import { hotjar } from 'react-hotjar';
+import Sidebar from './Sidebar/Sidebar';
 
 import {
   getCurrentUser,
@@ -24,7 +25,10 @@ import {
 import HelpMenu from './HelpMenu/HelpMenu';
 
 function Leaderboard(props) {
-  const { user, getCurrentUserDispatch, getLeaderboardDispatch, userRanking, leaderboard } = props;
+  const {
+    user, getCurrentUserDispatch, getLeaderboardDispatch, userRanking, 
+    leaderboard
+  } = props;
 
   const history = useHistory();
   const [activeKey, setActiveKey] = React.useState('0');
@@ -210,129 +214,121 @@ function Leaderboard(props) {
   };
 
   return (
-    <div
-      style={{
-        width: '100%',
-        backgroundPosition: '50% 50%',
-        backgroundSize: 'cover',
-        backgroundColor: '#fff'
-      }}
-    >
+    <div>
       <Navigation searchBarPosition="center" />
-      <div
-        style={{
-          paddingTop: 30,
-          height: `calc(100vh - 70px + ${60 + items.length * 60}px)`
-        }}
-      >
-        <div
-          style={{
-            width: '80%',
-            margin: '0 auto'
-          }}
-        >
-          <div className="leaderboard-heading mb-4" style={{ width: '80%' }}>
-            Leaderboard
-          </div>
-          <div className="bg-white rounded-lg p-6 shadow-lg">
-            <div className="flex justify-between items-center">
-              <Tabs
-                overrides={{
-                  Tab: {
-                    style: {
-                      outline: 'none'
-                    }
-                  },
-                  Root: {
-                    style: {
-                      outline: 'none',
-                      width: '80%',
-                      margin: '0 auto'
-                    }
-                  },
-                  TabBar: {
-                    style: {
-                      outline: 'none',
-                      backgroundColor: 'white'
-                    }
-                  },
-                  TabContent: {
-                    style: {
-                      outline: 'none',
-                      color: '#059305'
-                    }
-                  }
-                }}
-                onChange={({ activeKey }) => {
-                  setActiveKey(activeKey);
-                }}
-                activeKey={activeKey}
-              >
-                <Tab
-                  overrides={{
-                    Tab: {
-                      style: {
-                        outline: 'none',
-                        fontSize: 16,
-                        fontWeight: 'bold',
-                        color: `${activeKey === '0' && '#059305'}`,
-                        borderColor: `${activeKey === '0' && '#059305'}`
-                      }
-                    }
-                  }}
-                  title="Global"
-                ></Tab>
-                <Tab
-                  overrides={{
-                    Tab: {
-                      style: {
-                        outline: 'none',
-                        fontSize: 16,
-                        fontWeight: 'bold',
-                        color: `${activeKey === '1' && '#059305'}`,
-                        borderColor: `${activeKey === '1' && '#059305'}`
-                      }
-                    }
-                  }}
-                  disabled
-                  title="SF (coming soon)"
-                ></Tab>
-                <Tab
-                  overrides={{
-                    Tab: {
-                      style: {
-                        outline: 'none',
-                        fontSize: 16,
-                        fontWeight: 'bold',
-                        color: `${activeKey === '2' && '#059305'}`,
-                        borderColor: `${activeKey === '2' && '#059305'}`
-                      }
-                    }
-                  }}
-                  disabled
-                  title="NYC (coming soon)"
-                ></Tab>
-                <Tab
-                  overrides={{
-                    Tab: {
-                      style: {
-                        outline: 'none',
-                        fontSize: 16,
-                        fontWeight: 'bold',
-                        color: `${activeKey === '3' && '#059305'}`,
-                        borderColor: `${activeKey === '3' && '#059305'}`
-                      }
-                    }
-                  }}
-                  disabled
-                  title="LA (coming soon)"
-                ></Tab>
-              </Tabs>
+      <div className="lg:max-w-4xl xl:max-w-screen-xl w-full mx-auto py-12 px-6">
+        <div className="block xl:flex">
+          <aside className="xl:pr-6 sidebar-wrapper">
+            <Sidebar {...props} />
+          </aside>
+          <section className="w-full">
+            <div className="leaderboard-heading mb-4" style={{ width: '80%' }}>
+              Leaderboard
             </div>
-            <div className="mt-4" style={{ maxHeight: 550, overflow: 'auto' }}>
-              {leaderboardJSX()}
+            <div className="bg-white rounded-lg p-6 shadow-lg">
+              <div className="flex justify-between items-center">
+                <Tabs
+                  overrides={{
+                    Tab: {
+                      style: {
+                        outline: 'none',
+                        display: 'flex',
+                        alignItems: 'center'
+                      }
+                    },
+                    Root: {
+                      style: {
+                        outline: 'none',
+                        width: '80%',
+                        margin: '0 auto'
+                      }
+                    },
+                    TabBar: {
+                      style: {
+                        outline: 'none',
+                        backgroundColor: 'white',
+                        overflow: 'auto'
+                      }
+                    },
+                    TabContent: {
+                      style: {
+                        outline: 'none',
+                        color: '#059305'
+                      }
+                    }
+                  }}
+                  onChange={({ activeKey }) => {
+                    setActiveKey(activeKey);
+                  }}
+                  activeKey={activeKey}
+                >
+                  <Tab
+                    overrides={{
+                      Tab: {
+                        style: {
+                          outline: 'none',
+                          fontSize: 16,
+                          fontWeight: 'bold',
+                          color: `${activeKey === '0' && '#059305'}`,
+                          borderColor: `${activeKey === '0' && '#059305'}`
+                        }
+                      }
+                    }}
+                    title="Global"
+                  ></Tab>
+                  {/* <Tab
+                    overrides={{
+                      Tab: {
+                        style: {
+                          outline: 'none',
+                          fontSize: 16,
+                          fontWeight: 'bold',
+                          color: `${activeKey === '1' && '#059305'}`,
+                          borderColor: `${activeKey === '1' && '#059305'}`
+                        }
+                      }
+                    }}
+                    disabled
+                    title="SF (coming soon)"
+                  ></Tab>
+                  <Tab
+                    overrides={{
+                      Tab: {
+                        style: {
+                          outline: 'none',
+                          fontSize: 16,
+                          fontWeight: 'bold',
+                          color: `${activeKey === '2' && '#059305'}`,
+                          borderColor: `${activeKey === '2' && '#059305'}`
+                        }
+                      }
+                    }}
+                    disabled
+                    title="NYC (coming soon)"
+                  ></Tab>
+                  <Tab
+                    overrides={{
+                      Tab: {
+                        style: {
+                          outline: 'none',
+                          fontSize: 16,
+                          fontWeight: 'bold',
+                          color: `${activeKey === '3' && '#059305'}`,
+                          borderColor: `${activeKey === '3' && '#059305'}`
+                        }
+                      }
+                    }}
+                    disabled
+                    title="LA (coming soon)"
+                  ></Tab> */}
+                </Tabs>
+              </div>
+              <div className="mt-4" style={{ maxHeight: 550, overflow: 'auto' }}>
+                {leaderboardJSX()}
+              </div>
             </div>
-          </div>
+          </section>
+          
         </div>
       </div>
       <HelpMenu />

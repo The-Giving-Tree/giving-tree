@@ -62,11 +62,13 @@
     "zxcvbn": "^4.4.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "npm run watch:css && react-scripts start",
+    "build": "npm run build:css && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "pretty": "prettier --write --tab-width 2 \"src/**/*.jsx\" && prettier --write --tab-width 2 \"src/**/*.js\""
+    "pretty": "prettier --write --tab-width 2 \"src/**/*.jsx\" && prettier --write --tab-width 2 \"src/**/*.js\"",
+    "build:css": "postcss src/assets/css/tailwind.css -o src/assets/css/styles.css", 
+    "watch:css": "postcss src/assets/css/tailwind.css -o src/assets/css/styles.css"
   },
   "pre-commit": [
     "pretty"
@@ -85,5 +87,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "autoprefixer": "^9.7.6",
+    "postcss-cli": "^7.1.0",
+    "tailwindcss": "^1.2.0"
   }
 }

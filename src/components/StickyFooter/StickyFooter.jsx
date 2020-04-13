@@ -2,7 +2,7 @@ import * as React from 'react';
 import './StickyFooter.css';
 
 // Custom Components
-import Footer from '../../components/Footer';
+import Footer from '../Footer/Footer';
 
 class StickyFooter extends React.Component {
   constructor(props) {
@@ -13,7 +13,7 @@ class StickyFooter extends React.Component {
 
   render() {
     return (
-      <div className="flex flex-col flex-grow">
+      <div className="StickyFooter flex flex-col flex-grow">
         <div className="flex-grow flex flex-col">
           {this.props.children}
         </div>

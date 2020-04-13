@@ -9,6 +9,8 @@ module.exports = Object.freeze({
     DRAFT: '/draft/:id',
     LEADERBOARD: '/leaderboard',
     ABOUT: '/about',
+    PRIVACY: '/about#privacy-policy',
+    TERMS: '/guidelines', // TODO: Update this with terms and conditions when available
     HOWITWORKS: '/how-it-works',
     GUIDELINES: '/guidelines',
     NEWSFEED: '/home/discover',
