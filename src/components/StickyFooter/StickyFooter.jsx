@@ -2,7 +2,7 @@ import * as React from 'react';
 import './StickyFooter.css';
 
 // Custom Components
-import Footer from '../../components/Footer';
+import Footer from '../Footer/Footer';
 
 class StickyFooter extends React.Component {
   constructor(props) {

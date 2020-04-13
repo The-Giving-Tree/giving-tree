@@ -24,7 +24,10 @@ import {
 import HelpMenu from './HelpMenu/HelpMenu';
 
 function Leaderboard(props) {
-  const { user, getCurrentUserDispatch, getLeaderboardDispatch, userRanking, leaderboard } = props;
+  const {
+    user, getCurrentUserDispatch, getLeaderboardDispatch, userRanking, 
+    leaderboard
+  } = props;
 
   const history = useHistory();
   const [activeKey, setActiveKey] = React.useState('0');

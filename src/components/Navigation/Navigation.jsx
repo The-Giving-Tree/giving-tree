@@ -36,6 +36,7 @@ import {
 } from '../../assets/logos/tgt-icon-only.svg';
 
 import './Navigation.css';
+import ModalLoginSignUp from '../Modals/LoginSignUp/ModalLoginSignUp';
 
 
 function Navigation(props) {
@@ -55,6 +56,7 @@ function Navigation(props) {
 
   const history = useHistory();
   const [showSearch, setShowSearch] = React.useState(false);
+
   let searchInp;
 
   // Detects when mouse is clicked outside of search results
@@ -116,46 +118,47 @@ function Navigation(props) {
   let notifications = user.notifications || [];
 
   const [isOpen, setIsOpen] = React.useState(false);
-  function close() {
-    setIsOpen(false);
-  }
 
-  const handleFeedback = () => {
-    const msg = {
-      text: `user: ${user.email} / ${user.username}.\n\n1: PMF: ${
-        Number(pmf) === 3
-          ? 'Very disappointed'
-          : Number(pmf) === 2
-          ? 'Somewhat disappointed'
-          : 'Not disappointed'
-      }.\n\n2: benefit of Giving Tree: ${benefit}.\n\n3: role: ${
-        userType[0].value
-      }.\n\n4: personal benefit: ${personalBenefit}.\n\n5: suggestion: ${suggestion}`
-    };
+  // function close() {
+  //   setIsOpen(false);
+  // }
 
-    const headers = {
-      headers: { Authorization: `Bearer ${localStorage.getItem('giving_tree_jwt')}` }
-    };
+  // const handleFeedback = () => {
+  //   const msg = {
+  //     text: `user: ${user.email} / ${user.username}.\n\n1: PMF: ${
+  //       Number(pmf) === 3
+  //         ? 'Very disappointed'
+  //         : Number(pmf) === 2
+  //         ? 'Somewhat disappointed'
+  //         : 'Not disappointed'
+  //     }.\n\n2: benefit of Giving Tree: ${benefit}.\n\n3: role: ${
+  //       userType[0].value
+  //     }.\n\n4: personal benefit: ${personalBenefit}.\n\n5: suggestion: ${suggestion}`
+  //   };
 
-    axios
-      .post(`${ROUTES[process.env.NODE_ENV].giving_tree}/feedback`, msg, headers)
-      .then(success => {
-        close();
+  //   const headers = {
+  //     headers: { Authorization: `Bearer ${localStorage.getItem('giving_tree_jwt')}` }
+  //   };
 
-        // reset
-        setPmf('');
-        setBenefit('');
-        setUserType('');
-        setPersonalBenefit('');
-        setSuggestion('');
+  //   axios
+  //     .post(`${ROUTES[process.env.NODE_ENV].giving_tree}/feedback`, msg, headers)
+  //     .then(success => {
+  //       close();
 
-        alert('Thank You! 🌳');
-      })
-      .catch(err => {
-        console.log('error while submitting feedback: ', err);
-        alert('error while submitting feedback!');
-      });
-  };
+  //       // reset
+  //       setPmf('');
+  //       setBenefit('');
+  //       setUserType('');
+  //       setPersonalBenefit('');
+  //       setSuggestion('');
+
+  //       alert('Thank You! 🌳');
+  //     })
+  //     .catch(err => {
+  //       console.log('error while submitting feedback: ', err);
+  //       alert('error while submitting feedback!');
+  //     });
+  // };
 
   const shorten = (length, text) => {
     if (text) {
@@ -267,6 +270,8 @@ function Navigation(props) {
     return 'hsl(' + h + ', ' + s + '%, ' + l + '%)';
   }
 
+  
+
   // If the user IS logged in, display this nav...
   if (authenticated) {
     return (
@@ -286,7 +291,7 @@ function Navigation(props) {
         >
           Give Feedback!
         </button> */}
-        <Modal
+        {/* <Modal
           overrides={{ Dialog: { style: { borderRadius: '7px' } } }}
           onClose={close}
           isOpen={isOpen}
@@ -357,21 +362,19 @@ function Navigation(props) {
               Submit
             </ModalButton>
           </ModalFooter>
-        </Modal>
+        </Modal> */}
+        
         {/* Main logo */}
-        <button className="mr-auto" style={{
-          width: 165
-        }} 
-        onClick={() => {
+        <button className="mr-auto" onClick={() => {
           const url = (authenticated) ? '/home/discover' : '/';
           window.location = url;
         }}>
           <LogoFull className="hidden sm:inline-block" />
-          <LogoIcon className="inline-block sm:inline-block" />
+          <LogoIcon className="inline-block sm:hidden" />
         </button>
 
         {/* Search bar */}
-        <div className="hidden md:block max-w-md ml-auto px-6 w-full">
+        <div className="hidden md:block max-w-md ml-auto px-5 w-full">
           <div className="search-wrapper relative">
             <div className={`overflow-hidden ${showSearch ? 'w-full' : 'w-0'}
             rounded-full bg-gray-200`}>
@@ -460,23 +463,22 @@ function Navigation(props) {
 
         {/* Submit Link */}
         <Link
-          className="mr-4"
+          className="mr-5 h-6 w-6 inline-block flex-shrink-0"
           to={Constants.PATHS.SUBMIT}
           onClick={() => {
             selectMenuDispatch({ selectMenu: '' });
             window.location = Constants.PATHS.SUBMIT;
           }}
         >
-          <img
+          <img 
             src="https://d1ppmvgsdgdlyy.cloudfront.net/submit.svg"
             alt="document"
-            style={{ height: 26 }}
           />
         </Link>
 
         {/* Guidelines Link */}
         <Link
-          className="hidden md:block mr-5"
+          className="hidden md:block mr-5 h-6 w-6 inline-block flex-shrink-0"
           to={Constants.PATHS.GUIDELINES}
           onClick={() => history.push(Constants.PATHS.GUIDELINES)}
         >
@@ -493,7 +495,7 @@ function Navigation(props) {
           content={({ close }) => notificationMenu(close)}
         >
           <div
-            className="flex items-center mr-5"
+            className="flex items-center mr-5 h-6 w-6 inline-block flex-shrink-0"
             style={{
               cursor: 'pointer',
               height: 40
@@ -501,9 +503,7 @@ function Navigation(props) {
           >
             <img
               src="https://d1ppmvgsdgdlyy.cloudfront.net/notification.svg"
-              alt="notification"
-              style={{ width: 25 }}
-            />
+              alt="notification" />
             {notifications.length > 0 && (
               <div style={{ marginLeft: -10, marginRight: 20 }}>
                 <NotificationBadge count={notifications.length} effect={Effect.SCALE} />
@@ -555,7 +555,7 @@ function Navigation(props) {
             />
           )}
         >
-          <div>
+          <div className="flex-shrink-0">
             <div
               className="profilePic flex items-center lg:hidden"
               style={{
@@ -608,8 +608,10 @@ function Navigation(props) {
   } else {
     // If the user is NOT logged in, display this nav...
     return (
-      <header className="Navigation flex items-center justify-start px-6 py-3 
-      bg-white z-10">
+      <header className="Navigation flex items-center justify-start px-5 py-2 
+      bg-white z-10 shadow-md relative">
+        <ModalLoginSignUp isOpen={isOpen} setIsOpen={setIsOpen} 
+        type={`login`}/>
         {/* Main logo */}
         <button className="mr-auto" onClick={() => {
           const url = (authenticated) ? '/home/discover' : '/';
@@ -628,8 +630,8 @@ function Navigation(props) {
           </Link>
           {/* Guidelines button */}
           <Link
-            className="mr-4 bg-transparent hover:bg-red-500 
-            text-red-700 font-semibold hover:text-white py-2 px-4 border 
+            className="mr-3 bg-transparent hover:bg-red-500 
+            text-red-700 font-semibold hover:text-white py-1 px-6 border 
             border-red-500 hover:border-transparent rounded"
             to={Constants.PATHS.GUIDELINES}
             onClick={() => history.push(Constants.PATHS.GUIDELINES)}
@@ -638,11 +640,10 @@ function Navigation(props) {
           </Link>
 
           {/* Login link */}
-          <Link className="bg-transparent bg-green-700 text-white font-semibold 
-          hover:bg-green-900 px-4 py-2 rounded" 
-          to={Constants.PATHS.LOGIN}>
+          <button className="bg-transparent bg-green-700 text-white font-semibold 
+          hover:bg-green-900 px-6 py-1 rounded" onClick={() => setIsOpen(true)}>
             Login
-          </Link>
+          </button>
         </div>
       </header>
     );

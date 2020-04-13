@@ -1,5 +1,4 @@
 
-
 body {
   background-color: #f5f5f5;
 }
@@ -22,22 +21,6 @@ body {
   font-weight: 500;
   font-size: 16px;
   line-height: 20px;
-}
-
-.footer {
-  background-color: #545454;
-  color: white;
-}
-
-.footer-heading {
-  font-style: normal;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 24px;
-  line-height: 29px;
-  display: flex;
-  align-items: center;
-  height: 56px;
 }
 
 .section-text {
@@ -101,18 +84,6 @@ b {
   align-items: center;
 }
 
-.footer-text {
-  cursor: pointer;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 18px;
-  line-height: 21px;
-  display: flex;
-  align-items: center;
-  color: #FFFFFF;
-  height: 40px;
-}
-
 .loading-spinner {
   width: 20px;
   height: 20px;
@@ -124,6 +95,10 @@ b {
   border-color: rgb(78, 83, 255) rgb(78, 83, 255) transparent;
   animation: grow 0.375s ease-in-out infinite alternate, rotation 0.75s infinite linear;
   background: transparent !important;
+}
+
+.loading-spinner.loading-spinner-white {
+  border-color: #fff #fff transparent;
 }
 
 @keyframes rotation {

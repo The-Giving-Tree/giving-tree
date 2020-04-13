@@ -2,28 +2,24 @@
 Will make this in to SCSS when we implement it
 */
 
-.LandingPage .landing-image {
-  
+.LandingPage .dotted-line {
+  left: 55px;
+  top: 16px;
+  height: calc(100% - 32px);
+  border: 1px dashed #8CBF3F;
 }
 
-@media all and (min-width: 768px) {
-  .LandingPage .landing-image {
-    
-  } 
-}
-
-@media all and (min-width: 1024px) {
-  .LandingPage .landing-image {
-    
-  } 
-}
-
-.landing-page-title {
+.landing-page-title-flipped {
+  background-image: url('https://d1ppmvgsdgdlyy.cloudfront.net/homepage/divider_responsive_flipped.svg');
   min-height: 7rem;
-  background: url('../../assets/homepage/Divider_Responsive.svg') no-repeat center center;
   background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
-
-/**
-How it works section
-**/
+.landing-page-title {
+  background-image: url('https://d1ppmvgsdgdlyy.cloudfront.net/homepage/divider_responsive.svg');
+  min-height: 7rem;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
