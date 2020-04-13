@@ -2,8 +2,24 @@
 Will make this in to SCSS when we implement it
 */
 
+.LandingPage .landing-image {
+  
+}
+
+@media all and (min-width: 768px) {
+  .LandingPage .landing-image {
+    
+  } 
+}
+
+@media all and (min-width: 1024px) {
+  .LandingPage .landing-image {
+    
+  } 
+}
+
 .landing-page-title {
-  min-height: 111px;
+  min-height: 7rem;
   background: url('../../assets/homepage/Divider_Responsive.svg') no-repeat center center;
   background-size: cover;
 }

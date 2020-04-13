@@ -1,9 +1,6 @@
 import * as React from 'react';
 import Constants from '../Constants';
 import { useHistory, Link } from 'react-router-dom';
-import { useStyletron } from 'baseui';
-import { Spinner } from 'baseui/spinner';
-import Search from 'baseui/icon/search';
 import { Input } from 'baseui/input';
 import { StatefulMenu, OptionProfile } from 'baseui/menu';
 import { StatefulPopover, PLACEMENT } from 'baseui/popover';
@@ -19,7 +16,9 @@ import {
 } from '../../store/actions/auth/auth-actions';
 import { search } from '../../store/actions/global/global-actions';
 import NotificationBadge from 'react-notification-badge';
-import { Modal, ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/modal';
+import {
+  Modal, ModalHeader, ModalBody, ModalFooter, ModalButton
+} from 'baseui/modal';
 import { Effect } from 'react-notification-badge';
 import axios from 'axios';
 import ROUTES from '../../utils/routes';
@@ -29,29 +28,19 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 
 import { ReactComponent as IconSearch } from '../../assets/icons/search.svg';
+import {
+  ReactComponent as LogoFull 
+} from '../../assets/logos/tgt-text-and-logo.svg';
+import {
+  ReactComponent as LogoIcon
+} from '../../assets/logos/tgt-icon-only.svg';
 
 import './Navigation.css';
 
 
-function Before() {
-  const [css, theme] = useStyletron();
-  return (
-    <div
-      className={css({
-        display: 'flex',
-        alignItems: 'center',
-        paddingLeft: theme.sizing.scale500
-      })}
-    >
-      <Search size="18px" />
-    </div>
-  );
-}
-
 function Navigation(props) {
   const {
     user,
-    searchBarPosition,
     logoutDispatch,
     getCurrentUserDispatch,
     addToNotificationsDispatch,
@@ -97,21 +86,6 @@ function Navigation(props) {
     return <div ref={wrapperRef}>{props.children}</div>;
   }
 
-  function After() {
-    const [css, theme] = useStyletron();
-    return (
-      <div
-        className={css({
-          display: 'flex',
-          alignItems: 'center',
-          paddingRight: theme.sizing.scale500
-        })}
-      >
-        {searchLoading && <Spinner size="18px" />}
-      </div>
-    );
-  }
-
   const authenticated = localStorage.getItem('giving_tree_jwt');
   const [pmf, setPmf] = React.useState('');
   const [benefit, setBenefit] = React.useState('');
@@ -140,8 +114,6 @@ function Navigation(props) {
   refresh();
 
   let notifications = user.notifications || [];
-
-  const center = searchBarPosition === 'center';
 
   const [isOpen, setIsOpen] = React.useState(false);
   function close() {
@@ -393,11 +365,9 @@ function Navigation(props) {
         onClick={() => {
           const url = (authenticated) ? '/home/discover' : '/';
           window.location = url;
-        }}><img
-          src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
-          alt="Giving Tree"
-          style={{ height: 30 }}
-          />
+        }}>
+          <LogoFull className="hidden sm:inline-block" />
+          <LogoIcon className="inline-block sm:inline-block" />
         </button>
 
         {/* Search bar */}
@@ -638,48 +608,40 @@ function Navigation(props) {
   } else {
     // If the user is NOT logged in, display this nav...
     return (
-      <header className="Navigation flex items-center justify-start px-6 py-3 bg-white">
+      <header className="Navigation flex items-center justify-start px-6 py-3 
+      bg-white z-10">
         {/* Main logo */}
         <button className="mr-auto" onClick={() => {
           const url = (authenticated) ? '/home/discover' : '/';
           window.location = url;
         }}>
-          <img
-            src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
-            alt="Giving Tree"
-            style={{ height: 30 }}
-          />
+          <LogoFull className="hidden sm:inline-block" />
+          <LogoIcon className="inline-block sm:hidden" />
         </button>
         <div className="ml-auto flex items-center justify-end">
+          {/* How it works */}
+          <Link to={Constants.PATHS.HOWITWORKS}
+          className="mr-6 hidden sm:inline" onClick={() => {
+            history.push(Constants.PATHS.HOWITWORKS)
+          }}>
+            How it works
+          </Link>
           {/* Guidelines button */}
           <Link
-            className="hidden md:block mr-4"
+            className="mr-4 bg-transparent hover:bg-red-500 
+            text-red-700 font-semibold hover:text-white py-2 px-4 border 
+            border-red-500 hover:border-transparent rounded"
             to={Constants.PATHS.GUIDELINES}
             onClick={() => history.push(Constants.PATHS.GUIDELINES)}
           >
-            <img
-              src="https://d1ppmvgsdgdlyy.cloudfront.net/information.svg"
-              alt="guidelines"
-              style={{ width: 25, cursor: 'pointer' }}
-            />
+            Safety
           </Link>
 
           {/* Login link */}
-          <Link
-            className="hidden md:inline mr-4"
-            style={{ textDecoration: 'none' }}
-            to={Constants.PATHS.LOGIN}
-          >
+          <Link className="bg-transparent bg-green-700 text-white font-semibold 
+          hover:bg-green-900 px-4 py-2 rounded" 
+          to={Constants.PATHS.LOGIN}>
             Login
-          </Link>
-
-          {/* Get started button */}
-          <Link
-            className="py-2 px-4 rounded-full text-white bg-black"
-            onClick={() => history.push(Constants.PATHS.SIGNUP)}
-            to={Constants.PATHS.SIGNUP}
-          >
-            Get started
           </Link>
         </div>
       </header>

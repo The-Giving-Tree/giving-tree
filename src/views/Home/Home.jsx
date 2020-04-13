@@ -6,7 +6,6 @@ import Alert from 'baseui/icon/alert';
 import Check from 'baseui/icon/check';
 import { Notification } from 'baseui/notification';
 import { hotjar } from 'react-hotjar';
-import Media from 'react-media';
 import { Button, SHAPE } from 'baseui/button';
 import { useHistory, Redirect } from 'react-router-dom';
 import { Modal, ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/modal';
@@ -433,97 +432,101 @@ function Home(props) {
 
   return (
     <StickyFooter className="h-full flex flex-col">
-      <Navigation selectMenuDispatch={selectMenuDispatch} searchBarPosition="center" />
-      <React.Fragment>
-        <Media
-          queries={{
-            xs: '(max-width: 639px)',
-            small: '(min-width: 640px)',
-            medium: '(min-width: 768px)',
-            large: '(min-width: 1024px)',
-            xl: '(min-width: 1280px)'
-          }}
-        >
-          {matches =>
-            authenticated ? (
-              <Redirect to={`/home/discover`} />
-            ) : (
-              <div className="flex-grow py-4 lg:py-20 LandingPage">
-                <div className="max-w-screen-lg w-full mx-auto px-6">
-                  <div className="grid grid-cols-1 lg:grid-cols-2">
-                    <div className="col-span-1">
-                      <div style={{
-                        minHeight: 270,
-                        background: 'url(https://d1ppmvgsdgdlyy.cloudfront.net/' + 
-                          'landing.png) center center',
-                        backgroundSize: 'cover' 
-                      }}></div>
-                      <em className="block mb-4 text-xs">
-                        Image by <a className="text-blue-500"
-                        href="https://dribbble.com/Tubik">
-                        Tubikstudio</a> via Dribbble
-                      </em>
-                    </div>
-                    <div className="col-span-1 lg:pl-6 flex flex-col items-center">
-                      <h2 className="text-lg font-bold text-center mb-2">
-                        Ask for help or lend a hand
-                      </h2>
-                      <p className="text-center mb-4">
-                        The Giving Tree was created in response to COVID-19. 
-                        Our platform connects 
-                        people who need help shopping for essential items with 
-                        local low-risk people who want to help.
-                      </p>
-                      <div className="text-center mb-4">
-                        <button 
-                        className="py-2 bg-green-700 text-white font-semibold
-                        w-48 rounded-md">
-                          Sign up
-                        </button>
-                      </div>
-                      <p className="uppercase text-center mb-4">Or</p>
-                      <p className="text-center">
-                        Call/text our hotline to request help: 
-                        <strong>415-964-4261</strong>
-                      </p>
-                    </div>
+      <Navigation selectMenuDispatch={selectMenuDispatch} 
+      searchBarPosition="center" />
+      {authenticated ? (
+          <Redirect to={`/home/discover`} />
+        ) : (
+          <div className="flex-grow py-8 lg:py-20 LandingPage bg-white">
+            <div className="max-w-screen-lg w-full mx-auto px-6">
+              <div className="grid grid-cols-1 md:grid-cols-2">
+                <div className="col-span-1">
+                  <div className="landing-image">
+                    <img src="https://d1ppmvgsdgdlyy.cloudfront.net/homepage/landing.jpg" />
                   </div>
+                  <em className="block mb-4 text-xs">
+                    Image by <a className="text-blue-500"
+                    href="https://dribbble.com/Tubik">
+                    Tubikstudio</a> via Dribbble
+                  </em>
                 </div>
-                <div className="flex items-center justify-center 
-                landing-page-title max-w-screen-lg mx-auto">
-                  <h2 className="text-2xl font-semibold text-center">
-                    How it works
+                <div className="max-w-sm mx-auto col-span-1 md:pl-6 flex flex-col justify-center items-center">
+                  <h2 className="text-lg font-bold text-center mb-2">
+                    Ask for help or lend a hand
                   </h2>
-                </div>
-                <div className="relative px-6 max-w-screen-lg steps-container">
-                  
-                  <button className="rounded-lg bg-green-700 font-semibold 
-                  text-white py-2 px-3 start-button mb-2">
-                    Start!
-                  </button>
-                  <div className="">
-                    <div className="flex items-center justify-center no-1 mr-4
-                    h-8 w-8 font-bold text-white bg-green-500 rounded-full">
-                      <span>1</span>
-                    </div>
-                    <p className="text-lg">
-                      Doug, who needs help getting groceries, posts a request 
-                      on The Giving Tree
-                    </p>
+                  <p className="text-center mb-4">
+                    The Giving Tree was created in response to COVID-19. 
+                    Our platform connects 
+                    people who need help shopping for essential items with 
+                    local low-risk people who want to help.
+                  </p>
+                  <div className="text-center mb-4">
+                    <button 
+                    className="py-2 bg-green-700 text-white font-semibold
+                    w-48 rounded-md">
+                      Sign up
+                    </button>
                   </div>
-                  
-
-                  <div className="flex items-center justify-center no-2
-                  h-8 w-8 font-bold text-white bg-green-500 rounded-full">
-                    <span>2</span>
-                  </div>
-                  
+                  <p className="uppercase text-center mb-4">Or</p>
+                  <p className="text-center">
+                    Call/text our hotline to request help: <strong>
+                      415-964-4261</strong>
+                  </p>
                 </div>
               </div>
-            )
-          }
-        </Media>
-      </React.Fragment>
+            </div>
+            <div className="flex items-center justify-center 
+            landing-page-title max-w-screen-lg mx-auto mb-3 sm:h-48">
+              <h2 className="text-2xl font-semibold text-center">
+                How it works
+              </h2>
+            </div>
+            <div className="relative px-6 max-w-sm md:max-w-lg mx-auto">
+              
+              <button className="rounded-lg bg-green-700 font-semibold 
+              text-white py-1 px-2 start-button mb-3">
+                Start!
+              </button>
+              <div className="flex px-3 mb-8 items-center">
+                <div className="flex items-center justify-center 
+                mr-4 h-10 w-10 font-bold text-white bg-green-500 text-2xl
+                rounded-full flex-shrink-0">
+                  <span>1</span>
+                </div>
+                <p className="text-lg">
+                  Doug, who needs help getting groceries, posts a request 
+                  on The Giving Tree
+                </p>
+              </div>
+
+              <div className="flex px-3 mb-8 items-center">
+                <div className="flex items-center justify-center text-2xl
+                h-10 w-10 font-bold text-white bg-green-500 rounded-full
+                flex-shrink-0 mr-4">
+                  <span>2</span>
+                </div>
+                <p className="text-lg">
+                  Nadia, who lives 1.3 miles away from Doug, finds and 
+                  claims the request
+                </p>
+              </div>
+              
+              <div className="flex px-3 mb-8 items-center">
+                <div className="flex items-center justify-center text-2xl
+                h-10 w-10 font-bold text-white bg-green-500 rounded-full
+                flex-shrink-0 mr-4">
+                  <span>3</span>
+                </div>
+                <p className="text-lg">
+                  Nadia safely delivers the groceries to Doug, who reimburses 
+                  her using Venmo
+                </p>
+              </div>
+              
+            </div>
+          </div>
+        )
+      }
     </StickyFooter>
   );
 }
