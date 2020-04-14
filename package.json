@@ -35,10 +35,14 @@
     "crypto": "^1.0.1",
     "dotenv": "^8.2.0",
     "emotion": "^10.0.23",
+<<<<<<< HEAD
     "express": "^4.17.1",
     "express-rate-limit": "^5.0.0",
     "express-validator": "^5.3.1",
     "fs": "0.0.1-security",
+=======
+    "geolib": "^3.2.1",
+>>>>>>> 57eef0d3ca7b6e9fd66e7aa05ac0dd3f5b761525
     "history": "^4.10.1",
     "image-exists": "^1.1.0",
     "image-extensions": "^1.1.0",
@@ -69,7 +73,12 @@
     "react-copy-to-clipboard": "^5.0.2",
     "react-dom": "^16.12.0",
     "react-dropzone": "^10.2.1",
+    "react-expand-animated": "^1.0.2",
+    "react-ga": "^2.7.0",
     "react-geolocated": "^3.0.1",
+    "react-helmet": "^5.2.1",
+    "react-hotjar": "^2.2.0",
+    "react-infinite-scroll-component": "^5.0.4",
     "react-infinite-scroller": "^1.2.4",
     "react-instantsearch-dom": "^6.0.0",
     "react-latex": "^1.5.0",
@@ -80,8 +89,14 @@
     "react-pure-lifecycle": "^3.0.0",
     "react-redux": "^7.1.3",
     "react-router-dom": "^5.1.2",
+    "react-router-hash-link": "^1.2.2",
     "react-router-redux": "^4.0.8",
+<<<<<<< HEAD
     "react-scripts": "^3.4.0",
+=======
+    "react-scripts": "3.4.1",
+    "react-scroll": "^1.7.16",
+>>>>>>> 57eef0d3ca7b6e9fd66e7aa05ac0dd3f5b761525
     "react-use": "^13.27.0",
     "redis": "^2.8.0",
     "redux": "^4.0.4",
@@ -97,7 +112,41 @@
     "styletron-react": "^5.2.6",
     "zxcvbn": "^4.4.2"
   },
+<<<<<<< HEAD
   "devDependencies": {
     "concurrently": "^5.1.0"
+=======
+  "scripts": {
+    "start": "npm run watch:css && react-scripts start",
+    "build": "npm run build:css && react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "pretty": "prettier --write --tab-width 2 \"src/**/*.jsx\" && prettier --write --tab-width 2 \"src/**/*.js\"",
+    "build:css": "postcss src/assets/css/tailwind.css -o src/assets/css/styles.css", 
+    "watch:css": "postcss src/assets/css/tailwind.css -o src/assets/css/styles.css"
+  },
+  "pre-commit": [
+    "pretty"
+  ],
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "autoprefixer": "^9.7.6",
+    "postcss-cli": "^7.1.0",
+    "tailwindcss": "^1.2.0"
+>>>>>>> 57eef0d3ca7b6e9fd66e7aa05ac0dd3f5b761525
   }
 }

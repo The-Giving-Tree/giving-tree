@@ -1,0 +1,37 @@
+.HelpMenu {
+  position: fixed;
+  bottom: 5rem;
+  right: 2rem;
+}
+
+.HelpMenuContent li:not(.divider) {
+  padding: .5rem 1rem;
+}
+
+.HelpMenuContent li.divider {
+  padding: 0;
+}
+
+.HelpMenuContent li.divider:before {
+  content: '';
+  display: block;
+  height: 1px;
+  background-color: #BFBFBF;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 100%;
+}
+
+@media all and (min-width: 415px) {
+  .HelpMenu {
+    bottom: 3rem;
+  }
+}
+
+@media all and (min-width: 1280px) {
+  .HelpMenu {
+    right: 10%;
+  }
+}

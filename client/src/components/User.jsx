@@ -1,40 +1,20 @@
 import * as React from 'react';
-import {
-  HeaderNavigation,
-  ALIGN,
-  StyledNavigationItem as NavigationItem,
-  StyledNavigationList as NavigationList
-} from 'baseui/header-navigation';
-import { StyledLink as Link } from 'baseui/link';
-import { Button, SHAPE, SIZE } from 'baseui/button';
-import { StatefulSelect as Search, TYPE } from 'baseui/select';
-import Navigation from './Navigation';
+import { Button, SIZE } from 'baseui/button';
+import Navigation from './Navigation/Navigation';
 import { Avatar } from 'baseui/avatar';
 import { useHistory } from 'react-router-dom';
-import { Card, StyledBody, StyledAction } from 'baseui/card';
+import { Card, StyledBody } from 'baseui/card';
 import { Block } from 'baseui/block';
-import { H1, H2, H3, H4, H5, H6 } from 'baseui/typography';
+import { hotjar } from 'react-hotjar';
 import { Tabs, Tab } from 'baseui/tabs';
-import { Slate, Editable, ReactEditor, withReact, useSlate } from 'slate-react';
-import { Editor, Text, createEditor } from 'slate';
-import { withHistory } from 'slate-history';
 import moment from 'moment';
-import Upload from 'baseui/icon/upload';
+import { getDistance } from 'geolib';
 import Check from 'baseui/icon/check';
+import { geolocated } from 'react-geolocated';
 import { Input } from 'baseui/input';
 import { StatefulTooltip } from 'baseui/tooltip';
 import Dropzone from 'react-dropzone';
-import {
-  ButtonEditor,
-  Icon,
-  Toolbar,
-  withRichText,
-  withImages,
-  Element,
-  Leaf,
-  MarkButton,
-  BlockButton
-} from './submitHelper';
+import Sidebar from './Sidebar/Sidebar';
 
 import { connect } from 'react-redux';
 
@@ -43,26 +23,22 @@ import {
   loadUser,
   follow,
   unfollow,
-  updateProfile
+  updateProfile,
+  selectMenu
 } from '../store/actions/auth/auth-actions';
-import { findByLabelText } from '@testing-library/dom';
-
-// check to see if valid user or not
-// if valid, show
-// if invalid, redirect to error page
+import StickyFooter from './StickyFooter/StickyFooter';
 
 function User(props) {
   const {
     user,
     foundUser,
-    errorMessage,
-    foundUserUpdated,
-    getCurrentUserDispatch,
     followDispatch,
     unfollowDispatch,
+    coords,
     foundUserNull,
     loadUserDispatch,
     updateProfileDispatch,
+    selectMenuDispatch,
     updatedProfile
   } = props;
   const id = props.match.params.id.toLowerCase();
@@ -81,10 +57,6 @@ function User(props) {
   const [header, setHeader] = React.useState({ preview: '', raw: '' });
   const [newHeaderFileName, setNewHeaderFileName] = React.useState('');
   const [hoverPost, setHoverPost] = React.useState([]);
-  const [errorMessageFile, setErrorMessage] = React.useState('');
-
-  const renderElement = React.useCallback(props => <Element {...props} />, []);
-  const renderLeaf = React.useCallback(props => <Leaf {...props} />, []);
 
   // load on page load
   React.useEffect(() => {
@@ -108,10 +80,9 @@ function User(props) {
     });
   }, [props.updatedProfile, id, loadUserDispatch]);
 
-  const slateEditor = React.useMemo(
-    () => withImages(withRichText(withHistory(withReact(createEditor())))),
-    []
-  );
+  React.useEffect(() => {
+    hotjar.initialize('1751072', 6);
+  }, []);
 
   function mouseOut() {
     setFollowHover(false);
@@ -137,12 +108,34 @@ function User(props) {
     setHoverAvatar(false);
   }
 
+  function calculateDistance(requestLocation) {
+    if (requestLocation.lat && requestLocation.lng && coords) {
+      var request = {
+        latitude: requestLocation.lat,
+        longitude: requestLocation.lng
+      };
+
+      var user = {
+        latitude: coords.latitude,
+        longitude: coords.longitude
+      };
+
+      let distance = getDistance(request, user); // meters
+      let km = distance / 1000;
+      let mi = km * 0.621371;
+
+      return mi ? mi.toFixed(2) : '-';
+    } else {
+      return '-';
+    }
+  }
+
   let followers = foundUser.followers ? foundUser.followers.length : '0';
   let following = foundUser.following ? foundUser.following.length : '0';
   let createdAt = foundUser.createdAt ? foundUser.createdAt : '';
-  let karma = foundUser.karma ? foundUser.karma : '';
-  let name = foundUser.name;
+  let karma = Number(foundUser.karma) >= 0 ? foundUser.karma : '';
   let username = foundUser.username;
+  let name = foundUser.name;
   let verified = foundUser.verified;
   let summary = foundUser.summary;
 
@@ -157,8 +150,8 @@ function User(props) {
       })
     : [];
 
-  let userFollowsProfile = profileFollowersArray.includes(user._id);
-  let userLeadsProfile = profileFollowingArray.includes(user._id);
+  let userFollowsProfile = profileFollowersArray.includes(user._id && user._id.toString());
+  let userLeadsProfile = profileFollowingArray.includes(user._id && user._id.toString());
   let selfProfile = foundUser.username === user.username;
 
   function handleClick() {
@@ -188,6 +181,16 @@ function User(props) {
       setNewHeaderFileName(files[0].name);
     }
   };
+
+  function stringToHslColor(str, s, l) {
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    var h = hash % 360;
+    return 'hsl(' + h + ', ' + s + '%, ' + l + '%)';
+  }
 
   const onDrop = files => {
     if (files.length > 1) {
@@ -220,14 +223,16 @@ function User(props) {
     setHoverPost(hoverPost.concat(i));
   }
 
-  function generateHash(username = '') {
+  function generateHash(username = '', version = 0) {
     const secret = 'givingtree';
     const hash = require('crypto')
       .createHmac('sha256', secret)
       .update(username.toLowerCase())
       .digest('hex');
 
-    return 'https://d1ppmvgsdgdlyy.cloudfront.net/user/' + hash;
+    const suffix = Number(version) === 0 || !version ? '' : `%3Fver%3D${version}`;
+    const url = `https://d1ppmvgsdgdlyy.cloudfront.net/user/${hash}${suffix}`;
+    return url;
   }
 
   const cartJSX = cart => {
@@ -363,7 +368,20 @@ function User(props) {
               <div style={{ margin: 7 }}>
                 <div>
                   <div className="font-bold text-base text-left my-1 mt-4">
-                    {post.text && JSON.parse(post.text).address}
+                    {post.text && coords
+                      ? `${calculateDistance(JSON.parse(post.text).location)} miles from
+                                      you ${
+                                        JSON.parse(post.text).postal
+                                          ? `(${JSON.parse(post.text).postal.split('-')[0] ||
+                                              JSON.parse(post.text).postal})`
+                                          : ''
+                                      }`
+                      : `Zip Code: ${
+                          JSON.parse(post.text).postal
+                            ? `${JSON.parse(post.text).postal.split('-')[0] ||
+                                JSON.parse(post.text).postal}`
+                            : ''
+                        }`}
                   </div>
                   <div className="font-bold text-base text-left my-1 mt-4">
                     {post && `Description: ${JSON.parse(post.text).description}`}
@@ -404,7 +422,7 @@ function User(props) {
 
   let draftElements = (
     <StyledBody>
-      No drafts avaiable.{' '}
+      No drafts available.{' '}
       <a
         className="text-indigo-600 hover:text-indigo-800"
         style={{ textDecoration: 'none' }}
@@ -414,7 +432,7 @@ function User(props) {
       </a>
     </StyledBody>
   );
-  if (!isEmpty(user) && user.drafts.length > 0) {
+  if (!isEmpty(user) && user.drafts && user.drafts.length > 0) {
     draftElements = user.drafts.map(draft => (
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <div style={{ fontSize: '14px' }}>
@@ -471,12 +489,17 @@ function User(props) {
                   height: 32,
                   background: `url(${generateHash(
                     comment.username
-                  )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
-                  backgroundPosition: '50% 50%',
+                  )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${comment.username[0].toUpperCase()}.svg), ${stringToHslColor(
+                    comment.username,
+                    80,
+                    45
+                  )}`,
+                  backgroundPosition: 'center',
                   backgroundSize: 'cover',
                   borderRadius: '50%',
                   marginRight: 10,
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  backgroundRepeat: 'no-repeat'
                 }}
               />
               <strong>
@@ -575,12 +598,17 @@ function User(props) {
                   height: 32,
                   background: `url(${generateHash(
                     vote.username
-                  )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg)`,
-                  backgroundPosition: '50% 50%',
+                  )}), url(https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${vote.username[0].toUpperCase()}.svg), ${stringToHslColor(
+                    vote.username,
+                    80,
+                    45
+                  )}`,
+                  backgroundPosition: 'center',
                   backgroundSize: 'cover',
                   borderRadius: '50%',
                   marginRight: 10,
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  backgroundRepeat: 'no-repeat'
                 }}
               />
               <strong>
@@ -685,472 +713,453 @@ function User(props) {
     downvoteFeed = <StyledBody>{foundUser.username} hasn't downvoted anything yet!</StyledBody>;
   }
 
+  function dayAge(date) {
+    var diff = new Date() - new Date(date);
+    return diff / 1000 / (60 * 60 * 24);
+  }
+
   return (
-    <div style={{ width: '100%' }}>
-      <Navigation searchBarPosition="center" />
-      <div style={{ width: '100%', background: '#F5F5F5', height: 'calc(100vh - 70px)' }}>
-        <div style={{ paddingLeft: 24, paddingRight: 24, paddingTop: 50 }}>
-          {foundUserNull && isEmpty(foundUser) ? (
-            <div style={{ margin: '0 auto', textAlign: 'center' }}>
-              Sorry, {id} is banned or is not a real user
-            </div>
-          ) : (
-            <React.Fragment>
-              <Card
-                headerImage={header.preview || foundUser.headerPictureUrl}
-                overrides={{
-                  Root: {
-                    style: {
-                      width: '50%',
-                      margin: '0 auto',
-                      position: 'relative'
-                    }
-                  },
-                  HeaderImage: {
-                    style: {
-                      width: '100%',
-                      objectFit: 'cover',
-                      height: '250px',
-                      opacity: editorMode ? (hoverHeader ? '80%' : '30%') : '100%',
-                      zIndez: 0
-                    }
-                  }
-                }}
-              >
-                {editorMode && (
-                  <Dropzone
-                    accept="image/*"
-                    onDrop={files => onDropHeader(files)}
-                    className="dropzone-box"
-                  >
-                    {({ getRootProps, getInputProps }) => (
-                      <section>
-                        <div {...getRootProps()} style={{ outline: 'none' }}>
-                          <input {...getInputProps()} />
-                          <div
-                            style={{
-                              display: 'block',
-                              position: 'absolute',
-                              width: 30,
-                              height: 30,
-                              top: '30px',
-                              right: '30px',
-                              backgroundRepeat: 'no-repeat',
-                              backgroundPosition: 'center',
-                              cursor: 'pointer',
-                              backgroundImage: `url('https://d1ppmvgsdgdlyy.cloudfront.net/photo.svg')`
-                            }}
-                            onMouseEnter={() => mouseOverHeader()}
-                            onMouseLeave={() => mouseOutHeader()}
-                          />
-                        </div>
-                      </section>
-                    )}
-                  </Dropzone>
-                )}
-                {username && (
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignContent: 'center'
+    <StickyFooter>
+      <Navigation selectMenuDispatch={selectMenuDispatch} searchBarPosition="center" />
+      <div className="lg:max-w-4xl xl:max-w-screen-xl w-full mx-auto py-12 px-6">
+        <div className="block xl:flex">
+          <aside className="xl:pr-6 sidebar-wrapper">
+            <Sidebar {...props} />
+          </aside>
+          <section className="w-full xl:px-6">
+            {foundUserNull && isEmpty(foundUser) ? (
+              <div style={{ margin: '0 auto', textAlign: 'center' }}>
+                Sorry, {id} is banned or is not a real user
+              </div>
+            ) : (    
+              <div className="user-cards-container">
+                  <Card
+                    headerImage={header.preview || foundUser.headerPictureUrl}
+                    overrides={{
+                      Root: {
+                        style: {
+                          margin: '0 auto',
+                          position: 'relative'
+                        }
+                      },
+                      HeaderImage: {
+                        style: {
+                          width: '100%',
+                          objectFit: 'cover',
+                          height: '250px',
+                          opacity: editorMode ? (hoverHeader ? '80%' : '30%') : '100%',
+                          zIndez: 0
+                        }
+                      }
                     }}
                   >
-                    {editorMode ? (
-                      <div type="file" style={{ position: 'relative', cursor: 'pointer' }}>
-                        <Dropzone
-                          accept="image/*"
-                          onDrop={files => onDrop(files)}
-                          className="dropzone-box"
-                        >
-                          {({ getRootProps, getInputProps }) => (
-                            <section>
+                    {editorMode && (
+                      <Dropzone
+                        accept="image/*"
+                        onDrop={files => onDropHeader(files)}
+                        className="dropzone-box"
+                      >
+                        {({ getRootProps, getInputProps }) => (
+                          <section>
+                            <div {...getRootProps()} style={{ outline: 'none' }}>
+                              <input {...getInputProps()} />
                               <div
-                                {...getRootProps()}
-                                style={{ outline: 'none' }}
-                                onMouseEnter={() => mouseOverAvatar()}
-                                onMouseLeave={() => mouseOutAvatar()}
-                              >
-                                <input {...getInputProps()} />
-                                <div
-                                  style={{
-                                    display: 'block',
-                                    position: 'absolute',
-                                    width: 30,
-                                    height: 30,
-                                    top: '55px',
-                                    left: '55px',
-                                    zIndex: '1',
-                                    marginTop: '-94px',
-                                    backgroundRepeat: 'no-repeat',
-                                    backgroundPosition: 'center',
-                                    backgroundImage: `url('https://d1ppmvgsdgdlyy.cloudfront.net/photo.svg')`
-                                  }}
-                                />
-                                <Avatar
-                                  overrides={{
-                                    Avatar: { style: { opacity: hoverAvatar ? '90%' : '60%' } },
-                                    Initials: { style: { backgroundColor: 'white' } },
-                                    Root: {
-                                      style: {
-                                        marginTop: '-94px'
+                                style={{
+                                  display: 'block',
+                                  position: 'absolute',
+                                  width: 30,
+                                  height: 30,
+                                  top: '30px',
+                                  right: '30px',
+                                  backgroundRepeat: 'no-repeat',
+                                  backgroundPosition: 'center',
+                                  cursor: 'pointer',
+                                  backgroundImage: `url('https://d1ppmvgsdgdlyy.cloudfront.net/photo.svg')`
+                                }}
+                                onMouseEnter={() => mouseOverHeader()}
+                                onMouseLeave={() => mouseOutHeader()}
+                              />
+                            </div>
+                          </section>
+                        )}
+                      </Dropzone>
+                    )}
+                    {username && (
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignContent: 'center'
+                        }}
+                      >
+                        {editorMode ? (
+                          <div type="file" style={{ position: 'relative', cursor: 'pointer' }}>
+                            <Dropzone
+                              accept="image/*"
+                              onDrop={files => onDrop(files)}
+                              className="dropzone-box"
+                            >
+                              {({ getRootProps, getInputProps }) => (
+                                <section>
+                                  <div
+                                    {...getRootProps()}
+                                    style={{ outline: 'none' }}
+                                    onMouseEnter={() => mouseOverAvatar()}
+                                    onMouseLeave={() => mouseOutAvatar()}
+                                  >
+                                    <input {...getInputProps()} />
+                                    <div
+                                      style={{
+                                        display: 'block',
+                                        position: 'absolute',
+                                        width: 30,
+                                        height: 30,
+                                        top: '55px',
+                                        left: '55px',
+                                        zIndex: '1',
+                                        marginTop: '-94px',
+                                        backgroundRepeat: 'no-repeat',
+                                        backgroundPosition: 'center',
+                                        backgroundImage: `url('https://d1ppmvgsdgdlyy.cloudfront.net/photo.svg')`
+                                      }}
+                                    />
+                                    <Avatar
+                                      overrides={{
+                                        Avatar: {
+                                          style: {
+                                            opacity: hoverAvatar ? '90%' : '60%',
+                                            background: stringToHslColor(username, 80, 45)
+                                          }
+                                        },
+                                        Initials: { style: { backgroundColor: 'white' } },
+                                        Root: {
+                                          style: {
+                                            marginTop: '-94px'
+                                          }
+                                        }
+                                      }}
+                                      name={username}
+                                      src={
+                                        image.preview ||
+                                        foundUser.profilePictureUrl ===
+                                          'https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg'
+                                          ? `https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${username[0].toUpperCase()}.svg`
+                                          : foundUser.profilePictureUrl
                                       }
-                                    }
-                                  }}
-                                  name={username}
-                                  src={image.preview || foundUser.profilePictureUrl}
-                                  size={'140px'}
-                                  key={'140px'}
-                                />
+                                      size={'140px'}
+                                      key={'140px'}
+                                    />
+                                  </div>
+                                </section>
+                              )}
+                            </Dropzone>
+                            {newFileName && (
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center'
+                                }}
+                              >
+                                <p
+                                  className="my-2"
+                                  style={{ fontSize: 8, textAlign: 'center', color: 'green' }}
+                                >
+                                  {newFileName}
+                                </p>
+                                <Check style={{ height: 16, color: 'green' }} />
                               </div>
-                            </section>
-                          )}
-                        </Dropzone>
-                        {newFileName && (
-                          <div
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center'
+                            )}
+                          </div>
+                        ) : (
+                          <Avatar
+                            name={username}
+                            overrides={{
+                              Root: {
+                                style: {
+                                  marginTop: '-94px',
+                                  background: stringToHslColor(username, 80, 45)
+                                }
+                              }
                             }}
-                          >
+                            src={
+                              updatedProfile && image.preview
+                                ? image.preview
+                                : foundUser.profilePictureUrl ===
+                                  'https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg'
+                                ? `https://d1ppmvgsdgdlyy.cloudfront.net/alphabet/${username[0].toUpperCase()}.svg`
+                                : foundUser.profilePictureUrl
+                            }
+                            size={'140px'}
+                            key={'140px'}
+                          />
+                        )}
+                        {selfProfile && editorMode ? (
+                          <div style={{ alignContent: 'flex-start' }}>
+                            <Button
+                              onClick={() => {
+                                setEditorMode(false);
+                                setImage({ preview: '', raw: '' });
+                                setHeader({ preview: '', raw: '' });
+                              }}
+                              style={{ marginRight: 15, fontSize: '14px' }}
+                              kind={'secondary'}
+                              shape={'pill'}
+                              size={'compact'}
+                            >
+                              Cancel
+                            </Button>
+                            <Button
+                              onClick={() => {
+                                // submit dispatch
+                                updateProfileDispatch({
+                                  env: process.env.NODE_ENV,
+                                  summary: summaryText,
+                                  rawImage: image.raw || '',
+                                  rawHeader: header.raw || ''
+                                });
+                                setNewFileName('');
+                                setEditorMode(false);
+                              }}
+                              shape={'pill'}
+                              style={{ fontSize: '14px' }}
+                              size={'compact'}
+                            >
+                              Save
+                            </Button>
+                          </div>
+                        ) : (
+                          selfProfile && (
+                            <div style={{ alignContent: 'flex-start' }}>
+                              <img
+                                src="https://d1ppmvgsdgdlyy.cloudfront.net/edit.svg"
+                                alt="edit"
+                                onClick={() => {
+                                  //
+                                  setSummaryText(summary);
+                                  setProfilePictureUrl(foundUser.profilePictureUrl);
+
+                                  setEditorMode(true);
+                                }}
+                                style={{ cursor: 'pointer', width: 15 }}
+                              />
+                            </div>
+                          )
+                        )}
+                      </div>
+                    )}
+                    {
+                      <div>
+                        <div
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignContent: 'center',
+                            marginTop: 30
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', marginBottom: 10 }}>
                             <p
                               className="my-2"
-                              style={{ fontSize: 8, textAlign: 'center', color: 'green' }}
+                              style={{ textTransform: 'capitalize', margin: 'auto 0', fontSize: 20 }}
                             >
-                              {newFileName}
+                              <strong>{username}</strong>
+                              {name && ` - ${name}`}
                             </p>
-                            <Check style={{ height: 16, color: 'green' }} />
+                            {verified && (
+                              <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <img
+                                  src="https://d1ppmvgsdgdlyy.cloudfront.net/verified.svg"
+                                  alt="verified"
+                                  style={{ marginLeft: 14, height: 20 }}
+                                />
+                                <div style={{ marginLeft: 5, fontSize: 12 }}>
+                                  <strong>verified</strong>
+                                </div>
+                              </div>
+                            )}
                           </div>
-                        )}
-                      </div>
-                    ) : (
-                      <Avatar
-                        name={username}
-                        overrides={{
-                          Root: {
-                            style: {
-                              marginTop: '-94px'
-                            }
-                          }
-                        }}
-                        src={
-                          updatedProfile && image.preview
-                            ? image.preview
-                            : foundUser.profilePictureUrl
-                        }
-                        size={'140px'}
-                        key={'140px'}
-                      />
-                    )}
-                    {selfProfile && editorMode ? (
-                      <div style={{ alignContent: 'flex-start' }}>
-                        <Button
-                          onClick={() => {
-                            setEditorMode(false);
-                            setImage({ preview: '', raw: '' });
-                            setHeader({ preview: '', raw: '' });
-                          }}
-                          style={{ marginRight: 15, fontSize: '14px' }}
-                          kind={'secondary'}
-                          shape={'pill'}
-                          size={'compact'}
-                        >
-                          Cancel
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            // submit dispatch
-                            updateProfileDispatch({
-                              env: process.env.NODE_ENV,
-                              summary: summaryText,
-                              rawImage: image.raw || '',
-                              rawHeader: header.raw || ''
-                            });
-                            setNewFileName('');
-                            setEditorMode(false);
-                          }}
-                          shape={'pill'}
-                          style={{ fontSize: '14px' }}
-                          size={'compact'}
-                        >
-                          Save
-                        </Button>
-                      </div>
-                    ) : (
-                      selfProfile && (
-                        <div style={{ alignContent: 'flex-start' }}>
-                          <img
-                            src="https://d1ppmvgsdgdlyy.cloudfront.net/edit.svg"
-                            alt="edit"
-                            onClick={() => {
-                              //
-                              setSummaryText(summary);
-                              setProfilePictureUrl(foundUser.profilePictureUrl);
-
-                              setEditorMode(true);
-                            }}
-                            style={{ cursor: 'pointer', width: 15 }}
-                          />
+                          <div>
+                            {userLeadsProfile && (
+                              <div style={{ marginRight: 20, display: 'inline' }}>Follows You</div>
+                            )}
+                            {!selfProfile && (
+                              <Button
+                                style={{
+                                  outline: 'none',
+                                  backgroundColor: userFollowsProfile
+                                    ? followHover
+                                      ? 'rgb(202, 32, 85)'
+                                      : 'rgb(0, 121, 211)'
+                                    : 'rgb(238, 238, 238)',
+                                  color: userFollowsProfile ? 'white' : 'black'
+                                }}
+                                onClick={() => handleClick()}
+                                onMouseEnter={() => mouseOver()}
+                                onMouseLeave={() => mouseOut()}
+                                size={SIZE.compact}
+                                shape={'pill'}
+                                kind={'secondary'}
+                              >
+                                {userFollowsProfile
+                                  ? followHover
+                                    ? 'Unfollow'
+                                    : 'Following'
+                                  : 'Follow'}
+                              </Button>
+                            )}
+                          </div>
                         </div>
-                      )
-                    )}
-                  </div>
-                )}
-                {name ? (
-                  <Block>
-                    <h4 style={{ fontSize: 20, textTransform: 'capitalize', marginBottom: 0 }}>
-                      {name}
-                    </h4>
-                    <div
-                      style={{
-                        marginTop: 10,
-                        marginBottom: 0,
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignContent: 'center'
-                      }}
-                    >
-                      <p className="my-2" style={{ textTransform: 'lowercase', margin: 'auto 0' }}>
-                        <strong>{username}</strong>
+                      </div>
+                    }
+
+                    {createdAt && (
+                      <p
+                        className="my-2"
+                        style={{ textTransform: 'capitalize', margin: 'auto 0', fontSize: 12 }}
+                      >
+                        {Number(karma) >= 0 ? Number(karma) : 0} karma · Member since{' '}
+                        {moment(createdAt).format('MMM D, YYYY')}
                       </p>
-                      <div>
-                        {userLeadsProfile && (
-                          <div style={{ marginRight: 20, display: 'inline' }}>Follows You</div>
-                        )}
-                        {!selfProfile && (
-                          <Button
-                            style={{
-                              outline: 'none',
-                              backgroundColor: userFollowsProfile
-                                ? followHover
-                                  ? 'rgb(202, 32, 85)'
-                                  : 'rgb(0, 121, 211)'
-                                : 'rgb(238, 238, 238)',
-                              color: userFollowsProfile ? 'white' : 'black',
-                              fontSize: '14px'
-                            }}
-                            onMouseEnter={() => mouseOver()}
-                            onMouseLeave={() => mouseOut()}
-                            onClick={() => handleClick()}
-                            size={SIZE.compact}
-                            shape={'pill'}
-                            kind={'secondary'}
-                          >
-                            {userFollowsProfile
-                              ? followHover
-                                ? 'Unfollow'
-                                : 'Following'
-                              : 'Follow'}
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  </Block>
-                ) : (
-                  <div>
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignContent: 'center',
-                        marginTop: 30
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', marginBottom: 10 }}>
-                        <p
-                          className="my-2"
-                          style={{ textTransform: 'capitalize', margin: 'auto 0', fontSize: 20 }}
-                        >
-                          <strong>{username}</strong>
-                        </p>
-                        {verified && (
-                          <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <img
-                              src="https://d1ppmvgsdgdlyy.cloudfront.net/verified.svg"
-                              alt="verified"
-                              style={{ marginLeft: 14, height: 20 }}
-                            />
-                            <div style={{ marginLeft: 5, fontSize: 12 }}>
-                              <strong>verified</strong>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                      <div>
-                        {userLeadsProfile && (
-                          <div style={{ marginRight: 20, display: 'inline' }}>Follows You</div>
-                        )}
-                        {!selfProfile && (
-                          <Button
-                            style={{
-                              outline: 'none',
-                              backgroundColor: userFollowsProfile
-                                ? followHover
-                                  ? 'rgb(202, 32, 85)'
-                                  : 'rgb(0, 121, 211)'
-                                : 'rgb(238, 238, 238)',
-                              color: userFollowsProfile ? 'white' : 'black'
-                            }}
-                            onClick={() => handleClick()}
-                            onMouseEnter={() => mouseOver()}
-                            onMouseLeave={() => mouseOut()}
-                            size={SIZE.compact}
-                            shape={'pill'}
-                            kind={'secondary'}
-                          >
-                            {userFollowsProfile
-                              ? followHover
-                                ? 'Unfollow'
-                                : 'Following'
-                              : 'Follow'}
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {createdAt && (
-                  <p
-                    className="my-2"
-                    style={{ textTransform: 'capitalize', margin: 'auto 0', fontSize: 12 }}
-                  >
-                    {Number(karma) >= 0 ? Number(karma) : 0} karma · Member since{' '}
-                    {moment(createdAt).format('MMM D, YYYY')}
-                  </p>
-                )}
-
-                <Block>
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      marginTop: 20,
-                      alignContent: 'center'
-                    }}
-                  >
-                    {editorMode ? (
-                      <Input
-                        placeholder="add a description..."
-                        size={'compact'}
-                        overrides={{ Root: { style: { width: '500px' } } }}
-                        value={summaryText}
-                        onChange={event => setSummaryText(event.currentTarget.value)}
-                        onKeyPress={async event => {
-                          var code = event.keyCode || event.which;
-                          if (code === 13 && event.target.value !== '') {
-                            // submit dispatch
-                            updateProfileDispatch({
-                              env: process.env.NODE_ENV,
-                              summary: summaryText,
-                              rawImage: image.raw || '',
-                              rawHeader: header.raw || ''
-                            });
-                            setNewFileName('');
-                            setEditorMode(false);
-                          }
-                        }}
-                      ></Input>
-                    ) : (
-                      <div style={{ fontSize: 16 }}>{summary}</div>
                     )}
-                    <div style={{ fontSize: 16 }}>
-                      <strong>{following}&nbsp;</strong> following &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      <strong>{followers}&nbsp;</strong> followers
-                    </div>
-                  </div>
-                </Block>
-              </Card>
-              {/* Add this later */}
-              {/* <Card
-                overrides={{
-                  Root: {
-                    style: {
-                      width: '50%',
-                      margin: '0 auto',
-                      marginTop: '30px'
-                    }
-                  }
-                }}
-              >
-                <StyledBody>Latest Activity</StyledBody>
-              </Card> */}
-              <Card
-                overrides={{
-                  Root: {
-                    style: {
-                      width: '50%',
-                      margin: '0 auto',
-                      marginTop: '30px',
-                      marginBottom: '60px'
-                    }
-                  }
-                }}
-              >
-                <Tabs
-                  onChange={({ activeKey }) => {
-                    setActiveKey(activeKey);
-                  }}
-                  activeKey={activeKey}
-                  overrides={{ TabContent: { style: { paddingLeft: '0px', paddingRight: '0px' } } }}
-                >
-                  <Tab
+
+                    <Block>
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          marginTop: 20,
+                          alignContent: 'center'
+                        }}
+                      >
+                        {editorMode ? (
+                          <Input
+                            placeholder="add a description..."
+                            size={'compact'}
+                            overrides={{ Root: { style: { width: '500px' } } }}
+                            value={summaryText}
+                            onChange={event => setSummaryText(event.currentTarget.value)}
+                            onKeyPress={async event => {
+                              var code = event.keyCode || event.which;
+                              if (code === 13 && event.target.value !== '') {
+                                // submit dispatch
+                                updateProfileDispatch({
+                                  env: process.env.NODE_ENV,
+                                  summary: summaryText,
+                                  rawImage: image.raw || '',
+                                  rawHeader: header.raw || ''
+                                });
+                                setNewFileName('');
+                                setEditorMode(false);
+                              }
+                            }}
+                          ></Input>
+                        ) : (
+                          <div style={{ fontSize: 16 }}>{summary}</div>
+                        )}
+                        <div style={{ fontSize: 16 }}>
+                          <strong>{following}&nbsp;</strong> following &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          <strong>{followers}&nbsp;</strong> followers
+                        </div>
+                      </div>
+                    </Block>
+                  </Card>
+                  {/* Add this later */}
+                  {/* <Card
                     overrides={{
-                      Tab: { style: { outline: 'none' } },
-                      TabContent: { style: { paddingLeft: '12px', paddingRight: '12px' } }
+                      Root: {
+                        style: {
+                          margin: '0 auto',
+                          marginTop: '30px'
+                        }
+                      }
                     }}
-                    title="Requests"
                   >
-                    <div
-                      style={{
-                        display: 'grid',
-                        gridGap: '0',
-                        gridTemplateColumns: 'repeat(auto-fill,minmax(250px,1fr))',
-                        gridTemplateRows: 'repeat(auto-fill,minmax(250px,1fr))',
-                        maxHeight: '500px',
-                        overflow: 'auto'
+                    <StyledBody>Latest Activity</StyledBody>
+                  </Card> */}
+                  <Card
+                    overrides={{
+                      Root: {
+                        style: {
+                          margin: '0 auto',
+                          marginBottom: '60px',
+                          marginTop: '30px'
+                        }
+                      }
+                    }}
+                  >
+                    <Tabs
+                      onChange={({ activeKey }) => {
+                        setActiveKey(activeKey);
+                      }}
+                      activeKey={activeKey}
+                      overrides={{
+                        TabContent: { style: { paddingLeft: '0px', paddingRight: '0px' } },
+                        TabBar: {
+                          style: {
+                            overflow: 'auto'
+                          }
+                        }
                       }}
                     >
-                      {postElements}
-                    </div>
-                  </Tab>
-                  {selfProfile && (
-                    <Tab overrides={{ Tab: { style: { outline: 'none' } } }} title="Drafts">
-                      <div style={{ maxHeight: '500px', overflow: 'auto' }}>{draftElements}</div>
-                    </Tab>
-                  )}
-                  {/* <Tab
-                    overrides={{
-                      Tab: { style: { outline: 'none' } },
-                      TabContent: { style: { paddingLeft: '12px', paddingRight: '12px' } }
-                    }}
-                    title="Funding"
-                  >
-                    Something
-                  </Tab> */}
-                  <Tab overrides={{ Tab: { style: { outline: 'none' } } }} title="Comments">
-                    <div style={{ maxHeight: '500px', overflow: 'auto', paddingRight: '10px' }}>
-                      {commentElements}
-                    </div>
-                  </Tab>
-                  <Tab overrides={{ Tab: { style: { outline: 'none' } } }} title="Upvotes">
-                    <div style={{ maxHeight: '500px', overflow: 'auto', paddingRight: '10px' }}>
-                      {upvoteFeed}
-                    </div>
-                  </Tab>
-                  <Tab overrides={{ Tab: { style: { outline: 'none' } } }} title="Downvotes">
-                    <div style={{ maxHeight: '500px', overflow: 'auto', paddingRight: '10px' }}>
-                      {downvoteFeed}
-                    </div>
-                  </Tab>
-                </Tabs>
-              </Card>
-            </React.Fragment>
-          )}
+                      <Tab
+                        overrides={{
+                          Tab: { style: { outline: 'none' } },
+                          TabContent: { style: { paddingLeft: '12px', paddingRight: '12px' } }
+                        }}
+                        title="Requests"
+                      >
+                        <div
+                          style={{
+                            display: 'grid',
+                            gridGap: '0',
+                            gridTemplateColumns: 'repeat(auto-fill,minmax(250px,1fr))',
+                            gridTemplateRows: 'repeat(auto-fill,minmax(250px,1fr))',
+                            maxHeight: '500px',
+                            overflow: 'auto'
+                          }}
+                        >
+                          {postElements}
+                        </div>
+                      </Tab>
+                      {selfProfile && (
+                        <Tab overrides={{ Tab: { style: { outline: 'none' } } }} title="Drafts">
+                          <div style={{ maxHeight: '500px', overflow: 'auto' }}>{draftElements}</div>
+                        </Tab>
+                      )}
+                      {/* <Tab
+                        overrides={{
+                          Tab: { style: { outline: 'none' } },
+                          TabContent: { style: { paddingLeft: '12px', paddingRight: '12px' } }
+                        }}
+                        title="Funding"
+                      >
+                        Something
+                      </Tab> */}
+                      <Tab overrides={{ Tab: { style: { outline: 'none' } } }} title="Comments">
+                        <div style={{ maxHeight: '500px', overflow: 'auto', paddingRight: '10px' }}>
+                          {commentElements}
+                        </div>
+                      </Tab>
+                      <Tab overrides={{ Tab: { style: { outline: 'none' } } }} title="Upvotes">
+                        <div style={{ maxHeight: '500px', overflow: 'auto', paddingRight: '10px' }}>
+                          {upvoteFeed}
+                        </div>
+                      </Tab>
+                      <Tab overrides={{ Tab: { style: { outline: 'none' } } }} title="Downvotes">
+                        <div style={{ maxHeight: '500px', overflow: 'auto', paddingRight: '10px' }}>
+                          {downvoteFeed}
+                        </div>
+                      </Tab>
+                    </Tabs>
+                  </Card>
+                </div>
+            )}
+          </section>
         </div>
+        
       </div>
-    </div>
+    </StickyFooter>   
   );
 }
 
@@ -1159,7 +1168,8 @@ const mapDispatchToProps = dispatch => ({
   loadUserDispatch: payload => dispatch(loadUser(payload)),
   followDispatch: payload => dispatch(follow(payload)),
   unfollowDispatch: payload => dispatch(unfollow(payload)),
-  updateProfileDispatch: payload => dispatch(updateProfile(payload))
+  updateProfileDispatch: payload => dispatch(updateProfile(payload)),
+  selectMenuDispatch: payload => dispatch(selectMenu(payload))
 });
 
 const mapStateToProps = state => ({
@@ -1175,4 +1185,4 @@ User.defaultProps = {};
 
 User.propTypes = {};
 
-export default connect(mapStateToProps, mapDispatchToProps)(User);
+export default connect(mapStateToProps, mapDispatchToProps)(geolocated()(User));

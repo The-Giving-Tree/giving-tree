@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { cx, css } from 'emotion';
-import { Text, createEditor, Transforms, Editor } from 'slate';
-import { Slate, Editable, ReactEditor, withReact, useSlate } from 'slate-react';
-import { useEditor, useSelected, useFocused } from 'slate-react';
+import { Transforms, Editor } from 'slate';
+import { useSelected, useFocused } from 'slate-react';
 
 export const insertImage = (editor, url = 'https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg') => {
   const text = { text: '' };

@@ -1,0 +1,8 @@
+/**
+ * I'll implement the sticky footer better once I clean up the front end a bit
+ */
+.StickyFooter {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}

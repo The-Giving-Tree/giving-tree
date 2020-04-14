@@ -178,7 +178,7 @@ const claimTask = async (env, postId, token) => {
   }
 };
 
-const unclaimTask = async (env, postId, token) => {
+const unclaimTask = async (env, postId, cancelReason, token) => {
   try {
     const headers = {
       headers: { Authorization: `Bearer ${token}` }
@@ -186,7 +186,7 @@ const unclaimTask = async (env, postId, token) => {
 
     const data = await Axios.put(
       `${ROUTES[env].giving_tree}/v1/post/${postId}/unclaim`,
-      {},
+      { reason: cancelReason },
       headers
     );
     return data;
@@ -284,6 +284,20 @@ const loadPost = async (env, id, token) => {
   }
 };
 
+const deletePost = async (env, id, token) => {
+  try {
+    const headers = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const data = await Axios.delete(`${ROUTES[env].giving_tree}/v1/post/${id}`, headers);
+    return data;
+  } catch (e) {
+    const error = e.response.data ? e.response.data : e;
+    Sentry.captureException(new Error(JSON.stringify(error)));
+    throw error;
+  }
+};
+
 const loadUser = async (env, username) => {
   try {
     const data = await Axios.get(`${ROUTES[env].giving_tree}/v1/user/${username}`);
@@ -302,6 +316,27 @@ const isEmpty = obj => {
   return true;
 };
 
+const getLeaderboard = async (env, location = 'global', token) => {
+  try {
+    const headers = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+
+    let query = '';
+    if (location !== 'global') {
+      query += `lat=${location.lat}&lng=${location.lng}`;
+    }
+
+    let data = await Axios.get(`${ROUTES[env].giving_tree}/leaderboard?${query}`, headers);
+
+    return data;
+  } catch (e) {
+    const error = e.response.data ? e.response.data : e;
+    Sentry.captureException(new Error(JSON.stringify(error)));
+    throw error;
+  }
+};
+
 const loadNewsFeed = async (env, page, location = undefined, feed, token) => {
   try {
     const headers = {
@@ -309,7 +344,7 @@ const loadNewsFeed = async (env, page, location = undefined, feed, token) => {
     };
 
     let query = '';
-    if (location && !isEmpty(location)) {
+    if (location && location.lat && location.lng) {
       query += `lat=${location.lat}&lng=${location.lng}`;
     }
 
@@ -362,12 +397,9 @@ const markSeen = async (env, postId, userId, token) => {
       userId
     };
 
-    console.log('env: ', env);
-
     const data = await Axios.post(`${ROUTES[env].giving_tree}/seen`, payload, headers);
     return data;
   } catch (e) {
-    console.log('e: ', e);
     const error = e.response.data ? e.response.data : e;
     Sentry.captureException(new Error(JSON.stringify(error)));
     throw error;
@@ -502,6 +534,8 @@ const Api = {
   unfollow,
   markSeen,
   downvote,
+  getLeaderboard,
+  deletePost,
   loadNewsFeed,
   loadPost,
   loadUser,

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  HeaderNavigation,
   ALIGN,
   StyledNavigationItem as NavigationItem,
   StyledNavigationList as NavigationList
@@ -11,13 +10,15 @@ import { Redirect } from 'react-router-dom';
 import lifecycle from 'react-pure-lifecycle';
 import { Card, StyledAction } from 'baseui/card';
 import { Input } from 'baseui/input';
-import PropTypes from 'prop-types';
 import { Button, SHAPE } from 'baseui/button';
 import { connect } from 'react-redux';
 import Media from 'react-media';
-import { Modal, ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/modal';
+import { 
+  Modal, ModalHeader, ModalBody, ModalFooter, ModalButton
+} from 'baseui/modal';
 
 import { login, initiateReset } from '../store/actions/auth/auth-actions';
+import Navigation from './Navigation/Navigation';
 
 const componentDidUpdate = props => {};
 
@@ -36,8 +37,6 @@ function Login(props) {
     errorMessage,
     loginDispatch,
     loginLoading,
-    loginFailure,
-    loginSuccess,
     initiateResetDispatch,
     initiateResetSuccess
   } = props;
@@ -67,11 +66,11 @@ function Login(props) {
   let history = useHistory();
 
   if (authenticated) {
-    return <Redirect to="/" />;
+    return <Redirect to="/home/discover" />;
   } else {
     return (
       <div style={{ width: '100%' }}>
-        <HeaderNavigation
+        <Navigation
           overrides={{
             Root: {
               style: {
@@ -85,38 +84,48 @@ function Login(props) {
             <NavigationItem>
               <div
                 style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}
-                onClick={() => history.push('/')}
+                onClick={() => history.push(authenticated ? '/home/discover' : '/')}
               >
                 <img
-                  src="https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg"
+                  src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
                   alt="Giving Tree"
                   style={{ height: 30, marginRight: 12 }}
                 />
-                <strong>
+                {/* <strong>
                   <div style={{ textDecoration: 'none', color: 'black' }}>Giving Tree</div>
-                </strong>
+                </strong> */}
               </div>
             </NavigationItem>
           </NavigationList>
           <NavigationList $align={ALIGN.center} />
           <NavigationList $align={ALIGN.right} />
-        </HeaderNavigation>
-        <div style={{ paddingLeft: 24, paddingRight: 24, textAlign: 'center' }}>
-          <h2 className="my-4 font-bold text-2xl">Login</h2>
-          <Media
-            queries={{
-              small: '(max-width: 599px)',
-              medium: '(min-width: 600px) and (max-width: 1199px)',
-              large: '(min-width: 1200px)'
-            }}
-          >
-            {matches => (
+        </Navigation>
+        <Media
+          queries={{
+            small: '(max-width: 599px)',
+            medium: '(min-width: 600px) and (max-width: 1199px)',
+            large: '(min-width: 1200px)'
+          }}
+        >
+          {matches => (
+            <div
+              style={{
+                paddingLeft: matches.small ? 0 : 24,
+                paddingRight: matches.small ? 0 : 24,
+                textAlign: 'center'
+              }}
+            >
+              <h2 className="my-4 font-bold text-2xl">Login</h2>
               <Card
                 overrides={{
                   Root: {
                     style: {
                       width: matches.medium || matches.large ? '512px' : '100%',
-                      margin: '0 auto'
+                      margin: '0 auto',
+                      border: 'none',
+                      paddingTop: '12px',
+                      paddingBottom: '12px',
+                      boxShadow: 'none'
                     }
                   }
                 }}
@@ -167,6 +176,7 @@ function Login(props) {
                         });
 
                         setResetModal(false);
+                        setResetEmail('');
                       }}
                     >
                       Reset
@@ -214,15 +224,15 @@ function Login(props) {
                   </Button>
                 </StyledAction>
               </Card>
-            )}
-          </Media>
-          <p className="my-3 text-sm">
-            New to Giving Tree?{' '}
-            <a className="text-indigo-600 hover:text-indigo-800" href="/signup">
-              Sign Up
-            </a>
-          </p>
-        </div>
+              <p className="my-3 text-sm">
+                New to Giving Tree?{' '}
+                <a className="text-indigo-600 hover:text-indigo-800" href="/signup">
+                  Sign Up
+                </a>
+              </p>
+            </div>
+          )}
+        </Media>
       </div>
     );
   }
@@ -247,4 +257,5 @@ Login.defaultProps = {};
 
 Login.propTypes = {};
 
-export default lifecycle(methods)(connect(mapStateToProps, mapDispatchToProps)(Login));
+export default lifecycle(methods)
+  (connect(mapStateToProps, mapDispatchToProps)(Login));

@@ -1,14 +1,174 @@
-.App {
-  text-align: center;
+
+body {
+  background-color: #f5f5f5;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* XL Devices/Desktop */
+@media all and (min-width: 1280px) {
+  .sidebar-wrapper {
+    max-width: 200px;
+    width: 100%;
+  }
 }
+
 
 .green-placeholder ::placeholder {
   color:    #03a87c;
+}
+
+.side-table-heading {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.section-text {
+  font-size: 20px;
+}
+
+b {
+  font-size: 24px;
+}
+
+.about-text {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 29px;
+}
+
+.about-section {
+  padding-bottom: 41px;
+  padding-top: 41px;
+  padding-Right: 10%;
+  padding-Left: 10%;
+}
+
+.back-to-top {
+  cursor: pointer;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  height: 24px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 19px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.about-privacy {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 29px;
+}
+
+.privacy-text {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 19px;
+}
+
+.about-heading {
+  height: 80px;
+  text-transform: capitalize;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 36px;
+  line-height: 68px;
+  display: flex;
+  align-items: center;
+}
+
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  border-radius: 100%;
+  border-width: 2px;
+  border-style: solid;
+  border-image: initial;
+  border-color: rgb(78, 83, 255) rgb(78, 83, 255) transparent;
+  animation: grow 0.375s ease-in-out infinite alternate, rotation 0.75s infinite linear;
+  background: transparent !important;
+}
+
+.loading-spinner.loading-spinner-white {
+  border-color: #fff #fff transparent;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+@keyframes grow {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform:scale(1.1);
+  }
+}
+
+.landing-title {
+  font-size: 30px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #000000;
+}
+
+.landing-text {
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #000000;
+}
+
+.tooltip-heading {
+  height: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #059305;
+}
+
+.leaderboard-heading {
+  font-size: 30px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #424242;
+}
+
+.tooltip-text {
+  width: 216px;
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #545454;
 }
 
 .profilePic {

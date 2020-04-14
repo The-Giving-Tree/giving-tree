@@ -5,39 +5,28 @@ import {
   StyledNavigationItem as NavigationItem,
   StyledNavigationList as NavigationList
 } from 'baseui/header-navigation';
-import { StyledLink as Link } from 'baseui/link';
-import { Button, SHAPE } from 'baseui/button';
-import { StatefulSelect as Search, TYPE } from 'baseui/select';
-import Navigation from './Navigation';
-import { Avatar } from 'baseui/avatar';
-import { Redirect } from 'react-router-dom';
-import { Card, StyledBody, StyledAction } from 'baseui/card';
+import { Button } from 'baseui/button';
+import Navigation from './Navigation/Navigation';
 import { Block } from 'baseui/block';
-import { H1, H2, H3, H4, H5, H6 } from 'baseui/typography';
-
 import { connect } from 'react-redux';
+import { hotjar } from 'react-hotjar';
 
 import { getCurrentUser, loadUser, logoutAll } from '../store/actions/auth/auth-actions';
-import { findByLabelText } from '@testing-library/dom';
 
 // check to see if valid user or not
 // if valid, show
 // if invalid, redirect to error page
 
 function Setting(props) {
-  const {
-    user,
-    foundUser,
-    errorMessage,
-    getCurrentUserDispatch,
-    loadUserDispatch,
-    logoutAllDispatch
-  } = props;
+  const { logoutAllDispatch } = props;
   const tab = props.match.params.tab;
-  console.log('tab: ', tab);
   if (tab === undefined) {
     console.log(tab === undefined);
   }
+
+  React.useEffect(() => {
+    hotjar.initialize('1751072', 6);
+  }, []);
 
   return (
     <div style={{ width: '100%' }}>

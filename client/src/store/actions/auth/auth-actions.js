@@ -1,5 +1,4 @@
 import ACTION_TYPE from './action-types';
-import { ACCESSIBILITY_TYPE } from 'baseui/popover';
 
 /**
  * @function
@@ -106,6 +105,11 @@ export const selectMenu = payload => ({
   payload
 });
 
+export const getLeaderboard = payload => ({
+  type: ACTION_TYPE.GET_LEADERBOARD_REQUESTED,
+  payload
+});
+
 export const getCurrentUser = payload => ({
   type: ACTION_TYPE.GET_CURRENT_USER_REQUESTED,
   payload
@@ -123,6 +127,11 @@ export const register = payload => ({
 
 export const loadPost = payload => ({
   type: ACTION_TYPE.LOAD_POST_REQUESTED,
+  payload
+});
+
+export const deletePost = payload => ({
+  type: ACTION_TYPE.DELETE_POST_REQUESTED,
   payload
 });
 

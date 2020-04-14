@@ -1,9 +1,6 @@
-import { call, delay, put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import ACTION_TYPE from '../../actions/auth/action-types';
 import Api from './api';
-import { getUserData } from '../user/user-sagas';
-import GLOBAL_TYPES from '../../actions/global/action-types';
-import ROUTES from '../../../utils/routes';
 
 export function* login(action) {
   try {
@@ -189,7 +186,13 @@ export function* claimTask(action) {
 export function* unclaimTask(action) {
   try {
     const token = localStorage.getItem('giving_tree_jwt');
-    yield call(Api.unclaimTask, action.payload.env, action.payload.postId, token);
+    yield call(
+      Api.unclaimTask,
+      action.payload.env,
+      action.payload.postId,
+      action.payload.cancelReason,
+      token
+    );
 
     yield put({
       type: ACTION_TYPE.UNCLAIM_TASK_SUCCESS
@@ -317,6 +320,34 @@ export function* unfollow(action) {
   }
 }
 
+export function* getLeaderboard(action) {
+  try {
+    const token = localStorage.getItem('giving_tree_jwt');
+    const data = yield call(
+      Api.getLeaderboard,
+      action.payload.env,
+      action.payload.location, // global by default and can specify locations in the future
+      token
+    );
+
+    // return if no more
+    if (!data.data) {
+      return;
+    }
+    const { leaderboard, userRanking } = data.data;
+
+    yield put({
+      type: ACTION_TYPE.GET_LEADERBOARD_SUCCESS,
+      payload: {
+        leaderboard,
+        userRanking
+      }
+    });
+  } catch (error) {
+    yield put({ type: ACTION_TYPE.GET_LEADERBOARD_FAILURE, payload: error });
+  }
+}
+
 export function* loadNewsfeed(action) {
   try {
     const token = localStorage.getItem('giving_tree_jwt');
@@ -334,8 +365,6 @@ export function* loadNewsfeed(action) {
       return;
     }
     const { newsfeed, currentPage, pages, numOfResults } = data.data;
-
-    console.log('newsfeed: ', newsfeed);
 
     yield put({
       type: ACTION_TYPE.LOAD_NEWSFEED_SUCCESS,
@@ -372,12 +401,30 @@ export function* loadPost(action) {
   }
 }
 
+export function* deletePost(action) {
+  try {
+    const token = localStorage.getItem('giving_tree_jwt');
+    yield call(Api.deletePost, action.payload.env, action.payload.postId, token);
+
+    yield put({
+      type: ACTION_TYPE.DELETE_POST_SUCCESS
+    });
+  } catch (error) {
+    yield put({ type: ACTION_TYPE.DELETE_POST_FAILURE, payload: error });
+    if (error.code === 401) {
+      localStorage.removeItem('giving_tree_jwt');
+      window.location = '/';
+    }
+  }
+}
+
 export function* loadUser(action) {
   try {
     const data = yield call(Api.loadUser, action.payload.env, action.payload.username);
     const {
       message,
       email,
+      name,
       username,
       posts,
       comments,
@@ -387,10 +434,13 @@ export function* loadUser(action) {
       createdAt,
       upvotes,
       downvotes,
+      karma,
       verified,
       _id,
       profilePictureUrl,
-      headerPictureUrl
+      headerPictureUrl,
+      headerVersion,
+      profileVersion
     } = data.data;
 
     yield put({
@@ -399,7 +449,11 @@ export function* loadUser(action) {
         _id,
         message,
         email,
+        karma,
+        name,
         headerPictureUrl,
+        headerVersion,
+        profileVersion,
         username,
         upvotes,
         downvotes,
@@ -429,7 +483,10 @@ export function* getCurrentUser(action) {
     const {
       message,
       email,
+      name,
       username,
+      profileVersion,
+      headerVersion,
       _id,
       seenSubmitTutorial,
       welcomeTutorial,
@@ -443,7 +500,10 @@ export function* getCurrentUser(action) {
       payload: {
         message,
         email,
+        name,
         username,
+        profileVersion,
+        headerVersion,
         seenSubmitTutorial,
         welcomeTutorial,
         notifications,
@@ -618,7 +678,9 @@ export default function* watchAuthSagas() {
   yield takeLatest(ACTION_TYPE.LOAD_NEWSFEED_REQUESTED, loadNewsfeed);
   yield takeLatest(ACTION_TYPE.GET_CURRENT_USER_REQUESTED, getCurrentUser);
   yield takeLatest(ACTION_TYPE.LOAD_POST_REQUESTED, loadPost);
+  yield takeLatest(ACTION_TYPE.DELETE_POST_REQUESTED, deletePost);
   yield takeLatest(ACTION_TYPE.LOAD_USER_REQUESTED, loadUser);
   yield takeLatest(ACTION_TYPE.LOGOUT_REQUESTED, logout);
   yield takeLatest(ACTION_TYPE.LOGOUT_ALL_REQUESTED, logoutAll);
+  yield takeLatest(ACTION_TYPE.GET_LEADERBOARD_REQUESTED, getLeaderboard);
 }

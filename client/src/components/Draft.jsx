@@ -1,30 +1,16 @@
-import React, { useState, useMemo, useRef, useEffect } from 'react';
-import { Slate, Editable, ReactEditor, withReact, useSlate } from 'slate-react';
-import { Editor, Text, createEditor } from 'slate';
+import React, { useMemo } from 'react';
+import { Slate, Editable, withReact, useSlate } from 'slate-react';
+import { Editor, createEditor } from 'slate';
 import ReactDOM from 'react-dom';
 import isHotkey from 'is-hotkey';
-import { Range } from 'slate';
-import { css, cx } from 'emotion';
 import { withHistory } from 'slate-history';
-import {
-  HeaderNavigation,
-  ALIGN,
-  StyledNavigationItem as NavigationItem,
-  StyledNavigationList as NavigationList
-} from 'baseui/header-navigation';
 import moment from 'moment';
 import { StatefulTooltip } from 'baseui/tooltip';
-import { StyledLink as Link } from 'baseui/link';
 import { Button, SHAPE, KIND, SIZE } from 'baseui/button';
-import { StatefulSelect as Search, TYPE } from 'baseui/select';
 import { StatefulMenu } from 'baseui/menu';
-import Navigation from './Navigation';
-import { Avatar } from 'baseui/avatar';
+import Navigation from './Navigation/Navigation';
 import { Redirect } from 'react-router-dom';
-import { Card, StyledBody, StyledAction } from 'baseui/card';
-import { Block } from 'baseui/block';
-import { H1, H2, H3, H4, H5, H6 } from 'baseui/typography';
-import { Upload, ChevronUp, ChevronDown } from 'baseui/icon';
+import { Card, StyledBody } from 'baseui/card';
 import { useStyletron } from 'baseui';
 import { Input, StyledInput } from 'baseui/input';
 import { Tag, VARIANT as TAG_VARIANT } from 'baseui/tag';
@@ -41,7 +27,6 @@ import {
   publishPost,
   handleSeenSubmit
 } from '../store/actions/user/user-actions';
-import { findByLabelText } from '@testing-library/dom';
 
 const InputReplacement = ({ tags, removeTag, ...restProps }) => {
   const [css] = useStyletron();
@@ -75,8 +60,6 @@ export const Portal = ({ children }) => {
 function Draft(props) {
   const {
     user,
-    foundUser,
-    errorMessage,
     submitDraftSuccess,
     userErrorMessage,
     submitPostSuccess,
@@ -86,10 +69,8 @@ function Draft(props) {
     getDraftLoading,
     getDraftFailure,
     submitDraftDispatch,
-    loadUserDispatch,
     handleSeenSubmitDispatch,
     getCurrentUserDispatch,
-    markSeenSubmitTutorial,
     getDraftDispatch,
     saveDraftDispatch,
     submitDraftLoading,
@@ -183,7 +164,7 @@ function Draft(props) {
   return (
     <div style={{ width: '100%' }}>
       <Navigation searchBarPosition="center" />
-      <div style={{ width: '100%', background: '#F5F5F5', height: 'calc(100vh - 70px)' }}>
+      <div style={{ width: '100%', background: '#fff', height: 'calc(100vh - 70px)' }}>
         <div style={{ paddingLeft: 24, paddingRight: 24, paddingTop: 50 }}>
           {!isEmpty(user) && !user.seenSubmitTutorial && !getDraftFailure && (
             <Card

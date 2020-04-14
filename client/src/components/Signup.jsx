@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  HeaderNavigation,
   ALIGN,
   StyledNavigationItem as NavigationItem,
   StyledNavigationList as NavigationList
@@ -16,6 +15,9 @@ import Check from 'baseui/icon/check';
 import { register } from '../store/actions/auth/auth-actions';
 import Media from 'react-media';
 import passwordValidator from 'password-validator';
+import { hotjar } from 'react-hotjar';
+import Navigation from './Navigation/Navigation';
+
 var schema = new passwordValidator();
 schema
   .is()
@@ -42,9 +44,13 @@ function Signup(props) {
   const [validPassword, setValidPassword] = React.useState(false);
   const authenticated = localStorage.getItem('giving_tree_jwt');
 
-  const { signupDispatch, errorMessage, registerLoading, registerSuccess, registerFailure } = props;
+  const { signupDispatch, errorMessage, registerLoading } = props;
 
   const history = useHistory();
+
+  React.useEffect(() => {
+    hotjar.initialize('1751072', 6);
+  }, []);
 
   function Negative() {
     const [css, theme] = useStyletron();
@@ -97,11 +103,11 @@ function Signup(props) {
   };
 
   if (authenticated) {
-    return <Redirect to="/" />;
+    return <Redirect to="/home/discover" />; // better home page redirect experience
   } else {
     return (
       <div style={{ width: '100%' }}>
-        <HeaderNavigation
+        <Navigation
           overrides={{
             Root: {
               style: {
@@ -115,38 +121,48 @@ function Signup(props) {
             <NavigationItem>
               <div
                 style={{ display: 'flex', alignContent: 'center', cursor: 'pointer' }}
-                onClick={() => history.push('/')}
+                onClick={() => history.push(authenticated ? '/home/discover' : '/')}
               >
                 <img
-                  src="https://d1ppmvgsdgdlyy.cloudfront.net/acacia.svg"
+                  src="https://d1ppmvgsdgdlyy.cloudfront.net/giving_tree_long.png"
                   alt="Giving Tree"
                   style={{ height: 30, marginRight: 12 }}
                 />
-                <strong>
+                {/* <strong>
                   <div style={{ textDecoration: 'none', color: 'black' }}>Giving Tree</div>
-                </strong>
+                </strong> */}
               </div>
             </NavigationItem>
           </NavigationList>
           <NavigationList $align={ALIGN.center} />
           <NavigationList $align={ALIGN.right} />
-        </HeaderNavigation>
-        <div style={{ paddingLeft: 24, paddingRight: 24, textAlign: 'center' }}>
-          <h2 className="my-4 font-bold text-2xl">Sign up</h2>
-          <Media
-            queries={{
-              small: '(max-width: 599px)',
-              medium: '(min-width: 600px) and (max-width: 1199px)',
-              large: '(min-width: 1200px)'
-            }}
-          >
-            {matches => (
+        </Navigation>
+        <Media
+          queries={{
+            small: '(max-width: 599px)',
+            medium: '(min-width: 600px) and (max-width: 1199px)',
+            large: '(min-width: 1200px)'
+          }}
+        >
+          {matches => (
+            <div
+              style={{
+                paddingLeft: matches.small ? 0 : 24,
+                paddingRight: matches.small ? 0 : 24,
+                textAlign: 'center'
+              }}
+            >
+              <h2 className="my-4 font-bold text-2xl">Sign up</h2>
               <Card
                 overrides={{
                   Root: {
                     style: {
                       width: matches.medium || matches.large ? '512px' : '100%',
-                      margin: '0 auto'
+                      margin: '0 auto',
+                      border: 'none',
+                      paddingTop: '12px',
+                      paddingBottom: '12px',
+                      boxShadow: 'none'
                     }
                   }
                 }}
@@ -227,12 +243,18 @@ function Signup(props) {
                   </Button>
                 </StyledAction>
               </Card>
-            )}
-          </Media>
-          <p className="my-3 text-sm">
-            Already have an account? <a href="/login">Login</a>
-          </p>
-        </div>
+              <p className="my-3 text-sm">
+                Already have an account? <a href="/login">Login</a>
+              </p>
+              <div
+                style={{ cursor: 'pointer' }}
+                className="text-sm text-black hover:text-green-600 transition duration-150"
+              >
+                <a href="tel:+1415-964-4261">Hotline: +1 415-964-4261</a>
+              </div>
+            </div>
+          )}
+        </Media>
       </div>
     );
   }

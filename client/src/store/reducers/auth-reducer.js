@@ -39,20 +39,27 @@ const initialState = {
 
   updatedProfile: false,
 
-  claimTaskLoading: false,
-  claimTaskSuccess: false,
-  claimTaskFailure: false,
+  claimRequestLoading: false,
+  claimRequestSuccess: false,
+  claimRequestFailure: false,
 
-  unclaimTaskLoading: false,
-  unclaimTaskSuccess: false,
-  unclaimTaskFailure: false,
+  unclaimRequestLoading: false,
+  unclaimRequestSuccess: false,
+  unclaimRequestFailure: false,
 
-  completeTaskLoading: false,
-  completeTaskSuccess: false,
-  completeTaskFailure: false,
+  completeRequestLoading: false,
+  completeRequestSuccess: false,
+  completeRequestFailure: false,
+
+  deletePostSuccess: false,
 
   selectMenu: '',
-  title: ''
+  title: '',
+  leaderboard: [],
+  userRanking: 0,
+  loadLeaderboardLoading: false,
+  loadLeaderboardSuccess: false,
+  loadLeaderboardFailure: false
 };
 
 const auth = (state = initialState, action) => {
@@ -76,67 +83,88 @@ const auth = (state = initialState, action) => {
         errorMessage: action.payload.message
       });
 
+    case ACTION_TYPE.GET_LEADERBOARD_REQUESTED:
+      return Object.assign({}, state, {
+        claimRequestLoading: true,
+        claimRequestSuccess: false,
+        claimRequestFailure: false
+      });
+    case ACTION_TYPE.GET_LEADERBOARD_SUCCESS:
+      return Object.assign({}, state, {
+        claimRequestLoading: false,
+        claimRequestSuccess: true,
+        claimRequestFailure: false,
+        leaderboard: action.payload.leaderboard,
+        userRanking: action.payload.userRanking
+      });
+    case ACTION_TYPE.GET_LEADERBOARD_FAILURE:
+      return Object.assign({}, state, {
+        claimRequestLoading: false,
+        claimRequestSuccess: false,
+        claimRequestFailure: true
+      });
+
     case ACTION_TYPE.SELECT_MENU_REQUESTED:
       return Object.assign({}, state, {
         selectMenu: action.payload.selectMenu,
         title: action.payload.title
       });
 
-    case ACTION_TYPE.CLAIM_TASK_REQUESTED:
+    case ACTION_TYPE.CLAIM_REQUEST_REQUESTED:
       return Object.assign({}, state, {
-        claimTaskLoading: true,
-        claimTaskSuccess: false,
-        claimTaskFailure: false
+        claimRequestLoading: true,
+        claimRequestSuccess: false,
+        claimRequestFailure: false
       });
-    case ACTION_TYPE.CLAIM_TASK_SUCCESS:
+    case ACTION_TYPE.CLAIM_REQUEST_SUCCESS:
       return Object.assign({}, state, {
-        claimTaskLoading: false,
-        claimTaskSuccess: true,
-        claimTaskFailure: false
+        claimRequestLoading: false,
+        claimRequestSuccess: true,
+        claimRequestFailure: false
       });
-    case ACTION_TYPE.CLAIM_TASK_FAILURE:
+    case ACTION_TYPE.CLAIM_REQUEST_FAILURE:
       return Object.assign({}, state, {
-        claimTaskLoading: false,
-        claimTaskSuccess: false,
-        claimTaskFailure: true
-      });
-
-    case ACTION_TYPE.UNCLAIM_TASK_REQUESTED:
-      return Object.assign({}, state, {
-        unclaimTaskLoading: true,
-        unclaimTaskSuccess: false,
-        unclaimTaskFailure: false
-      });
-    case ACTION_TYPE.UNCLAIM_TASK_SUCCESS:
-      return Object.assign({}, state, {
-        unclaimTaskLoading: false,
-        unclaimTaskSuccess: true,
-        unclaimTaskFailure: false
-      });
-    case ACTION_TYPE.UNCLAIM_TASK_FAILURE:
-      return Object.assign({}, state, {
-        unclaimTaskLoading: false,
-        unclaimTaskSuccess: false,
-        unclaimTaskFailure: true
+        claimRequestLoading: false,
+        claimRequestSuccess: false,
+        claimRequestFailure: true
       });
 
-    case ACTION_TYPE.COMPLETE_TASK_REQUESTED:
+    case ACTION_TYPE.UNCLAIM_REQUEST_REQUESTED:
       return Object.assign({}, state, {
-        completeTaskLoading: true,
-        completeTaskSuccess: false,
-        completeTaskFailure: false
+        unclaimRequestLoading: true,
+        unclaimRequestSuccess: false,
+        unclaimRequestFailure: false
       });
-    case ACTION_TYPE.COMPLETE_TASK_SUCCESS:
+    case ACTION_TYPE.UNCLAIM_REQUEST_SUCCESS:
       return Object.assign({}, state, {
-        completeTaskLoading: false,
-        completeTaskSuccess: true,
-        completeTaskFailure: false
+        unclaimRequestLoading: false,
+        unclaimRequestSuccess: true,
+        unclaimRequestFailure: false
       });
-    case ACTION_TYPE.COMPLETE_TASK_FAILURE:
+    case ACTION_TYPE.UNCLAIM_REQUEST_FAILURE:
       return Object.assign({}, state, {
-        completeTaskLoading: false,
-        completeTaskSuccess: false,
-        completeTaskFailure: true
+        unclaimRequestLoading: false,
+        unclaimRequestSuccess: false,
+        unclaimRequestFailure: true
+      });
+
+    case ACTION_TYPE.COMPLETE_REQUEST_REQUESTED:
+      return Object.assign({}, state, {
+        completeRequestLoading: true,
+        completeRequestSuccess: false,
+        completeRequestFailure: false
+      });
+    case ACTION_TYPE.COMPLETE_REQUEST_SUCCESS:
+      return Object.assign({}, state, {
+        completeRequestLoading: false,
+        completeRequestSuccess: true,
+        completeRequestFailure: false
+      });
+    case ACTION_TYPE.COMPLETE_REQUEST_FAILURE:
+      return Object.assign({}, state, {
+        completeRequestLoading: false,
+        completeRequestSuccess: false,
+        completeRequestFailure: true
       });
 
     case ACTION_TYPE.CONFIRM_PASSWORD_REQUESTED:
@@ -262,9 +290,9 @@ const auth = (state = initialState, action) => {
     case ACTION_TYPE.UPVOTE_SUCCESS:
     case ACTION_TYPE.DOWNVOTE_SUCCESS: {
       let newsfeed = state.newsfeed;
-      for (var i = 0; i < newsfeed.length; i++) {
-        if (newsfeed[i]._id.toString() === action.payload.newItem._id.toString()) {
-          newsfeed[i] = action.payload.newItem;
+      for (var j = 0; j < newsfeed.length; j++) {
+        if (newsfeed[j]._id.toString() === action.payload.newItem._id.toString()) {
+          newsfeed[j] = action.payload.newItem;
         }
       }
       return Object.assign({}, state, {
@@ -330,6 +358,16 @@ const auth = (state = initialState, action) => {
       return Object.assign({}, state, {
         loadPostSuccess: true,
         foundPost: action.payload.post,
+        errorMessage: ''
+      });
+    case ACTION_TYPE.DELETE_POST_REQUESTED:
+      return Object.assign({}, state, {
+        deletePostSuccess: false,
+        errorMessage: ''
+      });
+    case ACTION_TYPE.DELETE_POST_SUCCESS:
+      return Object.assign({}, state, {
+        deletePostSuccess: true,
         errorMessage: ''
       });
     case ACTION_TYPE.LOAD_USER_SUCCESS:
