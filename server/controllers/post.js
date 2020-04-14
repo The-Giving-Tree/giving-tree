@@ -21,8 +21,12 @@ exports.deletePost = async (req, res, next) => {
       return res.status(422).json({ message: `postId ${postId} doesn't exist` });
     }
 
-    let posts = await Post.findOne({ _id: postId });
-    let newsfeed = await Newsfeed.findOne({ postId: postId, deleted: false });
+    let posts = await Post.findOne({ _id: postId, authorId: req.user._id });
+    let newsfeed = await Newsfeed.findOne({
+      postId: postId,
+      ownerId: req.user._id,
+      deleted: false
+    });
 
     if (posts) {
       posts.remove();
@@ -61,7 +65,7 @@ exports.createDraft = async (req, res, next) => {
       categories: categories.split(','),
       title,
       text,
-      loc: [location.lng, location.lat], // [longitude, latitude]
+      loc: { type: 'Point', coordinates: [Number(location.lng), Number(location.lat)] }, // [longitude, latitude]
       authorId: req.user._id,
       username: req.user.username,
       draft: true,
@@ -155,13 +159,10 @@ exports.publishPost = async (req, res, next) => {
     posts.title = title;
     posts.text = text;
 
-    console.log('text: ', text);
-    console.log('JSON.parse(text).location: ', JSON.parse(text).location);
-    const location = {
+    posts.loc = {
       type: 'Point',
-      coordinates: [JSON.parse(text).location.lat, JSON.parse(text).location.lng]
+      coordinates: [Number(JSON.parse(text).location.lng), Number(JSON.parse(text).location.lat)] // [longitude, latitude]
     };
-    posts.loc = location;
 
     posts.draft = false;
     posts.published = true;

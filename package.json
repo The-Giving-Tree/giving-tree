@@ -51,14 +51,19 @@
     "jsonwebtoken": "^8.5.1",
     "memory-cache": "^0.2.0",
     "moment": "^2.24.0",
+<<<<<<< HEAD
+=======
+    "moment-timezone": "^0.5.28",
+>>>>>>> 3ca8bf0af2fc645c79c89e5306b5f31d864071a7
     "mongoolia": "^1.0.3",
-    "mongoose": "^5.7.12",
+    "mongoose": "^5.9.6",
     "mongoose-algolia": "^1.9.0",
     "mongoose-type-url": "^1.0.6",
     "mongoose-unique-validator": "^2.0.3",
     "multer": "^1.4.2",
     "multer-s3": "^2.9.0",
     "multiparty": "^4.2.1",
+    "mustache": "^4.0.1",
     "node-emoji": "^1.10.0",
     "nodemon": "^2.0.1",
     "password-validator": "^5.0.3",
@@ -106,6 +111,7 @@
     "slate-history": "^0.57.1",
     "slate-react": "^0.57.1",
     "socket.io": "^2.3.0",
+<<<<<<< HEAD
     "socket.io-client": "^2.3.0",
     "stripe": "^7.14.0",
     "styletron-engine-atomic": "^1.4.4",
@@ -142,6 +148,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+=======
+    "stripe": "^7.14.0",
+    "twilio": "^3.41.1"
+>>>>>>> 3ca8bf0af2fc645c79c89e5306b5f31d864071a7
   },
   "devDependencies": {
     "autoprefixer": "^9.7.6",

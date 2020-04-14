@@ -7,6 +7,9 @@ const Newsfeed = require(__dirname + '/../models/newsfeed');
 const Follow = require(__dirname + '/../models/follow');
 const sgMail = require('@sendgrid/mail');
 const withdrawMethod = require(__dirname + '/../models/withdrawalMethod');
+const Mustache = require('mustache');
+const fs = require('fs');
+const resetPassword = fs.readFileSync(__dirname + '/../templates/reset-password.hjs', 'utf-8');
 const stripe_secret_key = PROD ? process.env.STRIPE_SECRET : process.env.STRIPE_SECRET_SANDBOX;
 const stripe = require('stripe')(stripe_secret_key);
 var schema = new passwordValidator();
@@ -38,7 +41,7 @@ exports.login = async (req, res, next) => {
   const rememberMe = req.body.rememberMe.toString().toLowerCase() === 'true';
   User.findOne({ username: req.body.username.toLowerCase() }, function(err, user) {
     if (err) throw err;
-    if (!user) return res.status(401).json({ message: `Incorrect email or password` });
+    if (!user) return res.status(401).json({ message: `Incorrect username or password` });
 
     user.comparePassword(req.body.password, async function(err, isMatch) {
       if (err) next(err);
@@ -52,7 +55,7 @@ exports.login = async (req, res, next) => {
           _id: user._id
         });
       } else {
-        return res.status(401).json({ message: 'Incorrect email or password' });
+        return res.status(401).json({ message: 'Incorrect username or password' });
       }
     });
   });
@@ -140,6 +143,9 @@ exports.follow = async (req, res, next) => {
       email: foundUser.email,
       username: foundUser.username,
       verified: foundUser.verified,
+      karma: foundUser.karma,
+      profileVersion: foundUser.profileVersion || 0,
+      headerVersion: foundUser.headerVersion || 0,
       profilePictureUrl: foundUser.profilePictureUrl,
       headerPictureUrl: foundUser.headerPictureUrl,
       posts: postFeed,
@@ -166,7 +172,6 @@ exports.unfollow = async (req, res, next) => {
     }
 
     const userId = req.params.userId;
-    console.log('unfollowing: ', userId);
     await Follow.findOne({
       followerId: req.user._id,
       leaderId: userId
@@ -188,6 +193,9 @@ exports.unfollow = async (req, res, next) => {
       email: foundUser.email,
       username: foundUser.username,
       verified: foundUser.verified,
+      karma: foundUser.karma,
+      profileVersion: foundUser.profileVersion || 0,
+      headerVersion: foundUser.headerVersion || 0,
       profilePictureUrl: foundUser.profilePictureUrl,
       headerPictureUrl: foundUser.headerPictureUrl,
       posts: postFeed,
@@ -377,8 +385,13 @@ exports.resetPassword = async (req, res, next) => {
     const msg = {
       to: user.email.toLowerCase(),
       from: 'noreply@givingtree.com',
-      subject: `Your Password Reset Instructions [${new Date()}]`,
-      text: `Hello!\n\nWe've gotten a request to reset your password.\n\nThe reset link in http://localhost:3001/reset-password/${token}.\n\nIf this wasn't you, please email support@givingtree.com immedietly.\n\nYour friends at Giving Tree.`
+      subject: `Your Password Reset Instructions`,
+      html: Mustache.render(resetPassword, {
+        url: `${
+          PROD ? 'https://www.givingtreeproject.org' : 'http://localhost:3001'
+        }/reset-password/${token}`,
+        date: new Date()
+      })
     };
 
     await sgMail.send(msg);

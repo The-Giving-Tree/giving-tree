@@ -39,11 +39,10 @@ const postModel = new Schema(
     loc: {
       type: {
         type: String,
-        enum: ['Point']
+        default: 'Point'
       },
-      coordinates: {
-        type: [Number]
-      }
+      coordinates: [Number],
+      default: [0, 0]
     },
     completed: { type: Boolean, required: true, default: false },
     trackingDetails: {
@@ -55,6 +54,9 @@ const postModel = new Schema(
       dropoffEta: { type: String }, // string for the MVP
       notes: { type: String } // any notes from order (missing items, etc)
     },
+    cancelTaskerReason: [
+      { reason: { type: String }, user: { type: Schema.Types.ObjectId, ref: 'User' } }
+    ],
     assignedUser: { type: Schema.Types.ObjectId, ref: 'User' },
     flagged: [{ type: Schema.Types.ObjectId, ref: 'User', required: true }], // other Users can flag a post if it violates, after a certain number, the flagged content is manually reviewed
     voteTotal: { type: Number, default: 0 },
@@ -69,8 +71,6 @@ const postModel = new Schema(
   }
 );
 
-postModel.index({ loc: '2dsphere' });
-
 postModel.pre('save', function(next) {
   const date = new Date();
   this.updatedAt = date;
@@ -79,6 +79,8 @@ postModel.pre('save', function(next) {
   }
   next();
 });
+
+postModel.index({ loc: '2dsphere' });
 
 postModel.plugin(mongooseAlgolia, {
   appId: process.env.ALGOLIA_APP_ID,
